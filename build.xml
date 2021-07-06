@@ -410,6 +410,13 @@
 		</java>
 	</target>
 
+	<target name="kotlin-to-boa" depends="-compile-tests" description="Convert Kotlin code to Boa AST.">
+		<java classname="boa.test.datagen.KotlinToBoa" fork="true" failonerror="true">
+			<classpath refid="test.class.path" />
+			<arg value="${kotlin.code}" />
+		</java>
+	</target>
+
 
 	<!-- style checking -->
 	<target name="checkstyle">
