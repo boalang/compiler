@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, Robert Dyer
+ * Copyright 2021, Robert Dyer, Samuel W. Flint,
  *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,6 +50,7 @@ import boa.types.Ast.Variable;
 
 /**
  * @author rdyer
+ * @author swflint
  */
 public class KotlinVisitor {
 	protected List<Ast> root = null;
@@ -137,6 +138,10 @@ public class KotlinVisitor {
 		return id.getIdentifier();
 	}
 
+	protected String getIdentifier(final DefaultAstTerminal n) {
+		return n.getText();
+	}
+
 	private int indent = 0;
 	private void indent() {
 		for (int i = 0; i < indent; i++)
@@ -145,7 +150,6 @@ public class KotlinVisitor {
 
 	protected void visit(final PackageHeader n) {
 		pkgName = getIdentifier(n.getIdentifier());
-		//b.addAllModifiers(visitAnnotationsList(pkg.annotations()));
 	}
 
 	protected void visit(final Import n) {
@@ -234,18 +238,44 @@ public class KotlinVisitor {
 	}
 
 	protected void visit(final DefaultAstNode n) {
-		indent();
-		System.out.println(n.getDescription());
-		for (final Ast a : n.getChildren()) {
-			indent += 2;
-			startvisit(a);
-			indent -= 2;
+		switch (n.getDescription()) {
+		case "fileAnnotation":
+			visitFileAnnot(n);
+			break;
+
+		default:
+			for (final Ast a : n.getChildren())
+				startvisit(a);
+			break;
 		}
+	}
+
+	protected void visitFileAnnot(final DefaultAstNode n) {
+		boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+		mb.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
+		mb.setAnnotationName(typeName((DefaultAstNode)n.getChildren().get(3)));
+		b.addModifiers(mb.build());
 	}
 
 	protected void visit(final DefaultAstTerminal n) {
 		if (n.getChannel().getName() == "HIDDEN") return;
 		indent();
 		System.out.format("%s >>>%s<<< (%s)\n", n.getDescription(), n.getText(), n.getChannel().getName());
+	}
+
+	protected String typeName(final DefaultAstNode n) {
+		switch (n.getDescription()) {
+		case "userType":
+			return typeName((DefaultAstNode)n.getChildren().get(0));
+
+		case "simpleUserType":
+			return typeName((DefaultAstNode)n.getChildren().get(0));
+
+		case "simpleIdentifier":
+			return getIdentifier((DefaultAstTerminal)n.getChildren().get(0));
+
+		default:
+			return typeName((DefaultAstNode)n.getChildren().get(0));
+		}
 	}
 }
