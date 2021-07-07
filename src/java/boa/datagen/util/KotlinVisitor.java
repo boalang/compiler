@@ -313,7 +313,7 @@ public class KotlinVisitor {
 	}
 
 	protected void startvisitsc(final List<StringComponent> sc) {
-		for (final StringComponent s: sc)
+		for (final StringComponent s : sc)
 			visitsc(s);
 	}
 
@@ -855,639 +855,639 @@ public class KotlinVisitor {
 		}
 	}
 
-	protected void visitTypeAlias(DefaultAstNode n) {
+	protected void visitTypeAlias(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitDeclaration(DefaultAstNode n) {
+	protected void visitDeclaration(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitPrimaryConstructor(DefaultAstNode n) {
+	protected void visitPrimaryConstructor(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitDelegationSpecifiers(DefaultAstNode n) {
+	protected void visitDelegationSpecifiers(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitDelegationSpecifier(DefaultAstNode n) {
+	protected void visitDelegationSpecifier(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitConstructorInvocation(DefaultAstNode n) {
+	protected void visitConstructorInvocation(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitAnnotatedDelegationSpecifier(DefaultAstNode n) {
+	protected void visitAnnotatedDelegationSpecifier(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitExplicitDelegation(DefaultAstNode n) {
+	protected void visitExplicitDelegation(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitTypeParameters(DefaultAstNode n) {
+	protected void visitTypeParameters(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitTypeParameter(DefaultAstNode n) {
+	protected void visitTypeParameter(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitTypeConstraints(DefaultAstNode n) {
+	protected void visitTypeConstraints(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitTypeConstraint(DefaultAstNode n) {
+	protected void visitTypeConstraint(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitClassMemberDeclarations(DefaultAstNode n) {
+	protected void visitClassMemberDeclarations(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitClassMemberDeclaration(DefaultAstNode n) {
+	protected void visitClassMemberDeclaration(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitAnonymousInitializer(DefaultAstNode n) {
+	protected void visitAnonymousInitializer(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitCompanionObject(DefaultAstNode n) {
+	protected void visitCompanionObject(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitFunctionValueParameters(DefaultAstNode n) {
+	protected void visitFunctionValueParameters(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitFunctionValueParameter(DefaultAstNode n) {
+	protected void visitFunctionValueParameter(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitFunctionDeclaration(DefaultAstNode n) {
+	protected void visitFunctionDeclaration(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitFunctionBody(DefaultAstNode n) {
+	protected void visitFunctionBody(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitVariableDeclaration(DefaultAstNode n) {
+	protected void visitVariableDeclaration(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitMultiVariableDeclaration(DefaultAstNode n) {
+	protected void visitMultiVariableDeclaration(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitPropertyDeclaration(DefaultAstNode n) {
+	protected void visitPropertyDeclaration(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitPropertyDelegate(DefaultAstNode n) {
+	protected void visitPropertyDelegate(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitGetter(DefaultAstNode n) {
+	protected void visitGetter(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitSetter(DefaultAstNode n) {
+	protected void visitSetter(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitParametersWithOptionalType(DefaultAstNode n) {
+	protected void visitParametersWithOptionalType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitParameterWithOptionalType(DefaultAstNode n) {
+	protected void visitParameterWithOptionalType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitParameter(DefaultAstNode n) {
+	protected void visitParameter(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitObjectDeclaration(DefaultAstNode n) {
+	protected void visitObjectDeclaration(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitSecondaryConstructor(DefaultAstNode n) {
+	protected void visitSecondaryConstructor(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitConstructorDelegationCall(DefaultAstNode n) {
+	protected void visitConstructorDelegationCall(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitEnumClassBody(DefaultAstNode n) {
+	protected void visitEnumClassBody(final DefaultAstNode n) {
 
 	}
 
-	protected void visitEnumEntries(DefaultAstNode n) {
+	protected void visitEnumEntries(final DefaultAstNode n) {
 
 	}
 
-	protected void visitEnumEntry(DefaultAstNode n) {
+	protected void visitEnumEntry(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitType(DefaultAstNode n) {
+	protected void visitType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitTypeReference(DefaultAstNode n) {
+	protected void visitTypeReference(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitNullableType(DefaultAstNode n) {
+	protected void visitNullableType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitQuest(DefaultAstNode n) {
+	protected void visitQuest(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitUserType(DefaultAstNode n) {
+	protected void visitUserType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitSimpleUserType(DefaultAstNode n) {
+	protected void visitSimpleUserType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitTypeProjection(DefaultAstNode n) {
+	protected void visitTypeProjection(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitTypeProjectionModifiers(DefaultAstNode n) {
+	protected void visitTypeProjectionModifiers(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitTypeProjectionModifier(DefaultAstNode n) {
+	protected void visitTypeProjectionModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitFunctionType(DefaultAstNode n) {
+	protected void visitFunctionType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitFunctionTypeParameters(DefaultAstNode n) {
+	protected void visitFunctionTypeParameters(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitParenthesizedType(DefaultAstNode n) {
+	protected void visitParenthesizedType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitReceiverType(DefaultAstNode n) {
+	protected void visitReceiverType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitParenthesizedUserType(DefaultAstNode n) {
+	protected void visitParenthesizedUserType(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitStatements(DefaultAstNode n) {
+	protected void visitStatements(final DefaultAstNode n) {
 
 	}
 
-	protected void	visitStatement(DefaultAstNode n) {
+	protected void visitStatement(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLabel(DefaultAstNode n) {
+	protected void visitLabel(final DefaultAstNode n) {
 
 	}
 
-	protected void visitControlStructureBody(DefaultAstNode n) {
+	protected void visitControlStructureBody(final DefaultAstNode n) {
 
 	}
 
-	protected void visitBlock(DefaultAstNode n) {
+	protected void visitBlock(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLoopStatement(DefaultAstNode n) {
+	protected void visitLoopStatement(final DefaultAstNode n) {
 
 	}
 
-	protected void visitForStatement(DefaultAstNode n) {
+	protected void visitForStatement(final DefaultAstNode n) {
 
 	}
 
-	protected void visitWhileStatement(DefaultAstNode n) {
+	protected void visitWhileStatement(final DefaultAstNode n) {
 
 	}
 
-	protected void visitDoWhileStatement(DefaultAstNode n) {
+	protected void visitDoWhileStatement(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAssignment(DefaultAstNode n) {
+	protected void visitAssignment(final DefaultAstNode n) {
 
 	}
 
-	protected void visitSemi(DefaultAstNode n) {
+	protected void visitSemi(final DefaultAstNode n) {
 
 	}
 
-	protected void visitSemis(DefaultAstNode n) {
+	protected void visitSemis(final DefaultAstNode n) {
 
 	}
 
-	protected void visitExpression(DefaultAstNode n) {
+	protected void visitExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitDisjunction(DefaultAstNode n) {
+	protected void visitDisjunction(final DefaultAstNode n) {
 
 	}
 
-	protected void visitConjunction(DefaultAstNode n) {
+	protected void visitConjunction(final DefaultAstNode n) {
 
 	}
 
-	protected void visitEquality(DefaultAstNode n) {
+	protected void visitEquality(final DefaultAstNode n) {
 
 	}
 
-	protected void visitComparison(DefaultAstNode n) {
+	protected void visitComparison(final DefaultAstNode n) {
 
 	}
 
-	protected void visitGenericCallLikeComparison(DefaultAstNode n) {
+	protected void visitGenericCallLikeComparison(final DefaultAstNode n) {
 
 	}
 
-	protected void visitInfixOperation(DefaultAstNode n) {
+	protected void visitInfixOperation(final DefaultAstNode n) {
 
 	}
 
-	protected void visitElvisExpression(DefaultAstNode n) {
+	protected void visitElvisExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitElvis(DefaultAstNode n) {
+	protected void visitElvis(final DefaultAstNode n) {
 
 	}
 
-	protected void visitInfixFunctionCall(DefaultAstNode n) {
+	protected void visitInfixFunctionCall(final DefaultAstNode n) {
 
 	}
 
-	protected void visitRangeExpression(DefaultAstNode n) {
+	protected void visitRangeExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAdditiveExpression(DefaultAstNode n) {
+	protected void visitAdditiveExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitMultiplicativeExpression(DefaultAstNode n) {
+	protected void visitMultiplicativeExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAsExpression(DefaultAstNode n) {
+	protected void visitAsExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitPrefixUnaryExpression(DefaultAstNode n) {
+	protected void visitPrefixUnaryExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitUnaryPrefix(DefaultAstNode n) {
+	protected void visitUnaryPrefix(final DefaultAstNode n) {
 
 	}
 
-	protected void visitPostfixUnaryExpression(DefaultAstNode n) {
+	protected void visitPostfixUnaryExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitPostfixUnarySuffix(DefaultAstNode n) {
+	protected void visitPostfixUnarySuffix(final DefaultAstNode n) {
 
 	}
 
-	protected void visitDirectlyAssignableExpression(DefaultAstNode n) {
+	protected void visitDirectlyAssignableExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitParenthesizedDirectlyAssignableExpression(DefaultAstNode n) {
+	protected void visitParenthesizedDirectlyAssignableExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAssignableExpression(DefaultAstNode n) {
+	protected void visitAssignableExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitParenthesizedAssignableExpression(DefaultAstNode n) {
+	protected void visitParenthesizedAssignableExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAssignableSuffix(DefaultAstNode n) {
+	protected void visitAssignableSuffix(final DefaultAstNode n) {
 
 	}
 
-	protected void visitIndexingSuffix(DefaultAstNode n) {
+	protected void visitIndexingSuffix(final DefaultAstNode n) {
 
 	}
 
-	protected void visitNavigationSuffix(DefaultAstNode n) {
+	protected void visitNavigationSuffix(final DefaultAstNode n) {
 
 	}
 
-	protected void visitCallSuffix(DefaultAstNode n) {
+	protected void visitCallSuffix(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAnnotatedLambda(DefaultAstNode n) {
+	protected void visitAnnotatedLambda(final DefaultAstNode n) {
 
 	}
 
-	protected void visitTypeArguments(DefaultAstNode n) {
+	protected void visitTypeArguments(final DefaultAstNode n) {
 
 	}
 
-	protected void visitValueArguments(DefaultAstNode n) {
+	protected void visitValueArguments(final DefaultAstNode n) {
 
 	}
 
-	protected void visitValueArgument(DefaultAstNode n) {
+	protected void visitValueArgument(final DefaultAstNode n) {
 
 	}
 
-	protected void visitPrimaryExpression(DefaultAstNode n) {
+	protected void visitPrimaryExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitParenthesizedExpression(DefaultAstNode n) {
+	protected void visitParenthesizedExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitCollectionLiteral(DefaultAstNode n) {
+	protected void visitCollectionLiteral(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLiteralConstant(DefaultAstNode n) {
+	protected void visitLiteralConstant(final DefaultAstNode n) {
 
 	}
 
-	protected void visitStringLiteral(DefaultAstNode n) {
+	protected void visitStringLiteral(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLineStringLiteral(DefaultAstNode n) {
+	protected void visitLineStringLiteral(final DefaultAstNode n) {
 
 	}
 
-	protected void visitMultiLineStringLiteral(DefaultAstNode n) {
+	protected void visitMultiLineStringLiteral(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLineStringContent(DefaultAstNode n) {
+	protected void visitLineStringContent(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLineStringExpression(DefaultAstNode n) {
+	protected void visitLineStringExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitMultiLineStringContent(DefaultAstNode n) {
+	protected void visitMultiLineStringContent(final DefaultAstNode n) {
 
 	}
 
-	protected void visitMultiLineStringExpression(DefaultAstNode n) {
+	protected void visitMultiLineStringExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLambdaLiteral(DefaultAstNode n) {
+	protected void visitLambdaLiteral(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLambdaParameters(DefaultAstNode n) {
+	protected void visitLambdaParameters(final DefaultAstNode n) {
 
 	}
 
-	protected void visitLambdaParameter(DefaultAstNode n) {
+	protected void visitLambdaParameter(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAnonymousFunction(DefaultAstNode n) {
+	protected void visitAnonymousFunction(final DefaultAstNode n) {
 
 	}
 
-	protected void visitFunctionLiteral(DefaultAstNode n) {
+	protected void visitFunctionLiteral(final DefaultAstNode n) {
 
 	}
 
-	protected void visitObjectLiteral(DefaultAstNode n) {
+	protected void visitObjectLiteral(final DefaultAstNode n) {
 
 	}
 
-	protected void visitThisExpression(DefaultAstNode n) {
+	protected void visitThisExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitSuperExpression(DefaultAstNode n) {
+	protected void visitSuperExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitIfExpression(DefaultAstNode n) {
+	protected void visitIfExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitWhenSubject(DefaultAstNode n) {
+	protected void visitWhenSubject(final DefaultAstNode n) {
 
 	}
 
-	protected void visitWhenExpression(DefaultAstNode n) {
+	protected void visitWhenExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitWhenEntry(DefaultAstNode n) {
+	protected void visitWhenEntry(final DefaultAstNode n) {
 
 	}
 
-	protected void visitWhenCondition(DefaultAstNode n) {
+	protected void visitWhenCondition(final DefaultAstNode n) {
 
 	}
 
-	protected void visitRangeTest(DefaultAstNode n) {
+	protected void visitRangeTest(final DefaultAstNode n) {
 
 	}
 
-	protected void visitTypeTest(DefaultAstNode n) {
+	protected void visitTypeTest(final DefaultAstNode n) {
 
 	}
 
-	protected void visitTryExpression(DefaultAstNode n) {
+	protected void visitTryExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitCatchBlock(DefaultAstNode n) {
+	protected void visitCatchBlock(final DefaultAstNode n) {
 
 	}
 
-	protected void visitFinallyBlock(DefaultAstNode n) {
+	protected void visitFinallyBlock(final DefaultAstNode n) {
 
 	}
 
-	protected void visitJumpExpression(DefaultAstNode n) {
+	protected void visitJumpExpression(final DefaultAstNode n) {
 
 	}
 
-	protected void visitCallableReference(DefaultAstNode n) {
+	protected void visitCallableReference(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAssignmentAndOperator(DefaultAstNode n) {
+	protected void visitAssignmentAndOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitEqualityOperator(DefaultAstNode n) {
+	protected void visitEqualityOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitComparisonOperator(DefaultAstNode n) {
+	protected void visitComparisonOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitInOperator(DefaultAstNode n) {
+	protected void visitInOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitIsOperator(DefaultAstNode n) {
+	protected void visitIsOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAdditiveOperator(DefaultAstNode n) {
+	protected void visitAdditiveOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitMultiplicativeOperator(DefaultAstNode n) {
+	protected void visitMultiplicativeOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAsOperator(DefaultAstNode n) {
+	protected void visitAsOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitPrefixUnaryOperator(DefaultAstNode n) {
+	protected void visitPrefixUnaryOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitPostfixUnaryOperator(DefaultAstNode n) {
+	protected void visitPostfixUnaryOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitExcl(DefaultAstNode n) {
+	protected void visitExcl(final DefaultAstNode n) {
 
 	}
 
-	protected void visitMemberAccessOperator(DefaultAstNode n) {
+	protected void visitMemberAccessOperator(final DefaultAstNode n) {
 
 	}
 
-	protected void visitSafeNav(DefaultAstNode n) {
+	protected void visitSafeNav(final DefaultAstNode n) {
 
 	}
 
-	protected void visitModifiers(DefaultAstNode n) {
+	protected void visitModifiers(final DefaultAstNode n) {
 
 	}
 
-	protected void visitParameterModifiers(DefaultAstNode n) {
+	protected void visitParameterModifiers(final DefaultAstNode n) {
 
 	}
 
-	protected void visitModifier(DefaultAstNode n) {
+	protected void visitModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitTypeModifiers(DefaultAstNode n) {
+	protected void visitTypeModifiers(final DefaultAstNode n) {
 
 	}
 
-	protected void visitTypeModifier(DefaultAstNode n) {
+	protected void visitTypeModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitClassModifier(DefaultAstNode n) {
+	protected void visitClassModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitMemberModifier(DefaultAstNode n) {
+	protected void visitMemberModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitVisibilityModifier(DefaultAstNode n) {
+	protected void visitVisibilityModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitVarianceModifier(DefaultAstNode n) {
+	protected void visitVarianceModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitTypeParameterModifiers(DefaultAstNode n) {
+	protected void visitTypeParameterModifiers(final DefaultAstNode n) {
 
 	}
 
-	protected void visitTypeParameterModifier(DefaultAstNode n) {
+	protected void visitTypeParameterModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitFunctionModifier(DefaultAstNode n) {
+	protected void visitFunctionModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitPropertyModifier(DefaultAstNode n) {
+	protected void visitPropertyModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitInheritanceModifier(DefaultAstNode n) {
+	protected void visitInheritanceModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitParameterModifier(DefaultAstNode n) {
+	protected void visitParameterModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitReificationModifier(DefaultAstNode n) {
+	protected void visitReificationModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitPlatformModifier(DefaultAstNode n) {
+	protected void visitPlatformModifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAnnotation(DefaultAstNode n) {
+	protected void visitAnnotation(final DefaultAstNode n) {
 
 	}
 
-	protected void visitSingleAnnotation(DefaultAstNode n) {
+	protected void visitSingleAnnotation(final DefaultAstNode n) {
 
 	}
 
-	protected void visitMultiAnnotation(DefaultAstNode n) {
+	protected void visitMultiAnnotation(final DefaultAstNode n) {
 
 	}
 
-	protected void visitAnnotationUseSiteTarget(DefaultAstNode n) {
+	protected void visitAnnotationUseSiteTarget(final DefaultAstNode n) {
 
 	}
 
-	protected void visitUnescapedAnnotation(DefaultAstNode n) {
+	protected void visitUnescapedAnnotation(final DefaultAstNode n) {
 
 	}
 
-	protected void visitSimpleIdentifier(DefaultAstNode n) {
+	protected void visitSimpleIdentifier(final DefaultAstNode n) {
 
 	}
 
-	protected void visitIdentifier(DefaultAstNode n) {
+	protected void visitIdentifier(final DefaultAstNode n) {
 
 	}
 
@@ -1516,7 +1516,7 @@ public class KotlinVisitor {
 	protected String getIdentifier(final List<KlassIdentifier> id) {
 		boolean first = true;
 		String s = "";
-		for (final KlassIdentifier k: id) {
+		for (final KlassIdentifier k : id) {
 			if (!first)
 				s += ".";
 			else

@@ -1,5 +1,6 @@
 package boa.kotlin.test
 
 class C {
-    var x: int
+    var x: Int = 3
+    var y = 5
 }
