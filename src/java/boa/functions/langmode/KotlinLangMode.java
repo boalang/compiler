@@ -19,7 +19,14 @@ package boa.functions.langmode;
 import java.util.List;
 import java.util.Map;
 
-//import boa.datagen.util.KotlinVisitor;
+import kotlin.Unit;
+import kotlinx.ast.common.ast.Ast;
+import kotlinx.ast.common.AstResult;
+import kotlinx.ast.common.AstSource;
+import kotlinx.ast.grammar.kotlin.common.SummaryKt;
+import kotlinx.ast.grammar.kotlin.target.antlr.java.KotlinGrammarAntlrJavaParser;
+
+import boa.datagen.util.KotlinVisitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
@@ -38,7 +45,7 @@ import boa.types.Ast.Variable;
  */
 public class KotlinLangMode implements LangMode {
 	public String type_name(final String s) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		// first, normalize the string
 		final String t = s.replaceAll("<\\s+", "<")
 			.replaceAll(",\\s+", ", ")
@@ -99,7 +106,7 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is an integer literal, otherwise false
 	 */
 	public boolean isIntLit(final Expression e) throws Exception {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
@@ -134,7 +141,7 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is a char literal, otherwise false
 	 */
 	public boolean isFloatLit(final Expression e) throws Exception {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
@@ -156,7 +163,7 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is a char literal, otherwise false
 	 */
 	public boolean isCharLit(final Expression e) throws Exception {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		return e.getLiteral().startsWith("'");
@@ -170,7 +177,7 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is a string literal, otherwise false
 	 */
 	public boolean isStringLit(final Expression e) throws Exception {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		return e.getLiteral().startsWith("\"");
@@ -184,7 +191,7 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is a type literal, otherwise false
 	 */
 	public boolean isTypeLit(final Expression e) throws Exception {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		return e.getLiteral().endsWith(".class");
@@ -198,7 +205,7 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is a bool literal, otherwise false
 	 */
 	public boolean isBoolLit(final Expression e) throws Exception {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
@@ -214,7 +221,7 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is a null literal, otherwise false
 	 */
 	public boolean isNullLit(final Expression e) throws Exception {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		return e.getLiteral().equals("null");
@@ -228,7 +235,7 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is a string literal, otherwise false
 	 */
 	public boolean isLiteral(final Expression e, final String lit) throws Exception {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
 	}
 
@@ -242,7 +249,7 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final ASTRoot r) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (r == null) return "";
 
 		String s = "";
@@ -254,7 +261,7 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Namespace n) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (n == null) return "";
 
 		String s = "";
@@ -274,7 +281,7 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Declaration d) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (d == null) return "";
 
 		String s = indent() + prettyprint(d.getModifiersList());
@@ -375,14 +382,14 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Type t) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (t == null) return "";
 
 		return t.getName();
 	}
 
 	public String prettyprint(final Method m) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (m == null) return "";
 		String s = indent() + prettyprint(m.getModifiersList());
 
@@ -418,7 +425,7 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Variable v) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (v == null) return "";
 
 		String s = "";
@@ -440,7 +447,7 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	private String prettyprint(final List<Modifier> mods) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		String s = "";
 
 		for (final Modifier m : mods)
@@ -450,7 +457,7 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Statement stmt) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (stmt == null) return "";
 
 		String s = "";
@@ -632,7 +639,7 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Expression e) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (e == null) return "";
 
 		String s = "";
@@ -811,17 +818,17 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	private String ppPrefix(final String op, final Expression e) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		return op + prettyprint(e.getExpressions(0));
 	}
 
 	private String ppPostfix(final String op, final Expression e) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		return prettyprint(e.getExpressions(0)) + op;
 	}
 
 	private String ppInfix(final String op, final List<Expression> exps) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		StringBuilder s = new StringBuilder();
 
 		s.append(prettyprint(exps.get(0)));
@@ -836,7 +843,7 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Modifier m) {
-        // FIXME convert to Kotlin
+		// FIXME convert to Kotlin
 		if (m == null) return "";
 
 		String s = "";
@@ -873,16 +880,24 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public Expression parseexpression(final String s) {
-        // FIXME convert to Kotlin
-
-		final Expression.Builder eb = Expression.newBuilder();
-		eb.setKind(Expression.ExpressionKind.OTHER);
-		return eb.build();
+		final ASTRoot root = parse(s);
+		if (root.getNamespacesCount() == 0) return null;
+		final Namespace n = root.getNamespaces(0);
+		if (n.getExpressionsCount() == 0) return null;
+		return n.getExpressions(0);
 	}
 
 	public ASTRoot parse(final String s) {
-        // FIXME convert to Kotlin
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
+		try {
+			final AstSource source = new AstSource.String("", s);
+			final AstResult<Unit, List<Ast>> astList = SummaryKt.summary(KotlinGrammarAntlrJavaParser.INSTANCE.parseKotlinFile(source), true);
+			ast.addNamespaces(new KotlinVisitor().getNamespace(astList.get()));
+		} catch (final Throwable e) {
+			// do nothing
+		}
+
 		return ast.build();
 	}
 }
