@@ -83,21 +83,16 @@ public class KotlinLangMode implements LangMode {
 	 * <code>LITERAL</code> and is an integer literal.
 	 *
 	 * The test is a simplified grammar, based on the one from:
-	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
+	 * https://github.com/Kotlin/kotlin-spec/blob/648afef3b9a7fccec7fdaa4aabde6d114bcf9d69/grammar/src/main/antlr/KotlinLexer.g4
 	 *
-	 * DecimalNumeral:
-	 * 	[0-9] [lL]?
-	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
-	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
+	 * IntegerLiteral
+	 *  ([1..9] [0..9_]*)? [0..9] [uU]? [lL]?
 	 *
-	 * HexNumeral:
-	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
+	 * HexLiteral
+	 *  '0' [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [uU]? [lL]?
 	 *
-	 * OctalNumeral:
-	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
-	 *
-	 * BinaryNumeral:
-	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
+	 * BinLiteral
+	 *  '0' [bB] [01] ([01_]* [01])? [uU]? [lL]?
 	 *
 	 * If any of these match, it returns <code>true</code>.  Otherwise it
 	 * returns <code>false</code>.
@@ -106,18 +101,13 @@ public class KotlinLangMode implements LangMode {
 	 * @return true if the expression is an integer literal, otherwise false
 	 */
 	public boolean isIntLit(final Expression e) throws Exception {
-		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
 
-		if (lit.matches("^[0-9][lL]?$")) return true;
-		if (lit.matches("^[1-9][0-9]([0-9_]*[0-9])?[lL]?$")) return true;
-		if (lit.matches("^[1-9][_]+[0-9]([0-9_]*[0-9])?[lL]?$")) return true;
-
-		if (lit.matches("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[lL]?$")) return true;
-		if (lit.matches("^0[_]*[0-7]([0-7_]*[0-7])?[lL]?$")) return true;
-		return lit.matches("^0[bB][01]([01_]*[01])?[lL]?$");
+		if (lit.matches("^([1..9][0..9_]*)?[0..9][uU]?[lL]?$")) return true;
+		if (lit.matches("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[uU]?[lL]?$")) return true;
+		return lit.matches("^0[bB][01]([01_]*[01])?[uU]?[lL]?$");
 	}
 
 	/**
@@ -125,87 +115,53 @@ public class KotlinLangMode implements LangMode {
 	 * <code>LITERAL</code> and is a float literal.
 	 *
 	 * The test is a simplified grammar, based on the one from:
-	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
+	 * https://github.com/Kotlin/kotlin-spec/blob/648afef3b9a7fccec7fdaa4aabde6d114bcf9d69/grammar/src/main/antlr/KotlinLexer.g4
 	 *
-	 * DecimalFloatingPointLiteral:
-	 *  [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]* [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
-	 *  \\. [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
-	 *  [0-9] ([0-9_]* [0-9])? [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
-	 *  [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]
+	 * FloatLiteral
+	 *  ([0..9] ([0..9_]* [0..9])?)? '.' [0..9] ([0..9_]* [0..9])? ([eE] [+-]? [0..9] ([0..9_]* [0..9])?)? [fF]
+	 *  [0..9] ([0..9_]* [0..9])? [eE] [+-]? [0..9] ([0..9_]* [0..9])? [fF]
+	 *  [0..9] ([0..9_]* [0..9])? [fF]
 	 *
-	 * HexadecimalFloatingPointLiteral:
-	 *  0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
-	 *  0 [Xx] ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 * DoubleLiteral
+	 *  ([0..9] ([0..9_]* [0..9])?)? '.' [0..9] ([0..9_]* [0..9])? ([eE] [+-]? [0..9] ([0..9_]* [0..9])?)?
+	 *  [0..9] ([0..9_]* [0..9])? [eE] [+-]? [0..9] ([0..9_]* [0..9])?
+	 *
+	 * If any of these match, it returns <code>true</code>.  Otherwise it
+	 * returns <code>false</code>.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a char literal, otherwise false
 	 */
 	public boolean isFloatLit(final Expression e) throws Exception {
-		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
 
-		if (lit.matches("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
-		if (lit.matches("^\\.[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
-		if (lit.matches("^[0-9]([0-9_]*[0-9])?[eE][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
-		if (lit.matches("^[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]$")) return true;
+		if (lit.matches("^([0..9]([0..9_]*[0..9])?)?\\.[0..9]([0..9_]*[0..9])?([eE][+-]?[0..9]([0..9_]*[0..9])?)?[fF]$")) return true;
+		if (lit.matches("^[0..9]([0..9_]*[0..9])?[eE][+-]?[0..9]([0..9_]*[0..9])?[fF]$")) return true;
+		if (lit.matches("^[0..9]([0..9_]*[0..9])?[fF]$")) return true;
 
-		if (lit.matches("^0[Xx][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
-		return lit.matches("^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$");
+		if (lit.matches("^([0..9]([0..9_]*[0..9])?)?\\.[0..9]([0..9_]*[0..9])?([eE][+-]?[0..9]([0..9_]*[0..9])?)?$")) return true;
+		return lit.matches("^[0..9]([0..9_]*[0..9])?[eE][+-]?[0..9]([0..9_]*[0..9])?$");
 	}
 
-	/**
-	 * Returns <code>true</code> if the expression <code>e</code> is of kind
-	 * <code>LITERAL</code> and is a char literal.
-	 *
-	 * @param e the expression to test
-	 * @return true if the expression is a char literal, otherwise false
-	 */
 	public boolean isCharLit(final Expression e) throws Exception {
-		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		return e.getLiteral().startsWith("'");
 	}
 
-	/**
-	 * Returns <code>true</code> if the expression <code>e</code> is of kind
-	 * <code>LITERAL</code> and is a string literal.
-	 *
-	 * @param e the expression to test
-	 * @return true if the expression is a string literal, otherwise false
-	 */
 	public boolean isStringLit(final Expression e) throws Exception {
-		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		return e.getLiteral().startsWith("\"");
 	}
 
-	/**
-	 * Returns <code>true</code> if the expression <code>e</code> is of kind
-	 * <code>LITERAL</code> and is a type literal.
-	 *
-	 * @param e the expression to test
-	 * @return true if the expression is a type literal, otherwise false
-	 */
 	public boolean isTypeLit(final Expression e) throws Exception {
-		// FIXME convert to Kotlin
-		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
-		if (!e.hasLiteral()) return false;
-		return e.getLiteral().endsWith(".class");
+		return false;
 	}
 
-	/**
-	 * Returns <code>true</code> if the expression <code>e</code> is of kind
-	 * <code>LITERAL</code> and is a bool literal.
-	 *
-	 * @param e the expression to test
-	 * @return true if the expression is a bool literal, otherwise false
-	 */
 	public boolean isBoolLit(final Expression e) throws Exception {
-		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
@@ -213,29 +169,13 @@ public class KotlinLangMode implements LangMode {
 		return lit.equals("true") || lit.equals("false");
 	}
 
-	/**
-	 * Returns <code>true</code> if the expression <code>e</code> is of kind
-	 * <code>LITERAL</code> and is a null literal.
-	 *
-	 * @param e the expression to test
-	 * @return true if the expression is a null literal, otherwise false
-	 */
 	public boolean isNullLit(final Expression e) throws Exception {
-		// FIXME convert to Kotlin
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
 		return e.getLiteral().equals("null");
 	}
 
-	/**
-	 * Returns <code>true</code> if the expression <code>e</code> is of kind
-	 * <code>LITERAL</code> and the literal matches the string <code>lit</code>.
-	 *
-	 * @param e the expression to test
-	 * @return true if the expression is a string literal, otherwise false
-	 */
 	public boolean isLiteral(final Expression e, final String lit) throws Exception {
-		// FIXME convert to Kotlin
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
 	}
 
@@ -249,7 +189,6 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final ASTRoot r) {
-		// FIXME convert to Kotlin
 		if (r == null) return "";
 
 		String s = "";
@@ -261,18 +200,29 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Namespace n) {
-		// FIXME convert to Kotlin
 		if (n == null) return "";
 
 		String s = "";
 
-		if (n.getName().length() > 0) {
-			s += prettyprint(n.getModifiersList());
+		s += prettyprint(n.getModifiersList());
+
+		if (n.getName().length() > 0)
 			s += indent() + "package " + n.getName() + ";\n";
-		}
 
 		for (final String i : n.getImportsList())
 			s += indent() + "import " + i + "\n";
+
+		for (final Variable v : n.getVariablesList())
+			s += prettyprint(v);
+
+		for (final Method m : n.getMethodsList())
+			s += prettyprint(m);
+
+		for (final Statement st : n.getStatementsList())
+			s += prettyprint(st);
+
+		for (final Expression e : n.getExpressionsList())
+			s += prettyprint(e);
 
 		for (final Declaration d : n.getDeclarationsList())
 			s += prettyprint(d);
@@ -447,7 +397,6 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	private String prettyprint(final List<Modifier> mods) {
-		// FIXME convert to Kotlin
 		String s = "";
 
 		for (final Modifier m : mods)
@@ -809,26 +758,19 @@ public class KotlinLangMode implements LangMode {
 					s += prettyprint(e.getExpressions(0));
 				return s;
 
-			// TODO
-			case METHOD_REFERENCE:
-				return s;
-
 			default: return s;
 		}
 	}
 
 	private String ppPrefix(final String op, final Expression e) {
-		// FIXME convert to Kotlin
 		return op + prettyprint(e.getExpressions(0));
 	}
 
 	private String ppPostfix(final String op, final Expression e) {
-		// FIXME convert to Kotlin
 		return prettyprint(e.getExpressions(0)) + op;
 	}
 
 	private String ppInfix(final String op, final List<Expression> exps) {
-		// FIXME convert to Kotlin
 		StringBuilder s = new StringBuilder();
 
 		s.append(prettyprint(exps.get(0)));
