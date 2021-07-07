@@ -1,4 +1,4 @@
 package Foo
 
-class C<T> {
+class C<D, T : S, F> : O, P {
 }

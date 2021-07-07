@@ -27,12 +27,13 @@ import java.util.Stack;
 import kotlinx.ast.common.ast.Ast;
 import kotlinx.ast.common.ast.DefaultAstNode;
 import kotlinx.ast.common.ast.DefaultAstTerminal;
-import kotlinx.ast.common.klass.KlassIdentifier;
-import kotlinx.ast.common.klass.KlassDeclaration;
-import kotlinx.ast.common.klass.KlassModifier;
-import kotlinx.ast.common.klass.KlassInheritance;
-import kotlinx.ast.common.klass.KlassString;
 import kotlinx.ast.common.klass.KlassAnnotation;
+import kotlinx.ast.common.klass.KlassDeclaration;
+import kotlinx.ast.common.klass.KlassIdentifier;
+import kotlinx.ast.common.klass.KlassInheritance;
+import kotlinx.ast.common.klass.KlassModifier;
+import kotlinx.ast.common.klass.KlassString;
+import kotlinx.ast.common.klass.KlassTypeParameter;
 import kotlinx.ast.common.klass.StringComponent;
 import kotlinx.ast.common.klass.StringComponentRaw;
 import kotlinx.ast.common.klass.StringComponentAstNodeExpression;
@@ -89,12 +90,12 @@ public class KotlinVisitor {
 
 		startvisit(n);
 
-        b.addAllExpressions(expressions.pop());
-        b.addAllStatements(statements.pop());
-        b.addAllMethods(methods.pop());
-        b.addAllVariables(fields.pop());
-        b.addAllDeclarations(declarations.pop());
-        b.addAllModifiers(modifiers.pop());
+		b.addAllExpressions(expressions.pop());
+		b.addAllStatements(statements.pop());
+		b.addAllMethods(methods.pop());
+		b.addAllVariables(fields.pop());
+		b.addAllDeclarations(declarations.pop());
+		b.addAllModifiers(modifiers.pop());
 
 		return b.build();
 	}
@@ -213,25 +214,36 @@ public class KotlinVisitor {
 		db.setFullyQualifiedName(fullyQualified(getIdentifier(n.getIdentifier())));
 
 		modifiers.push(new ArrayList<Modifier>());
+		for (final KlassAnnotation a : n.getAnnotations())
+			visit(a);
 		for (final KlassModifier m : n.getModifiers())
 			visit(m);
 		db.addAllModifiers(modifiers.pop());
 
+		for (final KlassTypeParameter tp : n.getTypeParameters())
+			db.addGenericParameters(buildType(getIdentifier(tp)));
+
+		for (final KlassInheritance inh : n.getInheritance())
+			db.addParents(buildType(inh));
+
 		declarations.push(new ArrayList<Declaration>());
 		fields.push(new ArrayList<Variable>());
+		methods.push(new ArrayList<Method>());
+		statements.push(new ArrayList<Statement>());
 
 		startvisit(n.getExpressions());
 
+		db.addAllStatements(statements.pop());
+		db.addAllMethods(methods.pop());
 		db.addAllFields(fields.pop());
 		db.addAllNestedDeclarations(declarations.pop());
-	/* TODO
-	repeated Type generic_parameters = 4;
-	repeated Type parents = 5;
-	repeated Method methods = 6;
-	repeated Declaration nested_declarations = 8;
-	optional int32 declaring_type = 15;
-	repeated Statement statements = 16;
-	*/
+
+		// TODO default constructor
+		// TODO type
+		// TODO receiverType
+		// TODO parameter
+
+		// TODO? optional int32 declaring_type = 15;
 
 		declarations.peek().add(db.build());
 	}
@@ -1579,6 +1591,17 @@ public class KotlinVisitor {
 		return id.getIdentifier();
 	}
 
+	protected String getIdentifier(final KlassTypeParameter p) {
+		if (p.getBase().size() == 0)
+			return getIdentifier(p.getGeneric());
+
+		final List<String> parts = new ArrayList<String>();
+		parts.add(getIdentifier(p.getGeneric()));
+		for (final KlassIdentifier id : p.getBase())
+			parts.add(getIdentifier(id));
+		return String.join(" : ", parts);
+	}
+
 	protected String getIdentifier(final DefaultAstTerminal n) {
 		return n.getText();
 	}
@@ -1605,9 +1628,30 @@ public class KotlinVisitor {
 		return b.getName() + "." + name;
 	}
 
+	protected Type buildType(final String s) {
+		return Type.newBuilder()
+				   .setName(s)
+				   .setKind(TypeKind.GENERIC)
+				   .build();
+	}
+
+	protected Type buildType(final KlassIdentifier t) {
+		return Type.newBuilder()
+				   .setName(getIdentifier(t))
+				   .setKind(TypeKind.OTHER)
+				   .build();
+	}
+
 	protected Type buildType(final List<KlassIdentifier> t) {
 		return Type.newBuilder()
 				   .setName(getIdentifier(t))
+				   .setKind(TypeKind.OTHER)
+				   .build();
+	}
+
+	protected Type buildType(final KlassInheritance i) {
+		return Type.newBuilder()
+				   .setName(getIdentifier(i.getType()))
 				   .setKind(TypeKind.OTHER)
 				   .build();
 	}
