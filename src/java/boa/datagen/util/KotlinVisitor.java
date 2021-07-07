@@ -234,6 +234,14 @@ public class KotlinVisitor {
 
 		db.addAllFields(fields.pop());
 		db.addAllNestedDeclarations(declarations.pop());
+    /* TODO
+	repeated Type generic_parameters = 4;
+	repeated Type parents = 5;
+	repeated Method methods = 6;
+	repeated Declaration nested_declarations = 8;
+	optional int32 declaring_type = 15;
+	repeated Statement statements = 16;
+    */
 
 		declarations.peek().add(db.build());
 	}
@@ -266,6 +274,64 @@ public class KotlinVisitor {
 		boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
 
 		switch (n.getGroup().getGroup()) {
+		case "inheritanceModifier":
+			switch (n.getModifier()) {
+			case "abstract":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.ABSTRACT);
+				break;
+
+			case "open":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+				mb.setOther("open");
+				break;
+
+			case "final":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.FINAL);
+				break;
+
+			default:
+				System.out.println("unknown visibility modifier: " + n.getModifier());
+				break;
+			}
+			break;
+
+		case "classModifier":
+			switch (n.getModifier()) {
+			case "enum":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+				mb.setOther("enum");
+				break;
+
+			case "sealed":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+				mb.setOther("sealed");
+				break;
+
+			case "annotation":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
+				break;
+
+			case "value":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+				mb.setOther("value");
+				break;
+
+			case "inner":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+				mb.setOther("inner");
+				break;
+
+			case "data":
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+				mb.setOther("data");
+				break;
+
+			default:
+				System.out.println("unknown visibility modifier: " + n.getModifier());
+				break;
+			}
+			break;
+
 		case "visibilityModifier":
 			mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
 			switch (n.getModifier()) {
@@ -290,7 +356,9 @@ public class KotlinVisitor {
 				break;
 			}
 			break;
+
 		default:
+			System.out.println("unknown modifier group: " + n.getGroup().getGroup());
 			break;
 		}
 
