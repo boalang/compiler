@@ -155,10 +155,10 @@ public class KotlinVisitor {
 	protected void visit(final KlassDeclaration n) {
 		switch (n.getKeyword()) {
 		case "var":
-			visitDeclarationVar(n);
+			visitDeclarationVar(n, false);
 			break;
 		case "val":
-			visitDeclarationVal(n);
+			visitDeclarationVar(n, true);
 			break;
 		case "class":
 			visitDeclarationClass(n);
@@ -184,69 +184,33 @@ public class KotlinVisitor {
 		default:
 			System.out.println("unknown kotlin declaration: " + n.getKeyword());
 		}
-		indent += 2;
-		startvisit(n.getChildren());
-		indent -= 2;
 	}
 
-	protected void visitDeclarationVar(final KlassDeclaration n) {
+	protected void visitDeclarationVar(final KlassDeclaration n, final boolean isFinal) {
 		final boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
 
 		vb.setName(getIdentifier(n.getIdentifier()));
 
-		// Set the type.
-		if(!getIdentifier(n.getType()).equals(""))
-			vb.setVariableType(boa.types.Ast.Type.newBuilder()
-					   .setName(getIdentifier(n.getType()))
-					   .setKind(boa.types.Ast.TypeKind.OTHER)
-					   .build());
+		if (n.getType().size() > 0)
+			vb.setVariableType(buildType(n.getType()));
 
-		// Handle any potential modifiers on a variable.
+		// for val, mark it final/const
+		if (isFinal)
+			vb.addModifiers(boa.types.Ast.Modifier.newBuilder()
+									.setKind(boa.types.Ast.Modifier.ModifierKind.CONSTANT)
+									.build());
+
 		modifiers.push(new ArrayList<Modifier>());
-		for (final KlassModifier m: n.getModifiers())
+		for (final KlassModifier m : n.getModifiers())
 			visit(m);
 		vb.addAllModifiers(modifiers.pop());
 
-		// Add any/all expressions providing values.
-		for (final Ast ex: n.getExpressions()) {
+		for (final Ast ex : n.getExpressions()) {
 			int numExpressionsStart = expressions.size();
 			startvisit(ex);
 			int numExpressions = expressions.size();
-			if (numExpressions > numExpressionsStart)
-				for (int i = 0 ; i < numExpressions - numExpressionsStart; i++)
-					vb.addExpressions(expressions.pop());
-		}
-
-		fields.peek().add(vb.build());
-	}
-
-	protected void visitDeclarationVal(final KlassDeclaration n) {
-		// Generally, see definition of `visitDeclarationVar`
-		final boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-
-		vb.setName(getIdentifier(n.getIdentifier()));
-
-		if(!getIdentifier(n.getType()).equals(""))
-			vb.setVariableType(boa.types.Ast.Type.newBuilder()
-					   .setName(getIdentifier(n.getType()))
-					   .setKind(boa.types.Ast.TypeKind.OTHER)
-					   .build());
-
-		modifiers.push(new ArrayList<Modifier>());
-		// Note: `val x = 5` is roughly equivalent to `final int x = 5`
-		modifiers.peek().add(boa.types.Ast.Modifier.newBuilder()
-				     .setKind(boa.types.Ast.Modifier.ModifierKind.FINAL).build());
-		for (final KlassModifier m: n.getModifiers())
-			visit(m);
-		vb.addAllModifiers(modifiers.pop());
-
-		for (final Ast ex: n.getExpressions()) {
-			int numExpressionsStart = expressions.size();
-			startvisit(ex);
-			int numExpressions = expressions.size();
-			if (numExpressions > numExpressionsStart)
-				for (int i = 0 ; i < numExpressions - numExpressionsStart; i++)
-					vb.addExpressions(expressions.pop());
+			for (int i = 0 ; i < numExpressions - numExpressionsStart; i++)
+				vb.addExpressions(expressions.pop());
 		}
 
 		fields.peek().add(vb.build());
@@ -300,8 +264,25 @@ public class KotlinVisitor {
 	}
 
 	protected void visit(final KlassModifier n) {
-		indent();
-		System.out.format("KlassModifier(%s, %s)\n", n.getModifier(), n.getGroup().getGroup());
+		boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+
+		switch (n.getGroup().getGroup()) {
+		case "visibilityModifier":
+			mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
+			switch (n.getModifier()) {
+			case "private":
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PRIVATE);
+				break;
+
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+
+		modifiers.peek().add(mb.build());
 	}
 
 	protected void visit(final KlassString n) {
@@ -1555,5 +1536,12 @@ public class KotlinVisitor {
 		if (b.getName().isEmpty())
 			return name;
 		return b.getName() + "." + name;
+	}
+
+	protected Type buildType(final List<KlassIdentifier> t) {
+		return Type.newBuilder()
+				   .setName(getIdentifier(t))
+				   .setKind(boa.types.Ast.TypeKind.OTHER)
+				   .build();
 	}
 }
