@@ -1130,7 +1130,8 @@ public class KotlinVisitor {
 	}
 
 	protected void visitStatement(final DefaultAstNode n) {
-
+		// TODO: Handle correctly
+		startvisit(n.getChildren());
 	}
 
 	protected void visitLabel(final DefaultAstNode n) {
@@ -1146,7 +1147,8 @@ public class KotlinVisitor {
 	}
 
 	protected void visitLoopStatement(final DefaultAstNode n) {
-
+		// TODO: Handle correctly
+		startvisit(n.getChildren());
 	}
 
 	protected void visitForStatement(final DefaultAstNode n) {
@@ -1380,7 +1382,8 @@ public class KotlinVisitor {
 	}
 
 	protected void visitLambdaLiteral(final DefaultAstNode n) {
-
+		// TODO: Handle correctly
+		startvisit(n.getChildren());
 	}
 
 	protected void visitLambdaParameters(final DefaultAstNode n) {
@@ -1396,7 +1399,8 @@ public class KotlinVisitor {
 	}
 
 	protected void visitFunctionLiteral(final DefaultAstNode n) {
-
+		// TODO: Handle correctly
+                startvisit(n.getChildren());
 	}
 
 	protected void visitObjectLiteral(final DefaultAstNode n) {
