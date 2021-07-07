@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import kotlinx.ast.common.ast.Ast;
+import kotlinx.ast.common.ast.AstWithRawAstKt;
 import kotlinx.ast.common.ast.DefaultAstNode;
 import kotlinx.ast.common.ast.DefaultAstTerminal;
 import kotlinx.ast.common.klass.KlassAnnotation;
@@ -293,8 +294,9 @@ public class KotlinVisitor {
 
 		// TODO: Handle generics
 		// TODO: Figure out how to get the content of a method/function
+		Ast rawAst = AstWithRawAstKt.rawAstOrNull(n).getAst();
 
-		startvisit(n.getChildren());
+		startvisit(rawAst);
 
 		mb.addAllModifiers(modifiers.pop());
 		mb.addAllArguments(fields.pop());
