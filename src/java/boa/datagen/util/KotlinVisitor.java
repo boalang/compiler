@@ -1295,7 +1295,12 @@ public class KotlinVisitor {
 	}
 
 	protected void visitParenthesizedExpression(final DefaultAstNode n) {
-
+		expressionsWork.push(new ArrayList<boa.types.Ast.Expression>());
+		startvisit(n.getChildren());
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
+		eb.addAllExpressions(expressionsWork.pop());
+		expressionsWork.peek().add(eb.build());
 	}
 
 	protected void visitCollectionLiteral(final DefaultAstNode n) {
