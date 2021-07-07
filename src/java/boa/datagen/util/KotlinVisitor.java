@@ -1209,6 +1209,16 @@ public class KotlinVisitor {
 	}
 
 	protected void visitMultiplicativeExpression(final DefaultAstNode n) {
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MULT);
+		expressionsWork.push(new ArrayList<boa.types.Ast.Expression>());
+		startvisit(n.getChildren());
+                List<boa.types.Ast.Expression> children = expressionsWork.pop();
+		if (children.size() == 1) {
+			expressionsWork.peek().add(children.get(0));
+		}
+		eb.addAllExpressions(children);
+		expressionsWork.peek().add(eb.build());
 
 	}
 
