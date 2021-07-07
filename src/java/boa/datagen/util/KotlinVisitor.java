@@ -1187,11 +1187,31 @@ public class KotlinVisitor {
 	}
 
 	protected void visitDisjunction(final DefaultAstNode n) {
-
+		expressions.push(new ArrayList<Expression>());
+                startvisit(n.getChildren());
+                List<Expression> children = expressions.pop();
+		if (children.size() > 1) {
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(Expression.ExpressionKind.LOGICAL_OR);
+			eb.addAllExpressions(children);
+			expressions.peek().add(eb.build());
+		} else {
+			expressions.peek().add(children.get(1));
+		}
 	}
 
 	protected void visitConjunction(final DefaultAstNode n) {
-
+		expressions.push(new ArrayList<Expression>());
+                startvisit(n.getChildren());
+                List<Expression> children = expressions.pop();
+		if (children.size() > 1) {
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(Expression.ExpressionKind.LOGICAL_AND);
+			eb.addAllExpressions(children);
+			expressions.peek().add(eb.build());
+		} else {
+			expressions.peek().add(children.get(1));
+		}
 	}
 
 	protected void visitEquality(final DefaultAstNode n) {
