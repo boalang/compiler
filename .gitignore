@@ -8,3 +8,4 @@
 /junitvmwatcher*.properties
 .vscode/
 /src/antlr/.antlr
+.*.swp
