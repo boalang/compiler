@@ -265,7 +265,7 @@ public class KotlinVisitor {
 	}
 
 	protected void visitDeclarationArgument(final KlassDeclaration n) {
-
+                startvisit(n.getChildren());
 	}
 
 	protected void visitDeclarationParameter(final KlassDeclaration n) {
@@ -1157,7 +1157,13 @@ public class KotlinVisitor {
 	}
 
 	protected void visitGenericCallLikeComparison(final DefaultAstNode n) {
-
+		final Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.METHODCALL);
+                eb.setMethod(getIdentifier((KlassIdentifier)n.getChildren().get(0)));
+		expressions.push(new ArrayList<Expression>());
+		startvisit(n.getChildren().get(1));
+		eb.addAllMethodArgs(expressions.pop());
+                expressions.peek().add(eb.build());
 	}
 
 	protected void visitInfixOperation(final DefaultAstNode n) {
@@ -1181,7 +1187,18 @@ public class KotlinVisitor {
 	}
 
 	protected void visitAdditiveExpression(final DefaultAstNode n) {
+		final Expression.Builder eb = Expression.newBuilder();
 
+		eb.setKind(Expression.ExpressionKind.OP_ADD);
+
+		expressions.push(new ArrayList<Expression>());
+		startvisit(n.getChildren());
+		final List<Expression> children = expressions.pop();
+		if (children.size() == 1)
+			expressions.peek().add(children.get(0));
+		eb.addAllExpressions(children);
+
+		expressions.peek().add(eb.build());
 	}
 
 	protected void visitMultiplicativeExpression(final DefaultAstNode n) {
@@ -1248,7 +1265,7 @@ public class KotlinVisitor {
 	}
 
 	protected void visitCallSuffix(final DefaultAstNode n) {
-
+                startvisit(n.getChildren());
 	}
 
 	protected void visitAnnotatedLambda(final DefaultAstNode n) {
