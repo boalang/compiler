@@ -40,10 +40,12 @@ import kotlinx.ast.grammar.kotlin.common.summary.Import;
 import kotlinx.ast.grammar.kotlin.common.summary.PackageHeader;
 
 import boa.types.Ast.Declaration;
+import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
 import boa.types.Ast.Modifier;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.PositionInfo;
+import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
@@ -56,12 +58,12 @@ public class KotlinVisitor {
 	protected List<Ast> root = null;
 
 	protected Namespace.Builder b = Namespace.newBuilder();
-	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
-	protected Stack<List<boa.types.Ast.Modifier>> modifiers = new Stack<List<boa.types.Ast.Modifier>>();
-	protected Stack<List<boa.types.Ast.Expression>> expressions = new Stack<List<boa.types.Ast.Expression>>();
-	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
-	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
-	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
+	protected Stack<List<Declaration>> declarations = new Stack<List<Declaration>>();
+	protected Stack<List<Modifier>> modifiers = new Stack<List<Modifier>>();
+	protected Stack<List<Expression>> expressions = new Stack<List<Expression>>();
+	protected Stack<List<Variable>> fields = new Stack<List<Variable>>();
+	protected Stack<List<Method>> methods = new Stack<List<Method>>();
+	protected Stack<List<Statement>> statements = new Stack<List<Statement>>();
 
 	public static final int KLS10 = 10;
 	public static final int KLS11 = 11;
@@ -77,18 +79,22 @@ public class KotlinVisitor {
 
 	public Namespace getNamespaces(final List<Ast> n) {
 		root = n;
+
+		modifiers.push(new ArrayList<Modifier>());
 		declarations.push(new ArrayList<Declaration>());
 		fields.push(new ArrayList<Variable>());
+		methods.push(new ArrayList<Method>());
+		statements.push(new ArrayList<Statement>());
+		expressions.push(new ArrayList<Expression>());
 
 		startvisit(n);
 
-		final List<Declaration> decls = declarations.pop();
-		for (final Declaration d : decls)
-			b.addDeclarations(d);
-
-		final List<Variable> fs = fields.pop();
-		for (final Variable v : fs)
-			b.addVariables(v);
+        b.addAllExpressions(expressions.pop());
+        b.addAllStatements(statements.pop());
+        b.addAllMethods(methods.pop());
+        b.addAllVariables(fields.pop());
+        b.addAllDeclarations(declarations.pop());
+        b.addAllModifiers(modifiers.pop());
 
 		return b.build();
 	}
@@ -172,7 +178,7 @@ public class KotlinVisitor {
 	}
 
 	protected void visitDeclarationVar(final KlassDeclaration n, final boolean isFinal) {
-		final boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
+		final Variable.Builder vb = Variable.newBuilder();
 
 		vb.setName(getIdentifier(n.getIdentifier()));
 
@@ -181,8 +187,8 @@ public class KotlinVisitor {
 
 		// for val, mark it final/const
 		if (isFinal)
-			vb.addModifiers(boa.types.Ast.Modifier.newBuilder()
-									.setKind(boa.types.Ast.Modifier.ModifierKind.CONSTANT)
+			vb.addModifiers(Modifier.newBuilder()
+									.setKind(Modifier.ModifierKind.CONSTANT)
 									.build());
 
 		modifiers.push(new ArrayList<Modifier>());
@@ -191,7 +197,7 @@ public class KotlinVisitor {
 		vb.addAllModifiers(modifiers.pop());
 
 		for (final Ast ex : n.getExpressions()) {
-						expressions.push(new ArrayList<boa.types.Ast.Expression>());
+						expressions.push(new ArrayList<Expression>());
 			startvisit(ex);
 			vb.addAllExpressions(expressions.pop());
 		}
@@ -200,9 +206,9 @@ public class KotlinVisitor {
 	}
 
 	protected void visitDeclarationClass(final KlassDeclaration n) {
-		final boa.types.Ast.Declaration.Builder db = boa.types.Ast.Declaration.newBuilder();
+		final Declaration.Builder db = Declaration.newBuilder();
 
-		db.setKind(boa.types.Ast.TypeKind.CLASS);
+		db.setKind(TypeKind.CLASS);
 		db.setName(getIdentifier(n.getIdentifier()));
 		db.setFullyQualifiedName(fullyQualified(getIdentifier(n.getIdentifier())));
 
@@ -255,22 +261,22 @@ public class KotlinVisitor {
 	}
 
 	protected void visit(final KlassModifier n) {
-		boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+		Modifier.Builder mb = Modifier.newBuilder();
 
 		switch (n.getGroup().getGroup()) {
 		case "inheritanceModifier":
 			switch (n.getModifier()) {
 			case "abstract":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.ABSTRACT);
+				mb.setKind(Modifier.ModifierKind.ABSTRACT);
 				break;
 
 			case "open":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+				mb.setKind(Modifier.ModifierKind.OTHER);
 				mb.setOther(n.getModifier());
 				break;
 
 			case "final":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.FINAL);
+				mb.setKind(Modifier.ModifierKind.FINAL);
 				break;
 
 			default:
@@ -282,7 +288,7 @@ public class KotlinVisitor {
 		case "classModifier":
 			switch (n.getModifier()) {
 			case "annotation":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
+				mb.setKind(Modifier.ModifierKind.ANNOTATION);
 				break;
 
 			case "enum":
@@ -290,7 +296,7 @@ public class KotlinVisitor {
 			case "inner":
 			case "data":
 			case "sealed":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+				mb.setKind(Modifier.ModifierKind.OTHER);
 				mb.setOther(n.getModifier());
 				break;
 
@@ -301,22 +307,22 @@ public class KotlinVisitor {
 			break;
 
 		case "visibilityModifier":
-			mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
+			mb.setKind(Modifier.ModifierKind.VISIBILITY);
 			switch (n.getModifier()) {
 			case "public":
-				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PUBLIC);
+				mb.setVisibility(Modifier.Visibility.PUBLIC);
 				break;
 
 			case "protected":
-				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PROTECTED);
+				mb.setVisibility(Modifier.Visibility.PROTECTED);
 				break;
 
 			case "private":
-				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PRIVATE);
+				mb.setVisibility(Modifier.Visibility.PRIVATE);
 				break;
 
 			case "internal":
-				mb.setVisibility(boa.types.Ast.Modifier.Visibility.INTERNAL);
+				mb.setVisibility(Modifier.Visibility.INTERNAL);
 				break;
 
 			default:
@@ -333,7 +339,7 @@ public class KotlinVisitor {
 		case "parameterModifier":
 		case "reificationModifier":
 		case "platformModifier":
-			mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+			mb.setKind(Modifier.ModifierKind.OTHER);
 			mb.setOther(n.getModifier());
 			break;
 
@@ -1167,13 +1173,13 @@ public class KotlinVisitor {
 	}
 
 	protected void visitMultiplicativeExpression(final DefaultAstNode n) {
-		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		final Expression.Builder eb = Expression.newBuilder();
 
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MULT);
+		eb.setKind(Expression.ExpressionKind.OP_MULT);
 
-		expressions.push(new ArrayList<boa.types.Ast.Expression>());
+		expressions.push(new ArrayList<Expression>());
 		startvisit(n.getChildren());
-		final List<boa.types.Ast.Expression> children = expressions.pop();
+		final List<Expression> children = expressions.pop();
 		if (children.size() == 1)
 			expressions.peek().add(children.get(0));
 		eb.addAllExpressions(children);
@@ -1254,11 +1260,11 @@ public class KotlinVisitor {
 	}
 
 	protected void visitParenthesizedExpression(final DefaultAstNode n) {
-		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		final Expression.Builder eb = Expression.newBuilder();
 
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
+		eb.setKind(Expression.ExpressionKind.PAREN);
 
-		expressions.push(new ArrayList<boa.types.Ast.Expression>());
+		expressions.push(new ArrayList<Expression>());
 		startvisit(n.getChildren());
 		eb.addAllExpressions(expressions.pop());
 
@@ -1270,9 +1276,9 @@ public class KotlinVisitor {
 	}
 
 	protected void visitLiteralConstant(final DefaultAstNode n) {
-		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		final Expression.Builder eb = Expression.newBuilder();
 
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		eb.setKind(Expression.ExpressionKind.LITERAL);
 		// Grab the first (and presumably *only*) subexpression, cast as a terminal, and use its text
 		eb.setLiteral(((DefaultAstTerminal)n.getChildren().get(0)).getText());
 
@@ -1536,9 +1542,9 @@ public class KotlinVisitor {
 	}
 
 	protected void visitFileAnnot(final DefaultAstNode n) {
-		boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+		Modifier.Builder mb = Modifier.newBuilder();
 
-		mb.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
+		mb.setKind(Modifier.ModifierKind.ANNOTATION);
 		DefaultAstNode ast = (DefaultAstNode)n.getChildren().get(3);
 		ast = (DefaultAstNode)ast.getChildren().get(0);
 		ast = (DefaultAstNode)ast.getChildren().get(0);
@@ -1547,7 +1553,7 @@ public class KotlinVisitor {
 		//mb.addAnnotationMembers();
 		//mb.addAnnotationValues();
 
-		b.addModifiers(mb.build());
+		modifiers.peek().add(mb.build());
 	}
 
 	protected void visit(final DefaultAstTerminal n) {
@@ -1602,7 +1608,7 @@ public class KotlinVisitor {
 	protected Type buildType(final List<KlassIdentifier> t) {
 		return Type.newBuilder()
 				   .setName(getIdentifier(t))
-				   .setKind(boa.types.Ast.TypeKind.OTHER)
+				   .setKind(TypeKind.OTHER)
 				   .build();
 	}
 }
