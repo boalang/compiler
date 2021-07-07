@@ -59,6 +59,7 @@ public class KotlinVisitor {
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
 	protected Stack<List<boa.types.Ast.Modifier>> modifiers = new Stack<List<boa.types.Ast.Modifier>>();
 	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
+	protected Stack<List<boa.types.Ast.Expression>> expressionsWork = new Stack<List<boa.types.Ast.Expression>>();
 	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
@@ -206,11 +207,9 @@ public class KotlinVisitor {
 		vb.addAllModifiers(modifiers.pop());
 
 		for (final Ast ex : n.getExpressions()) {
-			int numExpressionsStart = expressions.size();
+                        expressionsWork.push(new ArrayList<boa.types.Ast.Expression>());
 			startvisit(ex);
-			int numExpressions = expressions.size();
-			for (int i = 0 ; i < numExpressions - numExpressionsStart; i++)
-				vb.addExpressions(expressions.pop());
+			vb.addAllExpressions(expressionsWork.pop());
 		}
 
 		fields.peek().add(vb.build());
