@@ -603,7 +603,7 @@ public abstract class AbstractCommit {
 			final KotlinVisitor visitor = new KotlinVisitor();
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-			ast.addNamespaces(visitor.getNamespaces(astList.get()));
+			ast.addNamespaces(visitor.getNamespace(astList.get()));
 
 			switch (visitor.getAstLevel()) {
 				case KotlinVisitor.KLS10:

@@ -40,11 +40,14 @@ public class KotlinToBoa {
 
 			final AstSource source = new AstSource.String("", content);
 			final AstResult<Unit, List<Ast>> astList = SummaryKt.summary(KotlinGrammarAntlrJavaParser.INSTANCE.parseKotlinFile(source), true);
+for (final Ast ast : astList.get())
+    kotlinx.ast.common.PrintKt.print(ast);
+System.out.println("");
 
 			final KotlinVisitor visitor = new KotlinVisitor();
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-			ast.addNamespaces(visitor.getNamespaces(astList.get()));
+			ast.addNamespaces(visitor.getNamespace(astList.get()));
 			sb.append(JsonFormat.printToString(ast.build()));
 
 			return FileIO.normalizeEOL(sb.toString());

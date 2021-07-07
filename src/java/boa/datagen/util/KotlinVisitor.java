@@ -77,7 +77,7 @@ public class KotlinVisitor {
 		return astLevel;
 	}
 
-	public Namespace getNamespaces(final List<Ast> n) {
+	public Namespace getNamespace(final List<Ast> n) {
 		root = n;
 
 		modifiers.push(new ArrayList<Modifier>());
