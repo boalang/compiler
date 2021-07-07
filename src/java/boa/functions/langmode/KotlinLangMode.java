@@ -843,7 +843,6 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Modifier m) {
-		// FIXME convert to Kotlin
 		if (m == null) return "";
 
 		String s = "";
@@ -856,11 +855,12 @@ public class KotlinLangMode implements LangMode {
 					case PUBLIC:    return "public";
 					case PRIVATE:   return "private";
 					case PROTECTED: return "protected";
-					case NAMESPACE: return "namespace";
+					case INTERNAL:  return "internal";
 					default: return s;
 				}
 
 			case ANNOTATION:
+				// FIXME convert to Kotlin - handle @file:[foo, bar] syntax
 				s = "@" + m.getAnnotationName();
 				if (m.getAnnotationMembersCount() > 0) s += "(";
 				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
@@ -871,8 +871,6 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case FINAL:        return "final";
-			case STATIC:       return "static";
-			case SYNCHRONIZED: return "synchronized";
 			case ABSTRACT:     return "abstract";
 
 			default: return s;
