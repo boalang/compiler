@@ -1312,8 +1312,6 @@ public class KotlinVisitor {
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		// Grab the first (and presumably *only*) subexpression, cast as a terminal, and use its text
 		eb.setLiteral(((DefaultAstTerminal)n.getChildren().get(0)).getText());
-		if (expressionsWork.empty())
-			expressionsWork.push(new ArrayList<boa.types.Ast.Expression>());
 		expressionsWork.peek().add(eb.build());
 	}
 
