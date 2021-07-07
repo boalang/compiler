@@ -58,8 +58,7 @@ public class KotlinVisitor {
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
 	protected Stack<List<boa.types.Ast.Modifier>> modifiers = new Stack<List<boa.types.Ast.Modifier>>();
-	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
-	protected Stack<List<boa.types.Ast.Expression>> expressionsWork = new Stack<List<boa.types.Ast.Expression>>();
+	protected Stack<List<boa.types.Ast.Expression>> expressions = new Stack<List<boa.types.Ast.Expression>>();
 	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
@@ -94,10 +93,6 @@ public class KotlinVisitor {
 		return b.build();
 	}
 
-	public boa.types.Ast.Expression getExpression() {
-		return expressions.pop();
-	}
-
 	public void startvisit(final List<Ast> n) {
 		for (final Ast ast : n)
 			startvisit(ast);
@@ -130,12 +125,6 @@ public class KotlinVisitor {
 			System.out.println("unknown kotlin node: " + n.getClass());
 	}
 
-	private int indent = 0;
-	private void indent() {
-		for (int i = 0; i < indent; i++)
-			System.out.print(" ");
-	}
-
 	protected void visit(final PackageHeader n) {
 		b.setName(getIdentifier(n.getIdentifier()));
 	}
@@ -145,12 +134,7 @@ public class KotlinVisitor {
 	}
 
 	protected void visit(final KlassIdentifier n) {
-		if (n == null) return;
-		indent();
-		System.out.format("KlassIdentifier(%s)\n", n.getIdentifier());
-		indent += 2;
-		startvisit(n.getChildren());
-		indent -= 2;
+
 	}
 
 	protected void visit(final KlassDeclaration n) {
@@ -207,9 +191,9 @@ public class KotlinVisitor {
 		vb.addAllModifiers(modifiers.pop());
 
 		for (final Ast ex : n.getExpressions()) {
-                        expressionsWork.push(new ArrayList<boa.types.Ast.Expression>());
+						expressions.push(new ArrayList<boa.types.Ast.Expression>());
 			startvisit(ex);
-			vb.addAllExpressions(expressionsWork.pop());
+			vb.addAllExpressions(expressions.pop());
 		}
 
 		fields.peek().add(vb.build());
@@ -234,14 +218,14 @@ public class KotlinVisitor {
 
 		db.addAllFields(fields.pop());
 		db.addAllNestedDeclarations(declarations.pop());
-    /* TODO
+	/* TODO
 	repeated Type generic_parameters = 4;
 	repeated Type parents = 5;
 	repeated Method methods = 6;
 	repeated Declaration nested_declarations = 8;
 	optional int32 declaring_type = 15;
 	repeated Statement statements = 16;
-    */
+	*/
 
 		declarations.peek().add(db.build());
 	}
@@ -282,7 +266,7 @@ public class KotlinVisitor {
 
 			case "open":
 				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
-				mb.setOther("open");
+				mb.setOther(n.getModifier());
 				break;
 
 			case "final":
@@ -297,33 +281,17 @@ public class KotlinVisitor {
 
 		case "classModifier":
 			switch (n.getModifier()) {
-			case "enum":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
-				mb.setOther("enum");
-				break;
-
-			case "sealed":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
-				mb.setOther("sealed");
-				break;
-
 			case "annotation":
 				mb.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
 				break;
 
+			case "enum":
 			case "value":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
-				mb.setOther("value");
-				break;
-
 			case "inner":
-				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
-				mb.setOther("inner");
-				break;
-
 			case "data":
+			case "sealed":
 				mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
-				mb.setOther("data");
+				mb.setOther(n.getModifier());
 				break;
 
 			default:
@@ -357,6 +325,18 @@ public class KotlinVisitor {
 			}
 			break;
 
+		case "typeModifier":
+		case "memberModifier":
+		case "varianceModifier":
+		case "functionModifier":
+		case "propertyModifier":
+		case "parameterModifier":
+		case "reificationModifier":
+		case "platformModifier":
+			mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+			mb.setOther(n.getModifier());
+			break;
+
 		default:
 			System.out.println("unknown modifier group: " + n.getGroup().getGroup());
 			break;
@@ -366,11 +346,7 @@ public class KotlinVisitor {
 	}
 
 	protected void visit(final KlassString n) {
-		indent();
-		System.out.println("KlassString");
-		indent += 2;
-		startvisitsc(n.getChildren());
-		indent -= 2;
+
 	}
 
 	protected void startvisitsc(final List<StringComponent> sc) {
@@ -388,37 +364,19 @@ public class KotlinVisitor {
 	}
 
 	protected void visitsc(final StringComponentRaw sc) {
-		indent();
-		System.out.println(sc.getDescription());
+
 	}
 
 	protected void visitsc(final StringComponentAstNodeExpression sc) {
-		final Ast expression = sc.getExpression();
-		if (expression instanceof KlassIdentifier) {
-			indent();
-			System.out.println(expression.getDescription());
-		} else {
-			startvisit(expression);
-		}
+
 	}
 
 	protected void visit(final KlassInheritance n) {
-		indent();
-		System.out.println("KlassInheritance");
-		indent += 2;
-		startvisit(n.getChildren());
-		indent -= 2;
+
 	}
 
 	protected void visit(final KlassAnnotation n) {
-		indent();
-		System.out.println(n.getAttachments());
-		System.out.print("KlassAnnotation(");
-		System.out.print(getIdentifier(n.getIdentifier()));
-		System.out.println(")");
-		indent += 2;
-		startvisit(n.getChildren());
-		indent -= 2;
+
 	}
 
 	protected void visit(final DefaultAstNode n) {
@@ -1209,17 +1167,18 @@ public class KotlinVisitor {
 	}
 
 	protected void visitMultiplicativeExpression(final DefaultAstNode n) {
-		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MULT);
-		expressionsWork.push(new ArrayList<boa.types.Ast.Expression>());
-		startvisit(n.getChildren());
-                List<boa.types.Ast.Expression> children = expressionsWork.pop();
-		if (children.size() == 1) {
-			expressionsWork.peek().add(children.get(0));
-		}
-		eb.addAllExpressions(children);
-		expressionsWork.peek().add(eb.build());
+		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.OP_MULT);
+
+		expressions.push(new ArrayList<boa.types.Ast.Expression>());
+		startvisit(n.getChildren());
+		final List<boa.types.Ast.Expression> children = expressions.pop();
+		if (children.size() == 1)
+			expressions.peek().add(children.get(0));
+		eb.addAllExpressions(children);
+
+		expressions.peek().add(eb.build());
 	}
 
 	protected void visitAsExpression(final DefaultAstNode n) {
@@ -1295,12 +1254,15 @@ public class KotlinVisitor {
 	}
 
 	protected void visitParenthesizedExpression(final DefaultAstNode n) {
-		expressionsWork.push(new ArrayList<boa.types.Ast.Expression>());
-		startvisit(n.getChildren());
-		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
-		eb.addAllExpressions(expressionsWork.pop());
-		expressionsWork.peek().add(eb.build());
+
+		expressions.push(new ArrayList<boa.types.Ast.Expression>());
+		startvisit(n.getChildren());
+		eb.addAllExpressions(expressions.pop());
+
+		expressions.peek().add(eb.build());
 	}
 
 	protected void visitCollectionLiteral(final DefaultAstNode n) {
@@ -1308,11 +1270,13 @@ public class KotlinVisitor {
 	}
 
 	protected void visitLiteralConstant(final DefaultAstNode n) {
-		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		// Grab the first (and presumably *only*) subexpression, cast as a terminal, and use its text
 		eb.setLiteral(((DefaultAstTerminal)n.getChildren().get(0)).getText());
-		expressionsWork.peek().add(eb.build());
+
+		expressions.peek().add(eb.build());
 	}
 
 	protected void visitStringLiteral(final DefaultAstNode n) {
@@ -1571,7 +1535,6 @@ public class KotlinVisitor {
 
 	}
 
-
 	protected void visitFileAnnot(final DefaultAstNode n) {
 		boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
 
@@ -1589,7 +1552,6 @@ public class KotlinVisitor {
 
 	protected void visit(final DefaultAstTerminal n) {
 		if (n.getChannel().getName() == "HIDDEN") return;
-		indent();
 		System.out.format("%s >>>%s<<< (%s)\n", n.getDescription(), n.getText(), n.getChannel().getName());
 	}
 
