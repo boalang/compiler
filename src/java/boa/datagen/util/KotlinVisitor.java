@@ -1143,7 +1143,11 @@ public class KotlinVisitor {
 	}
 
 	protected void visitBlock(final DefaultAstNode n) {
-
+		statements.push(new ArrayList<Statement>());
+                Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BLOCK);
+		sb.addAllStatements(statements.pop());
+                statements.peek().add(sb.build());
 	}
 
 	protected void visitLoopStatement(final DefaultAstNode n) {
