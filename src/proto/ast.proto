@@ -448,6 +448,8 @@ message Modifier {
 		PACKAGE = 4;
 		/** A default visibility modifier */
 		DEFAULT = 5;
+		/** An internal visibility modifier */
+		INTERNAL = 6;
 	}
 	/** A scope modifier */
 	enum Scope {

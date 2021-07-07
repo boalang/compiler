@@ -270,11 +270,24 @@ public class KotlinVisitor {
 		case "visibilityModifier":
 			mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
 			switch (n.getModifier()) {
+			case "public":
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PUBLIC);
+				break;
+
+			case "protected":
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PROTECTED);
+				break;
+
 			case "private":
 				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PRIVATE);
 				break;
 
+			case "internal":
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.INTERNAL);
+				break;
+
 			default:
+				System.out.println("unknown visibility modifier: " + n.getModifier());
 				break;
 			}
 			break;
