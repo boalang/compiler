@@ -173,6 +173,9 @@ public class KotlinVisitor {
 		case "parameter":
 			visitDeclarationParameter(n);
 			break;
+		case "fun":
+			visitDeclarationFun(n);
+			break;
 		default:
 			System.out.println("unknown kotlin declaration: " + n.getKeyword());
 		}
@@ -269,7 +272,34 @@ public class KotlinVisitor {
 	}
 
 	protected void visitDeclarationParameter(final KlassDeclaration n) {
+		final Variable.Builder vb = Variable.newBuilder();
 
+		vb.setName(getIdentifier(n.getIdentifier()));
+		if (n.getType().size() > 0)
+			vb.setVariableType(buildType(n.getType()));
+
+		fields.peek().add(vb.build());
+	}
+
+	protected void visitDeclarationFun(final KlassDeclaration n) {
+                final Method.Builder mb = Method.newBuilder();
+		mb.setName(getIdentifier(n.getIdentifier()));
+
+		if (n.getType().size() > 0)
+                        mb.setReturnType(buildType(n.getType()));
+
+                modifiers.push(new ArrayList<Modifier>());
+		fields.push(new ArrayList<Variable>());
+
+		// TODO: Handle generics
+		// TODO: Figure out how to get the content of a method/function
+
+		startvisit(n.getChildren());
+
+		mb.addAllModifiers(modifiers.pop());
+		mb.addAllArguments(fields.pop());
+
+		methods.peek().add(mb.build());
 	}
 
 	protected void visit(final KlassModifier n) {
