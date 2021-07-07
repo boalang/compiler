@@ -1119,7 +1119,14 @@ public class KotlinVisitor {
 	}
 
 	protected void visitStatements(final DefaultAstNode n) {
-
+		statements.add(new ArrayList<Statement>());
+		expressions.add(new ArrayList<Expression>());
+                startvisit(n.getChildren());
+                Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BLOCK);
+		sb.addAllStatements(statements.pop());
+		sb.addAllExpressions(expressions.pop());
+		statements.peek().add(sb.build());
 	}
 
 	protected void visitStatement(final DefaultAstNode n) {
