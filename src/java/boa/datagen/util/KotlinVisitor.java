@@ -1001,7 +1001,8 @@ public class KotlinVisitor {
 	}
 
 	protected void visitFunctionBody(final DefaultAstNode n) {
-
+		// TODO: Handle better
+                startvisit(n.getChildren());
 	}
 
 	protected void visitVariableDeclaration(final DefaultAstNode n) {
