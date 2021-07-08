@@ -73,6 +73,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	protected Stack<List<Method>> methods = new Stack<List<Method>>();
 	protected Stack<List<Statement>> statements = new Stack<List<Statement>>();
 
+	protected Stack<Expression.ExpressionKind> exprType = new Stack<Expression.ExpressionKind>();
+
 	public static final int KLS10 = 10;
 	public static final int KLS11 = 11;
 	public static final int KLS12 = 12;
@@ -117,7 +119,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 
 	public Void visitKtElement(KtElement element, Void v) {
-		visitElement(element);
+		if (element instanceof KtOperationReferenceExpression)
+			visitOperationReferenceExpression((KtOperationReferenceExpression) element, v);
+		else
+			visitElement(element);
 		return null;
 	}
 
@@ -201,7 +206,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitPrefixExpression
 	// visitPostfixExpression
 	// visitUnaryExpression
-	// visitBinaryExpression
 	// visitReturnExpression
 	// visitExpressionWithLabel
 	// visitThrowExpression
@@ -265,6 +269,40 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		eb.setKind(Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(expr.getText());
 		expressions.peek().add(eb.build());
+		return null;
+	}
+
+	public Void visitBinaryExpression(KtBinaryExpression expr, Void v) {
+                expressions.push(new ArrayList<Expression>());
+		Expression.Builder eb = Expression.newBuilder();
+		expr.acceptChildren(this, v);
+		eb.addAllExpressions(expressions.pop());
+		eb.setKind(exprType.pop());
+		expressions.peek().add(eb.build());
+		return null;
+	}
+
+	public Void visitOperationReferenceExpression(KtOperationReferenceExpression opRef, Void v) {
+		switch (opRef.getReferencedNameElement().getText()) {
+		case "+":
+			exprType.push(Expression.ExpressionKind.OP_ADD);
+                        break;
+		case "*":
+			exprType.push(Expression.ExpressionKind.OP_MULT);
+			break;
+		case "-":
+			exprType.push(Expression.ExpressionKind.OP_SUB);
+			break;
+		case "/":
+			exprType.push(Expression.ExpressionKind.OP_DIV);
+			break;
+		case "%":
+			exprType.push(Expression.ExpressionKind.OP_MOD);
+			break;
+			// TODO: Check if there are other options
+		default:
+                        exprType.push(Expression.ExpressionKind.OP_ADD);
+		}
 		return null;
 	}
 
