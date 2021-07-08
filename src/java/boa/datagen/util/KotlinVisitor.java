@@ -177,7 +177,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitKtFile
 	// visitScript
 	// visitImportAlias
-	// visitImportList - Maybe?
 	// visitFileAnnotationList
 	// visitClassBody
 	// visitModifierList
@@ -323,6 +322,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		eb.addAllExpressions(expressions.pop());
 		expressions.peek().add(eb.build());
 		return null;
+	}
+
+	// TODO: Remove when nolonger including printing
+	public Void visitImportList(KtImportList l, Void v) {
+                l.acceptChildren(this, v);
+                return null;
 	}
 
 	@Override
