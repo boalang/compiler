@@ -170,7 +170,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitSecondaryConstructor
 	// visitPrimaryConstructor
 	// visitNamedFunction
-	// visitProperty
 	// visitDestructuringDeclaration
 	// visitDistructuringDeclarationEntry
 	// visitTypeAlias
@@ -328,6 +327,29 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitImportList(KtImportList l, Void v) {
                 l.acceptChildren(this, v);
                 return null;
+	}
+
+	public Void visitProperty(KtProperty prop, Void v) {
+		expressions.push(new ArrayList<Expression>());
+                modifiers.push(new ArrayList<Modifier>());
+		if(!prop.isVar()) {
+			Modifier.Builder mb = Modifier.newBuilder();
+                        mb.setKind(Modifier.ModifierKind.CONSTANT);
+			modifiers.peek().add(mb.build());
+		}
+		Variable.Builder vb = Variable.newBuilder();
+
+		if(prop.hasInitializer()) {
+			prop.getInitializer().accept(this, v);
+		}
+
+                System.out.println("Var Name: "+prop.getNameIdentifier().getClass());
+		vb.setName(prop.getNameIdentifier().getText());
+                vb.addAllModifiers(modifiers.pop());
+		vb.addAllExpressions(expressions.pop());
+
+                fields.peek().add(vb.build());
+		return null;
 	}
 
 	@Override

@@ -1,3 +1,5 @@
 package boa.kotlin.test
 
-val x = 5 * (3 + 7 + y) / 6
+val pi = 3.14159
+
+var x = 5 * (3 + 7 + pi) / 6
