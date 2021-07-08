@@ -24,23 +24,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-// import kotlinx.ast.common.ast.Ast;
-// import kotlinx.ast.common.ast.AstWithRawAstKt;
-// import kotlinx.ast.common.ast.DefaultAstNode;
-// import kotlinx.ast.common.ast.DefaultAstTerminal;
-// import kotlinx.ast.common.klass.KlassAnnotation;
-// import kotlinx.ast.common.klass.KlassDeclaration;
-// import kotlinx.ast.common.klass.KlassIdentifier;
-// import kotlinx.ast.common.klass.KlassInheritance;
-// import kotlinx.ast.common.klass.KlassModifier;
-// import kotlinx.ast.common.klass.KlassString;
-// import kotlinx.ast.common.klass.KlassTypeParameter;
-// import kotlinx.ast.common.klass.StringComponent;
-// import kotlinx.ast.common.klass.StringComponentRaw;
-// import kotlinx.ast.common.klass.StringComponentAstNodeExpression;
-// import kotlinx.ast.grammar.kotlin.common.summary.Import;
-// import kotlinx.ast.grammar.kotlin.common.summary.PackageHeader;
-
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiRecursiveElementVisitor;
+import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.kotlin.psi.*;
 
 import boa.types.Ast.Declaration;
@@ -54,17 +40,12 @@ import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 
+
 /**
  * @author rdyer
  * @author swflint
  */
-
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiRecursiveElementVisitor;
-import com.intellij.psi.PsiWhiteSpace;
-
 public class KotlinVisitor extends KtVisitor<Void, Void> {
-
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected Stack<List<Declaration>> declarations = new Stack<List<Declaration>>();
 	protected Stack<List<Modifier>> modifiers = new Stack<List<Modifier>>();
@@ -87,8 +68,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return astLevel;
 	}
 
-	public Namespace getNamespace(KtFile kt) {
-
+	public Namespace getNamespace(final KtFile kt) {
 		modifiers.push(new ArrayList<Modifier>());
 		declarations.push(new ArrayList<Declaration>());
 		fields.push(new ArrayList<Variable>());
@@ -98,7 +78,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		b.setName("test");
 
-                kt.accept(this);
+		kt.accept(this);
 
 		b.addAllExpressions(expressions.pop());
 		b.addAllStatements(statements.pop());
@@ -117,8 +97,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			System.out.print(" ");
 	}
 
-
-	public Void visitKtElement(KtElement element, Void v) {
+	public Void visitKtElement(final KtElement element, final Void v) {
 		if (element instanceof KtOperationReferenceExpression)
 			visitOperationReferenceExpression((KtOperationReferenceExpression) element, v);
 		else if (element instanceof KtNameReferenceExpression)
@@ -144,20 +123,20 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		indent--;
 	}
 
-	public Void visitPackageDirective(final KtPackageDirective directive, Void v) {
+	public Void visitPackageDirective(final KtPackageDirective directive, final Void v) {
 		b.setName(directive.getQualifiedName());
 		return null;
 	}
 
 	// Generally visitor methods should be of the form:
 	// See also https://github.com/JetBrains/kotlin/blob/92d200e093c693b3c06e53a39e0b0973b84c7ec5/compiler/psi/src/org/jetbrains/kotlin/psi/KtVisitor.java
-	// public Void visitElementNameHere(final ElementType name, Void v) {
-        //         doSomethingHere();
+	// public Void visitElementNameHere(final ElementType name, final Void v) {
+	//		 doSomethingHere();
 	// 	return null;
 	// }
 
-	public Void visitImportDirective(final KtImportDirective directive, Void v) {
-                b.addImports(directive.getImportedFqName().toString());
+	public Void visitImportDirective(final KtImportDirective directive, final Void v) {
+		b.addImports(directive.getImportedFqName().toString());
 		return null;
 	}
 
@@ -263,17 +242,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitLiteralStringTemplateEntry
 	// visitEscapeStringTemplateEntry
 
-	public Void visitConstantExpression(KtConstantExpression expr, Void v) {
-		Expression.Builder eb = Expression.newBuilder();
+	public Void visitConstantExpression(final KtConstantExpression expr, final Void v) {
+		final Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(expr.getText());
 		expressions.peek().add(eb.build());
 		return null;
 	}
 
-	public Void visitBinaryExpression(KtBinaryExpression expr, Void v) {
-                expressions.push(new ArrayList<Expression>());
-		Expression.Builder eb = Expression.newBuilder();
+	public Void visitBinaryExpression(final KtBinaryExpression expr, final Void v) {
+		expressions.push(new ArrayList<Expression>());
+		final Expression.Builder eb = Expression.newBuilder();
 		expr.acceptChildren(this, v);
 		eb.addAllExpressions(expressions.pop());
 		eb.setKind(exprType.pop());
@@ -281,11 +260,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
-	public Void visitOperationReferenceExpression(KtOperationReferenceExpression opRef, Void v) {
+	public Void visitOperationReferenceExpression(final KtOperationReferenceExpression opRef, final Void v) {
 		switch (opRef.getReferencedNameElement().getText()) {
 		case "+":
 			exprType.push(Expression.ExpressionKind.OP_ADD);
-                        break;
+			break;
 		case "*":
 			exprType.push(Expression.ExpressionKind.OP_MULT);
 			break;
@@ -300,22 +279,23 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 			// TODO: Check if there are other options
 		default:
-                        exprType.push(Expression.ExpressionKind.OP_ADD);
+			exprType.push(Expression.ExpressionKind.OP_ADD);
+			break;
 		}
 		return null;
 	}
 
-	public Void visitNameReferenceExpression(KtNameReferenceExpression nameRef, Void v) {
-		Expression.Builder eb = Expression.newBuilder();
+	public Void visitNameReferenceExpression(final KtNameReferenceExpression nameRef, final Void v) {
+		final Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(Expression.ExpressionKind.VARACCESS);
 		eb.setVariable(nameRef.getReferencedName());
 		expressions.peek().add(eb.build());
 		return null;
 	}
 
-	public Void visitParenthesizedExpression(KtParenthesizedExpression expr, Void v) {
-                expressions.push(new ArrayList<Expression>());
-                Expression.Builder eb = Expression.newBuilder();
+	public Void visitParenthesizedExpression(final KtParenthesizedExpression expr, final Void v) {
+		expressions.push(new ArrayList<Expression>());
+		final Expression.Builder eb = Expression.newBuilder();
 		expr.acceptChildren(this, v);
 		eb.setKind(Expression.ExpressionKind.PAREN);
 		eb.addAllExpressions(expressions.pop());
@@ -324,36 +304,35 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	// TODO: Remove when nolonger including printing
-	public Void visitImportList(KtImportList l, Void v) {
-                l.acceptChildren(this, v);
-                return null;
+	public Void visitImportList(KtImportList l, final Void v) {
+		l.acceptChildren(this, v);
+		return null;
 	}
 
-	public Void visitProperty(KtProperty prop, Void v) {
+	public Void visitProperty(final KtProperty prop, final Void v) {
 		expressions.push(new ArrayList<Expression>());
-                modifiers.push(new ArrayList<Modifier>());
-		if(!prop.isVar()) {
-			Modifier.Builder mb = Modifier.newBuilder();
-                        mb.setKind(Modifier.ModifierKind.CONSTANT);
+		modifiers.push(new ArrayList<Modifier>());
+		if (!prop.isVar()) {
+			final Modifier.Builder mb = Modifier.newBuilder();
+			mb.setKind(Modifier.ModifierKind.CONSTANT);
 			modifiers.peek().add(mb.build());
 		}
-		Variable.Builder vb = Variable.newBuilder();
+		final Variable.Builder vb = Variable.newBuilder();
 
-		if(prop.hasInitializer()) {
+		if (prop.hasInitializer()) {
 			prop.getInitializer().accept(this, v);
 		}
 
-                System.out.println("Var Name: "+prop.getNameIdentifier().getClass());
+		System.out.println("Var Name: "+prop.getNameIdentifier().getClass());
 		vb.setName(prop.getNameIdentifier().getText());
-                vb.addAllModifiers(modifiers.pop());
+		vb.addAllModifiers(modifiers.pop());
 		vb.addAllExpressions(expressions.pop());
 
-                fields.peek().add(vb.build());
+		fields.peek().add(vb.build());
 		return null;
 	}
 
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
 	}
-
 }
