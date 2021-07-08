@@ -236,7 +236,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitTypeArgumentList
 	// visitThisExpression
 	// visitSuperExpression
-	// visitParenthesizedExpression
 	// visitInitializerList
 	// visitAnonymousInitializer
 	// visitScriptInitializer
@@ -316,6 +315,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	public Void visitParenthesizedExpression(KtParenthesizedExpression expr, Void v) {
+                expressions.push(new ArrayList<Expression>());
+                Expression.Builder eb = Expression.newBuilder();
+		expr.acceptChildren(this, v);
+		eb.setKind(Expression.ExpressionKind.PAREN);
+		eb.addAllExpressions(expressions.pop());
+		expressions.peek().add(eb.build());
+		return null;
+	}
 
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
