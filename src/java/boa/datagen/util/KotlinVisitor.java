@@ -303,12 +303,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
-	// TODO: Remove when nolonger including printing
-	public Void visitImportList(KtImportList l, final Void v) {
-		l.acceptChildren(this, v);
-		return null;
-	}
-
 	public Void visitProperty(final KtProperty prop, final Void v) {
 		expressions.push(new ArrayList<Expression>());
 		modifiers.push(new ArrayList<Modifier>());
@@ -335,10 +329,20 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+
+	// Things to ignore/pass through
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
 	}
 
+	// TODO: Remove when nolonger including printing
+	public Void visitImportList(KtImportList l, final Void v) {
+		l.acceptChildren(this, v);
+		return null;
+	}
+
+
+	// Utility methods
 	private Type typeFromTypeRef(KtTypeReference type) {
 		Type.Builder tb = Type.newBuilder();
 		tb.setName(type.getText());
