@@ -336,7 +336,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	// TODO: Remove when nolonger including printing
-	public Void visitImportList(KtImportList l, final Void v) {
+	public Void visitImportList(final KtImportList l, final Void v) {
 		l.acceptChildren(this, v);
 		return null;
 	}
