@@ -40,13 +40,6 @@ import org.w3c.css.sac.InputSource;
 
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 
-import kotlin.Unit;
-import kotlinx.ast.common.ast.Ast;
-import kotlinx.ast.common.AstResult;
-import kotlinx.ast.common.AstSource;
-import kotlinx.ast.grammar.kotlin.common.SummaryKt;
-import kotlinx.ast.grammar.kotlin.target.antlr.java.KotlinGrammarAntlrJavaParser;
-
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -68,6 +61,27 @@ import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
+
+// Dependencies for Kotlin
+import java.io.FileWriter;
+import org.jetbrains.kotlin.psi.KtFile;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.VirtualFileManager;
+import com.intellij.openapi.vfs.VirtualFileSystem;
+import com.intellij.openapi.vfs.StandardFileSystems;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
+import com.intellij.core.CoreFileTypeRegistry;
+import com.intellij.lang.LanguageParserDefinitions;
+import org.jetbrains.kotlin.idea.KotlinLanguage;
+import org.jetbrains.kotlin.idea.KotlinFileType;
+import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
+import com.intellij.psi.PsiManager;
+import com.intellij.openapi.project.Project;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
+import org.jetbrains.kotlin.extensions.PreprocessedFileCreator;
 
 /**
  * @author rdyer
@@ -589,12 +603,38 @@ public abstract class AbstractCommit {
 		}
 	}
 
+	// FIXME: Get a kotlin file from a string
+	private boolean kotlinParserPrepared = false;
+	private VirtualFileSystem kVirtFileSys;
+	private PsiManager kProjectManager;
+	private KtFile getKtFile(final String path, final String content) throws IOException {
+		if (!kotlinParserPrepared) {
+			Disposable disp = Disposer.newDisposable();
+			KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
+			KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
+			Project proj = kpe.getProject();
+			((CoreFileTypeRegistry) FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
+			LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
+										new KotlinParserDefinition());
+			kVirtFileSys = VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.FILE_PROTOCOL);
+			kProjectManager = PsiManager.getInstance(proj);
+			kotlinParserPrepared = true;
+		}
+		File theFile = File.createTempFile(path, ".kt");
+                FileWriter fw = new FileWriter(theFile);
+		fw.write(content);
+		fw.close();
+		VirtualFile file = kVirtFileSys.findFileByPath(theFile.getAbsolutePath());
+		KtFile kt = new KtFile(kProjectManager.findViewProvider(file), false);
+		return kt;
+	}
+
+	// FIXME: See above
 	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
-		AstResult<Unit, List<Ast>> astList = null;
+                KtFile theKt = null;
 
 		try {
-			AstSource source = new AstSource.String(path, content);
-			astList = SummaryKt.summary(KotlinGrammarAntlrJavaParser.INSTANCE.parseKotlinFile(source), true);
+			theKt = getKtFile(path, content);
 		} catch (final Throwable e) {
 			return false;
 		}
@@ -603,7 +643,8 @@ public abstract class AbstractCommit {
 			final KotlinVisitor visitor = new KotlinVisitor();
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-			ast.addNamespaces(visitor.getNamespace(astList.get()));
+			// theKt.accept(visitor);
+			ast.addNamespaces(visitor.getNamespace(theKt));
 
 			switch (visitor.getAstLevel()) {
 				case KotlinVisitor.KLS10:

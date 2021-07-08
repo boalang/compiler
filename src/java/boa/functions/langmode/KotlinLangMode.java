@@ -20,11 +20,11 @@ import java.util.List;
 import java.util.Map;
 
 import kotlin.Unit;
-import kotlinx.ast.common.ast.Ast;
-import kotlinx.ast.common.AstResult;
-import kotlinx.ast.common.AstSource;
-import kotlinx.ast.grammar.kotlin.common.SummaryKt;
-import kotlinx.ast.grammar.kotlin.target.antlr.java.KotlinGrammarAntlrJavaParser;
+// import kotlinx.ast.common.ast.Ast;
+// import kotlinx.ast.common.AstResult;
+// import kotlinx.ast.common.AstSource;
+// import kotlinx.ast.grammar.kotlin.common.SummaryKt;
+// import kotlinx.ast.grammar.kotlin.target.antlr.java.KotlinGrammarAntlrJavaParser;
 
 import boa.datagen.util.KotlinVisitor;
 import boa.types.Ast.ASTRoot;
@@ -830,13 +830,14 @@ public class KotlinLangMode implements LangMode {
 	public ASTRoot parse(final String s) {
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-		try {
-			final AstSource source = new AstSource.String("", s);
-			final AstResult<Unit, List<Ast>> astList = SummaryKt.summary(KotlinGrammarAntlrJavaParser.INSTANCE.parseKotlinFile(source), true);
-			ast.addNamespaces(new KotlinVisitor().getNamespace(astList.get()));
-		} catch (final Throwable e) {
-			// do nothing
-		}
+		// FIXME: Handle parsing of Kotlin code
+		// try {
+		// 	final AstSource source = new AstSource.String("", s);
+		// 	final AstResult<Unit, List<Ast>> astList = SummaryKt.summary(KotlinGrammarAntlrJavaParser.INSTANCE.parseKotlinFile(source), true);
+		// 	ast.addNamespaces(new KotlinVisitor().getNamespace(astList.get()));
+		// } catch (final Throwable e) {
+		// 	// do nothing
+		// }
 
 		return ast.build();
 	}
