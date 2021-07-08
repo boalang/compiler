@@ -125,9 +125,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public void visitElement(final PsiElement element) {
 		indent();
 		System.out.print(element);
-		if (element instanceof org.jetbrains.kotlin.psi.KtPackageDirective)
-			this.visitElement((KtPackageDirective) element);
-		else if (element instanceof org.jetbrains.kotlin.psi.KtConstantExpression)
+		if (element instanceof org.jetbrains.kotlin.psi.KtConstantExpression)
 			System.out.print("(" + ((org.jetbrains.kotlin.psi.KtConstantExpression)element).getText() + ")");
 		else if (element instanceof org.jetbrains.kotlin.psi.KtBinaryExpression)
 			System.out.print("(" + ((org.jetbrains.kotlin.psi.KtBinaryExpression)element).getOperationToken() + ")");
@@ -140,7 +138,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	public Void visitPackageDirective(final KtPackageDirective directive, Void v) {
-		System.out.println("**** Package Directive ****");
 		b.setName(directive.getQualifiedName());
 		return null;
 	}
