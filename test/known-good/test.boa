@@ -10,7 +10,7 @@ a = a + {3, 6};
 s: stack of int;
 push(s, 3);
 
-t := T"Sat Jan  1 00:00:00 GMT 2005";
+t := T"Sat Jan 1 2005 00:00:00 GMT";
 t = addmonth(addyear(t), 1);
 
 m: map[string] of int;

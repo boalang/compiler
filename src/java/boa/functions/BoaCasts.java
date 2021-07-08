@@ -17,6 +17,7 @@
  */
 package boa.functions;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -78,6 +79,8 @@ public class BoaCasts {
 		return 0;
 	}
 
+	private final static SimpleDateFormat boaDateFormat = new SimpleDateFormat("EEE MMM d yyyy HH:mm:ss z");
+
 	/**
 	 * Parse a time string.
 	 * 
@@ -86,14 +89,28 @@ public class BoaCasts {
 	 * 
 	 * @return A long containing the time represented by <em>s</em>.
 	 * 
-	 * @throws ParseException
+	 * @throws RuntimeException if the time string is invalid
 	 */
-	public static long stringToTime(final String s, final String tz) throws ParseException {
-		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
+	public static long stringToTime(final String s, final String tz) {
+		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
 
-		simpleDateFormat.setCalendar(Calendar.getInstance(TimeZone.getTimeZone(tz)));
+		// first try a standard format
+		try {
+			boaDateFormat.setCalendar(calendar);
+			return boaDateFormat.parse(s).getTime() * 1000;
+		} catch (final Exception e) { }
 
-		return simpleDateFormat.parse(s).getTime() * 1000;
+		// then try every possible combination of built in formats
+		final int [] formats = new int[] {DateFormat.DEFAULT, DateFormat.FULL, DateFormat.SHORT, DateFormat.LONG, DateFormat.MEDIUM};
+		for (final int f : formats)
+			for (final int f2 : formats)
+				try {
+					final DateFormat df = DateFormat.getDateTimeInstance(f, f2);
+					df.setCalendar(calendar);
+					return df.parse(s).getTime() * 1000;
+				} catch (final Exception e) { }
+
+		throw new RuntimeException("unable to convert string to time - bad format for string: " + s);
 	}
 
 	/**
@@ -104,10 +121,10 @@ public class BoaCasts {
 	 * 
 	 * @return A long containing the time represented by <em>s</em>.
 	 * 
-	 * @throws ParseException
+	 * @throws RuntimeException if the time string is invalid
 	 */
-	public static long stringToTime(final String s) throws ParseException {
-		return BoaCasts.stringToTime(s, "PST8PDT");
+	public static long stringToTime(final String s) {
+		return BoaCasts.stringToTime(s, "UTC");
 	}
 
 	private static final DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
@@ -169,8 +186,6 @@ public class BoaCasts {
 	 * 
 	 */
 	public static String timeToString(final long t, final String tz) {
-		final SimpleDateFormat boaDateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
-
 		final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(tz));
 
 		calendar.setTimeInMillis(t / 1000);
@@ -190,6 +205,6 @@ public class BoaCasts {
 	 * 
 	 */
 	public static String timeToString(final long t) {
-		return BoaCasts.timeToString(t, "PST8PDT");
+		return BoaCasts.timeToString(t, "UTC");
 	}
 }
