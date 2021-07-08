@@ -323,6 +323,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			prop.getInitializer().accept(this, v);
 		}
 
+		KtTypeReference typeRef = prop.getTypeReference();
+		if (typeRef != null)
+			vb.setVariableType(typeFromTypeRef(typeRef));
+
 		vb.setName(prop.getNameIdentifier().getText());
 		vb.addAllModifiers(modifiers.pop());
 		vb.addAllExpressions(expressions.pop());
