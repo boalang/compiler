@@ -195,7 +195,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitArgument
 	// visitExpression
 	// visitLoopExpression
-	// visitConstantExpression
 	// visitSimpleNameExpression
 	// visitReferenceExpression
 	// visitLabeledExpression
@@ -260,6 +259,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitSimpleNameStringTemplateEntry
 	// visitLiteralStringTemplateEntry
 	// visitEscapeStringTemplateEntry
+
+	public Void visitConstantExpression(KtConstantExpression expr, Void v) {
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.LITERAL);
+		eb.setLiteral(expr.getText());
+		expressions.peek().add(eb.build());
+		return null;
+	}
+
 
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
