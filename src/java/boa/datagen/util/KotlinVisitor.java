@@ -334,4 +334,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
 	}
+
+	private Type typeFromTypeRef(KtTypeReference type) {
+		Type.Builder tb = Type.newBuilder();
+		tb.setName(type.getText());
+                tb.setKind(TypeKind.OTHER);
+		return tb.build();
+	}
+
 }
