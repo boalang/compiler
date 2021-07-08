@@ -323,7 +323,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			prop.getInitializer().accept(this, v);
 		}
 
-		System.out.println("Var Name: "+prop.getNameIdentifier().getClass());
 		vb.setName(prop.getNameIdentifier().getText());
 		vb.addAllModifiers(modifiers.pop());
 		vb.addAllExpressions(expressions.pop());
