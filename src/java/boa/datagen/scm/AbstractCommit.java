@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Hridesh Rajan, Robert Dyer, Hoan Nguyen
+ * Copyright 2016-2021, Hridesh Rajan, Robert Dyer, Hoan Nguyen, Samuel W. Flint,
  *                 Iowa State University of Science and Technology
  *                 Bowling Green State University
  *                 and University of Nebraska Board of Regents
@@ -231,9 +231,8 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java")) {
-			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			parseJavaFile(path, fb, content, false); // parse java file
+			parseJavaFile(path, fb, getFileContents(path), false); // parse java file
 		} else if (lowerPath.endsWith(".kt")) {
 			fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
 			parseKotlinFile(path, fb, getFileContents(path), false);
@@ -603,38 +602,33 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	// FIXME: Get a kotlin file from a string
-	private boolean kotlinParserPrepared = false;
-	private VirtualFileSystem kVirtFileSys;
-	private PsiManager kProjectManager;
-	private KtFile getKtFile(final String path, final String content) throws IOException {
-		if (!kotlinParserPrepared) {
-			Disposable disp = Disposer.newDisposable();
-			KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
-			KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
-			Project proj = kpe.getProject();
-			((CoreFileTypeRegistry) FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
-			LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
-										new KotlinParserDefinition());
-			kVirtFileSys = VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.FILE_PROTOCOL);
-			kProjectManager = PsiManager.getInstance(proj);
-			kotlinParserPrepared = true;
-		}
-		File theFile = File.createTempFile(path, ".kt");
-                FileWriter fw = new FileWriter(theFile);
-		fw.write(content);
-		fw.close();
-		VirtualFile file = kVirtFileSys.findFileByPath(theFile.getAbsolutePath());
-		KtFile kt = new KtFile(kProjectManager.findViewProvider(file), false);
-		return kt;
-	}
+	private VirtualFileSystem kVirtFileSys = null;
+	private PsiManager kProjectManager = null;
 
-	// FIXME: See above
 	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
-                KtFile theKt = null;
+		KtFile theKt = null;
 
 		try {
-			theKt = getKtFile(path, content);
+			if (kVirtFileSys == null || kProjectManager == null) {
+				final Disposable disp = Disposer.newDisposable();
+				final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
+				final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
+				final Project proj = kpe.getProject();
+				((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
+				LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
+											new KotlinParserDefinition());
+				kVirtFileSys = VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.FILE_PROTOCOL);
+				kProjectManager = PsiManager.getInstance(proj);
+			}
+
+			// FIXME: parse directly from string, not temp file
+			final File theFile = File.createTempFile(path, ".kt");
+			final FileWriter fw = new FileWriter(theFile);
+			fw.write(content);
+			fw.close();
+			final VirtualFile file = kVirtFileSys.findFileByPath(theFile.getAbsolutePath());
+			theKt = new KtFile(kProjectManager.findViewProvider(file), false);
+			theFile.delete();
 		} catch (final Throwable e) {
 			return false;
 		}
@@ -643,7 +637,6 @@ public abstract class AbstractCommit {
 			final KotlinVisitor visitor = new KotlinVisitor();
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-			// theKt.accept(visitor);
 			ast.addNamespaces(visitor.getNamespace(theKt));
 
 			switch (visitor.getAstLevel()) {
