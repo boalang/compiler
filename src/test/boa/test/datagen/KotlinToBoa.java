@@ -58,8 +58,6 @@ public class KotlinToBoa {
 	protected static String parseKotlin(final String content) {
 		final StringBuilder sb = new StringBuilder();
 
-		KtFile kt = null;
-
 		try {
 			if (kVirtFileSys == null || kProjectManager == null) {
 				final Disposable disp = Disposer.newDisposable();
@@ -78,17 +76,18 @@ public class KotlinToBoa {
 			fw.write(content);
 			fw.close();
 			final VirtualFile file = kVirtFileSys.findFileByPath(theFile.getAbsolutePath());
-			kt = new KtFile(kProjectManager.findViewProvider(file), false);
+			KtFile kt = new KtFile(kProjectManager.findViewProvider(file), false);
+
+			final KotlinVisitor visitor = new KotlinVisitor();
+			final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
+			ast.addNamespaces(visitor.getNamespace(kt));
+			sb.append(JsonFormat.printToString(ast.build()));
+
 			theFile.delete();
 		} catch (final Throwable t) {
 			return "";
 		}
-
-		final KotlinVisitor visitor = new KotlinVisitor();
-		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-
-		ast.addNamespaces(visitor.getNamespace(kt));
-		sb.append(JsonFormat.printToString(ast.build()));
 
 		return FileIO.normalizeEOL(sb.toString());
 	}
