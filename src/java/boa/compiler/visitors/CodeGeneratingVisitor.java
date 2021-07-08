@@ -18,8 +18,6 @@
 package boa.compiler.visitors;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -1746,31 +1744,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (lit.startsWith("T")) {
 			final String s = lit.substring(2, lit.length() - 1);
 
-			// first try a standard format
 			try {
-				final DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy");
-				code.add(formatDate(df.parse(s)));
+				code.add(boa.functions.BoaCasts.stringToTime(s) + "L");
 				return;
-			} catch (final Exception e) { }
-
-			// then try every possible combination of built in formats
-			final int [] formats = new int[] {DateFormat.DEFAULT, DateFormat.FULL, DateFormat.SHORT, DateFormat.LONG, DateFormat.MEDIUM};
-			for (final int f : formats)
-				for (final int f2 : formats)
-					try {
-						final DateFormat df = DateFormat.getDateTimeInstance(f, f2);
-						code.add(formatDate(df.parse(s)));
-						return;
-					} catch (final Exception e) { }
-
-			throw new TypeCheckException(n, "Invalid time literal '" + s + "'");
+			} catch (final Exception e) {
+				throw new TypeCheckException(n, "Invalid time literal '" + s + "'");
+			}
 		}
 
 		code.add(lit.substring(0, lit.length() - 1));
-	}
-
-	private String formatDate(final Date date) {
-		return (date.getTime() * 1000) + "L";
 	}
 
 	//
