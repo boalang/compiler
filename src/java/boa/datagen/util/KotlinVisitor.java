@@ -145,6 +145,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	// Generally visitor methods should be of the form:
+	// See also https://github.com/JetBrains/kotlin/blob/92d200e093c693b3c06e53a39e0b0973b84c7ec5/compiler/psi/src/org/jetbrains/kotlin/psi/KtVisitor.java
+	// public Void visitElementNameHere(final ElementType name, Void v) {
+        //         doSomethingHere();
+	// 	return null;
+	// }
+
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
 	}
