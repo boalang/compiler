@@ -152,6 +152,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// 	return null;
 	// }
 
+	public Void visitImportDirective(final KtImportDirective directive, Void v) {
+                b.addImports(directive.getImportedFqName().toString());
+		return null;
+	}
+
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
 	}
