@@ -121,6 +121,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitKtElement(KtElement element, Void v) {
 		if (element instanceof KtOperationReferenceExpression)
 			visitOperationReferenceExpression((KtOperationReferenceExpression) element, v);
+		else if (element instanceof KtNameReferenceExpression)
+			visitNameReferenceExpression((KtNameReferenceExpression) element, v);
 		else
 			visitElement(element);
 		return null;
@@ -303,6 +305,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		default:
                         exprType.push(Expression.ExpressionKind.OP_ADD);
 		}
+		return null;
+	}
+
+	public Void visitNameReferenceExpression(KtNameReferenceExpression nameRef, Void v) {
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.VARACCESS);
+		eb.setVariable(nameRef.getReferencedName());
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
