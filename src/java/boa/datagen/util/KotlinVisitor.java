@@ -189,7 +189,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitTypeParameter
 	// visitEnumEntry
 	// visitParameterList
-	// visitParameter
 	// visitSuperTypeList
 	// visitSuperTypeListEntry
 	// visitDelegatedSuperTypeEntry
@@ -447,6 +446,16 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		mb.addAllArguments(fields.pop());
 		mb.addAllModifiers(modifiers.pop());
 		methods.peek().add(mb.build());
+		return null;
+	}
+
+	@Override
+	public Void visitParameter(final KtParameter param, final Void v) {
+		Variable.Builder vb = Variable.newBuilder();
+		vb.setName(param.getName());
+		if (param.getTypeReference() != null)
+			vb.setVariableType(typeFromTypeRef(param.getTypeReference()));
+		fields.peek().add(vb.build());
 		return null;
 	}
 
