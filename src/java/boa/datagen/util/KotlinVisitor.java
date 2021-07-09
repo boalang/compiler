@@ -53,6 +53,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	protected Stack<List<Method>> methods = new Stack<List<Method>>();
 	protected Stack<List<Statement>> statements = new Stack<List<Statement>>();
 
+	protected Stack<List<Expression>> arguments = new Stack<List<Expression>>();
+
 	public static final int KLS10 = 10;
 	public static final int KLS11 = 11;
 	public static final int KLS12 = 12;
@@ -456,6 +458,25 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (param.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(param.getTypeReference()));
 		fields.peek().add(vb.build());
+		return null;
+	}
+
+	@Override
+        public Void visitCallExpression(final KtCallExpression args, final Void v) {
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.METHODCALL);
+		arguments.push(new ArrayList<Expression>());
+		args.acceptChildren(this, v);
+		eb.addAllMethodArgs(arguments.pop());
+                expressions.peek().add(eb.build());
+		return null;
+	}
+
+	@Override
+	public Void visitValueArgumentList(final KtValueArgumentList args, final Void v) {
+		expressions.push(new ArrayList<Expression>());
+		args.acceptChildren(this, v);
+		arguments.peek().addAll(expressions.pop());
 		return null;
 	}
 
