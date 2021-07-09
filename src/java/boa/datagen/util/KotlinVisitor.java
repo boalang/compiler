@@ -186,9 +186,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitDestructuringDeclaration
 	// visitDistructuringDeclarationEntry
 	// visitTypeAlias
-	// visitKtFile
 	// visitScript
-	// visitImportAlias
 	// visitClassBody
 	// visitModifierList
 	// visitConstructorCalleeExpression
