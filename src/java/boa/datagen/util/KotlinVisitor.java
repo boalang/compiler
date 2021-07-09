@@ -497,6 +497,22 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	@Override
+	public Void visitWhileExpression(final KtWhileExpression whileExpr, final Void v) {
+		Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.WHILE);
+                expressions.push(new ArrayList<Expression>());
+                whileExpr.getCondition().accept(this, v);
+                sb.addAllConditions(expressions.pop());
+                expressions.push(new ArrayList<Expression>());
+                statements.push(new ArrayList<Statement>());
+                whileExpr.getBody().accept(this, v);
+		sb.addAllExpressions(expressions.pop());
+		sb.addAllStatements(statements.pop());
+                statements.peek().add(sb.build());
+		return null;
+	}
+
 	// Things to ignore/pass through
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
