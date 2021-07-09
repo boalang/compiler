@@ -335,6 +335,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "MOD":
 			eb.setKind(Expression.ExpressionKind.OP_MOD);
 			break;
+		case "LTEQ":
+			eb.setKind(Expression.ExpressionKind.LTEQ);
+			break;
+		case "GTEQ":
+			eb.setKind(Expression.ExpressionKind.GTEQ);
+			break;
+		case "GT":
+			eb.setKind(Expression.ExpressionKind.GT);
+			break;
+		case "LT":
+			eb.setKind(Expression.ExpressionKind.LT);
+			break;
 		default:
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
 		}
