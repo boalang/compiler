@@ -136,7 +136,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitImportDirective(final KtImportDirective directive, final Void v) {
         System.out.println(directive);
 		b.addImports(directive.getImportedFqName().toString());
-		directive.acceptChildren(this, v);
 		return null;
 	}
 
