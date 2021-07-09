@@ -63,25 +63,22 @@ import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
 
 // Dependencies for Kotlin
-import java.io.FileWriter;
-import org.jetbrains.kotlin.psi.KtFile;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.VirtualFileSystem;
-import com.intellij.openapi.vfs.StandardFileSystems;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.core.CoreFileTypeRegistry;
 import com.intellij.lang.LanguageParserDefinitions;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.vfs.StandardFileSystems;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.testFramework.LightVirtualFile;
 import org.jetbrains.kotlin.idea.KotlinLanguage;
 import org.jetbrains.kotlin.idea.KotlinFileType;
 import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
-import com.intellij.psi.PsiManager;
-import com.intellij.openapi.project.Project;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
-import org.jetbrains.kotlin.extensions.PreprocessedFileCreator;
 
 /**
  * @author rdyer
@@ -602,14 +599,13 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	private VirtualFileSystem kVirtFileSys = null;
 	private PsiManager kProjectManager = null;
 
 	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		KtFile theKt = null;
 
 		try {
-			if (kVirtFileSys == null || kProjectManager == null) {
+			if (kProjectManager == null) {
 				final Disposable disp = Disposer.newDisposable();
 				final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
 				final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
@@ -617,18 +613,11 @@ public abstract class AbstractCommit {
 				((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
 				LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
 											new KotlinParserDefinition());
-				kVirtFileSys = VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.FILE_PROTOCOL);
 				kProjectManager = PsiManager.getInstance(proj);
 			}
 
-			// FIXME: parse directly from string, not temp file
-			final File theFile = File.createTempFile(path, ".kt");
-			final FileWriter fw = new FileWriter(theFile);
-			fw.write(content);
-			fw.close();
-			final VirtualFile file = kVirtFileSys.findFileByPath(theFile.getAbsolutePath());
+			final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content);
 			theKt = new KtFile(kProjectManager.findViewProvider(file), false);
-			theFile.delete();
 		} catch (final Throwable e) {
 			return false;
 		}

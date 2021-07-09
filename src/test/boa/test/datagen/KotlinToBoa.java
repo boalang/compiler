@@ -16,9 +16,6 @@
  */
 package boa.test.datagen;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 import com.googlecode.protobuf.format.JsonFormat;
@@ -31,16 +28,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vfs.StandardFileSystems;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.VirtualFileSystem;
 import com.intellij.psi.PsiManager;
+import com.intellij.testFramework.LightVirtualFile;
 import org.jetbrains.kotlin.idea.KotlinLanguage;
 import org.jetbrains.kotlin.idea.KotlinFileType;
 import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
-import org.jetbrains.kotlin.extensions.PreprocessedFileCreator;
 
 import boa.datagen.util.FileIO;
 import boa.datagen.util.KotlinVisitor;
@@ -52,14 +47,15 @@ import boa.types.Ast.ASTRoot;
  * @author swflint
  */
 public class KotlinToBoa {
-	private static VirtualFileSystem kVirtFileSys = null;
 	private static PsiManager kProjectManager = null;
 
 	protected static String parseKotlin(final String content) {
 		final StringBuilder sb = new StringBuilder();
 
+		KtFile theKt = null;
+
 		try {
-			if (kVirtFileSys == null || kProjectManager == null) {
+			if (kProjectManager == null) {
 				final Disposable disp = Disposer.newDisposable();
 				final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
 				final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
@@ -67,27 +63,20 @@ public class KotlinToBoa {
 				((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
 				LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
 											new KotlinParserDefinition());
-				kVirtFileSys = VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.FILE_PROTOCOL);
 				kProjectManager = PsiManager.getInstance(proj);
 			}
 		
-			final File theFile = File.createTempFile("test-kotlin", ".kt");
-			final FileWriter fw = new FileWriter(theFile);
-			fw.write(content);
-			fw.close();
-			final VirtualFile file = kVirtFileSys.findFileByPath(theFile.getAbsolutePath());
-			KtFile kt = new KtFile(kProjectManager.findViewProvider(file), false);
-
-			final KotlinVisitor visitor = new KotlinVisitor();
-			final ASTRoot.Builder ast = ASTRoot.newBuilder();
-
-			ast.addNamespaces(visitor.getNamespace(kt));
-			sb.append(JsonFormat.printToString(ast.build()));
-
-			theFile.delete();
+			final VirtualFile file = new LightVirtualFile("test.kt", KotlinFileType.INSTANCE, content);
+			theKt = new KtFile(kProjectManager.findViewProvider(file), false);
 		} catch (final Throwable t) {
 			return "";
 		}
+
+		final KotlinVisitor visitor = new KotlinVisitor();
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
+		ast.addNamespaces(visitor.getNamespace(theKt));
+		sb.append(JsonFormat.printToString(ast.build()));
 
 		return FileIO.normalizeEOL(sb.toString());
 	}
