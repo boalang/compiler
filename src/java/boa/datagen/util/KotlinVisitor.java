@@ -466,8 +466,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(Expression.ExpressionKind.METHODCALL);
 		arguments.push(new ArrayList<Expression>());
+		expressions.push(new ArrayList<Expression>());
 		args.acceptChildren(this, v);
+		List<Expression> exprs = expressions.pop();
+		Expression lastExpression = exprs.remove(exprs.size() - 1);
+		eb.setMethod(lastExpression.getVariable());
 		eb.addAllMethodArgs(arguments.pop());
+		eb.addAllExpressions(exprs);
                 expressions.peek().add(eb.build());
 		return null;
 	}
