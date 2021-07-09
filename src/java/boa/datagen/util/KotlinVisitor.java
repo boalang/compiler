@@ -84,8 +84,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitKtElement(final KtElement element, final Void v) {
 		if (element instanceof KtOperationReferenceExpression)
 			visitOperationReferenceExpression((KtOperationReferenceExpression) element, v);
-		else if (element instanceof KtNameReferenceExpression)
-			visitNameReferenceExpression((KtNameReferenceExpression) element, v);
 		else
 			visitElement(element);
 		return null;
