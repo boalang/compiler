@@ -416,6 +416,23 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	@Override
+	public Void visitPrimaryConstructor(final KtPrimaryConstructor constructor, final Void v) {
+		Method.Builder mb = Method.newBuilder();
+		mb.setName(constructor.getName());
+                modifiers.push(new ArrayList<Modifier>());
+                fields.push(new ArrayList<Variable>());
+		expressions.push(new ArrayList<Expression>());
+		constructor.acceptChildren(this, v);
+		mb.addStatements(Statement.newBuilder()
+				 .setKind(Statement.StatementKind.BLOCK)
+				 .addAllExpressions(expressions.pop()));
+		mb.addAllArguments(fields.pop());
+		mb.addAllModifiers(modifiers.pop());
+		methods.peek().add(mb.build());
+		return null;
+	}
+
 	// Things to ignore/pass through
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
