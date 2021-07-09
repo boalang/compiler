@@ -75,7 +75,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	private void indent() {
 		for (int i = 0; i < indent * 2; i++)
-			System.out.print(" ");
+			System.err.print(" ");
 	}
 
 	@Override
@@ -90,14 +90,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public void visitElement(final PsiElement element) {
 		indent();
-		System.out.print(element);
+		System.err.print(element);
 		if (element instanceof org.jetbrains.kotlin.psi.KtConstantExpression)
-			System.out.print("(" + ((org.jetbrains.kotlin.psi.KtConstantExpression)element).getText() + ")");
+			System.err.print("(" + ((org.jetbrains.kotlin.psi.KtConstantExpression)element).getText() + ")");
 		else if (element instanceof org.jetbrains.kotlin.psi.KtBinaryExpression)
-			System.out.print("(" + ((org.jetbrains.kotlin.psi.KtBinaryExpression)element).getOperationToken() + ")");
+			System.err.print("(" + ((org.jetbrains.kotlin.psi.KtBinaryExpression)element).getOperationToken() + ")");
 		else if (element instanceof com.intellij.psi.impl.source.tree.LeafPsiElement)
-			System.out.print("(" + ((com.intellij.psi.impl.source.tree.LeafPsiElement)element).getText() + ")");
-		System.out.println(" - " + element.getClass());
+			System.err.print("(" + ((com.intellij.psi.impl.source.tree.LeafPsiElement)element).getText() + ")");
+		System.err.println(" - " + element.getClass());
 		indent++;
 		element.acceptChildren(this);
 		indent--;
@@ -145,21 +145,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnnotationEntry(final KtAnnotationEntry entry, final Void v) {
-		System.out.println("ANN ENTRY");
+		System.err.println("ANN ENTRY");
 		entry.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitAnnotation(final KtAnnotation annotation, final Void v) {
-		System.out.println("ANN");
+		System.err.println("ANN");
 		annotation.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitAnnotationUseSiteTarget(final KtAnnotationUseSiteTarget target, final Void v) {
-		System.out.println("ANN TARGET: " + target.getAnnotationUseSiteTarget().toString().toLowerCase());
+		System.err.println("ANN TARGET: " + target.getAnnotationUseSiteTarget().toString().toLowerCase());
 		target.acceptChildren(this, v);
 		return null;
 	}
@@ -211,8 +211,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitReturnExpression
 	// visitExpressionWithLabel
 	// visitThrowExpression
-	// visitBreakExpression
-	// visitContinueExpression
 	// visitIfExpression
 	// visitWhenExpression
 	// visitCollectionLiteralExpression
@@ -264,6 +262,46 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitSimpleNameStringTemplateEntry
 	// visitLiteralStringTemplateEntry
 	// visitEscapeStringTemplateEntry
+
+	@Override
+	public Void visitBreakExpression(final KtBreakExpression expr, final Void v) {
+		final Statement.Builder b = Statement.newBuilder();
+
+		b.setKind(Statement.StatementKind.BREAK);
+
+		final String label = expr.getLabelName();
+		if (label != null) {
+			final Expression.Builder eb = Expression.newBuilder();
+
+			eb.setLiteral(label);
+			eb.setKind(Expression.ExpressionKind.LITERAL);
+
+			b.addExpressions(eb.build());
+		}
+
+		statements.peek().add(b.build());
+		return null;
+	}
+
+	@Override
+	public Void visitContinueExpression(final KtContinueExpression expr, final Void v) {
+		final Statement.Builder b = Statement.newBuilder();
+
+		b.setKind(Statement.StatementKind.CONTINUE);
+
+		final String label = expr.getLabelName();
+		if (label != null) {
+			final Expression.Builder eb = Expression.newBuilder();
+
+			eb.setLiteral(label);
+			eb.setKind(Expression.ExpressionKind.LITERAL);
+
+			b.addExpressions(eb.build());
+		}
+
+		statements.peek().add(b.build());
+		return null;
+	}
 
 	@Override
 	public Void visitConstantExpression(final KtConstantExpression expr, final Void v) {
