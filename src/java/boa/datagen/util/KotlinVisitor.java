@@ -177,7 +177,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// See also https://github.com/JetBrains/kotlin/blob/92d200e093c693b3c06e53a39e0b0973b84c7ec5/compiler/psi/src/org/jetbrains/kotlin/psi/KtVisitor.java
 	// visitKtElement
 	// visitDeclaration
-	// visitClass
 	// visitObjectDeclaration
 	// visitClassOrObject
 	// visitSecondaryConstructor
@@ -361,6 +360,32 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	@Override
+	public Void visitClass(final KtClass klass, final Void v) {
+		Declaration.Builder db = Declaration.newBuilder();
+                db.setName(klass.getNameAsSafeName().asString());
+		if (klass.isInterface())
+			db.setKind(TypeKind.INTERFACE);
+		else if (klass.isEnum())
+			db.setKind(TypeKind.ENUM);
+		else
+			db.setKind(TypeKind.CLASS);
+
+		modifiers.push(new ArrayList<Modifier>());
+		fields.push(new ArrayList<Variable>());
+		declarations.push(new ArrayList<Declaration>());
+		methods.push(new ArrayList<Method>());
+
+		klass.acceptChildren(this, v);
+
+		db.addAllNestedDeclarations(declarations.pop());
+		db.addAllModifiers(modifiers.pop());
+		db.addAllMethods(methods.pop());
+		db.addAllFields(fields.pop());
+
+		declarations.peek().add(db.build());
+		return null;
+	}
 
 	// Things to ignore/pass through
 	@Override
