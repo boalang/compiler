@@ -135,8 +135,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitImportDirective(final KtImportDirective directive, final Void v) {
-        System.out.println(directive);
-		b.addImports(directive.getImportedFqName().toString());
+		StringBuilder sb = new StringBuilder();
+		sb.append(directive.getImportedFqName().toString());
+		if (directive.isAllUnder()) {
+			sb.append(".*");
+		}
+		if (directive.getAliasName() != null) {
+			sb.append(" as " + directive.getAliasName());
+		}
+		b.addImports(sb.toString());
 		return null;
 	}
 
