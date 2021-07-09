@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiRecursiveElementVisitor;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.kotlin.psi.*;
 
@@ -69,23 +69,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	public Namespace getNamespace(final KtFile kt) {
-		modifiers.push(new ArrayList<Modifier>());
-		declarations.push(new ArrayList<Declaration>());
-		fields.push(new ArrayList<Variable>());
-		methods.push(new ArrayList<Method>());
-		statements.push(new ArrayList<Statement>());
-		expressions.push(new ArrayList<Expression>());
-
-		b.setName("");
-
 		kt.accept(this);
-
-		b.addAllExpressions(expressions.pop());
-		b.addAllStatements(statements.pop());
-		b.addAllMethods(methods.pop());
-		b.addAllVariables(fields.pop());
-		b.addAllDeclarations(declarations.pop());
-		b.addAllModifiers(modifiers.pop());
 
 		return b.build();
 	}
@@ -97,6 +81,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			System.out.print(" ");
 	}
 
+	@Override
 	public Void visitKtElement(final KtElement element, final Void v) {
 		if (element instanceof KtOperationReferenceExpression)
 			visitOperationReferenceExpression((KtOperationReferenceExpression) element, v);
@@ -123,24 +108,66 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		indent--;
 	}
 
+	@Override
+	public void visitFile(final PsiFile f) {
+		modifiers.push(new ArrayList<Modifier>());
+		declarations.push(new ArrayList<Declaration>());
+		fields.push(new ArrayList<Variable>());
+		methods.push(new ArrayList<Method>());
+		statements.push(new ArrayList<Statement>());
+
+		b.setName("");
+		f.acceptChildren(this);
+
+		b.addAllStatements(statements.pop());
+		b.addAllMethods(methods.pop());
+		b.addAllVariables(fields.pop());
+		b.addAllDeclarations(declarations.pop());
+		b.addAllModifiers(modifiers.pop());
+	}
+
+	@Override
 	public Void visitPackageDirective(final KtPackageDirective directive, final Void v) {
 		b.setName(directive.getQualifiedName());
 		return null;
 	}
 
-	// Generally visitor methods should be of the form:
-	// See also https://github.com/JetBrains/kotlin/blob/92d200e093c693b3c06e53a39e0b0973b84c7ec5/compiler/psi/src/org/jetbrains/kotlin/psi/KtVisitor.java
-	// public Void visitElementNameHere(final ElementType name, final Void v) {
-	//		 doSomethingHere();
-	// 	return null;
-	// }
-
+	@Override
 	public Void visitImportDirective(final KtImportDirective directive, final Void v) {
+        System.out.println(directive);
 		b.addImports(directive.getImportedFqName().toString());
+		directive.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitAnnotationEntry(final KtAnnotationEntry entry, final Void v) {
+		System.out.println("ANN ENTRY");
+		entry.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitAnnotation(final KtAnnotation annotation, final Void v) {
+		System.out.println("ANN");
+		annotation.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitAnnotationUseSiteTarget(final KtAnnotationUseSiteTarget target, final Void v) {
+		System.out.println("ANN TARGET: " + target.getAnnotationUseSiteTarget().toString().toLowerCase());
+		target.acceptChildren(this, v);
 		return null;
 	}
 
 	// TODO
+	// Generally visitor methods should be of the form:
+	// 	public Void visitElementNameHere(final ElementType name, final Void v) {
+	// 		doSomethingHere();
+	// 		return null;
+	// 	}
+	// See also https://github.com/JetBrains/kotlin/blob/92d200e093c693b3c06e53a39e0b0973b84c7ec5/compiler/psi/src/org/jetbrains/kotlin/psi/KtVisitor.java
 	// visitKtElement
 	// visitDeclaration
 	// visitClass
@@ -155,12 +182,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitKtFile
 	// visitScript
 	// visitImportAlias
-	// visitFileAnnotationList
 	// visitClassBody
 	// visitModifierList
-	// visitAnnotations
-	// visitAnnotationEntry
-	// visitAnnotationUseSiteTarget
 	// visitConstructorCalleeExpression
 	// visitTypeParameterList
 	// visitTypeParameter
@@ -242,6 +265,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitLiteralStringTemplateEntry
 	// visitEscapeStringTemplateEntry
 
+	@Override
 	public Void visitConstantExpression(final KtConstantExpression expr, final Void v) {
 		final Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(Expression.ExpressionKind.LITERAL);
@@ -250,6 +274,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	@Override
 	public Void visitBinaryExpression(final KtBinaryExpression expr, final Void v) {
 		expressions.push(new ArrayList<Expression>());
 		final Expression.Builder eb = Expression.newBuilder();
@@ -293,6 +318,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	@Override
 	public Void visitParenthesizedExpression(final KtParenthesizedExpression expr, final Void v) {
 		expressions.push(new ArrayList<Expression>());
 		final Expression.Builder eb = Expression.newBuilder();
@@ -303,6 +329,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	@Override
 	public Void visitProperty(final KtProperty prop, final Void v) {
 		expressions.push(new ArrayList<Expression>());
 		modifiers.push(new ArrayList<Modifier>());
@@ -335,19 +362,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
 	}
 
-	// TODO: Remove when nolonger including printing
-	public Void visitImportList(final KtImportList l, final Void v) {
-		l.acceptChildren(this, v);
-		return null;
-	}
-
-
 	// Utility methods
-	private Type typeFromTypeRef(KtTypeReference type) {
+	private Type typeFromTypeRef(final KtTypeReference type) {
 		Type.Builder tb = Type.newBuilder();
 		tb.setName(type.getText());
-                tb.setKind(TypeKind.OTHER);
+		tb.setKind(TypeKind.OTHER);
 		return tb.build();
 	}
-
 }
