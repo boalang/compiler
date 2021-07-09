@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.Stack;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.kotlin.psi.*;
 
@@ -109,7 +108,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public void visitFile(final PsiFile f) {
+	public Void visitKtFile(final KtFile f, final Void v) {
 		modifiers.push(new ArrayList<Modifier>());
 		declarations.push(new ArrayList<Declaration>());
 		fields.push(new ArrayList<Variable>());
@@ -124,6 +123,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		b.addAllVariables(fields.pop());
 		b.addAllDeclarations(declarations.pop());
 		b.addAllModifiers(modifiers.pop());
+
+		return null;
 	}
 
 	@Override
