@@ -9,7 +9,7 @@
 	<property name="ant.build.javac.target" value="1.8" />
 
 	<!-- ANTLR version -->
-	<property name="antlr.version" value="4.9.2" />
+	<property name="antlr.version" value="4.5" />
 
 	<!-- CheckStyle path -->
 	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"

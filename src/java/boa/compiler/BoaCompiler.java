@@ -36,7 +36,7 @@ import java.util.zip.ZipEntry;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
-import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.RecognitionException;
@@ -114,7 +114,7 @@ public class BoaCompiler extends BoaMain {
 		SymbolTable.initialize(libs);
 
 		try {
-			final BoaLexer lexer = new BoaLexer(CharStreams.fromFileName(inputFile.getAbsolutePath()));
+			final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(inputFile.getAbsolutePath()));
 			lexer.removeErrorListeners();
 			lexer.addErrorListener(new LexerErrorListener());
 
@@ -187,7 +187,7 @@ public class BoaCompiler extends BoaMain {
 		SymbolTable.initialize(libs);
 
 		try {
-			final BoaLexer lexer = new BoaLexer(CharStreams.fromFileName(inputFile.getAbsolutePath()));
+			final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(inputFile.getAbsolutePath()));
 			lexer.removeErrorListeners();
 			lexer.addErrorListener(new LexerErrorListener());
 
@@ -230,7 +230,7 @@ public class BoaCompiler extends BoaMain {
 			return parser.start().ast;
 		} catch (final ParseCancellationException e) {
 			// fall-back to LL mode parsing if SLL fails
-			tokens.seek(0);
+			tokens.reset();
 			parser.reset();
 
 			parser.removeErrorListeners();
