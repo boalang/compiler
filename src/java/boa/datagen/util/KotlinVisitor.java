@@ -76,7 +76,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		statements.push(new ArrayList<Statement>());
 		expressions.push(new ArrayList<Expression>());
 
-		b.setName("test");
+		b.setName("");
 
 		kt.accept(this);
 
