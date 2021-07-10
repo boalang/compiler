@@ -24,8 +24,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
+import org.jetbrains.kotlin.lexer.KtModifierKeywordToken;
 import org.jetbrains.kotlin.psi.*;
 
 import boa.types.Ast.Declaration;
@@ -82,9 +84,73 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	public void visitLeaf(final LeafPsiElement leaf) {
+		if (leaf.getElementType() instanceof KtModifierKeywordToken)
+			visitModifier((KtModifierKeywordToken)leaf.getElementType());
+	}
+
+	public void visitModifier(final KtModifierKeywordToken m) {
+		Modifier.Builder mb = Modifier.newBuilder();
+
+        switch (m.getValue()) {
+        case "abstract":
+            mb.setKind(Modifier.ModifierKind.ABSTRACT);
+            break;
+
+        case "final":
+            mb.setKind(Modifier.ModifierKind.FINAL);
+            break;
+
+        case "annotation":
+            mb.setKind(Modifier.ModifierKind.ANNOTATION);
+            break;
+
+        case "open":
+        case "enum":
+        case "value":
+        case "inner":
+        case "data":
+        case "sealed":
+            mb.setKind(Modifier.ModifierKind.OTHER);
+            mb.setOther(m.getValue());
+            break;
+
+        case "public":
+            mb.setKind(Modifier.ModifierKind.VISIBILITY);
+            mb.setVisibility(Modifier.Visibility.PUBLIC);
+            break;
+
+        case "protected":
+            mb.setKind(Modifier.ModifierKind.VISIBILITY);
+            mb.setVisibility(Modifier.Visibility.PROTECTED);
+            break;
+
+        case "private":
+            mb.setKind(Modifier.ModifierKind.VISIBILITY);
+            mb.setVisibility(Modifier.Visibility.PRIVATE);
+            break;
+
+        case "internal":
+            mb.setKind(Modifier.ModifierKind.VISIBILITY);
+            mb.setVisibility(Modifier.Visibility.INTERNAL);
+            break;
+
+		default:
+			System.out.println("unknown modifier: " + m.getValue());
+			mb.setKind(Modifier.ModifierKind.OTHER);
+            mb.setOther(m.getValue());
+			break;
+		}
+
+		modifiers.peek().add(mb.build());
+	}
+
 	@Override
 	public void visitElement(final PsiElement element) {
-		element.acceptChildren(this);
+		if (element instanceof LeafPsiElement)
+			visitLeaf((LeafPsiElement)element);
+		else
+			element.acceptChildren(this);
 	}
 
 	@Override
@@ -108,21 +174,20 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitPackageDirective(final KtPackageDirective directive, final Void v) {
-		b.setName(directive.getQualifiedName());
+	public Void visitPackageDirective(final KtPackageDirective pkg, final Void v) {
+		b.setName(pkg.getQualifiedName());
+		pkg.acceptChildren(this);
 		return null;
 	}
 
 	@Override
-	public Void visitImportDirective(final KtImportDirective directive, final Void v) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(directive.getImportedFqName().toString());
-		if (directive.isAllUnder()) {
+	public Void visitImportDirective(final KtImportDirective imprt, final Void v) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(imprt.getImportedFqName().toString());
+		if (imprt.isAllUnder())
 			sb.append(".*");
-		}
-		if (directive.getAliasName() != null) {
-			sb.append(" as " + directive.getAliasName());
-		}
+		if (imprt.getAliasName() != null)
+			sb.append(" as " + imprt.getAliasName());
 		b.addImports(sb.toString());
 		return null;
 	}
