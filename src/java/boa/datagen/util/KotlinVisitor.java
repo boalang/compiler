@@ -87,53 +87,57 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public void visitModifier(final KtModifierKeywordToken m) {
 		Modifier.Builder mb = Modifier.newBuilder();
 
-        switch (m.getValue()) {
-        case "abstract":
-            mb.setKind(Modifier.ModifierKind.ABSTRACT);
-            break;
+		switch (m.getValue()) {
+		case "abstract":
+			mb.setKind(Modifier.ModifierKind.ABSTRACT);
+			break;
 
-        case "final":
-            mb.setKind(Modifier.ModifierKind.FINAL);
-            break;
+		case "const":
+			mb.setKind(Modifier.ModifierKind.STATIC);
+			break;
 
-        case "annotation":
-            mb.setKind(Modifier.ModifierKind.ANNOTATION);
-            break;
+		case "final":
+			mb.setKind(Modifier.ModifierKind.FINAL);
+			break;
 
-        case "open":
-        case "enum":
-        case "value":
-        case "inner":
-        case "data":
-        case "sealed":
-            mb.setKind(Modifier.ModifierKind.OTHER);
-            mb.setOther(m.getValue());
-            break;
+		case "annotation":
+			mb.setKind(Modifier.ModifierKind.ANNOTATION);
+			break;
 
-        case "public":
-            mb.setKind(Modifier.ModifierKind.VISIBILITY);
-            mb.setVisibility(Modifier.Visibility.PUBLIC);
-            break;
+		case "open":
+		case "enum":
+		case "value":
+		case "inner":
+		case "data":
+		case "sealed":
+			mb.setKind(Modifier.ModifierKind.OTHER);
+			mb.setOther(m.getValue());
+			break;
 
-        case "protected":
-            mb.setKind(Modifier.ModifierKind.VISIBILITY);
-            mb.setVisibility(Modifier.Visibility.PROTECTED);
-            break;
+		case "public":
+			mb.setKind(Modifier.ModifierKind.VISIBILITY);
+			mb.setVisibility(Modifier.Visibility.PUBLIC);
+			break;
 
-        case "private":
-            mb.setKind(Modifier.ModifierKind.VISIBILITY);
-            mb.setVisibility(Modifier.Visibility.PRIVATE);
-            break;
+		case "protected":
+			mb.setKind(Modifier.ModifierKind.VISIBILITY);
+			mb.setVisibility(Modifier.Visibility.PROTECTED);
+			break;
 
-        case "internal":
-            mb.setKind(Modifier.ModifierKind.VISIBILITY);
-            mb.setVisibility(Modifier.Visibility.INTERNAL);
-            break;
+		case "private":
+			mb.setKind(Modifier.ModifierKind.VISIBILITY);
+			mb.setVisibility(Modifier.Visibility.PRIVATE);
+			break;
+
+		case "internal":
+			mb.setKind(Modifier.ModifierKind.VISIBILITY);
+			mb.setVisibility(Modifier.Visibility.INTERNAL);
+			break;
 
 		default:
 			System.out.println("unknown modifier: " + m.getValue());
 			mb.setKind(Modifier.ModifierKind.OTHER);
-            mb.setOther(m.getValue());
+			mb.setOther(m.getValue());
 			break;
 		}
 
