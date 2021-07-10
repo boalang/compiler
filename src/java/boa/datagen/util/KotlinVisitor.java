@@ -1010,8 +1010,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.addStatements(Statement.newBuilder()
 					 .setKind(Statement.StatementKind.BLOCK)
 					 .addAllExpressions(exprs));
-		mb.addAllArguments(fields.pop());
+                List<Variable> methodFields = fields.pop();
+		mb.addAllArguments(methodFields);
 		mb.addAllModifiers(modifiers.pop());
+
+		for(Variable var: methodFields)
+			fields.peek().add(var);
 
 		methods.peek().add(mb.build());
 		return null;

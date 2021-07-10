@@ -25,6 +25,15 @@
                         }
                      ]
                   }
+               ],
+               "fields": [
+                  {
+                     "name": "firstName",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     }
+                  }
                ]
             }
          ]
