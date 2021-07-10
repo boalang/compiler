@@ -570,8 +570,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDotQualifiedExpression(final KtDotQualifiedExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.VARACCESS);
+		eb.setVariable(expr.getText());
+		expressions.peek().add(eb.build());
+		// FIXME probably want this split into sub-exps
+		// expr.acceptChildren(this, v);
 		return null;
 	}
 
