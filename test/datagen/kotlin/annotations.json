@@ -5,7 +5,7 @@
          "declarations": [
             {
                "name": "Example",
-               "kind": "CLASS",
+               "kind": "IMMUTABLE",
                "methods": [
                   {
                      "name": "<init>",
