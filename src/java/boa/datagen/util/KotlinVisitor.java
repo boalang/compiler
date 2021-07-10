@@ -598,8 +598,29 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitBlockExpression(final KtBlockExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Statement.Builder sb = Statement.newBuilder();
+		sb.setKind(Statement.StatementKind.BLOCK);
+
+		final List<Statement> stmts = new ArrayList<Statement>();
+		statements.push(stmts);
+
+		final List<Expression> exprs = new ArrayList<Expression>();
+		expressions.push(exprs);
+
+		for (final KtExpression e : expr.getStatements()) {
+			e.accept(this, v);
+			for (final Expression ex : exprs)
+				stmts.add(Statement.newBuilder()
+						.setKind(Statement.StatementKind.EXPRESSION)
+						.addExpressions(ex)
+						.build());
+			exprs.clear();
+		}
+
+		sb.addAllStatements(statements.pop());
+		expressions.pop();
+
+		statements.peek().add(sb.build());
 		return null;
 	}
 

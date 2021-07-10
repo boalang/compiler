@@ -1,0 +1,59 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "expressions": [
+                        {
+                           "kind": "METHODCALL",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "super"
+                              }
+                           ],
+                           "method": "foo"
+                        },
+                        {
+                           "kind": "METHODCALL",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "super<Int>"
+                              }
+                           ],
+                           "method": "foo"
+                        },
+                        {
+                           "kind": "METHODCALL",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "super<>"
+                              }
+                           ],
+                           "method": "foo"
+                        },
+                        {
+                           "kind": "METHODCALL",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "super<Int>@label"
+                              }
+                           ],
+                           "method": "foo"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
