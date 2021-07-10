@@ -8,46 +8,66 @@
                "statements": [
                   {
                      "kind": "BLOCK",
-                     "expressions": [
+                     "statements": [
                         {
-                           "kind": "METHODCALL",
+                           "kind": "EXPRESSION",
                            "expressions": [
                               {
-                                 "kind": "VARACCESS",
-                                 "variable": "super"
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "super"
+                                    }
+                                 ],
+                                 "method": "foo"
                               }
-                           ],
-                           "method": "foo"
+                           ]
                         },
                         {
-                           "kind": "METHODCALL",
+                           "kind": "EXPRESSION",
                            "expressions": [
                               {
-                                 "kind": "VARACCESS",
-                                 "variable": "super<Int>"
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "super<Int>"
+                                    }
+                                 ],
+                                 "method": "foo"
                               }
-                           ],
-                           "method": "foo"
+                           ]
                         },
                         {
-                           "kind": "METHODCALL",
+                           "kind": "EXPRESSION",
                            "expressions": [
                               {
-                                 "kind": "VARACCESS",
-                                 "variable": "super<>"
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "super<>"
+                                    }
+                                 ],
+                                 "method": "foo"
                               }
-                           ],
-                           "method": "foo"
+                           ]
                         },
                         {
-                           "kind": "METHODCALL",
+                           "kind": "EXPRESSION",
                            "expressions": [
                               {
-                                 "kind": "VARACCESS",
-                                 "variable": "super<Int>@label"
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "super<Int>@label"
+                                    }
+                                 ],
+                                 "method": "foo"
                               }
-                           ],
-                           "method": "foo"
+                           ]
                         }
                      ]
                   }
