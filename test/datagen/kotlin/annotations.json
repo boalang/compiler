@@ -8,7 +8,7 @@
                "kind": "CLASS",
                "methods": [
                   {
-                     "name": "Example",
+                     "name": "<init>",
                      "arguments": [
                         {
                            "name": "foo",
