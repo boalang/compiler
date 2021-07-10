@@ -450,8 +450,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			vb.setVariableType(typeFromTypeRef(typeRef));
 
 		modifiers.push(new ArrayList<Modifier>());
-		for (final KtAnnotationEntry a : prop.getAnnotationEntries())
-			a.accept(this, v);
 		prop.getModifierList().accept(this, v);
 		if (!prop.isVar()) {
 			final Modifier.Builder mb = Modifier.newBuilder();
