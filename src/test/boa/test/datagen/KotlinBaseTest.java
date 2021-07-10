@@ -66,13 +66,22 @@ public class KotlinBaseTest extends BaseTest {
 	private final static KotlinTreeDumper v = new KotlinTreeDumper();
 
 	protected static void dumpKotlin(final String content) {
+		dumpKotlin(content, false);
+	}
+
+	protected static void dumpKotlin(final String content, final boolean showEx) {
 		try {
 			getKtFile(content).accept(v);
-		} catch (final Throwable e) {
+		} catch (final Throwable t) {
+			if (showEx) t.printStackTrace();
 		}
 	}
 
 	protected static String parseKotlin(final String content) {
+		return parseKotlin(content, false);
+	}
+
+	protected static String parseKotlin(final String content, final boolean showEx) {
 		try {
 			final KotlinVisitor visitor = new KotlinVisitor();
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -81,6 +90,7 @@ public class KotlinBaseTest extends BaseTest {
 
 			return FileIO.normalizeEOL(JsonFormat.printToString(ast.build()));
 		} catch (final Throwable t) {
+			if (showEx) t.printStackTrace();
 			return "";
 		}
 	}

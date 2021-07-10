@@ -22,6 +22,6 @@ package boa.test.datagen;
  */
 public class DumpKotlin extends KotlinBaseTest {
 	public static void main(String[] args) {
-		dumpKotlin(args[0]);
+		dumpKotlin(args[0], true);
 	}
 }

@@ -24,6 +24,6 @@ package boa.test.datagen;
 public class KotlinToBoa extends KotlinBaseTest {
 	public static void main(String[] args) {
 		for (final String s : args)
-			System.out.println(parseKotlin(s));
+			System.out.println(parseKotlin(s, true));
 	}
 }
