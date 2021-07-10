@@ -44,55 +44,53 @@ import boa.datagen.util.FileIO;
  * @author rdyer
  */
 public class DumpKotlin {
-    public static class KotlinTreeDumper extends KtVisitor<Void, Void> {
-        private int indent = 0;
+	public static class KotlinTreeDumper extends KtVisitor<Void, Void> {
+		private int indent = 0;
 
-        private void indent() {
-            for (int i = 0; i < indent * 2; i++)
-                System.err.print(" ");
-        }
+		private void indent() {
+			for (int i = 0; i < indent * 2; i++)
+				System.err.print(" ");
+		}
 
-        @Override
-        public void visitElement(final PsiElement element) {
-            indent();
-            System.err.print(element);
-            if (element instanceof org.jetbrains.kotlin.psi.KtConstantExpression)
-                System.err.print("(" + ((org.jetbrains.kotlin.psi.KtConstantExpression)element).getText() + ")");
-            else if (element instanceof org.jetbrains.kotlin.psi.KtBinaryExpression)
-                System.err.print("(" + ((org.jetbrains.kotlin.psi.KtBinaryExpression)element).getOperationToken() + ")");
-            else if (element instanceof com.intellij.psi.impl.source.tree.LeafPsiElement)
-                System.err.print("(" + ((com.intellij.psi.impl.source.tree.LeafPsiElement)element).getText() + ")");
-            System.err.println(" - " + element.getClass());
-            indent++;
-            element.acceptChildren(this);
-            indent--;
-        }
-    }
-
+		@Override
+		public void visitElement(final PsiElement element) {
+			indent();
+			System.err.print(element);
+			if (element instanceof org.jetbrains.kotlin.psi.KtConstantExpression)
+				System.err.print("(" + ((org.jetbrains.kotlin.psi.KtConstantExpression)element).getText() + ")");
+			else if (element instanceof org.jetbrains.kotlin.psi.KtBinaryExpression)
+				System.err.print("(" + ((org.jetbrains.kotlin.psi.KtBinaryExpression)element).getOperationToken() + ")");
+			else if (element instanceof com.intellij.psi.impl.source.tree.LeafPsiElement)
+				System.err.print("(" + ((com.intellij.psi.impl.source.tree.LeafPsiElement)element).getText() + ")");
+			System.err.println(" - " + element.getClass());
+			indent++;
+			element.acceptChildren(this);
+			indent--;
+		}
+	}
 
 	public static void main(String[] args) {
-        final KotlinTreeDumper v = new KotlinTreeDumper();
+		final KotlinTreeDumper v = new KotlinTreeDumper();
 
-		for (final String path : args) {
-            KtFile theKt = null;
+		final String path = "cmdline.kt";
+		final String content = args[0];
 
-            try {
-                final String content = FileIO.readFileContents(new File(path));
-                final Disposable disp = Disposer.newDisposable();
-                final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
-                final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
-                final Project proj = kpe.getProject();
-                ((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
-                LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
-                                            new KotlinParserDefinition());
-                final PsiManager kProjectManager = PsiManager.getInstance(proj);
+		KtFile theKt = null;
 
-                final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content);
-                theKt = new KtFile(kProjectManager.findViewProvider(file), false);
-                theKt.accept(v);
-            } catch (final Throwable e) {
-                continue;
-            }
+		try {
+			final Disposable disp = Disposer.newDisposable();
+			final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
+			final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
+			final Project proj = kpe.getProject();
+			((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
+			LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
+										new KotlinParserDefinition());
+			final PsiManager kProjectManager = PsiManager.getInstance(proj);
+
+			final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content);
+			theKt = new KtFile(kProjectManager.findViewProvider(file), false);
+			theKt.accept(v);
+		} catch (final Throwable e) {
 		}
 	}
 }
