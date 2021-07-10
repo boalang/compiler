@@ -80,7 +80,7 @@
                      "name": "bar",
                      "variable_type": {
                         "name": "String",
-                         "kind": "OTHER"
+                        "kind": "OTHER"
                      },
                      "modifiers": [
                         {
@@ -103,12 +103,6 @@
                            "other": "param"
                         }
                      ]
-                  }
-               ],
-               "modifiers": [
-                  {
-                     "kind": "OTHER",
-                     "other": "data"
                   }
                ]
             }
