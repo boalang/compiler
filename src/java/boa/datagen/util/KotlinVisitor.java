@@ -69,6 +69,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
+	public void visitElement(final PsiElement element) {
+		if (element instanceof LeafPsiElement)
+			visitLeaf((LeafPsiElement)element);
+		else
+			element.acceptChildren(this);
+	}
+
+	@Override
 	public Void visitKtElement(final KtElement element, final Void v) {
 		if (element instanceof KtNameReferenceExpression)
 			visitNameReferenceExpression((KtNameReferenceExpression) element, v);
@@ -140,14 +148,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		modifiers.peek().add(mb.build());
-	}
-
-	@Override
-	public void visitElement(final PsiElement element) {
-		if (element instanceof LeafPsiElement)
-			visitLeaf((LeafPsiElement)element);
-		else
-			element.acceptChildren(this);
 	}
 
 	@Override
@@ -692,18 +692,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitPropertyAccessor(final KtPropertyAccessor prop, final Void v) {
-		expressions.push(new ArrayList<Expression>());
-		statements.push(new ArrayList<Statement>());
-		prop.acceptChildren(this, v);
-		// TODO
-		expressions.pop();
-		statements.pop();
-		prop.getProperty();
-		return null;
-	}
-
-	@Override
 	public Void visitTypeConstraintList(final KtTypeConstraintList n, final Void v) {
 		// TODO
 		n.acceptChildren(this, v);
@@ -749,19 +737,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitBinaryWithTypeRHSExpression(final KtBinaryExpressionWithTypeRHS n, final Void v) {
 		// TODO
 		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitStringTemplateExpression(final KtStringTemplateExpression expr, final Void v) {
-		final StringBuilder sb = new StringBuilder();
-		for (final KtStringTemplateEntry e : expr.getEntries())
-			sb.append(e.getText());
-
-		expressions.peek().add(Expression.newBuilder()
-				.setKind(Expression.ExpressionKind.LITERAL)
-				.setLiteral("\"" + sb.toString() + "\"")
-				.build());
 		return null;
 	}
 
@@ -822,43 +797,56 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
+	public Void visitStringTemplateExpression(final KtStringTemplateExpression expr, final Void v) {
+		final StringBuilder sb = new StringBuilder();
+		for (final KtStringTemplateEntry e : expr.getEntries())
+			sb.append(e.getText());
+
+		expressions.peek().add(Expression.newBuilder()
+				.setKind(Expression.ExpressionKind.LITERAL)
+				.setLiteral("\"" + sb.toString() + "\"")
+				.build());
+		return null;
+	}
+
+	@Override
 	public Void visitStringTemplateEntry(final KtStringTemplateEntry n, final Void v) {
-		// TODO
+		// FIXME this can probably go away
 		n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitStringTemplateEntryWithExpression(final KtStringTemplateEntryWithExpression expr, final Void v) {
-		// TODO
+		// FIXME this can probably go away
 		expr.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitBlockStringTemplateEntry(final KtBlockStringTemplateEntry n, final Void v) {
-		// TODO
+		// FIXME this can probably go away
 		n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitSimpleNameStringTemplateEntry(final KtSimpleNameStringTemplateEntry n, final Void v) {
-		// TODO
+		// FIXME this can probably go away
 		n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitLiteralStringTemplateEntry(final KtLiteralStringTemplateEntry n, final Void v) {
-		// TODO
+		// FIXME this can probably go away
 		n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitEscapeStringTemplateEntry(final KtEscapeStringTemplateEntry n, final Void v) {
-		// TODO
+		// FIXME this can probably go away
 		n.acceptChildren(this, v);
 		return null;
 	}
@@ -908,10 +896,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitBinaryExpression(final KtBinaryExpression expr, final Void v) {
-		expressions.push(new ArrayList<Expression>());
 		final Expression.Builder eb = Expression.newBuilder();
-		expr.acceptChildren(this, v);
-		eb.addAllExpressions(expressions.pop());
+
 		switch(expr.getOperationToken().toString()) {
 		case "PLUS":
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
@@ -943,28 +929,45 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		default:
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
 		}
+
+		expressions.push(new ArrayList<Expression>());
+		expr.acceptChildren(this, v);
+		eb.addAllExpressions(expressions.pop());
+
 		expressions.peek().add(eb.build());
 		return null;
 	}
 
 	public Void visitNameReferenceExpression(final KtNameReferenceExpression nameRef, final Void v) {
-		if (!expressions.isEmpty()) {
-			final Expression.Builder eb = Expression.newBuilder();
-			eb.setKind(Expression.ExpressionKind.VARACCESS);
-			eb.setVariable(nameRef.getReferencedName());
-			expressions.peek().add(eb.build());
-		}
+		expressions.peek().add(Expression.newBuilder()
+				.setKind(Expression.ExpressionKind.VARACCESS)
+				.setVariable(nameRef.getReferencedName()).build());
 		return null;
 	}
 
 	@Override
 	public Void visitParenthesizedExpression(final KtParenthesizedExpression expr, final Void v) {
-		expressions.push(new ArrayList<Expression>());
 		final Expression.Builder eb = Expression.newBuilder();
-		expr.acceptChildren(this, v);
+
 		eb.setKind(Expression.ExpressionKind.PAREN);
+
+		expressions.push(new ArrayList<Expression>());
+		expr.acceptChildren(this, v);
 		eb.addAllExpressions(expressions.pop());
+
 		expressions.peek().add(eb.build());
+		return null;
+	}
+
+	@Override
+	public Void visitPropertyAccessor(final KtPropertyAccessor prop, final Void v) {
+		expressions.push(new ArrayList<Expression>());
+		statements.push(new ArrayList<Statement>());
+		prop.acceptChildren(this, v);
+		// TODO
+		expressions.pop();
+		statements.pop();
+		prop.getProperty();
 		return null;
 	}
 
@@ -972,20 +975,22 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitProperty(final KtProperty prop, final Void v) {
 		final Variable.Builder vb = Variable.newBuilder();
 
-		vb.setName(prop.getNameIdentifier().getText());
+		if (prop.getReceiverTypeReference() != null)
+			vb.setName(prop.getReceiverTypeReference().getText() + "." + prop.getNameIdentifier().getText());
+		else
+			vb.setName(prop.getNameIdentifier().getText());
 
 		final KtTypeReference typeRef = prop.getTypeReference();
 		if (typeRef != null)
 			vb.setVariableType(typeFromTypeRef(typeRef));
 
 		modifiers.push(new ArrayList<Modifier>());
+		if (!prop.isVar())
+			modifiers.peek().add(Modifier.newBuilder()
+					.setKind(Modifier.ModifierKind.FINAL)
+					.build());
 		if (prop.getModifierList() != null)
 			prop.getModifierList().accept(this, v);
-		if (!prop.isVar()) {
-			final Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.FINAL);
-			modifiers.peek().add(mb.build());
-		}
 		vb.addAllModifiers(modifiers.pop());
 
 		expressions.push(new ArrayList<Expression>());

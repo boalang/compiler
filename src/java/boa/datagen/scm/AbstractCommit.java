@@ -56,13 +56,13 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.JavaVisitor;
+import boa.datagen.util.KotlinErrorCheckVisitor;
 import boa.datagen.util.KotlinVisitor;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
 
-// Dependencies for Kotlin
 import com.intellij.core.CoreFileTypeRegistry;
 import com.intellij.lang.LanguageParserDefinitions;
 import com.intellij.openapi.Disposable;
@@ -78,6 +78,7 @@ import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
 import org.jetbrains.kotlin.psi.KtFile;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
+
 
 /**
  * @author rdyer
@@ -599,6 +600,7 @@ public abstract class AbstractCommit {
 	}
 
 	private PsiManager kProjectManager = null;
+	private final KotlinErrorCheckVisitor errorCheck = new KotlinErrorCheckVisitor();
 
 	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		KtFile theKt = null;
@@ -621,46 +623,48 @@ public abstract class AbstractCommit {
 			return false;
 		}
 
-		try {
-			final KotlinVisitor visitor = new KotlinVisitor();
-			final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		if (!errorCheck.hasError(theKt))
+			try {
+				final KotlinVisitor visitor = new KotlinVisitor();
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-			ast.addNamespaces(visitor.getNamespace(theKt));
+				ast.addNamespaces(visitor.getNamespace(theKt));
 
-			switch (visitor.getAstLevel()) {
-				case KotlinVisitor.KLS10:
-					fb.setKind(FileKind.SOURCE_KOTLIN_1_0);
-					break;
-				case KotlinVisitor.KLS11:
-					fb.setKind(FileKind.SOURCE_KOTLIN_1_1);
-					break;
-				case KotlinVisitor.KLS12:
-					fb.setKind(FileKind.SOURCE_KOTLIN_1_2);
-					break;
-				case KotlinVisitor.KLS13:
-					fb.setKind(FileKind.SOURCE_KOTLIN_1_3);
-					break;
-				case KotlinVisitor.KLS14:
-					fb.setKind(FileKind.SOURCE_KOTLIN_1_4);
-					break;
-				case KotlinVisitor.KLS15:
-					fb.setKind(FileKind.SOURCE_KOTLIN_1_5);
-					break;
-				default:
-					fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
-					break;
+				switch (visitor.getAstLevel()) {
+					case KotlinVisitor.KLS10:
+						fb.setKind(FileKind.SOURCE_KOTLIN_1_0);
+						break;
+					case KotlinVisitor.KLS11:
+						fb.setKind(FileKind.SOURCE_KOTLIN_1_1);
+						break;
+					case KotlinVisitor.KLS12:
+						fb.setKind(FileKind.SOURCE_KOTLIN_1_2);
+						break;
+					case KotlinVisitor.KLS13:
+						fb.setKind(FileKind.SOURCE_KOTLIN_1_3);
+						break;
+					case KotlinVisitor.KLS14:
+						fb.setKind(FileKind.SOURCE_KOTLIN_1_4);
+						break;
+					case KotlinVisitor.KLS15:
+						fb.setKind(FileKind.SOURCE_KOTLIN_1_5);
+						break;
+					default:
+						fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
+						break;
+				}
+
+				final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+				connector.astWriterLen += bw.getLength();
+
+				return true;
+			} catch (final IOException e) {
+				if (debug)
+					e.printStackTrace();
 			}
 
-			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
-			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-			connector.astWriterLen += bw.getLength();
-		} catch (final IOException e) {
-			if (debug)
-				e.printStackTrace();
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {

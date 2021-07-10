@@ -18,6 +18,24 @@ package boa.functions.langmode;
 
 import java.util.List;
 
+import com.intellij.core.CoreFileTypeRegistry;
+import com.intellij.lang.LanguageParserDefinitions;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.testFramework.LightVirtualFile;
+import org.jetbrains.kotlin.idea.KotlinLanguage;
+import org.jetbrains.kotlin.idea.KotlinFileType;
+import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
+import org.jetbrains.kotlin.psi.KtFile;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
+
+import boa.datagen.util.KotlinErrorCheckVisitor;
+import boa.datagen.util.KotlinVisitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
@@ -778,23 +796,19 @@ public class KotlinLangMode implements LangMode {
 	public String prettyprint(final Modifier m) {
 		if (m == null) return "";
 
-		String s = "";
-
 		switch (m.getKind()) {
-			case OTHER: return m.getOther();
-
 			case VISIBILITY:
 				switch (m.getVisibility()) {
 					case PUBLIC:    return "public";
 					case PRIVATE:   return "private";
 					case PROTECTED: return "protected";
 					case INTERNAL:  return "internal";
-					default: return s;
+					default: return "";
 				}
 
 			case ANNOTATION:
 				// FIXME convert to Kotlin - handle @file:[foo, bar] syntax
-				s = "@" + m.getAnnotationName();
+				String s = "@" + m.getAnnotationName();
 				if (m.getAnnotationMembersCount() > 0) s += "(";
 				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
 					if (i > 0) s += ", ";
@@ -803,10 +817,10 @@ public class KotlinLangMode implements LangMode {
 				if (m.getAnnotationMembersCount() > 0) s += ")";
 				return s;
 
-			case FINAL:        return "final";
-			case ABSTRACT:     return "abstract";
+			case FINAL:    return "final";
+			case ABSTRACT: return "abstract";
 
-			default: return s;
+			default: return m.getOther();
 		}
 	}
 
@@ -818,17 +832,33 @@ public class KotlinLangMode implements LangMode {
 		return n.getExpressions(0);
 	}
 
+	private PsiManager kProjectManager = null;
+
 	public ASTRoot parse(final String s) {
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 
-		// FIXME: Handle parsing of Kotlin code
-		// try {
-		// 	final AstSource source = new AstSource.String("", s);
-		// 	final AstResult<Unit, List<Ast>> astList = SummaryKt.summary(KotlinGrammarAntlrJavaParser.INSTANCE.parseKotlinFile(source), true);
-		// 	ast.addNamespaces(new KotlinVisitor().getNamespace(astList.get()));
-		// } catch (final Throwable e) {
-		// 	// do nothing
-		// }
+		try {
+			if (kProjectManager == null) {
+				final Disposable disp = Disposer.newDisposable();
+				final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
+				final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
+				final Project proj = kpe.getProject();
+				((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
+				LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
+											new KotlinParserDefinition());
+				kProjectManager = PsiManager.getInstance(proj);
+			}
+
+			final VirtualFile file = new LightVirtualFile("boa.kt", KotlinFileType.INSTANCE, s);
+			final KtFile theKt = new KtFile(kProjectManager.findViewProvider(file), false);
+
+			final KotlinErrorCheckVisitor errorCheck = new KotlinErrorCheckVisitor();
+
+			if (!errorCheck.hasError(theKt))
+				ast.addNamespaces(new KotlinVisitor().getNamespace(theKt));
+		} catch (final Exception e) {
+			// do nothing
+		}
 
 		return ast.build();
 	}
