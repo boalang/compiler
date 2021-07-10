@@ -984,9 +984,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		fields.push(new ArrayList<Variable>());
 		expressions.push(new ArrayList<Expression>());
 		constructor.acceptChildren(this, v);
-		mb.addStatements(Statement.newBuilder()
-				 .setKind(Statement.StatementKind.BLOCK)
-				 .addAllExpressions(expressions.pop()));
+		List<Expression> exprs = expressions.pop();
+		if (exprs.size() != 0)
+			mb.addStatements(Statement.newBuilder()
+					 .setKind(Statement.StatementKind.BLOCK)
+					 .addAllExpressions(exprs));
 		mb.addAllArguments(fields.pop());
 		mb.addAllModifiers(modifiers.pop());
 
@@ -1004,9 +1006,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		fields.push(new ArrayList<Variable>());
 		expressions.push(new ArrayList<Expression>());
 		function.acceptChildren(this, v);
-		mb.addStatements(Statement.newBuilder()
-				 .setKind(Statement.StatementKind.BLOCK)
-				 .addAllExpressions(expressions.pop()));
+		List<Expression> exprs = expressions.pop();
+		if (exprs.size() != 0)
+			mb.addStatements(Statement.newBuilder()
+					 .setKind(Statement.StatementKind.BLOCK)
+					 .addAllExpressions(exprs));
 		mb.addAllArguments(fields.pop());
 		mb.addAllModifiers(modifiers.pop());
 
