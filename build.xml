@@ -417,6 +417,13 @@
 		</java>
 	</target>
 
+	<target name="dump-kotlin" depends="-compile-tests" description="Parse and dump Kotlin AST.">
+		<java classname="boa.test.datagen.DumpKotlin" fork="true" failonerror="true">
+			<classpath refid="test.class.path" />
+			<arg value="${kotlin.file}" />
+		</java>
+	</target>
+
 
 	<!-- style checking -->
 	<target name="checkstyle">
