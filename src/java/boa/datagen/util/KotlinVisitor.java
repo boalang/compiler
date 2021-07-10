@@ -547,12 +547,39 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDotQualifiedExpression(final KtDotQualifiedExpression expr, final Void v) {
-		final Expression.Builder eb = Expression.newBuilder();
+		final KtExpression rcvr = expr.getReceiverExpression();
+		final KtExpression sel = expr.getSelectorExpression();
 
-		eb.setKind(Expression.ExpressionKind.VARACCESS);
-		eb.setVariable(expr.getText());
+		if (sel instanceof KtCallExpression) {
+			final KtCallExpression call = (KtCallExpression)sel;
+			final Expression.Builder eb = Expression.newBuilder();
 
-		expressions.peek().add(eb.build());
+			eb.setKind(Expression.ExpressionKind.METHODCALL);
+
+			expressions.push(new ArrayList<Expression>());
+			System.err.println(rcvr);
+			rcvr.accept(this, v);
+			eb.addAllExpressions(expressions.pop());
+
+			eb.setMethod(call.getCalleeExpression().getText());
+
+			if (call.getValueArgumentList() != null) {
+				expressions.push(new ArrayList<Expression>());
+				for (final KtValueArgument arg : call.getValueArgumentList().getArguments())
+					arg.getArgumentExpression().accept(this, v);
+				eb.addAllMethodArgs(expressions.pop());
+			}
+
+			expressions.peek().add(eb.build());
+		} else {
+			final Expression.Builder eb = Expression.newBuilder();
+
+			eb.setKind(Expression.ExpressionKind.VARACCESS);
+			eb.setVariable(expr.getText());
+
+			expressions.peek().add(eb.build());
+		}
+
 		return null;
 	}
 
