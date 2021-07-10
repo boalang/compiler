@@ -1,0 +1,37 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "foo",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "1"
+                  }
+               ]
+            },
+            {
+               "name": "bar",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"test: $foo --> ${n + 5}\""
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
