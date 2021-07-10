@@ -600,15 +600,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitThisExpression(final KtThisExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		expressions.peek().add(Expression.newBuilder()
+					 .setKind(Expression.ExpressionKind.VARACCESS)
+					 .setVariable(expr.getText())
+					 .build());
 		return null;
 	}
 
 	@Override
 	public Void visitSuperExpression(final KtSuperExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		expressions.peek().add(Expression.newBuilder()
+					 .setKind(Expression.ExpressionKind.VARACCESS)
+					 .setVariable(expr.getText())
+					 .build());
 		return null;
 	}
 
