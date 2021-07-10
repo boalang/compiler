@@ -64,8 +64,8 @@ public class TestKotlin extends KotlinBaseTest {
 	@Test
 	public void kotlin() throws IOException {
 		assertEquals(
-			parseKotlin(load(kotlinFileName)).trim(),
-			load(jsonFileName).trim()
+			load(jsonFileName).trim(),
+			parseKotlin(load(kotlinFileName)).trim()
 		);
 	}
 }
