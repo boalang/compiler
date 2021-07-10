@@ -36,9 +36,15 @@ public class TestKotlin extends KotlinBaseTest {
 
 	@Parameters(name = "{0}")
 	public static List<String[]> data() {
+		return getData(new File(rootDir));
+	}
+
+	private static List<String[]> getData(final File root) {
 		final List<String[]> files = new ArrayList<String[]>();
-		for (final File f : new File(rootDir).listFiles())
-			if (!f.isDirectory() && f.getName().endsWith(".kt")) {
+		for (final File f : root.listFiles())
+			if (f.isDirectory()) {
+				files.addAll(getData(f));
+			} else if (f.getName().endsWith(".kt")) {
 				final File f2 = new File(f.getPath().replace(".kt", ".json"));
 				if (f2.exists() && !f2.isDirectory())
 					files.add(new String[] { f.getPath(), f2.getPath()});
