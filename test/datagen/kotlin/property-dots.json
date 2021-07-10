@@ -1,0 +1,41 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "foo",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "bar.foo.bar"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "variable_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "bar.foo.bar"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
