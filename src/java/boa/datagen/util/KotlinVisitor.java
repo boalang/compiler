@@ -193,7 +193,28 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnnotationEntry(final KtAnnotationEntry entry, final Void v) {
-		entry.acceptChildren(this, v);
+		final Modifier.Builder mb = Modifier.newBuilder();
+
+		mb.setKind(Modifier.ModifierKind.ANNOTATION);
+
+		if (entry.getUseSiteTarget() != null)
+			mb.setOther(entry.getUseSiteTarget().getText());
+		mb.setAnnotationName(entry.getCalleeExpression().getText());
+
+		if (entry.getValueArgumentList() != null) {
+			expressions.push(new ArrayList<Expression>());
+			for (final KtValueArgument a : entry.getValueArgumentList().getArguments())
+				a.getArgumentExpression().accept(this, v);
+			mb.addAllAnnotationValues(expressions.pop());
+
+			for (final KtValueArgument a : entry.getValueArgumentList().getArguments())
+				if (a.getArgumentName() != null)
+					mb.addAnnotationMembers(a.getArgumentName().getText());
+				else
+					mb.addAnnotationMembers("");
+			}
+
+		modifiers.peek().add(mb.build());
 		return null;
 	}
 
@@ -243,7 +264,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	// visitConstructorDelegationCall
 	// visitPropertyDelegate
 	// visitTypeReference
-	// visiytValueArgumentList
 	// visitArgument
 	// visitExpression
 	// visitLoopExpression
@@ -430,6 +450,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			vb.setVariableType(typeFromTypeRef(typeRef));
 
 		modifiers.push(new ArrayList<Modifier>());
+		for (final KtAnnotationEntry a : prop.getAnnotationEntries())
+			a.accept(this, v);
 		prop.getModifierList().accept(this, v);
 		if (!prop.isVar()) {
 			final Modifier.Builder mb = Modifier.newBuilder();
@@ -575,9 +597,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
-	// Things to ignore/pass through
 	@Override
 	public void visitWhiteSpace(final PsiWhiteSpace space) {
+		// ignore
 	}
 
 	// Utility methods
