@@ -50,8 +50,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	protected Stack<List<Method>> methods = new Stack<List<Method>>();
 	protected Stack<List<Statement>> statements = new Stack<List<Statement>>();
 
-	protected Stack<List<Expression>> arguments = new Stack<List<Expression>>();
-
 	public static final int KLS10 = 10;
 	public static final int KLS11 = 11;
 	public static final int KLS12 = 12;
@@ -1041,14 +1039,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		eb.setKind(Expression.ExpressionKind.METHODCALL);
 
-		arguments.push(new ArrayList<Expression>());
-		expressions.push(new ArrayList<Expression>());
-		args.acceptChildren(this, v);
-		final List<Expression> exprs = expressions.pop();
-		final Expression lastExpression = exprs.remove(exprs.size() - 1);
-		eb.setMethod(lastExpression.getVariable());
-		eb.addAllMethodArgs(arguments.pop());
-		eb.addAllExpressions(exprs);
+		eb.setMethod(args.getCalleeExpression().getText());
+
+		if (args.getValueArgumentList() != null) {
+			expressions.push(new ArrayList<Expression>());
+                        for (final KtValueArgument arg : args.getValueArgumentList().getArguments())
+				arg.getArgumentExpression().accept(this, v);
+			eb.addAllMethodArgs(expressions.pop());
+		}
 
 		expressions.peek().add(eb.build());
 		return null;
@@ -1056,9 +1054,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitValueArgumentList(final KtValueArgumentList args, final Void v) {
-		expressions.push(new ArrayList<Expression>());
+		// TODO
 		args.acceptChildren(this, v);
-		arguments.peek().addAll(expressions.pop());
 		return null;
 	}
 
