@@ -229,7 +229,7 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".java")) {
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			parseJavaFile(path, fb, getFileContents(path), false); // parse java file
-		} else if (lowerPath.endsWith(".kt")) {
+		} else if (lowerPath.endsWith(".kt") || lowerPath.endsWith(".kts")) {
 			fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
 			parseKotlinFile(path, fb, getFileContents(path), false);
 		} else if (lowerPath.endsWith(".js")) {
