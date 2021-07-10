@@ -1,0 +1,68 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Example",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "Example",
+                     "arguments": [
+                        {
+                           "name": "foo",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann",
+                                 "other": "field"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "bar",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann",
+                                 "other": "get"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "quux",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann",
+                                 "other": "param"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "data"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
