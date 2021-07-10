@@ -91,7 +91,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	public void visitModifier(final KtModifierKeywordToken m) {
-		Modifier.Builder mb = Modifier.newBuilder();
+		final Modifier.Builder mb = Modifier.newBuilder();
 
 		switch (m.getValue()) {
 		case "abstract":
@@ -141,7 +141,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 
 		default:
-			System.out.println("unknown modifier: " + m.getValue());
+			System.err.println("===> UNKNOWN MODIFIER: " + m.getValue());
 			mb.setKind(Modifier.ModifierKind.OTHER);
 			mb.setOther(m.getValue());
 			break;
@@ -180,11 +180,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitImportDirective(final KtImportDirective imprt, final Void v) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(imprt.getImportedFqName().toString());
+
 		if (imprt.isAllUnder())
 			sb.append(".*");
+
 		if (imprt.getAliasName() != null)
 			sb.append(" as " + imprt.getAliasName());
-		b.addImports(sb.toString());
+
+			b.addImports(sb.toString());
 		return null;
 	}
 
@@ -274,13 +277,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitClassBody(final KtClassBody n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitModifierList(final KtModifierList n, final Void v) {
 		// TODO
 		n.acceptChildren(this, v);
 		return null;
@@ -960,14 +956,40 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitPropertyAccessor(final KtPropertyAccessor prop, final Void v) {
-		expressions.push(new ArrayList<Expression>());
+	public Void visitPropertyAccessor(final KtPropertyAccessor acc, final Void v) {
+		final Method.Builder mb = Method.newBuilder();
+		final KtProperty prop = acc.getProperty();
+
+		final String propName;
+		if (prop.getReceiverTypeReference() != null)
+			propName = prop.getReceiverTypeReference().getText() + "." + prop.getNameIdentifier().getText();
+		else
+			propName = prop.getNameIdentifier().getText();
+		mb.setName(propName + "." + (acc.isGetter() ? "<get>" : "<set>"));
+
+		if (acc.isGetter()) {
+			KtTypeReference typeRef = acc.getReturnTypeReference();
+			if (typeRef == null)
+				typeRef = prop.getTypeReference();
+			if (typeRef != null)
+				mb.setReturnType(typeFromTypeRef(typeRef));
+		} else {
+			mb.setReturnType(Type.newBuilder()
+					.setName("Unit")
+					.setKind(TypeKind.OTHER)
+					.build());
+		}
+
+		modifiers.push(new ArrayList<Modifier>());
+		if (acc.getModifierList() != null)
+			acc.getModifierList().accept(this, v);
+		mb.addAllModifiers(modifiers.pop());
+
 		statements.push(new ArrayList<Statement>());
-		prop.acceptChildren(this, v);
-		// TODO
-		expressions.pop();
-		statements.pop();
-		prop.getProperty();
+		acc.getBodyBlockExpression().accept(this, v);
+		mb.addAllStatements(statements.pop());
+
+		methods.peek().add(mb.build());
 		return null;
 	}
 
