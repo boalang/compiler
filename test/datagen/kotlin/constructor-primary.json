@@ -1,0 +1,28 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "Person",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "arguments": [
+                        {
+                           "name": "firstName",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -246,9 +246,24 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitSecondaryConstructor(final KtSecondaryConstructor n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+	public Void visitSecondaryConstructor(final KtSecondaryConstructor constructor, final Void v) {
+		final Method.Builder mb = Method.newBuilder();
+
+		mb.setName("<init>");
+
+		modifiers.push(new ArrayList<Modifier>());
+		fields.push(new ArrayList<Variable>());
+		expressions.push(new ArrayList<Expression>());
+		constructor.acceptChildren(this, v);
+		List<Expression> exprs = expressions.pop();
+		if (exprs.size() != 0)
+			mb.addStatements(Statement.newBuilder()
+					 .setKind(Statement.StatementKind.BLOCK)
+					 .addAllExpressions(exprs));
+		mb.addAllArguments(fields.pop());
+		mb.addAllModifiers(modifiers.pop());
+
+		methods.peek().add(mb.build());
 		return null;
 	}
 
@@ -980,7 +995,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitPrimaryConstructor(final KtPrimaryConstructor constructor, final Void v) {
 		final Method.Builder mb = Method.newBuilder();
 
-		mb.setName(constructor.getName());
+		mb.setName("<init>");
 
 		modifiers.push(new ArrayList<Modifier>());
 		fields.push(new ArrayList<Variable>());
