@@ -73,13 +73,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return b.build();
 	}
 
-	private int indent = 0;
-
-	private void indent() {
-		for (int i = 0; i < indent * 2; i++)
-			System.err.print(" ");
-	}
-
 	@Override
 	public Void visitKtElement(final KtElement element, final Void v) {
 		if (element instanceof KtNameReferenceExpression)
@@ -91,18 +84,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public void visitElement(final PsiElement element) {
-		indent();
-		System.err.print(element);
-		if (element instanceof org.jetbrains.kotlin.psi.KtConstantExpression)
-			System.err.print("(" + ((org.jetbrains.kotlin.psi.KtConstantExpression)element).getText() + ")");
-		else if (element instanceof org.jetbrains.kotlin.psi.KtBinaryExpression)
-			System.err.print("(" + ((org.jetbrains.kotlin.psi.KtBinaryExpression)element).getOperationToken() + ")");
-		else if (element instanceof com.intellij.psi.impl.source.tree.LeafPsiElement)
-			System.err.print("(" + ((com.intellij.psi.impl.source.tree.LeafPsiElement)element).getText() + ")");
-		System.err.println(" - " + element.getClass());
-		indent++;
 		element.acceptChildren(this);
-		indent--;
 	}
 
 	@Override
@@ -147,21 +129,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnnotationEntry(final KtAnnotationEntry entry, final Void v) {
-		System.err.println("ANN ENTRY");
 		entry.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitAnnotation(final KtAnnotation annotation, final Void v) {
-		System.err.println("ANN");
 		annotation.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitAnnotationUseSiteTarget(final KtAnnotationUseSiteTarget target, final Void v) {
-		System.err.println("ANN TARGET: " + target.getAnnotationUseSiteTarget().toString().toLowerCase());
+		//System.err.println("ANN TARGET: " + target.getAnnotationUseSiteTarget().toString().toLowerCase());
 		target.acceptChildren(this, v);
 		return null;
 	}
