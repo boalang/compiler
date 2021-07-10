@@ -929,7 +929,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			vb.setVariableType(typeFromTypeRef(typeRef));
 
 		modifiers.push(new ArrayList<Modifier>());
-		prop.getModifierList().accept(this, v);
+		if (prop.getModifierList() != null)
+			prop.getModifierList().accept(this, v);
 		if (!prop.isVar()) {
 			final Modifier.Builder mb = Modifier.newBuilder();
 			mb.setKind(Modifier.ModifierKind.FINAL);
@@ -1024,9 +1025,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (param.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(param.getTypeReference()));
 
-		modifiers.push(new ArrayList<Modifier>());
-		param.getModifierList().accept(this, v);
-		vb.addAllModifiers(modifiers.pop());
+		if (param.getModifierList() != null) {
+			modifiers.push(new ArrayList<Modifier>());
+			param.getModifierList().accept(this, v);
+			vb.addAllModifiers(modifiers.pop());
+		}
 
 		fields.peek().add(vb.build());
 		return null;
