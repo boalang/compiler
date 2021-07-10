@@ -9,6 +9,12 @@
                "methods": [
                   {
                      "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
                      "arguments": [
                         {
                            "name": "foo",

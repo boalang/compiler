@@ -998,6 +998,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		mb.setName("<init>");
 
 		modifiers.push(new ArrayList<Modifier>());
+		modifiers.peek().add(Modifier.newBuilder()
+				     .setKind(Modifier.ModifierKind.OTHER)
+				     .setOther("primary")
+				     .build());
 		fields.push(new ArrayList<Variable>());
 		expressions.push(new ArrayList<Expression>());
 		constructor.acceptChildren(this, v);
