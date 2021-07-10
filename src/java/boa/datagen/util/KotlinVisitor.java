@@ -173,7 +173,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitPackageDirective(final KtPackageDirective pkg, final Void v) {
 		b.setName(pkg.getQualifiedName());
-		pkg.acceptChildren(this);
 		return null;
 	}
 
