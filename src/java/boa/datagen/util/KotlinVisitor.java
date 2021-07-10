@@ -664,9 +664,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitPropertyAccessor(final KtPropertyAccessor n, final Void v) {
+	public Void visitPropertyAccessor(final KtPropertyAccessor prop, final Void v) {
+		expressions.push(new ArrayList<Expression>());
+		statements.push(new ArrayList<Statement>());
+		prop.acceptChildren(this, v);
 		// TODO
-		n.acceptChildren(this, v);
+		expressions.pop();
+		statements.pop();
+		prop.getProperty();
 		return null;
 	}
 
@@ -961,6 +966,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		vb.addAllExpressions(expressions.pop());
 
 		fields.peek().add(vb.build());
+
+		if (prop.getGetter() != null)
+			prop.getGetter().accept(this, v);
+		if (prop.getSetter() != null)
+			prop.getSetter().accept(this, v);
+
 		return null;
 	}
 
