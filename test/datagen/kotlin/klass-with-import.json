@@ -1,0 +1,16 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS"
+            }
+         ],
+         "imports": [
+            "java.util.List"
+         ]
+      }
+   ]
+}
