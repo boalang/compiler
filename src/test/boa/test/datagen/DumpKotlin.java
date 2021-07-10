@@ -18,9 +18,6 @@ package boa.test.datagen;
 
 import java.io.File;
 
-import com.intellij.psi.PsiElement;
-import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.kotlin.psi.KtVisitor;
 import com.intellij.core.CoreFileTypeRegistry;
 import com.intellij.lang.LanguageParserDefinitions;
 import com.intellij.openapi.Disposable;
@@ -29,14 +26,18 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vfs.StandardFileSystems;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.testFramework.LightVirtualFile;
-import org.jetbrains.kotlin.idea.KotlinLanguage;
+
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
 import org.jetbrains.kotlin.idea.KotlinFileType;
+import org.jetbrains.kotlin.idea.KotlinLanguage;
 import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
 import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
+import org.jetbrains.kotlin.psi.KtVisitor;
 
 import boa.datagen.util.FileIO;
 
@@ -66,6 +67,10 @@ public class DumpKotlin {
 			indent++;
 			element.acceptChildren(this);
 			indent--;
+		}
+
+		@Override
+		public void visitWhiteSpace(final PsiWhiteSpace space) {
 		}
 	}
 
