@@ -557,7 +557,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			eb.setKind(Expression.ExpressionKind.METHODCALL);
 
 			expressions.push(new ArrayList<Expression>());
-			System.err.println(rcvr);
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
 
@@ -1101,6 +1100,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitCallExpression(final KtCallExpression args, final Void v) {
+		// FIXME this visit can maybe go away?
 		final Expression.Builder eb = Expression.newBuilder();
 
 		eb.setKind(Expression.ExpressionKind.METHODCALL);
