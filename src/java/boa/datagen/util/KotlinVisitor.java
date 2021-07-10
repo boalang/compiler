@@ -232,102 +232,586 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
-	// TODO
-	// Generally visitor methods should be of the form:
-	// 	public Void visitElementNameHere(final ElementType name, final Void v) {
-	// 		doSomethingHere();
-	// 		return null;
-	// 	}
-	// See also https://github.com/JetBrains/kotlin/blob/92d200e093c693b3c06e53a39e0b0973b84c7ec5/compiler/psi/src/org/jetbrains/kotlin/psi/KtVisitor.java
-	// visitKtElement
-	// visitDeclaration
-	// visitObjectDeclaration
-	// visitClassOrObject
-	// visitSecondaryConstructor
-	// visitPrimaryConstructor
-	// visitNamedFunction
-	// visitDestructuringDeclaration
-	// visitDistructuringDeclarationEntry
-	// visitTypeAlias
-	// visitScript
-	// visitClassBody
-	// visitModifierList
-	// visitConstructorCalleeExpression
-	// visitTypeParameterList
-	// visitTypeParameter
-	// visitEnumEntry
-	// visitParameterList
-	// visitSuperTypeList
-	// visitSuperTypeListEntry
-	// visitDelegatedSuperTypeEntry
-	// visitSuperTypeCallEntry
-	// visitSuperTypeEntry
-	// visitConstructorDelegationCall
-	// visitPropertyDelegate
-	// visitTypeReference
-	// visitArgument
-	// visitExpression
-	// visitLoopExpression
-	// visitSimpleNameExpression
-	// visitReferenceExpression
-	// visitLabeledExpression
-	// visitPrefixExpression
-	// visitPostfixExpression
-	// visitUnaryExpression
-	// visitReturnExpression
-	// visitExpressionWithLabel
-	// visitThrowExpression
-	// visitIfExpression
-	// visitWhenExpression
-	// visitCollectionLiteralExpression
-	// visitTryExpression
-	// visitForExpression
-	// visitWhileExpression
-	// visitDoWhileExpression
-	// visitLambdaExpression
-	// visitAnnotatedExpression
-	// visitCallExpression
-	// visitArrayAccessExpression
-	// visitQualifiedExpression
-	// visitDoubleColonExpression
-	// visitCallableReferenceExpression
-	// visitDotQualifiedExpression
-	// visitSafeQualifiedExpression
-	// visitObjectLiteralExpression
-	// visitBlockExpression
-	// visitCatchSection
-	// visitFinallySection
-	// visitTypeArgumentList
-	// visitThisExpression
-	// visitSuperExpression
-	// visitInitializerList
-	// visitAnonymousInitializer
-	// visitScriptInitializer
-	// visitClassInitializer
-	// visitPropertyAccessor
-	// visitTypeConstraintList
-	// visitTypeConstraint
-	// visitTypeElement
-	// visitUserType
-	// visitDynamicType
-	// visitFunctionType
-	// visitSelfType
-	// visitBinaryWithTypeRHSExpression
-	// visitStringTemplateExpression
-	// visitNamedDeclaration
-	// visitNullableType
-	// visitTypeProjection
-	// visitWhenEntry
-	// visitIsExpression
-	// visitWhenConditionIsPattern
-	// visitWhenConditionInRange
-	// visitWhenConditionWithExpression
-	// visitStringTemplateEntry
-	// visitStringTemplateEntryWithExpression
-	// visitBlockStringTemplateEntry
-	// visitSimpleNameStringTemplateEntry
-	// visitLiteralStringTemplateEntry
-	// visitEscapeStringTemplateEntry
+	@Override
+	public Void visitDeclaration(final KtDeclaration n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitObjectDeclaration(final KtObjectDeclaration n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitClassOrObject(final KtClassOrObject n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSecondaryConstructor(final KtSecondaryConstructor n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitDestructuringDeclaration(final KtDestructuringDeclaration n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitDestructuringDeclarationEntry(final KtDestructuringDeclarationEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTypeAlias(final KtTypeAlias n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitScript(final KtScript n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitClassBody(final KtClassBody n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitModifierList(final KtModifierList n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitConstructorCalleeExpression(final KtConstructorCalleeExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTypeParameterList(final KtTypeParameterList n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTypeParameter(final KtTypeParameter n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitEnumEntry(final KtEnumEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitParameterList(final KtParameterList n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSuperTypeList(final KtSuperTypeList n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSuperTypeListEntry(final KtSuperTypeListEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitDelegatedSuperTypeEntry(final KtDelegatedSuperTypeEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSuperTypeCallEntry(final KtSuperTypeCallEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSuperTypeEntry(final KtSuperTypeEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitConstructorDelegationCall(final KtConstructorDelegationCall n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitPropertyDelegate(final KtPropertyDelegate n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTypeReference(final KtTypeReference n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitArgument(final KtValueArgument n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitExpression(final KtExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitLoopExpression(final KtLoopExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSimpleNameExpression(final KtSimpleNameExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitReferenceExpression(final KtReferenceExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitLabeledExpression(final KtLabeledExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitPrefixExpression(final KtPrefixExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitPostfixExpression(final KtPostfixExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitUnaryExpression(final KtUnaryExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitReturnExpression(final KtReturnExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitExpressionWithLabel(final KtExpressionWithLabel n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitThrowExpression(final KtThrowExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitIfExpression(final KtIfExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitWhenExpression(final KtWhenExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitCollectionLiteralExpression(final KtCollectionLiteralExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTryExpression(final KtTryExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitForExpression(final KtForExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitDoWhileExpression(final KtDoWhileExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitLambdaExpression(final KtLambdaExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitAnnotatedExpression(final KtAnnotatedExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitArrayAccessExpression(final KtArrayAccessExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitQualifiedExpression(final KtQualifiedExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitDoubleColonExpression(final KtDoubleColonExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitCallableReferenceExpression(final KtCallableReferenceExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitDotQualifiedExpression(final KtDotQualifiedExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSafeQualifiedExpression(final KtSafeQualifiedExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitObjectLiteralExpression(final KtObjectLiteralExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitBlockExpression(final KtBlockExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitCatchSection(final KtCatchClause n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitFinallySection(final KtFinallySection n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTypeArgumentList(final KtTypeArgumentList n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitThisExpression(final KtThisExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSuperExpression(final KtSuperExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitInitializerList(final KtInitializerList n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitAnonymousInitializer(final KtAnonymousInitializer n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitScriptInitializer(final KtScriptInitializer n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitClassInitializer(final KtClassInitializer n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitPropertyAccessor(final KtPropertyAccessor n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTypeConstraintList(final KtTypeConstraintList n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTypeConstraint(final KtTypeConstraint n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitUserType(final KtUserType n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitDynamicType(final KtDynamicType n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitFunctionType(final KtFunctionType n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSelfType(final KtSelfType n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitBinaryWithTypeRHSExpression(final KtBinaryExpressionWithTypeRHS n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitStringTemplateExpression(final KtStringTemplateExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitNamedDeclaration(final KtNamedDeclaration n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitNullableType(final KtNullableType n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitTypeProjection(final KtTypeProjection n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitWhenEntry(final KtWhenEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitIsExpression(final KtIsExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitWhenConditionIsPattern(final KtWhenConditionIsPattern n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitWhenConditionInRange(final KtWhenConditionInRange n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitWhenConditionWithExpression(final KtWhenConditionWithExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitStringTemplateEntry(final KtStringTemplateEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitStringTemplateEntryWithExpression(final KtStringTemplateEntryWithExpression n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitBlockStringTemplateEntry(final KtBlockStringTemplateEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitSimpleNameStringTemplateEntry(final KtSimpleNameStringTemplateEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitLiteralStringTemplateEntry(final KtLiteralStringTemplateEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
+
+	@Override
+	public Void visitEscapeStringTemplateEntry(final KtEscapeStringTemplateEntry n, final Void v) {
+		// TODO
+		n.acceptChildren(this, v);
+		return null;
+	}
 
 	@Override
 	public Void visitBreakExpression(final KtBreakExpression expr, final Void v) {
