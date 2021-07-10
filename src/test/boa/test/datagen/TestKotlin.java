@@ -40,7 +40,7 @@ public class TestKotlin extends KotlinBaseTest {
 		for (final File f : new File(rootDir).listFiles())
 			if (!f.isDirectory() && f.getName().endsWith(".kt")) {
 				final File f2 = new File(f.getPath().replace(".kt", ".json"));
-				if (!f2.exists() && f2.isDirectory())
+				if (f2.exists() && !f2.isDirectory())
 					files.add(new String[] { f.getPath(), f2.getPath()});
 			}
 		return files;
