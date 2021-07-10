@@ -17,11 +17,7 @@
 package boa.datagen.util;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.Stack;
 
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
@@ -35,7 +31,6 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
 import boa.types.Ast.Modifier;
 import boa.types.Ast.Namespace;
-import boa.types.Ast.PositionInfo;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
@@ -426,7 +421,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		modifiers.push(new ArrayList<Modifier>());
 		if (!prop.isVar()) {
 			final Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.CONSTANT);
+			mb.setKind(Modifier.ModifierKind.FINAL);
 			modifiers.peek().add(mb.build());
 		}
 		final Variable.Builder vb = Variable.newBuilder();
