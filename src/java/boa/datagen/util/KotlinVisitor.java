@@ -245,28 +245,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitSecondaryConstructor(final KtSecondaryConstructor constructor, final Void v) {
-		final Method.Builder mb = Method.newBuilder();
-
-		mb.setName("<init>");
-
-		modifiers.push(new ArrayList<Modifier>());
-		fields.push(new ArrayList<Variable>());
-		expressions.push(new ArrayList<Expression>());
-		constructor.acceptChildren(this, v);
-		List<Expression> exprs = expressions.pop();
-		if (exprs.size() != 0)
-			mb.addStatements(Statement.newBuilder()
-					 .setKind(Statement.StatementKind.BLOCK)
-					 .addAllExpressions(exprs));
-		mb.addAllArguments(fields.pop());
-		mb.addAllModifiers(modifiers.pop());
-
-		methods.peek().add(mb.build());
-		return null;
-	}
-
-	@Override
 	public Void visitDestructuringDeclaration(final KtDestructuringDeclaration d, final Void v) {
 		// TODO
 		d.acceptChildren(this, v);
@@ -1005,33 +983,47 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
-	@Override
-	public Void visitPrimaryConstructor(final KtPrimaryConstructor constructor, final Void v) {
+	private <T extends KtConstructor<T>> void visitConstructor(final KtConstructor<T> constructor, final boolean isPrimary) {
 		final Method.Builder mb = Method.newBuilder();
 
 		mb.setName("<init>");
 
 		modifiers.push(new ArrayList<Modifier>());
-		modifiers.peek().add(Modifier.newBuilder()
-				     .setKind(Modifier.ModifierKind.OTHER)
-				     .setOther("primary")
-				     .build());
+		if (isPrimary)
+			modifiers.peek().add(Modifier.newBuilder()
+						.setKind(Modifier.ModifierKind.OTHER)
+						.setOther("primary")
+						.build());
 		fields.push(new ArrayList<Variable>());
 		expressions.push(new ArrayList<Expression>());
-		constructor.acceptChildren(this, v);
-		List<Expression> exprs = expressions.pop();
+
+		constructor.acceptChildren(this, null);
+
+		final List<Expression> exprs = expressions.pop();
 		if (exprs.size() != 0)
 			mb.addStatements(Statement.newBuilder()
 					 .setKind(Statement.StatementKind.BLOCK)
 					 .addAllExpressions(exprs));
-                List<Variable> methodFields = fields.pop();
+		final List<Variable> methodFields = fields.pop();
 		mb.addAllArguments(methodFields);
 		mb.addAllModifiers(modifiers.pop());
 
-		for(Variable var: methodFields)
-			fields.peek().add(var);
+		if (isPrimary)
+			for (final Variable var : methodFields)
+				fields.peek().add(var);
 
 		methods.peek().add(mb.build());
+	}
+
+	@Override
+	public Void visitPrimaryConstructor(final KtPrimaryConstructor constructor, final Void v) {
+		visitConstructor(constructor, true);
+		return null;
+	}
+
+	@Override
+	public Void visitSecondaryConstructor(final KtSecondaryConstructor constructor, final Void v) {
+		visitConstructor(constructor, false);
 		return null;
 	}
 
@@ -1086,7 +1078,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (args.getValueArgumentList() != null) {
 			expressions.push(new ArrayList<Expression>());
-                        for (final KtValueArgument arg : args.getValueArgumentList().getArguments())
+			for (final KtValueArgument arg : args.getValueArgumentList().getArguments())
 				arg.getArgumentExpression().accept(this, v);
 			eb.addAllMethodArgs(expressions.pop());
 		}
