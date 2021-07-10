@@ -221,14 +221,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnnotation(final KtAnnotation annotation, final Void v) {
+		// TODO
 		annotation.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitAnnotationUseSiteTarget(final KtAnnotationUseSiteTarget target, final Void v) {
-		//System.err.println("ANN TARGET: " + target.getAnnotationUseSiteTarget().toString().toLowerCase());
-		target.acceptChildren(this, v);
 		return null;
 	}
 
