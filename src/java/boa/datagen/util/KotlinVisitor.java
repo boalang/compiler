@@ -725,8 +725,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitStringTemplateExpression(final KtStringTemplateExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final StringBuilder sb = new StringBuilder();
+		for (final KtStringTemplateEntry e : expr.getEntries())
+			sb.append(e.getText());
+
+		expressions.peek().add(Expression.newBuilder()
+				.setKind(Expression.ExpressionKind.LITERAL)
+				.setLiteral("\"" + sb.toString() + "\"")
+				.build());
 		return null;
 	}
 
@@ -835,14 +841,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		b.setKind(Statement.StatementKind.BREAK);
 
 		final String label = expr.getLabelName();
-		if (label != null) {
-			final Expression.Builder eb = Expression.newBuilder();
-
-			eb.setLiteral(label);
-			eb.setKind(Expression.ExpressionKind.LITERAL);
-
-			b.addExpressions(eb.build());
-		}
+		if (label != null)
+			b.addExpressions(Expression.newBuilder()
+					.setLiteral(label)
+					.setKind(Expression.ExpressionKind.LITERAL)
+					.build());
 
 		statements.peek().add(b.build());
 		return null;
@@ -855,14 +858,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		b.setKind(Statement.StatementKind.CONTINUE);
 
 		final String label = expr.getLabelName();
-		if (label != null) {
-			final Expression.Builder eb = Expression.newBuilder();
-
-			eb.setLiteral(label);
-			eb.setKind(Expression.ExpressionKind.LITERAL);
-
-			b.addExpressions(eb.build());
-		}
+		if (label != null)
+			b.addExpressions(Expression.newBuilder()
+					.setLiteral(label)
+					.setKind(Expression.ExpressionKind.LITERAL)
+					.build());
 
 		statements.peek().add(b.build());
 		return null;
@@ -870,10 +870,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitConstantExpression(final KtConstantExpression expr, final Void v) {
-		final Expression.Builder eb = Expression.newBuilder();
-		eb.setKind(Expression.ExpressionKind.LITERAL);
-		eb.setLiteral(expr.getText());
-		expressions.peek().add(eb.build());
+		expressions.peek().add(Expression.newBuilder()
+				.setKind(Expression.ExpressionKind.LITERAL)
+				.setLiteral(expr.getText())
+				.build());
 		return null;
 	}
 
