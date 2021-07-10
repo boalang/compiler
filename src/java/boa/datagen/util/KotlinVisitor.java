@@ -207,12 +207,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				a.getArgumentExpression().accept(this, v);
 			mb.addAllAnnotationValues(expressions.pop());
 
-			for (final KtValueArgument a : entry.getValueArgumentList().getArguments())
+			for (final KtValueArgument a : entry.getValueArgumentList().getArguments()) {
 				if (a.getArgumentName() != null)
 					mb.addAnnotationMembers(a.getArgumentName().getText());
 				else
 					mb.addAnnotationMembers("");
 			}
+		}
 
 		modifiers.peek().add(mb.build());
 		return null;
@@ -541,8 +542,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Variable.Builder vb = Variable.newBuilder();
 
 		vb.setName(param.getName());
+
 		if (param.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(param.getTypeReference()));
+
+		modifiers.push(new ArrayList<Modifier>());
+		param.getModifierList().accept(this, v);
+		vb.addAllModifiers(modifiers.pop());
 
 		fields.peek().add(vb.build());
 		return null;
