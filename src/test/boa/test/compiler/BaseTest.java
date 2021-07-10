@@ -323,7 +323,6 @@ public abstract class BaseTest {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-
 		}
 		return sb.toString();
 	}

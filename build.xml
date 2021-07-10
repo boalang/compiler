@@ -226,6 +226,20 @@
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
 
+	<target name="test-datagen-kotlin" depends="-compile-tests" description="Run Kotlin datagen unit tests.">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
+					<include name="boa/test/datagen/TestKotlin.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
+	</target>
+
 	<target name="test-datagen-js" depends="-compile-tests" description="Run JavaScript datagen unit tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
