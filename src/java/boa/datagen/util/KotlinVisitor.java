@@ -955,6 +955,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			db.setKind(TypeKind.INTERFACE);
 		else if (klass.isEnum())
 			db.setKind(TypeKind.ENUM);
+		else if (klass.isData())
+			db.setKind(TypeKind.IMMUTABLE);
 		else
 			db.setKind(TypeKind.CLASS);
 
