@@ -417,25 +417,26 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitProperty(final KtProperty prop, final Void v) {
-		expressions.push(new ArrayList<Expression>());
+		final Variable.Builder vb = Variable.newBuilder();
+
+		vb.setName(prop.getNameIdentifier().getText());
+
+		final KtTypeReference typeRef = prop.getTypeReference();
+		if (typeRef != null)
+			vb.setVariableType(typeFromTypeRef(typeRef));
+
 		modifiers.push(new ArrayList<Modifier>());
+		prop.getModifierList().accept(this, v);
 		if (!prop.isVar()) {
 			final Modifier.Builder mb = Modifier.newBuilder();
 			mb.setKind(Modifier.ModifierKind.FINAL);
 			modifiers.peek().add(mb.build());
 		}
-		final Variable.Builder vb = Variable.newBuilder();
-
-		if (prop.hasInitializer()) {
-			prop.getInitializer().accept(this, v);
-		}
-
-		KtTypeReference typeRef = prop.getTypeReference();
-		if (typeRef != null)
-			vb.setVariableType(typeFromTypeRef(typeRef));
-
-		vb.setName(prop.getNameIdentifier().getText());
 		vb.addAllModifiers(modifiers.pop());
+
+		expressions.push(new ArrayList<Expression>());
+		if (prop.hasInitializer())
+			prop.getInitializer().accept(this, v);
 		vb.addAllExpressions(expressions.pop());
 
 		fields.peek().add(vb.build());
