@@ -449,8 +449,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitClass(final KtClass klass, final Void v) {
-		Declaration.Builder db = Declaration.newBuilder();
-                db.setName(klass.getNameAsSafeName().asString());
+		final Declaration.Builder db = Declaration.newBuilder();
+
+		db.setName(klass.getNameAsSafeName().asString());
+
 		if (klass.isInterface())
 			db.setKind(TypeKind.INTERFACE);
 		else if (klass.isEnum())
@@ -476,10 +478,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitPrimaryConstructor(final KtPrimaryConstructor constructor, final Void v) {
-		Method.Builder mb = Method.newBuilder();
+		final Method.Builder mb = Method.newBuilder();
+
 		mb.setName(constructor.getName());
-                modifiers.push(new ArrayList<Modifier>());
-                fields.push(new ArrayList<Variable>());
+
+		modifiers.push(new ArrayList<Modifier>());
+		fields.push(new ArrayList<Variable>());
 		expressions.push(new ArrayList<Expression>());
 		constructor.acceptChildren(this, v);
 		mb.addStatements(Statement.newBuilder()
@@ -487,16 +491,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				 .addAllExpressions(expressions.pop()));
 		mb.addAllArguments(fields.pop());
 		mb.addAllModifiers(modifiers.pop());
+
 		methods.peek().add(mb.build());
 		return null;
 	}
 
 	@Override
 	public Void visitNamedFunction(final KtNamedFunction function, final Void v) {
-		Method.Builder mb = Method.newBuilder();
+		final Method.Builder mb = Method.newBuilder();
+
 		mb.setName(function.getName());
-                modifiers.push(new ArrayList<Modifier>());
-                fields.push(new ArrayList<Variable>());
+
+		modifiers.push(new ArrayList<Modifier>());
+		fields.push(new ArrayList<Variable>());
 		expressions.push(new ArrayList<Expression>());
 		function.acceptChildren(this, v);
 		mb.addStatements(Statement.newBuilder()
@@ -504,33 +511,39 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				 .addAllExpressions(expressions.pop()));
 		mb.addAllArguments(fields.pop());
 		mb.addAllModifiers(modifiers.pop());
+
 		methods.peek().add(mb.build());
 		return null;
 	}
 
 	@Override
 	public Void visitParameter(final KtParameter param, final Void v) {
-		Variable.Builder vb = Variable.newBuilder();
+		final Variable.Builder vb = Variable.newBuilder();
+
 		vb.setName(param.getName());
 		if (param.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(param.getTypeReference()));
+
 		fields.peek().add(vb.build());
 		return null;
 	}
 
 	@Override
-        public Void visitCallExpression(final KtCallExpression args, final Void v) {
-		Expression.Builder eb = Expression.newBuilder();
+	public Void visitCallExpression(final KtCallExpression args, final Void v) {
+		final Expression.Builder eb = Expression.newBuilder();
+
 		eb.setKind(Expression.ExpressionKind.METHODCALL);
+
 		arguments.push(new ArrayList<Expression>());
 		expressions.push(new ArrayList<Expression>());
 		args.acceptChildren(this, v);
-		List<Expression> exprs = expressions.pop();
-		Expression lastExpression = exprs.remove(exprs.size() - 1);
+		final List<Expression> exprs = expressions.pop();
+		final Expression lastExpression = exprs.remove(exprs.size() - 1);
 		eb.setMethod(lastExpression.getVariable());
 		eb.addAllMethodArgs(arguments.pop());
 		eb.addAllExpressions(exprs);
-                expressions.peek().add(eb.build());
+
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
@@ -544,17 +557,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitWhileExpression(final KtWhileExpression whileExpr, final Void v) {
-		Statement.Builder sb = Statement.newBuilder();
+		final Statement.Builder sb = Statement.newBuilder();
+
 		sb.setKind(Statement.StatementKind.WHILE);
-                expressions.push(new ArrayList<Expression>());
-                whileExpr.getCondition().accept(this, v);
-                sb.addAllConditions(expressions.pop());
-                expressions.push(new ArrayList<Expression>());
-                statements.push(new ArrayList<Statement>());
-                whileExpr.getBody().accept(this, v);
+
+		expressions.push(new ArrayList<Expression>());
+		whileExpr.getCondition().accept(this, v);
+		sb.addAllConditions(expressions.pop());
+
+		expressions.push(new ArrayList<Expression>());
+		statements.push(new ArrayList<Statement>());
+		whileExpr.getBody().accept(this, v);
 		sb.addAllExpressions(expressions.pop());
 		sb.addAllStatements(statements.pop());
-                statements.peek().add(sb.build());
+
+		statements.peek().add(sb.build());
 		return null;
 	}
 
@@ -565,7 +582,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	// Utility methods
 	private Type typeFromTypeRef(final KtTypeReference type) {
-		Type.Builder tb = Type.newBuilder();
+		final Type.Builder tb = Type.newBuilder();
 		tb.setName(type.getText());
 		tb.setKind(TypeKind.OTHER);
 		return tb.build();
