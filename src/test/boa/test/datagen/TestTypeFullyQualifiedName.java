@@ -146,7 +146,7 @@ public class TestTypeFullyQualifiedName {
 											String fqn = exp.getDeclaringType().getFullyQualifiedName();
 											System.out.println(exp.getKind() + " " + exp.getMethod() + " declaring type is " + fqn);
 											assertEquals("java.lang.Thread", fqn);
-										} else if (exp.getDeclaringType().equals("System")) {
+										} else if (exp.getDeclaringType().getName().equals("System")) {
 											String fqn = exp.getDeclaringType().getFullyQualifiedName();
 											System.out.println(exp.getKind() + " " + varOrMeth + " declaring type is " + fqn);
 											assertEquals("java.lang.System", fqn);
@@ -465,7 +465,7 @@ public class TestTypeFullyQualifiedName {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("start")) {
+											} else if (name.equals("start")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getName() + " is int");
 												assertEquals("int", var.getVariableType().getName());
 											} else if (name.equals("end")) {

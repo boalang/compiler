@@ -72,8 +72,7 @@ public class MetaDataDownLoader {
 				try {
 					Thread.sleep(10000);
 					count ++;
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
