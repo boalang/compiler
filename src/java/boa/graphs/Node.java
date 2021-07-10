@@ -161,7 +161,7 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 		final List<E> edges = new ArrayList<E>();
 		edges.addAll(inEdges);
 		edges.addAll(outEdges);
-		for (final Edge e : edges)
+		for (final Edge<?,?> e : edges)
 			e.delete();
 	}
 
@@ -209,7 +209,7 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 		if (this == o) return true;
 		if (!(o instanceof Node)) return false;
 
-		final Node n = (Node) o;
+		final Node<?,?> n = (Node<?,?>) o;
 
 		return id == n.id;
 	}

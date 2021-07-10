@@ -123,11 +123,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	protected class VarDeclCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		private boolean nest;
-		private CodeGeneratingVisitor cg;
-
-		public VarDeclCodeGeneratingVisitor(final CodeGeneratingVisitor cg) {
-			this.cg = cg;
-		}
 
 		/** {@inheritDoc} */
 		@Override
@@ -501,7 +496,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.seed = seed;
 		this.isLocal = isLocal;
 
-		varDecl = new VarDeclCodeGeneratingVisitor(this);
+		varDecl = new VarDeclCodeGeneratingVisitor();
 		staticInitialization = new StaticInitializationCodeGeneratingVisitor();
 		functionDeclarator = new FunctionDeclaratorCodeGeneratingVisitor();
 		tupleDeclarator = new TupleDeclaratorCodeGeneratingVisitor();
