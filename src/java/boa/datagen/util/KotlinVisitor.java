@@ -1046,15 +1046,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 						.setOther("primary")
 						.build());
 		fields.push(new ArrayList<Variable>());
-		expressions.push(new ArrayList<Expression>());
+		statements.push(new ArrayList<Statement>());
 
 		constructor.acceptChildren(this, null);
 
-		final List<Expression> exprs = expressions.pop();
-		if (exprs.size() != 0)
-			mb.addStatements(Statement.newBuilder()
-					 .setKind(Statement.StatementKind.BLOCK)
-					 .addAllExpressions(exprs));
+		mb.addAllStatements(statements.pop());
 		final List<Variable> methodFields = fields.pop();
 		mb.addAllArguments(methodFields);
 		mb.addAllModifiers(modifiers.pop());

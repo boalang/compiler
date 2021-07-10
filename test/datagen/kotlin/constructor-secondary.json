@@ -42,6 +42,11 @@
                               "kind": "OTHER"
                            }
                         }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
                      ]
                   }
                ],
