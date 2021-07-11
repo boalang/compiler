@@ -938,6 +938,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "LT":
 			eb.setKind(Expression.ExpressionKind.LT);
 			break;
+		case "in":
+			eb.setKind(Expression.ExpressionKind.IN);
+			break;
 		case "EQ":
 			eb.setKind(Expression.ExpressionKind.ASSIGN);
 			break;
