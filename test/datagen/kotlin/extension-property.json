@@ -72,6 +72,60 @@
                      ]
                   }
                ]
+            },
+            {
+               "name": "foo.foo.<set>",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  }
+               ],
+               "return_type": {
+                  "name": "Unit",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ASSIGN",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "foo.bar"
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo.bad.<get>",
+               "return_type": {
+                  "name": "String",
+                  "kind": "OTHER"
+               }
             }
          ],
          "variables": [
@@ -107,6 +161,18 @@
                "name": "foo.foo",
                "variable_type": {
                   "name": "Int",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "foo.bad",
+               "variable_type": {
+                  "name": "String",
                   "kind": "OTHER"
                },
                "modifiers": [
