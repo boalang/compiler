@@ -282,6 +282,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.build());
 
 		// TODO type params
+		ta.getTypeConstraints();
+		ta.getTypeParameters();
 
 		statements.peek().add(sb.build());
 		return null;
@@ -979,6 +981,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Method.Builder mb = Method.newBuilder();
 		final KtProperty prop = acc.getProperty();
 
+		modifiers.push(new ArrayList<Modifier>());
+		if (acc.getModifierList() != null)
+			acc.getModifierList().accept(this, v);
+		mb.addAllModifiers(modifiers.pop());
+
 		final String propName;
 		if (prop.getReceiverTypeReference() != null)
 			propName = prop.getReceiverTypeReference().getText() + "." + prop.getNameIdentifier().getText();
@@ -986,27 +993,38 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			propName = prop.getNameIdentifier().getText();
 		mb.setName(propName + "." + (acc.isGetter() ? "<get>" : "<set>"));
 
-		if (acc.isGetter()) {
-			KtTypeReference typeRef = acc.getReturnTypeReference();
-			if (typeRef == null)
-				typeRef = prop.getTypeReference();
-			if (typeRef != null)
-				mb.setReturnType(typeFromTypeRef(typeRef));
+		fields.push(new ArrayList<Variable>());
+		for (final KtParameter p : acc.getValueParameters())
+			p.accept(this, v);
+		mb.addAllArguments(fields.pop());
+
+		if (acc.getReturnTypeReference() != null) {
+			mb.setReturnType(typeFromTypeRef(acc.getReturnTypeReference()));
 		} else {
-			mb.setReturnType(Type.newBuilder()
-					.setName("Unit")
-					.setKind(TypeKind.OTHER)
-					.build());
+			if (acc.isSetter()) {
+				mb.setReturnType(Type.newBuilder()
+						.setName("Unit")
+						.setKind(TypeKind.OTHER)
+						.build());
+			} else {
+				final KtTypeReference typeRef = prop.getTypeReference();
+				if (typeRef != null)
+					mb.setReturnType(typeFromTypeRef(typeRef));
+			}
 		}
 
-		modifiers.push(new ArrayList<Modifier>());
-		if (acc.getModifierList() != null)
-			acc.getModifierList().accept(this, v);
-		mb.addAllModifiers(modifiers.pop());
-
-		statements.push(new ArrayList<Statement>());
-		acc.getBodyBlockExpression().accept(this, v);
-		mb.addAllStatements(statements.pop());
+		if (acc.getBodyBlockExpression() != null) {
+			statements.push(new ArrayList<Statement>());
+			acc.getBodyBlockExpression().accept(this, v);
+			mb.addAllStatements(statements.pop());
+		} else if (acc.getBodyExpression() != null) {
+			expressions.push(new ArrayList<Expression>());
+			acc.getBodyExpression().accept(this, v);
+			mb.addStatements(Statement.newBuilder()
+					.setKind(Statement.StatementKind.EXPRESSION)
+					.addExpressions(expressions.pop().get(0))
+					.build());
+		}
 
 		methods.peek().add(mb.build());
 		return null;

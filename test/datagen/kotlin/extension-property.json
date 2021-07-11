@@ -54,6 +54,24 @@
                      ]
                   }
                ]
+            },
+            {
+               "name": "foo.foo.<get>",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "statements": [
+                  {
+                     "kind": "EXPRESSION",
+                     "expressions": [
+                        {
+                           "kind": "LITERAL",
+                           "literal": "3"
+                        }
+                     ]
+                  }
+               ]
             }
          ],
          "variables": [
@@ -82,6 +100,18 @@
                   {
                      "kind": "VISIBILITY",
                      "visibility": "PUBLIC"
+                  }
+               ]
+            },
+            {
+               "name": "foo.foo",
+               "variable_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
                   }
                ]
             }
