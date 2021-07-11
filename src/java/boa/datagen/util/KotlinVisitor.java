@@ -1211,11 +1211,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		whileExpr.getCondition().accept(this, v);
 		sb.addAllConditions(expressions.pop());
 
-		expressions.push(new ArrayList<Expression>());
-		statements.push(new ArrayList<Statement>());
-		whileExpr.getBody().accept(this, v);
-		sb.addAllExpressions(expressions.pop());
-		sb.addAllStatements(statements.pop());
+		if (whileExpr.getBody() != null) {
+			expressions.push(new ArrayList<Expression>());
+			statements.push(new ArrayList<Statement>());
+			whileExpr.getBody().accept(this, v);
+			sb.addAllExpressions(expressions.pop());
+			sb.addAllStatements(statements.pop());
+		}
 
 		statements.peek().add(sb.build());
 		return null;
