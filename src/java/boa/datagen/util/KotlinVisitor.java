@@ -910,7 +910,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitBinaryExpression(final KtBinaryExpression expr, final Void v) {
 		final Expression.Builder eb = Expression.newBuilder();
 
-		switch(expr.getOperationToken().toString()) {
+		switch (expr.getOperationToken().toString()) {
 		case "PLUS":
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
 			break;
@@ -938,8 +938,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "LT":
 			eb.setKind(Expression.ExpressionKind.LT);
 			break;
+		case "EQ":
+			eb.setKind(Expression.ExpressionKind.ASSIGN);
+			break;
 		default:
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
+			System.err.println("===> UNKNOWN OPERATOR: " + expr.getOperationToken().toString());
+			break;
 		}
 
 		expressions.push(new ArrayList<Expression>());
