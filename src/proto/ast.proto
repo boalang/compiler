@@ -106,6 +106,8 @@ enum TypeKind {
 	ARRAY = 11;
 	/** Immutable data type */
 	IMMUTABLE = 12;
+	/** A typedef/alias */
+	ALIAS = 13;
 }
 
 /** A type in an AST */

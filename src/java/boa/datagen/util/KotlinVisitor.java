@@ -265,9 +265,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitTypeAlias(final KtTypeAlias n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+	public Void visitTypeAlias(final KtTypeAlias ta, final Void v) {
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.TYPEDECL);
+		sb.setTypeDeclaration(Declaration.newBuilder()
+				.setKind(TypeKind.ALIAS)
+				.setName(ta.getName())
+				.addParents(typeFromTypeRef(ta.getTypeReference()))
+				.build());
+
+		statements.peek().add(sb.build());
 		return null;
 	}
 

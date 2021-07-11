@@ -1,0 +1,42 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "statements": [
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "foo",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "3"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

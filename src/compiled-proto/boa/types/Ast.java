@@ -121,6 +121,14 @@ public final class Ast {
      * </pre>
      */
     IMMUTABLE(14, 12),
+    /**
+     * <code>ALIAS = 13;</code>
+     *
+     * <pre>
+     ** A typedef/alias 
+     * </pre>
+     */
+    ALIAS(15, 13),
     ;
 
     /**
@@ -259,6 +267,14 @@ public final class Ast {
      * </pre>
      */
     public static final int IMMUTABLE_VALUE = 12;
+    /**
+     * <code>ALIAS = 13;</code>
+     *
+     * <pre>
+     ** A typedef/alias 
+     * </pre>
+     */
+    public static final int ALIAS_VALUE = 13;
 
 
     public final int getNumber() { return value; }
@@ -278,6 +294,7 @@ public final class Ast {
         case 10: return PRIMITIVE;
         case 11: return ARRAY;
         case 12: return IMMUTABLE;
+        case 13: return ALIAS;
         default: return null;
       }
     }
@@ -308,7 +325,7 @@ public final class Ast {
     }
 
     private static final TypeKind[] VALUES = {
-      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, TRAIT, PRIMITIVE, ARRAY, IMMUTABLE, 
+      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, TRAIT, PRIMITIVE, ARRAY, IMMUTABLE, ALIAS, 
     };
 
     public static TypeKind valueOf(
@@ -43001,13 +43018,13 @@ public final class Ast {
       "\tPAGE_RULE\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FAC" +
       "E_RULE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020",
       "\n\022\017\n\013IMPORT_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\"\'\n\tA" +
-      "ttribute\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\322\001\n" +
+      "ttribute\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\335\001\n" +
       "\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTER" +
       "FACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUC" +
       "T\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTA" +
       "TION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRA" +
       "IT\020\t\022\r\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\022\r\n\tIMMUTA" +
-      "BLE\020\014\032\002\020\001B\002H\001"
+      "BLE\020\014\022\t\n\005ALIAS\020\r\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
