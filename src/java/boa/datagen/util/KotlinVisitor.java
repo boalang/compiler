@@ -250,8 +250,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDestructuringDeclarationEntry(final KtDestructuringDeclarationEntry n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+                final Variable.Builder vb = Variable.newBuilder();
+		vb.setName(n.getName());
+		vb.setVariableType(typeFromTypeRef(n.getTypeReference()));
+                if (n.getModifierList() != null) {
+			modifiers.push(new ArrayList<Modifier>());
+                        n.getModifierList().accept(this, v);
+			vb.addAllModifiers(modifiers.pop());
+		}
+		fields.peek().add(vb.build());
 		return null;
 	}
 
