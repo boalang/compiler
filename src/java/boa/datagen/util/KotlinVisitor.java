@@ -880,7 +880,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitStringTemplateEntry(final KtStringTemplateEntry st, final Void v) {
 		expressions.peek().add(Expression.newBuilder()
 				.setKind(Expression.ExpressionKind.TEMPLATE)
-				.setLiteral(st.getText())
+				.setLiteral("\"" + st.getText() + "\"")
 				.build());
 		return null;
 	}
@@ -894,7 +894,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		expressions.peek().add(Expression.newBuilder()
 				.setKind(Expression.ExpressionKind.TEMPLATE)
-				.setLiteral(st.getText())
+				.setLiteral("\"" + st.getText() + "\"")
 				.addAllExpressions(exprs)
 				.build());
 		return null;

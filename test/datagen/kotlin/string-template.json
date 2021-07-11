@@ -30,7 +30,7 @@
                      "expressions": [
                         {
                            "kind": "TEMPLATE",
-                           "literal": "test: "
+                           "literal": "\"test: \""
                         },
                         {
                            "kind": "TEMPLATE",
@@ -40,11 +40,11 @@
                                  "variable": "foo"
                               }
                            ],
-                           "literal": "$foo"
+                           "literal": "\"$foo\""
                         },
                         {
                            "kind": "TEMPLATE",
-                           "literal": " --> "
+                           "literal": "\" --> \""
                         },
                         {
                            "kind": "TEMPLATE",
@@ -63,7 +63,7 @@
                                  ]
                               }
                            ],
-                           "literal": "${n + 5}"
+                           "literal": "\"${n + 5}\""
                         }
                      ],
                      "literal": "\"test: $foo --> ${n + 5}\""
