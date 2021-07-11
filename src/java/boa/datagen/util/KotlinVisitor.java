@@ -243,16 +243,29 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDestructuringDeclaration(final KtDestructuringDeclaration d, final Void v) {
-		// TODO
-		d.acceptChildren(this, v);
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.VARDECL);
+                fields.push(new ArrayList<Variable>());
+		expressions.push(new ArrayList<Expression>());
+		System.out.println(d.getEntries().size());
+		for(KtDestructuringDeclarationEntry entry : d.getEntries()) {
+			entry.accept(this, v);
+		}
+                if(d.hasInitializer()) {
+			d.getInitializer().accept(this, v);
+		}
+                eb.addAllExpressions(expressions.pop());
+                eb.addAllVariableDecls(fields.pop());
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
 	@Override
 	public Void visitDestructuringDeclarationEntry(final KtDestructuringDeclarationEntry n, final Void v) {
-                final Variable.Builder vb = Variable.newBuilder();
+		final Variable.Builder vb = Variable.newBuilder();
 		vb.setName(n.getName());
-		vb.setVariableType(typeFromTypeRef(n.getTypeReference()));
+		if (n.getTypeReference() != null)
+			vb.setVariableType(typeFromTypeRef(n.getTypeReference()));
                 if (n.getModifierList() != null) {
 			modifiers.push(new ArrayList<Modifier>());
                         n.getModifierList().accept(this, v);
