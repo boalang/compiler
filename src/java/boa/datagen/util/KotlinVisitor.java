@@ -807,56 +807,59 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitStringTemplateExpression(final KtStringTemplateExpression expr, final Void v) {
-		final StringBuilder sb = new StringBuilder();
-		for (final KtStringTemplateEntry e : expr.getEntries())
-			sb.append(e.getText());
+		final KtStringTemplateEntry[] entries = expr.getEntries();
 
+		if (entries.length == 1 && entries[0] instanceof KtLiteralStringTemplateEntry) {
+			expressions.peek().add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.LITERAL)
+					.setLiteral("\"" + entries[0].getText() + "\"")
+					.build());
+		} else {
+			final List<Expression> exprs = new ArrayList<Expression>();
+			expressions.push(exprs);
+
+			final StringBuilder sb = new StringBuilder();
+			sb.append("\"");
+			for (final KtStringTemplateEntry e : entries) {
+				e.accept(this, v);
+				sb.append(e.getText());
+			}
+			sb.append("\"");
+			expressions.pop();
+
+			expressions.peek().add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.TEMPLATE)
+					// add the whole thing as a single string literal
+					.setLiteral(sb.toString())
+					// then add each individual part
+					.addAllExpressions(exprs)
+					.build());
+		}
+
+		return null;
+	}
+
+	@Override
+	public Void visitStringTemplateEntry(final KtStringTemplateEntry st, final Void v) {
 		expressions.peek().add(Expression.newBuilder()
-				.setKind(Expression.ExpressionKind.LITERAL)
-				.setLiteral("\"" + sb.toString() + "\"")
+				.setKind(Expression.ExpressionKind.TEMPLATE)
+				.setLiteral(st.getText())
 				.build());
 		return null;
 	}
 
 	@Override
-	public Void visitStringTemplateEntry(final KtStringTemplateEntry n, final Void v) {
-		// FIXME this can probably go away
-		n.acceptChildren(this, v);
-		return null;
-	}
+	public Void visitStringTemplateEntryWithExpression(final KtStringTemplateEntryWithExpression st, final Void v) {
+		final List<Expression> exprs = new ArrayList<Expression>();
+		expressions.push(exprs);
+		st.getExpression().accept(this, v);
+		expressions.pop();
 
-	@Override
-	public Void visitStringTemplateEntryWithExpression(final KtStringTemplateEntryWithExpression expr, final Void v) {
-		// FIXME this can probably go away
-		expr.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitBlockStringTemplateEntry(final KtBlockStringTemplateEntry n, final Void v) {
-		// FIXME this can probably go away
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitSimpleNameStringTemplateEntry(final KtSimpleNameStringTemplateEntry n, final Void v) {
-		// FIXME this can probably go away
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitLiteralStringTemplateEntry(final KtLiteralStringTemplateEntry n, final Void v) {
-		// FIXME this can probably go away
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitEscapeStringTemplateEntry(final KtEscapeStringTemplateEntry n, final Void v) {
-		// FIXME this can probably go away
-		n.acceptChildren(this, v);
+		expressions.peek().add(Expression.newBuilder()
+				.setKind(Expression.ExpressionKind.TEMPLATE)
+				.setLiteral(st.getText())
+				.addAllExpressions(exprs)
+				.build());
 		return null;
 	}
 

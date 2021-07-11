@@ -4,7 +4,7 @@
          "name": "",
          "variables": [
             {
-               "name": "foo",
+               "name": "baz",
                "modifiers": [
                   {
                      "kind": "FINAL"
@@ -13,7 +13,7 @@
                "expressions": [
                   {
                      "kind": "LITERAL",
-                     "literal": "1"
+                     "literal": "\"test\""
                   }
                ]
             },
@@ -26,7 +26,46 @@
                ],
                "expressions": [
                   {
-                     "kind": "LITERAL",
+                     "kind": "TEMPLATE",
+                     "expressions": [
+                        {
+                           "kind": "TEMPLATE",
+                           "literal": "test: "
+                        },
+                        {
+                           "kind": "TEMPLATE",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "foo"
+                              }
+                           ],
+                           "literal": "$foo"
+                        },
+                        {
+                           "kind": "TEMPLATE",
+                           "literal": " --> "
+                        },
+                        {
+                           "kind": "TEMPLATE",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ADD",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "n"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "5"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "literal": "${n + 5}"
+                        }
+                     ],
                      "literal": "\"test: $foo --> ${n + 5}\""
                   }
                ]
