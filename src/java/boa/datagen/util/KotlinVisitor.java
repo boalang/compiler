@@ -269,11 +269,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Statement.Builder sb = Statement.newBuilder();
 
 		sb.setKind(Statement.StatementKind.TYPEDECL);
+
+		modifiers.push(new ArrayList<Modifier>());
+		if (ta.getModifierList() != null)
+			ta.getModifierList().accept(this, v);
+
 		sb.setTypeDeclaration(Declaration.newBuilder()
 				.setKind(TypeKind.ALIAS)
 				.setName(ta.getName())
 				.addParents(typeFromTypeRef(ta.getTypeReference()))
+				.addAllModifiers(modifiers.pop())
 				.build());
+
+		// TODO type params
 
 		statements.peek().add(sb.build());
 		return null;
