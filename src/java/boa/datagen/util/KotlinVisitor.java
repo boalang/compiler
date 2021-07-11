@@ -76,15 +76,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			element.acceptChildren(this);
 	}
 
-	@Override
-	public Void visitKtElement(final KtElement element, final Void v) {
-		if (element instanceof KtNameReferenceExpression)
-			visitNameReferenceExpression((KtNameReferenceExpression) element, v);
-		else
-			visitElement(element);
-		return null;
-	}
-
 	public void visitLeaf(final LeafPsiElement leaf) {
 		if (leaf.getElementType() instanceof KtModifierKeywordToken)
 			visitModifier((KtModifierKeywordToken)leaf.getElementType());
@@ -417,8 +408,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSimpleNameExpression(final KtSimpleNameExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		expressions.peek().add(Expression.newBuilder()
+				.setKind(Expression.ExpressionKind.VARACCESS)
+				.setVariable(expr.getReferencedName()).build());
 		return null;
 	}
 
@@ -952,13 +944,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		eb.addAllExpressions(expressions.pop());
 
 		expressions.peek().add(eb.build());
-		return null;
-	}
-
-	public Void visitNameReferenceExpression(final KtNameReferenceExpression nameRef, final Void v) {
-		expressions.peek().add(Expression.newBuilder()
-				.setKind(Expression.ExpressionKind.VARACCESS)
-				.setVariable(nameRef.getReferencedName()).build());
 		return null;
 	}
 
