@@ -500,8 +500,37 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitForExpression(final KtForExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.FOREACH);
+
+		if (expr.getDestructuringDeclaration() != null) {
+			fields.push(new ArrayList<Variable>());
+			expr.getDestructuringDeclaration().accept(this, v);
+			sb.addAllVariableDeclarations(fields.pop());
+		}
+		else if (expr.getLoopParameter() != null) {
+			fields.push(new ArrayList<Variable>());
+			expr.getLoopParameter().accept(this, v);
+			sb.addAllVariableDeclarations(fields.pop());
+		}
+
+		if (expr.getLoopRange() != null) {
+			expressions.push(new ArrayList<Expression>());
+			expr.getLoopRange().accept(this, v);
+                        sb.addAllInitializations(expressions.pop());
+		}
+
+		if (expr.getBody() != null) {
+			statements.push(new ArrayList<Statement>());
+			expressions.push(new ArrayList<Expression>());
+			expr.getBody().accept(this, v);
+			sb.addAllExpressions(expressions.pop());
+			sb.addAllStatements(statements.pop());
+		}
+
+		statements.peek().add(sb.build());
+
 		return null;
 	}
 
