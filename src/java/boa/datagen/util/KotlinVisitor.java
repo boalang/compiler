@@ -943,7 +943,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		expressions.push(new ArrayList<Expression>());
-		expr.acceptChildren(this, v);
+		expr.getLeft().accept(this, v);
+		expr.getRight().accept(this, v);
 		eb.addAllExpressions(expressions.pop());
 
 		expressions.peek().add(eb.build());
