@@ -111,10 +111,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 
 		case "open":
-		case "enum":
 		case "value":
 		case "inner":
-		case "data":
 		case "sealed":
 			mb.setKind(Modifier.ModifierKind.OTHER);
 			mb.setOther(m.getValue());
@@ -139,6 +137,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.setKind(Modifier.ModifierKind.VISIBILITY);
 			mb.setVisibility(Modifier.Visibility.INTERNAL);
 			break;
+
+		case "data":
+		case "enum":
+			// do nothing because these are already handled by the class
+			return;
 
 		default:
 			System.err.println("===> UNKNOWN MODIFIER: " + m.getValue());
