@@ -506,9 +506,46 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
+	public Void visitWhileExpression(final KtWhileExpression whileExpr, final Void v) {
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.WHILE);
+
+		expressions.push(new ArrayList<Expression>());
+		whileExpr.getCondition().accept(this, v);
+		sb.addAllConditions(expressions.pop());
+
+		if (whileExpr.getBody() != null) {
+			expressions.push(new ArrayList<Expression>());
+			statements.push(new ArrayList<Statement>());
+			whileExpr.getBody().accept(this, v);
+			sb.addAllExpressions(expressions.pop());
+			sb.addAllStatements(statements.pop());
+		}
+
+		statements.peek().add(sb.build());
+		return null;
+	}
+
+	@Override
 	public Void visitDoWhileExpression(final KtDoWhileExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.DO);
+
+		expressions.push(new ArrayList<Expression>());
+		expr.getCondition().accept(this, v);
+		sb.addAllConditions(expressions.pop());
+
+		if (expr.getBody() != null) {
+			expressions.push(new ArrayList<Expression>());
+			statements.push(new ArrayList<Statement>());
+			expr.getBody().accept(this, v);
+			sb.addAllExpressions(expressions.pop());
+			sb.addAllStatements(statements.pop());
+		}
+
+		statements.peek().add(sb.build());
 		return null;
 	}
 
@@ -1198,28 +1235,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitValueArgumentList(final KtValueArgumentList args, final Void v) {
 		// TODO
 		args.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitWhileExpression(final KtWhileExpression whileExpr, final Void v) {
-		final Statement.Builder sb = Statement.newBuilder();
-
-		sb.setKind(Statement.StatementKind.WHILE);
-
-		expressions.push(new ArrayList<Expression>());
-		whileExpr.getCondition().accept(this, v);
-		sb.addAllConditions(expressions.pop());
-
-		if (whileExpr.getBody() != null) {
-			expressions.push(new ArrayList<Expression>());
-			statements.push(new ArrayList<Statement>());
-			whileExpr.getBody().accept(this, v);
-			sb.addAllExpressions(expressions.pop());
-			sb.addAllStatements(statements.pop());
-		}
-
-		statements.peek().add(sb.build());
 		return null;
 	}
 
