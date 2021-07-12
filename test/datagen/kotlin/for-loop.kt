@@ -6,9 +6,13 @@ class Six {
                      println(thing)
           }
       }
-      fun bar(thing: List<String) {
+      fun bar(things: List<String>) {
           for((index: int, value: String) in things.withIndex()) {
                       println(index, thing)
           }
+      }
+      fun baz(things: List<String>) {
+          for(thing: String in things)
+             println(thing)
       }
 }
