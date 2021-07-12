@@ -443,8 +443,36 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitLabeledExpression(final KtLabeledExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+                final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.LABEL);
+
+		sb.addExpressions(Expression.newBuilder()
+				  .setKind(Expression.ExpressionKind.LITERAL)
+				  .setLiteral(expr.getNameIdentifier().getText())
+				  .build());
+
+		if (expr.getBaseExpression() != null) {
+                        final List<Statement> stmts = new ArrayList<Statement>();
+			statements.push(stmts);
+
+			final List<Expression> exprs = new ArrayList<Expression>();
+			expressions.push(exprs);
+
+			expr.getBaseExpression().accept(this, v);
+			for(Expression e: exprs) {
+                                stmts.add(Statement.newBuilder()
+					  .setKind(Statement.StatementKind.EXPRESSION)
+					  .addExpressions(e)
+					  .build());
+			}
+			exprs.clear();
+
+			expressions.pop();
+			sb.addAllStatements(statements.pop());
+		}
+
+		statements.peek().add(sb.build());
 		return null;
 	}
 
