@@ -513,8 +513,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTryExpression(final KtTryExpression expr, final Void v) {
-		// TODO
+		final Statement.Builder sb = Statement.newBuilder();
+
+                sb.setKind(Statement.StatementKind.TRY);
+
+		statements.push(new ArrayList<Statement>());
+
 		expr.acceptChildren(this, v);
+
+		sb.addAllStatements(statements.pop());
+
+		statements.peek().add(sb.build());
+
 		return null;
 	}
 
@@ -720,15 +730,85 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitCatchSection(final KtCatchClause n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.CATCH);
+
+                if (n.getParameterList() != null) {
+			fields.push(new ArrayList<Variable>());
+                        n.getParameterList().accept(this, v);
+                        sb.addAllVariableDeclarations(fields.pop());
+		}
+
+		if (n.getCatchBody() != null) {
+                        final List<Statement> stmts = new ArrayList<Statement>();
+			statements.push(stmts);
+
+			final List<Expression> exprs = new ArrayList<Expression>();
+                        expressions.push(exprs);
+
+			final KtExpression body = n.getCatchBody();
+
+			if (body instanceof KtBlockExpression) {
+                                for (final KtExpression e: ((KtBlockExpression) body).getStatements()) {
+					e.accept(this, v);
+					for (final Expression ex: exprs)
+						stmts.add(Statement.newBuilder()
+							  .setKind(Statement.StatementKind.EXPRESSION)
+							  .addExpressions(ex)
+							  .build());
+					exprs.clear();
+				}
+			} else {
+				body.accept(this, v);
+				for (final Expression ex: exprs)
+					stmts.add(Statement.newBuilder()
+						  .setKind(Statement.StatementKind.EXPRESSION)
+						  .addExpressions(ex)
+						  .build());
+				exprs.clear();
+			}
+
+			sb.addAllStatements(statements.pop());
+			expressions.pop();
+		}
+
+		statements.peek().add(sb.build());
+
 		return null;
 	}
 
 	@Override
 	public Void visitFinallySection(final KtFinallySection n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.FINALLY);
+
+                if (n.getFinalExpression() != null) {
+			final List<Statement> stmts = new ArrayList<Statement>();
+			statements.push(stmts);
+
+			final List<Expression> exprs = new ArrayList<Expression>();
+			expressions.push(exprs);
+
+			for (final KtExpression e: n.getFinalExpression().getStatements()) {
+                                e.accept(this, v);
+				for (final Expression ex: exprs)
+					stmts.add(Statement.newBuilder()
+						  .setKind(Statement.StatementKind.EXPRESSION)
+						  .addExpressions(ex)
+						  .build());
+				exprs.clear();
+			}
+
+			exprs.clear();
+
+			sb.addAllStatements(statements.pop());
+			expressions.pop();
+		}
+
+                statements.peek().add(sb.build());
+
 		return null;
 	}
 
