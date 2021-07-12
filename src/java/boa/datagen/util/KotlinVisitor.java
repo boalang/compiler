@@ -486,7 +486,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitThrowExpression(final KtThrowExpression expr, final Void v) {
 		// TODO
+                Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.THROW);
+
+		expressions.push(new ArrayList<Expression>());
+
 		expr.acceptChildren(this, v);
+
+		sb.addAllExpressions(expressions.pop());
+
+		statements.peek().add(sb.build());
 		return null;
 	}
 
