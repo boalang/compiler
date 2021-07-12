@@ -1149,6 +1149,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "MUL":
 			eb.setKind(Expression.ExpressionKind.OP_MULT);
 			break;
+		case "MINUS":
 		case "SUB":
 			eb.setKind(Expression.ExpressionKind.OP_SUB);
 			break;
