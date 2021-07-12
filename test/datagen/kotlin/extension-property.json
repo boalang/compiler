@@ -14,7 +14,7 @@
                      "kind": "BLOCK",
                      "statements": [
                         {
-                           "kind": "EXPRESSION",
+                           "kind": "RETURN",
                            "expressions": [
                               {
                                  "kind": "LITERAL",
@@ -43,7 +43,7 @@
                      "kind": "BLOCK",
                      "statements": [
                         {
-                           "kind": "EXPRESSION",
+                           "kind": "RETURN",
                            "expressions": [
                               {
                                  "kind": "LITERAL",
