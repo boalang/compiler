@@ -492,8 +492,53 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitIfExpression(final KtIfExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.IF);
+
+		final List<Statement> stmts = new ArrayList<Statement>();
+		statements.push(stmts);
+
+		final List<Expression> exprs = new ArrayList<Expression>();
+		expressions.push(exprs);
+
+                if (expr.getCondition() != null) {
+                        expr.getCondition().accept(this, v);
+			sb.addAllConditions(exprs);
+			exprs.clear();
+		}
+
+		if(expr.getThen() != null) {
+			expr.getThen().accept(this, v);
+			for(final Expression e: exprs) {
+				stmts.add(Statement.newBuilder()
+					  .setKind(Statement.StatementKind.BLOCK)
+					  .addExpressions(e)
+					  .build());
+			}
+			exprs.clear();
+		} else {
+                        stmts.add(Statement.newBuilder()
+				  .setKind(Statement.StatementKind.BLOCK)
+				  .build());
+		}
+
+		if(expr.getElse() != null) {
+			expr.getElse().accept(this, v);
+			for(final Expression e: exprs) {
+                                stmts.add(Statement.newBuilder()
+					  .setKind(Statement.StatementKind.BLOCK)
+					  .addExpressions(e)
+					  .build());
+			}
+			exprs.clear();
+		}
+
+                expressions.pop();
+                sb.addAllStatements(statements.pop());
+
+                statements.peek().add(sb.build());
+
 		return null;
 	}
 
@@ -1108,6 +1153,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 		case "EQ":
 			eb.setKind(Expression.ExpressionKind.ASSIGN);
+			break;
+		case "EQEQ":
+			eb.setKind(Expression.ExpressionKind.EQ);
 			break;
 		default:
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
