@@ -1318,6 +1318,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Expression.Builder eb = Expression.newBuilder();
 
 		switch (expr.getOperationToken().toString()) {
+		// arithmetic expressions
 		case "PLUS":
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
 			break;
@@ -1331,9 +1332,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "DIV":
 			eb.setKind(Expression.ExpressionKind.OP_DIV);
 			break;
+		case "PERC":
 		case "MOD":
 			eb.setKind(Expression.ExpressionKind.OP_MOD);
 			break;
+		// Comparisons
 		case "LTEQ":
 			eb.setKind(Expression.ExpressionKind.LTEQ);
 			break;
@@ -1346,18 +1349,73 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "LT":
 			eb.setKind(Expression.ExpressionKind.LT);
 			break;
+		case "EQEQ":
+			eb.setKind(Expression.ExpressionKind.EQ);
+			break;
+		case "EXCLEQ":
+			eb.setKind(Expression.ExpressionKind.NEQ);
+			break;
+		// Logical operators
+		case "ANDAND":
+			eb.setKind(Expression.ExpressionKind.LOGICAL_AND);
+			break;
+		case "OROR":
+			eb.setKind(Expression.ExpressionKind.LOGICAL_OR);
+			break;
+		// Sets
 		case "in":
 			eb.setKind(Expression.ExpressionKind.IN);
 			break;
 		case "RANGE":
 			eb.setKind(Expression.ExpressionKind.ARRAY_COMPREHENSION);
 			break;
+		// Assignment & assignment-like
 		case "EQ":
 			eb.setKind(Expression.ExpressionKind.ASSIGN);
 			break;
-		case "EQEQ":
-			eb.setKind(Expression.ExpressionKind.EQ);
+		case "PLUSEQ":
+			eb.setKind(Expression.ExpressionKind.ASSIGN_ADD);
 			break;
+		case "MINUSEQ":
+			eb.setKind(Expression.ExpressionKind.ASSIGN_SUB);
+			break;
+		case "MULTEQ":
+			eb.setKind(Expression.ExpressionKind.ASSIGN_MULT);
+			break;
+		case "DIVEQ":
+			eb.setKind(Expression.ExpressionKind.ASSIGN_DIV);
+			break;
+		case "PERCEQ":
+			eb.setKind(Expression.ExpressionKind.ASSIGN_MOD);
+			break;
+		// When we use an identifier for the operation
+		case "IDENTIFIER":
+			switch (expr.getOperationReference().getText()) {
+			case "and":
+				eb.setKind(Expression.ExpressionKind.BIT_AND);
+				break;
+			case "or":
+				eb.setKind(Expression.ExpressionKind.BIT_OR);
+				break;
+			case "shl":
+				eb.setKind(Expression.ExpressionKind.BIT_LSHIFT);
+				break;
+			case "shr":
+				eb.setKind(Expression.ExpressionKind.BIT_RSHIFT);
+				break;
+			case "xor":
+				eb.setKind(Expression.ExpressionKind.BIT_XOR);
+				break;
+			case "ushr":
+				eb.setKind(Expression.ExpressionKind.BIT_UNSIGNEDRSHIFT);
+				break;
+			default:
+				eb.setKind(Expression.ExpressionKind.OTHER);
+				System.err.println("===> UNKNOWN OPERATOR ID: " + expr.getOperationReference().getText());
+				break;
+			}
+			break;
+		// Default case
 		default:
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
 			System.err.println("===> UNKNOWN OPERATOR: " + expr.getOperationToken().toString());
