@@ -1444,6 +1444,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			vb.addAllModifiers(modifiers.pop());
 		}
 
+		if (param.hasDefaultValue()) {
+			List<Expression> exprs = new ArrayList<Expression>();
+			expressions.push(exprs);
+			statements.push(new ArrayList<Statement>());
+                        param.getDefaultValue().accept(this, v);
+			if (exprs.size() > 0)
+				vb.setInitializer(exprs.get(0));
+			statements.pop();
+			expressions.pop();
+		}
+
 		fields.peek().add(vb.build());
 		return null;
 	}
