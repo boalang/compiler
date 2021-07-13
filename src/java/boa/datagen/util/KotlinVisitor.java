@@ -592,8 +592,35 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitWhenExpression(final KtWhenExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+                final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.SWITCH);
+
+		final List<Statement> stmts = new ArrayList<Statement>();
+		statements.push(stmts);
+
+		final List<Expression> exprs = new ArrayList<Expression>();
+		expressions.push(exprs);
+
+                if(expr.getSubjectExpression() != null) {
+			expr.getSubjectExpression().accept(this, v);
+			sb.addAllExpressions(exprs);
+			exprs.clear();
+		} else if (expr.getSubjectVariable() != null) {
+                        final List<Variable> vars = new ArrayList<Variable>();
+			fields.push(vars);
+			expr.getSubjectVariable().accept(this, v);
+			sb.addAllVariableDeclarations(fields.pop());
+		}
+
+                for(KtWhenEntry entry: expr.getEntries()) {
+			entry.accept(this, v);
+		}
+                sb.addAllStatements(statements.pop());
+                expressions.pop();
+
+		statements.peek().add(sb.build());
+
 		return null;
 	}
 
@@ -1043,7 +1070,47 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitWhenEntry(final KtWhenEntry n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		final Statement.Builder sb = Statement.newBuilder();
+
+		final List<Statement> stmts = new ArrayList<Statement>();
+		statements.push(stmts);
+
+		final List<Expression> exprs = new ArrayList<Expression>();
+		expressions.push(exprs);
+
+		if(n.isElse()) {
+			sb.setKind(Statement.StatementKind.DEFAULT);
+		} else {
+			sb.setKind(Statement.StatementKind.CASE);
+			// Handle conditions
+			if (n.getConditions().length != 0) {
+				for(KtWhenCondition cond : n.getConditions())
+					cond.accept(this, v);
+				sb.addAllExpressions(exprs);
+				exprs.clear();
+			}
+		}
+
+
+		if (n.getExpression() != null) {
+			n.getExpression().accept(this, v);
+			for(Expression e : exprs) {
+                                stmts.add(Statement.newBuilder()
+					  .setKind(Statement.StatementKind.EXPRESSION)
+					  .addExpressions(e)
+					  .build());
+			}
+			exprs.clear();
+		}
+
+		statements.pop();
+                expressions.pop();
+		statements.peek().add(sb.build());
+
+		for(Statement s: stmts) {
+			statements.peek().add(s);
+		}
+
 		return null;
 	}
 
