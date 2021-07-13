@@ -480,24 +480,34 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
-	@Override
-	public Void visitPrefixExpression(final KtPrefixExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitPostfixExpression(final KtPostfixExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
-		return null;
-	}
-
+	// No need for visitPostfixExpression/visitPrefixExpression, this handles them both quite easily.
 	@Override
 	public Void visitUnaryExpression(final KtUnaryExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Expression.Builder eb = Expression.newBuilder();
+		expressions.push(new ArrayList<Expression>());
+		if (expr.getBaseExpression() != null)
+			expr.getBaseExpression().accept(this, v);
+		eb.addAllExpressions(expressions.pop());
+		switch(expr.getOperationToken().toString()) {
+		case "MINUSMINUS":
+			eb.setKind(Expression.ExpressionKind.OP_DEC);
+			break;
+		case "PLUSPLUS":
+			eb.setKind(Expression.ExpressionKind.OP_INC);
+			break;
+		case "EXCL":
+			eb.setKind(Expression.ExpressionKind.LOGICAL_NOT);
+			break;
+		default:
+                        eb.setKind(Expression.ExpressionKind.OP_INC);
+			System.err.println("===> UNKNOWN OPERATOR: " + expr.getOperationToken().toString());
+			break;
+		}
+		if (expr instanceof KtPostfixExpression)
+			eb.setIsPostfix(true);
+
+		expressions.peek().add(eb.build());
+
 		return null;
 	}
 
