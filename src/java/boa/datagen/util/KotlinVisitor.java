@@ -1130,8 +1130,25 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitWhenConditionInRange(final KtWhenConditionInRange n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		final Expression.Builder eb = Expression.newBuilder();
+
+		final List<Expression> exprs = new ArrayList<Expression>();
+		expressions.push(exprs);
+
+                n.getRangeExpression().accept(this, v);
+
+		if (n.isNegated()) {
+			eb.setKind(Expression.ExpressionKind.LOGICAL_NOT);
+			eb.addExpressions(Expression.newBuilder()
+					  .setKind(Expression.ExpressionKind.IN)
+					  .addAllExpressions(expressions.pop())
+					  .build());
+		} else {
+			eb.setKind(Expression.ExpressionKind.IN);
+			eb.addAllExpressions(expressions.pop());
+		}
+
+                expressions.peek().add(eb.build());
 		return null;
 	}
 
@@ -1278,6 +1295,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 		case "in":
 			eb.setKind(Expression.ExpressionKind.IN);
+			break;
+		case "RANGE":
+			eb.setKind(Expression.ExpressionKind.ARRAY_COMPREHENSION);
 			break;
 		case "EQ":
 			eb.setKind(Expression.ExpressionKind.ASSIGN);
