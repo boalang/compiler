@@ -495,6 +495,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "PLUSPLUS":
 			eb.setKind(Expression.ExpressionKind.OP_INC);
 			break;
+		case "MINUS":
+			eb.setKind(Expression.ExpressionKind.OP_SUB);
+			break;
 		case "EXCL":
 			eb.setKind(Expression.ExpressionKind.LOGICAL_NOT);
 			break;

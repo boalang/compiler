@@ -80,6 +80,20 @@
                                  ]
                               }
                            ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_SUB",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "7"
+                                    }
+                                 ]
+                              }
+                           ]
                         }
                      ]
                   }
