@@ -1,0 +1,65 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "variables": [
+            {
+               "name": "x",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "ARRAYACCESS",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "foo"
+                        },
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "y"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "y",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "ARRAYACCESS",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "bar"
+                        },
+                        {
+                           "kind": "OP_ADD",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              },
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "foo"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

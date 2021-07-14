@@ -778,8 +778,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitArrayAccessExpression(final KtArrayAccessExpression expr, final Void v) {
-		// TODO
+                final Expression.Builder eb = Expression.newBuilder();
+
+		eb.setKind(Expression.ExpressionKind.ARRAYACCESS);
+
+		expressions.push(new ArrayList<Expression>());
+
 		expr.acceptChildren(this, v);
+
+		eb.addAllExpressions(expressions.pop());
+
+		expressions.peek().add(eb.build());
+
 		return null;
 	}
 
