@@ -744,8 +744,28 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitLambdaExpression(final KtLambdaExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Expression.Builder eb = Expression.newBuilder();
+
+		eb.setKind(Expression.ExpressionKind.LAMBDA);
+
+		if (expr.hasDeclaredReturnType())
+			eb.setReturnType(typeFromTypeRef(expr.getFunctionLiteral().getTypeReference()));
+
+		fields.push(new ArrayList<Variable>());
+		for (final KtParameter p : expr.getValueParameters())
+			p.accept(this, v);
+		eb.addAllVariableDecls(fields.pop());
+
+		if (expr.getBodyExpression() != null) {
+			expressions.push(new ArrayList<Expression>());
+			expr.getBodyExpression().accept(this, v);
+			eb.addStatements(Statement.newBuilder()
+					.setKind(Statement.StatementKind.EXPRESSION)
+					.addExpressions(expressions.pop().get(0))
+					.build());
+		}
+
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
