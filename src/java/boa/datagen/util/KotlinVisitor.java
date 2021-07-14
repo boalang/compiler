@@ -645,53 +645,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitWhenExpression(final KtWhenExpression expr, final Void v) {
-		final Statement.Builder sb = Statement.newBuilder();
-
-		sb.setKind(Statement.StatementKind.SWITCH);
-
-		statements.push(new ArrayList<Statement>());
-
-		final List<Expression> exprs = new ArrayList<Expression>();
-		expressions.push(exprs);
-
-		if (expr.getSubjectExpression() != null) {
-			expr.getSubjectExpression().accept(this, v);
-			sb.addAllExpressions(exprs);
-			exprs.clear();
-		} else if (expr.getSubjectVariable() != null) {
-			fields.push(new ArrayList<Variable>());
-			expr.getSubjectVariable().accept(this, v);
-			sb.addAllVariableDeclarations(fields.pop());
-		}
-
-		for (final KtWhenEntry entry: expr.getEntries())
-			entry.accept(this, v);
-		sb.addAllStatements(statements.pop());
-		expressions.pop();
-
-		statements.peek().add(sb.build());
-		return null;
-	}
-
-	@Override
 	public Void visitCollectionLiteralExpression(final KtCollectionLiteralExpression expr, final Void v) {
 		// TODO
 		expr.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitTryExpression(final KtTryExpression expr, final Void v) {
-		final Statement.Builder sb = Statement.newBuilder();
-
-		sb.setKind(Statement.StatementKind.TRY);
-
-		statements.push(new ArrayList<Statement>());
-		expr.acceptChildren(this, v);
-		sb.addAllStatements(statements.pop());
-
-		statements.peek().add(sb.build());
 		return null;
 	}
 
@@ -908,6 +864,20 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
+	public Void visitTryExpression(final KtTryExpression expr, final Void v) {
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.TRY);
+
+		statements.push(new ArrayList<Statement>());
+		expr.acceptChildren(this, v);
+		sb.addAllStatements(statements.pop());
+
+		statements.peek().add(sb.build());
+		return null;
+	}
+
+	@Override
 	public Void visitCatchSection(final KtCatchClause n, final Void v) {
 		final Statement.Builder sb = Statement.newBuilder();
 
@@ -1115,8 +1085,37 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
+	public Void visitWhenExpression(final KtWhenExpression expr, final Void v) {
+		final Statement.Builder sb = Statement.newBuilder();
+
+		sb.setKind(Statement.StatementKind.SWITCH);
+
+		statements.push(new ArrayList<Statement>());
+
+		final List<Expression> exprs = new ArrayList<Expression>();
+		expressions.push(exprs);
+
+		if (expr.getSubjectExpression() != null) {
+			expr.getSubjectExpression().accept(this, v);
+			sb.addAllExpressions(exprs);
+			exprs.clear();
+		} else if (expr.getSubjectVariable() != null) {
+			fields.push(new ArrayList<Variable>());
+			expr.getSubjectVariable().accept(this, v);
+			sb.addAllVariableDeclarations(fields.pop());
+		}
+
+		for (final KtWhenEntry entry: expr.getEntries())
+			entry.accept(this, v);
+		sb.addAllStatements(statements.pop());
+		expressions.pop();
+
+		statements.peek().add(sb.build());
+		return null;
+	}
+
+	@Override
 	public Void visitWhenEntry(final KtWhenEntry n, final Void v) {
-		// TODO
 		final Statement.Builder sb = Statement.newBuilder();
 
 		final List<Statement> stmts = new ArrayList<Statement>();
