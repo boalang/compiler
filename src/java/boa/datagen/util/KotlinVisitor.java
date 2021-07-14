@@ -1184,8 +1184,20 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitWhenConditionIsPattern(final KtWhenConditionIsPattern n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		Expression.Builder eb = Expression.newBuilder();
+
+		eb.setKind(Expression.ExpressionKind.TYPECOMPARE);
+		eb.setNewType(typeFromTypeRef(n.getTypeReference()));
+
+		if (n.isNegated()) {
+			final Expression isExpr = eb.build();
+
+			eb = Expression.newBuilder();
+			eb.setKind(Expression.ExpressionKind.LOGICAL_NOT);
+			eb.addExpressions(isExpr);
+		}
+
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
@@ -1213,8 +1225,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitWhenConditionWithExpression(final KtWhenConditionWithExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		expr.getExpression().accept(this, v);
 		return null;
 	}
 
