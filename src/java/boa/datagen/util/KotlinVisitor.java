@@ -1631,15 +1631,32 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		mb.setName(function.getName());
 
-		modifiers.push(new ArrayList<Modifier>());
+		if (function.getModifierList() != null) {
+			modifiers.push(new ArrayList<Modifier>());
+			function.getModifierList().accept(this, v);
+			mb.addAllModifiers(modifiers.pop());
+		}
+
+		if (function.hasDeclaredReturnType())
+			mb.setReturnType(typeFromTypeRef(function.getTypeReference()));
+
 		fields.push(new ArrayList<Variable>());
-		statements.push(new ArrayList<Statement>());
-
-		function.acceptChildren(this, v);
-
-		mb.addAllStatements(statements.pop());
+		for (final KtParameter p : function.getValueParameters())
+			p.accept(this, v);
 		mb.addAllArguments(fields.pop());
-		mb.addAllModifiers(modifiers.pop());
+
+		if (function.getBodyBlockExpression() != null) {
+			statements.push(new ArrayList<Statement>());
+			function.getBodyBlockExpression().accept(this, v);
+			mb.addAllStatements(statements.pop());
+		} else if (function.getBodyExpression() != null) {
+			expressions.push(new ArrayList<Expression>());
+			function.getBodyExpression().accept(this, v);
+			mb.addStatements(Statement.newBuilder()
+					.setKind(Statement.StatementKind.EXPRESSION)
+					.addExpressions(expressions.pop().get(0))
+					.build());
+		}
 
 		methods.peek().add(mb.build());
 		return null;
