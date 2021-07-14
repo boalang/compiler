@@ -133,6 +133,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		case "data":
 		case "enum":
+		case "companion":
 			// do nothing because these are already handled by the class
 			return;
 
@@ -233,8 +234,38 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitObjectDeclaration(final KtObjectDeclaration d, final Void v) {
-		// TODO
+		final Declaration.Builder db = Declaration.newBuilder();
+
+		db.setName(d.getName());
+
+		db.setKind(TypeKind.CLASS); // TODO: It's a class, but a singleton.  New Type Kind?  Or do as below and add modifier?
+
+		modifiers.push(new ArrayList<Modifier>());
+		fields.push(new ArrayList<Variable>());
+                methods.push(new ArrayList<Method>());
+		declarations.push(new ArrayList<Declaration>());
+
+		modifiers.peek().add(Modifier.newBuilder()
+				     .setKind(Modifier.ModifierKind.OTHER)
+				     .setOther("SINGLETON")
+				     .build());
+
+		if (d.isCompanion()) {
+                        modifiers.peek().add(Modifier.newBuilder()
+					     .setKind(Modifier.ModifierKind.OTHER)
+					     .setOther("COMPANION")
+					     .build());
+		}
+
 		d.acceptChildren(this, v);
+
+		db.addAllNestedDeclarations(declarations.pop());
+		db.addAllMethods(methods.pop());
+                db.addAllFields(fields.pop());
+		db.addAllModifiers(modifiers.pop());
+
+		declarations.peek().add(db.build());
+
 		return null;
 	}
 
