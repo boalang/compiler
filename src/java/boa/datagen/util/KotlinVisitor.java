@@ -778,18 +778,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitArrayAccessExpression(final KtArrayAccessExpression expr, final Void v) {
-                final Expression.Builder eb = Expression.newBuilder();
+		final Expression.Builder eb = Expression.newBuilder();
 
 		eb.setKind(Expression.ExpressionKind.ARRAYACCESS);
 
 		expressions.push(new ArrayList<Expression>());
-
 		expr.acceptChildren(this, v);
-
 		eb.addAllExpressions(expressions.pop());
 
 		expressions.peek().add(eb.build());
-
 		return null;
 	}
 
@@ -802,8 +799,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDoubleColonExpression(final KtDoubleColonExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Expression.Builder eb = Expression.newBuilder();
+
+		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
+		if (!expr.isEmptyLHS()) {
+			// TODO where to put this?
+			expr.getLhs().accept(this);
+		}
+
+		expressions.push(new ArrayList<Expression>());
+		expr.getReceiverExpression().accept(this, v);
+		eb.addAllExpressions(expressions.pop());
+
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
