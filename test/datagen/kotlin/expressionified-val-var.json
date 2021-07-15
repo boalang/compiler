@@ -1,0 +1,152 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<clinit>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "q",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "p"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "w",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "u"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "foo",
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "q",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "p"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "println",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "y"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "y",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "z"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
