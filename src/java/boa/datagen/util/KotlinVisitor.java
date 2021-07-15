@@ -1723,7 +1723,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitNamedFunction(final KtNamedFunction function, final Void v) {
 		final Method.Builder mb = Method.newBuilder();
 
-		mb.setName(function.getName());
+		if (function.getName() != null)
+			mb.setName(function.getName());
+		else
+			mb.setName("<anonymous-function>");
 
 		if (function.getModifierList() != null) {
 			modifiers.push(new ArrayList<Modifier>());
