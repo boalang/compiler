@@ -236,10 +236,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitObjectDeclaration(final KtObjectDeclaration d, final Void v) {
 		final Declaration.Builder db = Declaration.newBuilder();
 
-		if(d.getName() != null)
+		if (d.getName() != null)
 			db.setName(d.getName());
 		else
-			db.setName("<anonymous>");
+			db.setName("");
 
 		db.setKind(TypeKind.CLASS); // TODO: It's a class, but a singleton.  New Type Kind?  Or do as below and add modifier?
 
@@ -845,6 +845,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitDoubleColonExpression(final KtDoubleColonExpression expr, final Void v) {
 		final Expression.Builder eb = Expression.newBuilder();
 
+		System.err.println("DOUBLE COLON: " + expr.getText());
 		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
 		if (!expr.isEmptyLHS()) {
 			// TODO where to put this?
@@ -863,8 +864,22 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitCallableReferenceExpression(final KtCallableReferenceExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		System.err.println("CALLABLE REF EXP: " + expr.getText());
+		final Expression.Builder eb = Expression.newBuilder();
+
+		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
+		if (!expr.isEmptyLHS()) {
+			// TODO where to put this?
+			expr.getLhs().accept(this);
+		}
+
+		if (expr.getReceiverExpression() != null) {
+			expressions.push(new ArrayList<Expression>());
+			expr.getReceiverExpression().accept(this, v);
+			eb.addAllExpressions(expressions.pop());
+		}
+
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
