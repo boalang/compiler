@@ -1093,8 +1093,31 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitClassInitializer(final KtClassInitializer n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		final Method.Builder mb = Method.newBuilder();
+
+		mb.setName("<clinit>");
+
+		final List<Statement> stmts = new ArrayList<Statement>();
+		statements.push(stmts);
+
+		final List<Expression> exprs = new ArrayList<Expression>();
+		expressions.push(exprs);
+
+		if (n.getBody() != null) {
+                        n.getBody().accept(this, v);
+			for (Expression e: exprs) {
+				stmts.add(Statement.newBuilder()
+					  .setKind(Statement.StatementKind.EXPRESSION)
+					  .addExpressions(e)
+					  .build());
+			}
+			exprs.clear();
+		}
+
+		expressions.pop();
+		mb.addAllStatements(statements.pop());
+
+                methods.peek().add(mb.build());
 		return null;
 	}
 
