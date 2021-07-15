@@ -1179,14 +1179,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final List<Expression> exprs = new ArrayList<Expression>();
 		expressions.push(exprs);
 
-		if (expr.getSubjectExpression() != null) {
-			expr.getSubjectExpression().accept(this, v);
-			sb.addAllExpressions(exprs);
-			exprs.clear();
-		} else if (expr.getSubjectVariable() != null) {
+		if (expr.getSubjectVariable() != null) {
 			fields.push(new ArrayList<Variable>());
 			expr.getSubjectVariable().accept(this, v);
 			sb.addAllVariableDeclarations(fields.pop());
+		} else if (expr.getSubjectExpression() != null) {
+			expr.getSubjectExpression().accept(this, v);
+			sb.addAllExpressions(exprs);
+			exprs.clear();
 		}
 
 		for (final KtWhenEntry entry: expr.getEntries())
