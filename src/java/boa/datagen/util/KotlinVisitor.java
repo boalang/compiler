@@ -851,7 +851,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expr.getLhs().accept(this);
 		}
 
-		if(expr.getReceiverExpression() != null) {
+		if (expr.getReceiverExpression() != null) {
 			expressions.push(new ArrayList<Expression>());
 			expr.getReceiverExpression().accept(this, v);
 			eb.addAllExpressions(expressions.pop());
