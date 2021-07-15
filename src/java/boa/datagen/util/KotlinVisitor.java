@@ -1103,6 +1103,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final List<Expression> exprs = new ArrayList<Expression>();
 		expressions.push(exprs);
 
+		expectExpression.push(true);
+
 		if (n.getBody() != null) {
                         n.getBody().accept(this, v);
 			for (Expression e: exprs) {
@@ -1113,6 +1115,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			}
 			exprs.clear();
 		}
+
+		expectExpression.push(true);
 
 		expressions.pop();
 		mb.addAllStatements(statements.pop());
@@ -1659,14 +1663,20 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			prop.getInitializer().accept(this, v);
 		vb.addAllExpressions(expressions.pop());
 
-		fields.peek().add(vb.build());
-
 		if (prop.getGetter() != null)
 			prop.getGetter().accept(this, v);
 		if (prop.getSetter() != null)
 			prop.getSetter().accept(this, v);
 
 		expectExpression.pop();
+
+		if (expectExpression.peek())
+			expressions.peek().add(Expression.newBuilder()
+					       .setKind(Expression.ExpressionKind.VARDECL)
+					       .addVariableDecls(vb.build())
+					       .build());
+		else
+			fields.peek().add(vb.build());
 
 		return null;
 	}
@@ -1765,6 +1775,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			p.accept(this, v);
 		mb.addAllArguments(fields.pop());
 
+                expectExpression.push(true);
 		if (function.getBodyBlockExpression() != null) {
 			statements.push(new ArrayList<Statement>());
 			function.getBodyBlockExpression().accept(this, v);
@@ -1777,6 +1788,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 					.addExpressions(expressions.pop().get(0))
 					.build());
 		}
+		expectExpression.pop();
 
 		methods.peek().add(mb.build());
 		return null;
