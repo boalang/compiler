@@ -847,16 +847,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		System.err.println("DOUBLE COLON: " + expr.getText());
 		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
-		if (!expr.isEmptyLHS()) {
-			// TODO where to put this?
-			expr.getLhs().accept(this);
-		}
 
 		if (expr.getReceiverExpression() != null) {
 			expressions.push(new ArrayList<Expression>());
 			expr.getReceiverExpression().accept(this, v);
 			eb.addAllExpressions(expressions.pop());
 		}
+		eb.setMethod(expr.getText());
 
 		expressions.peek().add(eb.build());
 		return null;
@@ -868,16 +865,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Expression.Builder eb = Expression.newBuilder();
 
 		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
-		if (!expr.isEmptyLHS()) {
-			// TODO where to put this?
-			expr.getLhs().accept(this);
-		}
 
 		if (expr.getReceiverExpression() != null) {
 			expressions.push(new ArrayList<Expression>());
 			expr.getReceiverExpression().accept(this, v);
 			eb.addAllExpressions(expressions.pop());
 		}
+		eb.setMethod(expr.getCallableReference().getText());
 
 		expressions.peek().add(eb.build());
 		return null;
