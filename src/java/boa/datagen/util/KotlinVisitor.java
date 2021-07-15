@@ -236,7 +236,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitObjectDeclaration(final KtObjectDeclaration d, final Void v) {
 		final Declaration.Builder db = Declaration.newBuilder();
 
-		db.setName(d.getName());
+		if(d.getName() != null)
+			db.setName(d.getName());
+		else
+			db.setName("<anonymous>");
 
 		db.setKind(TypeKind.CLASS); // TODO: It's a class, but a singleton.  New Type Kind?  Or do as below and add modifier?
 
