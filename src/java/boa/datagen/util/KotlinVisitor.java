@@ -1726,7 +1726,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (function.getName() != null)
 			mb.setName(function.getName());
 		else
-			mb.setName("<anonymous-function>");
+			mb.setName("");
 
 		if (function.getModifierList() != null) {
 			modifiers.push(new ArrayList<Modifier>());
