@@ -1,0 +1,38 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "OuterInterface",
+               "kind": "INTERFACE",
+               "nested_declarations": [
+                  {
+                     "name": "InnerClass",
+                     "kind": "CLASS"
+                  },
+                  {
+                     "name": "InnerInterface",
+                     "kind": "INTERFACE"
+                  }
+               ]
+            },
+            {
+               "name": "OuterClass",
+               "kind": "CLASS",
+               "nested_declarations": [
+                  {
+                     "name": "InnerClass",
+                     "kind": "CLASS"
+                  },
+                  {
+                     "name": "InnerInterface",
+                     "kind": "INTERFACE"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

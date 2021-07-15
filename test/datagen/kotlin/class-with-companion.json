@@ -1,0 +1,40 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "Six",
+               "kind": "CLASS",
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "CLASS",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "SINGLETON"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "foo",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

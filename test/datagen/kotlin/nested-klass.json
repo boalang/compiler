@@ -1,0 +1,20 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "nested_declarations": [
+                  {
+                     "name": "D",
+                     "kind": "CLASS"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

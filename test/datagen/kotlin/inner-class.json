@@ -1,0 +1,88 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Outer",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "bar",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "LITERAL",
+                           "literal": "1"
+                        }
+                     ]
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Nested",
+                     "kind": "CLASS",
+                     "methods": [
+                        {
+                           "name": "foo",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "demo",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "METHODCALL",
+                     "expressions": [
+                        {
+                           "kind": "METHODCALL",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "Outer"
+                              }
+                           ],
+                           "method": "Nested"
+                        }
+                     ],
+                     "method": "foo"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

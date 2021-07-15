@@ -1,0 +1,118 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Constructors",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "s",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<clinit>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "println",
+                                       "method_args": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "\"Init block\""
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<init>",
+                     "arguments": [
+                        {
+                           "name": "i",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "println",
+                                       "method_args": [
+                                          {
+                                             "kind": "TEMPLATE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "TEMPLATE",
+                                                   "literal": "\"Constructor \""
+                                                },
+                                                {
+                                                   "kind": "TEMPLATE",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "i"
+                                                      }
+                                                   ],
+                                                   "literal": "\"$i\""
+                                                }
+                                             ],
+                                             "literal": "\"Constructor $i\""
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "s",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

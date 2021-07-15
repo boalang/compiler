@@ -1,0 +1,97 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Person",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "pets",
+                           "variable_type": {
+                              "name": "MutableList<Pet>",
+                              "kind": "OTHER"
+                           },
+                           "initializer": {
+                              "kind": "METHODCALL",
+                              "method": "mutableListOf"
+                           }
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "pets",
+                     "variable_type": {
+                        "name": "MutableList<Pet>",
+                        "kind": "OTHER"
+                     },
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "method": "mutableListOf"
+                     }
+                  }
+               ]
+            },
+            {
+               "name": "Pet",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "arguments": [
+                        {
+                           "name": "owner",
+                           "variable_type": {
+                              "name": "Person",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "owner.pets"
+                                          }
+                                       ],
+                                       "method": "add",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "this"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -1,0 +1,58 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C1",
+               "kind": "CLASS"
+            },
+            {
+               "name": "C2",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ABSTRACT"
+                  }
+               ]
+            },
+            {
+               "name": "C3",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ]
+            },
+            {
+               "name": "C4",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "C5",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "ABSTRACT"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

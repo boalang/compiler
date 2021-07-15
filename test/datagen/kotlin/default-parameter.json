@@ -1,0 +1,68 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.test.kotlin",
+         "methods": [
+            {
+               "name": "thing",
+               "arguments": [
+                  {
+                     "name": "name",
+                     "variable_type": {
+                        "name": "string",
+                        "kind": "OTHER"
+                     },
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "\"world\""
+                     }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "println",
+                                 "method_args": [
+                                    {
+                                       "kind": "TEMPLATE",
+                                       "expressions": [
+                                          {
+                                             "kind": "TEMPLATE",
+                                             "literal": "\"Hello \""
+                                          },
+                                          {
+                                             "kind": "TEMPLATE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "name"
+                                                }
+                                             ],
+                                             "literal": "\"${name}\""
+                                          },
+                                          {
+                                             "kind": "TEMPLATE",
+                                             "literal": "\"!\""
+                                          }
+                                       ],
+                                       "literal": "\"Hello ${name}!\""
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

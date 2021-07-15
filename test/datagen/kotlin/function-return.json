@@ -1,0 +1,104 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "methods": [
+            {
+               "name": "factorial",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "CONDITIONAL",
+                                 "expressions": [
+                                    {
+                                       "kind": "LTEQ",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "statements": [
+                                          {
+                                             "kind": "RETURN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "statements": [
+                                          {
+                                             "kind": "RETURN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "OP_MULT",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "x"
+                                                      },
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "factorial",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "OP_SUB",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "x"
+                                                                  },
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "1"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

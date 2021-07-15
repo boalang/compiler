@@ -1,0 +1,94 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Outer",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "bar",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "LITERAL",
+                           "literal": "1"
+                        }
+                     ]
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Inner",
+                     "kind": "CLASS",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "inner"
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "foo",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "bar"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "demo",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "METHODCALL",
+                     "expressions": [
+                        {
+                           "kind": "METHODCALL",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "Outer"
+                              }
+                           ],
+                           "method": "Inner"
+                        }
+                     ],
+                     "method": "foo"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
