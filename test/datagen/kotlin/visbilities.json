@@ -1,0 +1,55 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "x",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "y",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PUBLIC"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "z",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PROTECTED"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "w",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "INTERNAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "q"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
