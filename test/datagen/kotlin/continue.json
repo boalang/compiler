@@ -86,7 +86,7 @@
                                              "kind": "CONTINUE",
                                              "expressions": [
                                                 {
-                                                   "kind": "LABEL",
+                                                   "kind": "LITERAL",
                                                    "literal": "first"
                                                 }
                                              ]

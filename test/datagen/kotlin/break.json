@@ -86,7 +86,7 @@
                                              "kind": "BREAK",
                                              "expressions": [
                                                 {
-                                                   "kind": "LABEL",
+                                                   "kind": "LITERAL",
                                                    "literal": "first"
                                                 }
                                              ]
