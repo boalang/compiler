@@ -1,0 +1,71 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "Six",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "main",
+                     "arguments": [
+                        {
+                           "name": "args",
+                           "variable_type": {
+                              "name": "Array<String>",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "println",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "args"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "bar",
+                     "return_type": {
+                        "name": "Quux",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "args",
+                           "variable_type": {
+                              "name": "Array<String>",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
