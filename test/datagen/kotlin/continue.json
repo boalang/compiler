@@ -1,0 +1,108 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "main",
+               "arguments": [
+                  {
+                     "name": "args",
+                     "variable_type": {
+                        "name": "Array<String>",
+                        "kind": "OTHER"
+                     }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "5"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "CONDITIONAL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "statements": [
+                                          {
+                                             "kind": "CONTINUE"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "CONDITIONAL",
+                                 "expressions": [
+                                    {
+                                       "kind": "LOGICAL_NOT",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "statements": [
+                                          {
+                                             "kind": "CONTINUE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "first"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
