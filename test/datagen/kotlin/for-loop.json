@@ -1,0 +1,199 @@
+2
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "Six",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "foo",
+                     "arguments": [
+                        {
+                           "name": "things",
+                           "variable_type": {
+                              "name": "List<String>",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "FOREACH",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "println",
+                                                   "method_args": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "thing"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "initializations": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "things"
+                                    }
+                                 ],
+                                 "variable_declarations": [
+                                    {
+                                       "name": "thing",
+                                       "variable_type": {
+                                          "name": "String",
+                                          "kind": "OTHER"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "bar",
+                     "arguments": [
+                        {
+                           "name": "things",
+                           "variable_type": {
+                              "name": "List<String>",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "FOREACH",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "println",
+                                                   "method_args": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "index"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "thing"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "initializations": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "index",
+                                             "variable_type": {
+                                                "name": "int",
+                                                "kind": "OTHER"
+                                             }
+                                          },
+                                          {
+                                             "name": "value",
+                                             "variable_type": {
+                                                "name": "String",
+                                                "kind": "OTHER"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "baz",
+                     "arguments": [
+                        {
+                           "name": "things",
+                           "variable_type": {
+                              "name": "List<String>",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "FOREACH",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "println",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "thing"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "initializations": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "things"
+                                    }
+                                 ],
+                                 "variable_declarations": [
+                                    {
+                                       "name": "thing",
+                                       "variable_type": {
+                                          "name": "String",
+                                          "kind": "OTHER"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
