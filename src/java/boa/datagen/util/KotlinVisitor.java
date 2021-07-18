@@ -241,17 +241,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		else
 			db.setName("");
 
-		db.setKind(TypeKind.CLASS); // TODO: It's a class, but a singleton.  New Type Kind?  Or do as below and add modifier?
+		db.setKind(TypeKind.SINGLETON_OBJECT); // TODO: It's a class, but a singleton.  New Type Kind?  Or do as below and add modifier?
 
 		modifiers.push(new ArrayList<Modifier>());
 		fields.push(new ArrayList<Variable>());
                 methods.push(new ArrayList<Method>());
 		declarations.push(new ArrayList<Declaration>());
-
-		modifiers.peek().add(Modifier.newBuilder()
-				     .setKind(Modifier.ModifierKind.OTHER)
-				     .setOther("SINGLETON")
-				     .build());
 
 		if (d.isCompanion()) {
                         modifiers.peek().add(Modifier.newBuilder()
