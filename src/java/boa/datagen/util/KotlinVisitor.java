@@ -244,6 +244,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		db.setKind(TypeKind.SINGLETON);
 
+		for (final KtTypeParameter type_param: klass.getTypeParameters())
+			db.addGenericParameters(typeFromTypeParameter(type_param));
+
 		modifiers.push(new ArrayList<Modifier>());
 		fields.push(new ArrayList<Variable>());
                 methods.push(new ArrayList<Method>());
@@ -1704,6 +1707,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		else
 			db.setKind(TypeKind.CLASS);
 
+		for (final KtTypeParameter type_param: klass.getTypeParameters())
+			db.addGenericParameters(typeFromTypeParameter(type_param));
+
 		modifiers.push(new ArrayList<Modifier>());
 		fields.push(new ArrayList<Variable>());
 		declarations.push(new ArrayList<Declaration>());
@@ -1879,6 +1885,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Type.Builder tb = Type.newBuilder();
 		tb.setName(type.getText());
 		tb.setKind(kind);
+		return tb.build();
+	}
+
+	private Type typeFromTypeParameter(final KtTypeParameter type) {
+		final Type.Builder tb = Type.newBuilder();
+		tb.setName(type.getText());
+		tb.setFullyQualifiedName(type.getText());
+		tb.setKind(TypeKind.OTHER);
 		return tb.build();
 	}
 }
