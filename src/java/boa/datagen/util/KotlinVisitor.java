@@ -244,7 +244,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		db.setKind(TypeKind.SINGLETON);
 
-		for (final KtTypeParameter type_param: klass.getTypeParameters())
+		for (final KtTypeParameter type_param: d.getTypeParameters())
 			db.addGenericParameters(typeFromTypeParameter(type_param));
 
 		modifiers.push(new ArrayList<Modifier>());
