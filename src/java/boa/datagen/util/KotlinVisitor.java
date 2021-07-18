@@ -49,6 +49,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	protected Stack<List<Variable>> fields = new Stack<List<Variable>>();
 	protected Stack<List<Method>> methods = new Stack<List<Method>>();
 	protected Stack<List<Statement>> statements = new Stack<List<Statement>>();
+	protected Stack<List<Type>> types = new Stack<List<Type>>();
 
 	protected Stack<Boolean> expectExpression = new Stack<Boolean>();
 
@@ -247,6 +248,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		fields.push(new ArrayList<Variable>());
                 methods.push(new ArrayList<Method>());
 		declarations.push(new ArrayList<Declaration>());
+		types.push(new ArrayList<Type>());
 
 		if (d.isCompanion()) {
                         modifiers.peek().add(Modifier.newBuilder()
@@ -257,6 +259,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		d.acceptChildren(this, v);
 
+		db.addAllParents(types.pop());
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllMethods(methods.pop());
                 db.addAllFields(fields.pop());
@@ -419,8 +422,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSuperTypeEntry(final KtSuperTypeEntry n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		if (n.getTypeReference() != null)
+			types.peek().add(typeFromTypeRef(n.getTypeReference()));
 		return null;
 	}
 
@@ -1704,9 +1707,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		fields.push(new ArrayList<Variable>());
 		declarations.push(new ArrayList<Declaration>());
 		methods.push(new ArrayList<Method>());
+		types.push(new ArrayList<Type>());
 
 		klass.acceptChildren(this, v);
 
+		db.addAllParents(types.pop());
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllModifiers(modifiers.pop());
 		db.addAllMethods(methods.pop());
