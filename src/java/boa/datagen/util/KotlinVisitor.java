@@ -423,7 +423,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitSuperTypeEntry(final KtSuperTypeEntry n, final Void v) {
 		if (n.getTypeReference() != null)
-			types.peek().add(typeFromTypeRef(n.getTypeReference()));
+			types.peek().add(typeFromTypeRef(n.getTypeReference(), TypeKind.CLASS));
 		return null;
 	}
 
@@ -1871,9 +1871,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	// Utility methods
 	private Type typeFromTypeRef(final KtTypeReference type) {
+		return typeFromTypeRef(type, TypeKind.OTHER);
+	}
+
+	private Type typeFromTypeRef(final KtTypeReference type, TypeKind kind) {
 		final Type.Builder tb = Type.newBuilder();
 		tb.setName(type.getText());
-		tb.setKind(TypeKind.OTHER);
+		tb.setKind(kind);
 		return tb.build();
 	}
 }
