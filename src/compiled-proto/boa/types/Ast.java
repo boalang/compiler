@@ -130,13 +130,13 @@ public final class Ast {
      */
     ALIAS(15, 13),
     /**
-     * <code>SINGLETON_OBJECT = 14;</code>
+     * <code>SINGLETON = 14;</code>
      *
      * <pre>
      ** Declared singletons (Kotlin object declarations) 
      * </pre>
      */
-    SINGLETON_OBJECT(16, 14),
+    SINGLETON(16, 14),
     ;
 
     /**
@@ -284,13 +284,13 @@ public final class Ast {
      */
     public static final int ALIAS_VALUE = 13;
     /**
-     * <code>SINGLETON_OBJECT = 14;</code>
+     * <code>SINGLETON = 14;</code>
      *
      * <pre>
      ** Declared singletons (Kotlin object declarations) 
      * </pre>
      */
-    public static final int SINGLETON_OBJECT_VALUE = 14;
+    public static final int SINGLETON_VALUE = 14;
 
 
     public final int getNumber() { return value; }
@@ -311,7 +311,7 @@ public final class Ast {
         case 11: return ARRAY;
         case 12: return IMMUTABLE;
         case 13: return ALIAS;
-        case 14: return SINGLETON_OBJECT;
+        case 14: return SINGLETON;
         default: return null;
       }
     }
@@ -342,7 +342,7 @@ public final class Ast {
     }
 
     private static final TypeKind[] VALUES = {
-      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, TRAIT, PRIMITIVE, ARRAY, IMMUTABLE, ALIAS, SINGLETON_OBJECT, 
+      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, TRAIT, PRIMITIVE, ARRAY, IMMUTABLE, ALIAS, SINGLETON, 
     };
 
     public static TypeKind valueOf(
@@ -43045,13 +43045,13 @@ public final class Ast {
       "\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017",
       "\n\013MEDIA_QUERY\020\n\022\017\n\013IMPORT_RULE\020\013\022\017\n\013XML_" +
       "ELEMENT\020\014\"\'\n\tAttribute\022\013\n\003key\030\001 \002(\t\022\r\n\005v" +
-      "alue\030\002 \002(\t*\363\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CL" +
+      "alue\030\002 \002(\t*\354\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CL" +
       "ASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004A" +
       "NON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATI" +
       "ON\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GE" +
       "NERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n\tPRIMITIVE\020\n\022\t\n\005ARR" +
-      "AY\020\013\022\r\n\tIMMUTABLE\020\014\022\t\n\005ALIAS\020\r\022\024\n\020SINGLE" +
-      "TON_OBJECT\020\016\032\002\020\001B\002H\001"
+      "AY\020\013\022\r\n\tIMMUTABLE\020\014\022\t\n\005ALIAS\020\r\022\r\n\tSINGLE" +
+      "TON\020\016\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

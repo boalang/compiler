@@ -109,7 +109,7 @@ enum TypeKind {
 	/** A typedef/alias */
 	ALIAS = 13;
         /** Declared singletons (Kotlin object declarations) */
-        SINGLETON_OBJECT = 14;
+        SINGLETON = 14;
 }
 
 /** A type in an AST */
