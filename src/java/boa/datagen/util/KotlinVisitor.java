@@ -415,8 +415,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSuperTypeCallEntry(final KtSuperTypeCallEntry n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		if (n.getTypeReference() != null)
+			types.peek().add(typeFromTypeRef(n.getTypeReference(), TypeKind.CLASS));
+		// TODO Implicit Call to type's constructor?
 		return null;
 	}
 
