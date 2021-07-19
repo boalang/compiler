@@ -112,6 +112,8 @@ enum TypeKind {
         SINGLETON = 14;
         /** Types declared as explicitly dynamic (used in Kotlin -> JS) */
         DYNAMIC = 15;
+        /** Delegated type kinds (Kotlin feature) */
+        DELEGATED = 16;
 }
 
 /** A type in an AST */
@@ -131,6 +133,7 @@ message Type {
 	/** */
 	optional int32 key = 10;
 	optional Expression computed_name = 14;
+        optional Expression delegate = 15;
 }
 
 /** A method declaration */
