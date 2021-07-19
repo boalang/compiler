@@ -1884,7 +1884,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	private Type typeFromTypeRef(final KtTypeReference type, TypeKind kind) {
 		final Type.Builder tb = Type.newBuilder();
 		tb.setName(type.getText());
-		tb.setKind(kind);
+		if (type.getText().equals("dynamic") && (kind == TypeKind.OTHER))
+			tb.setKind(TypeKind.DYNAMIC);
+		else
+			tb.setKind(kind);
 		return tb.build();
 	}
 

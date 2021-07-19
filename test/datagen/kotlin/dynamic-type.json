@@ -1,0 +1,28 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "variables": [
+            {
+               "name": "dyn",
+               "variable_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "2"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

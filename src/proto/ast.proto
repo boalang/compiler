@@ -110,6 +110,8 @@ enum TypeKind {
 	ALIAS = 13;
         /** Declared singletons (Kotlin object declarations) */
         SINGLETON = 14;
+        /** Types declared as explicitly dynamic (used in Kotlin -> JS) */
+        DYNAMIC = 15;
 }
 
 /** A type in an AST */
