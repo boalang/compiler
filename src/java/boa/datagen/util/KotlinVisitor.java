@@ -331,16 +331,20 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (ta.getModifierList() != null)
 			ta.getModifierList().accept(this, v);
 
+		types.push(new ArrayList<Type>());
+		for (KtTypeParameter param: ta.getTypeParameters())
+			types.peek().add(typeFromTypeParameter(param));
+
 		sb.setTypeDeclaration(Declaration.newBuilder()
 				.setKind(TypeKind.ALIAS)
 				.setName(ta.getName())
 				.addParents(typeFromTypeRef(ta.getTypeReference()))
 				.addAllModifiers(modifiers.pop())
+				.addAllGenericParameters(types.pop())
 				.build());
 
 		// TODO type params
 		ta.getTypeConstraints();
-		ta.getTypeParameters();
 
 		statements.peek().add(sb.build());
 		return null;
@@ -1159,7 +1163,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDynamicType(final KtDynamicType n, final Void v) {
-		// TODO
 		n.acceptChildren(this, v);
 		return null;
 	}
