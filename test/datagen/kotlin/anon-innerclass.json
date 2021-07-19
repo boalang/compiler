@@ -1,0 +1,97 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "x",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "expressions": [
+                  {
+                     "kind": "METHODCALL",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "window"
+                        }
+                     ],
+                     "method": "addMouseListener",
+                     "method_args": [
+                        {
+                           "kind": "NEW",
+                           "new_type": {
+                              "name": "MouseAdapter",
+                              "kind": "CLASS"
+                           },
+                           "anon_declaration": {
+                              "name": "",
+                              "kind": "SINGLETON",
+                              "parents": [
+                                 {
+                                    "name": "MouseAdapter",
+                                    "kind": "CLASS"
+                                 }
+                              ],
+                              "methods": [
+                                 {
+                                    "name": "mouseClicked",
+                                    "modifiers": [
+                                       {
+                                          "kind": "OTHER",
+                                          "other": "override"
+                                       }
+                                    ],
+                                    "arguments": [
+                                       {
+                                          "name": "e",
+                                          "variable_type": {
+                                             "name": "MouseEvent",
+                                             "kind": "OTHER"
+                                          }
+                                       }
+                                    ],
+                                    "statements": [
+                                       {
+                                          "kind": "BLOCK"
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "name": "mouseEntered",
+                                    "modifiers": [
+                                       {
+                                          "kind": "OTHER",
+                                          "other": "override"
+                                       }
+                                    ],
+                                    "arguments": [
+                                       {
+                                          "name": "e",
+                                          "variable_type": {
+                                             "name": "MouseEvent",
+                                             "kind": "OTHER"
+                                          }
+                                       }
+                                    ],
+                                    "statements": [
+                                       {
+                                          "kind": "BLOCK"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
