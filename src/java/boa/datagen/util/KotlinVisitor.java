@@ -250,23 +250,22 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		modifiers.push(new ArrayList<Modifier>());
 		fields.push(new ArrayList<Variable>());
-                methods.push(new ArrayList<Method>());
+		methods.push(new ArrayList<Method>());
 		declarations.push(new ArrayList<Declaration>());
 		types.push(new ArrayList<Type>());
 
-		if (d.isCompanion()) {
-                        modifiers.peek().add(Modifier.newBuilder()
-					     .setKind(Modifier.ModifierKind.OTHER)
-					     .setOther("COMPANION")
-					     .build());
-		}
+		if (d.isCompanion())
+			modifiers.peek().add(Modifier.newBuilder()
+					.setKind(Modifier.ModifierKind.OTHER)
+					.setOther("COMPANION")
+					.build());
 
 		d.acceptChildren(this, v);
 
 		db.addAllParents(types.pop());
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllMethods(methods.pop());
-                db.addAllFields(fields.pop());
+		db.addAllFields(fields.pop());
 		db.addAllModifiers(modifiers.pop());
 
 		declarations.peek().add(db.build());
@@ -686,7 +685,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitCollectionLiteralExpression(final KtCollectionLiteralExpression expr, final Void v) {
-                final Expression.Builder eb = Expression.newBuilder();
+		final Expression.Builder eb = Expression.newBuilder();
 
 		eb.setKind(Expression.ExpressionKind.ARRAYLITERAL);
 
@@ -1119,12 +1118,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expectExpression.push(true);
 
 		if (n.getBody() != null) {
-                        n.getBody().accept(this, v);
+			n.getBody().accept(this, v);
 			for (Expression e: exprs) {
 				stmts.add(Statement.newBuilder()
-					  .setKind(Statement.StatementKind.EXPRESSION)
-					  .addExpressions(e)
-					  .build());
+						.setKind(Statement.StatementKind.EXPRESSION)
+						.addExpressions(e)
+						.build());
 			}
 			exprs.clear();
 		}
@@ -1134,7 +1133,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expressions.pop();
 		mb.addAllStatements(statements.pop());
 
-                methods.peek().add(mb.build());
+		methods.peek().add(mb.build());
 		return null;
 	}
 
@@ -1684,9 +1683,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (expectExpression.peek())
 			expressions.peek().add(Expression.newBuilder()
-					       .setKind(Expression.ExpressionKind.VARDECL)
-					       .addVariableDecls(vb.build())
-					       .build());
+					.setKind(Expression.ExpressionKind.VARDECL)
+					.addVariableDecls(vb.build())
+					.build());
 		else
 			fields.peek().add(vb.build());
 
@@ -1792,7 +1791,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			p.accept(this, v);
 		mb.addAllArguments(fields.pop());
 
-                expectExpression.push(true);
+		expectExpression.push(true);
 		if (function.getBodyBlockExpression() != null) {
 			statements.push(new ArrayList<Statement>());
 			function.getBodyBlockExpression().accept(this, v);
