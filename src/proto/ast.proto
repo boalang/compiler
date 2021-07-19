@@ -108,12 +108,12 @@ enum TypeKind {
 	IMMUTABLE = 12;
 	/** A typedef/alias */
 	ALIAS = 13;
-        /** Declared singletons (Kotlin object declarations) */
-        SINGLETON = 14;
-        /** Types declared as explicitly dynamic (used in Kotlin -> JS) */
-        DYNAMIC = 15;
-        /** Delegated type kinds (Kotlin feature) */
-        DELEGATED = 16;
+	/** Types declared as a singletons */
+	SINGLETON = 14;
+	/** Types declared as explicitly dynamic */
+	DYNAMIC = 15;
+	/** A delegated type */
+	DELEGATED = 16;
 }
 
 /** A type in an AST */
@@ -133,7 +133,8 @@ message Type {
 	/** */
 	optional int32 key = 10;
 	optional Expression computed_name = 14;
-        optional Expression delegate = 15;
+	/** For delegated types, this is the expression to delegate to. */
+	optional Expression delegate = 15;
 }
 
 /** A method declaration */
@@ -150,11 +151,11 @@ message Method {
 	repeated Variable arguments = 5;
 	/** The list of exceptions thrown by this method */
 	repeated Type exception_types = 6;
-    /**
+	/**
 	  * The statements in the method body. Note that most methods (in C-like
 	  * languages, such as Java) contain a single statement of type BLOCK, which
 	  * contains the list of statements within it!
-      */
+	  */
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;

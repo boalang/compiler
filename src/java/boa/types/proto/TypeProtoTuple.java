@@ -62,6 +62,9 @@ public class TypeProtoTuple extends BoaProtoTuple {
 
 		names.put("computed_name", counter++);
 		members.add(new ExpressionProtoTuple());
+
+		names.put("delegate", counter++);
+		members.add(new ExpressionProtoTuple());
 	}
 
 	/**

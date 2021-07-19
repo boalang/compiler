@@ -133,7 +133,7 @@ public final class Ast {
      * <code>SINGLETON = 14;</code>
      *
      * <pre>
-     ** Declared singletons (Kotlin object declarations) 
+     ** Types declared as a singletons 
      * </pre>
      */
     SINGLETON(16, 14),
@@ -141,7 +141,7 @@ public final class Ast {
      * <code>DYNAMIC = 15;</code>
      *
      * <pre>
-     ** Types declared as explicitly dynamic (used in Kotlin -&gt; JS) 
+     ** Types declared as explicitly dynamic 
      * </pre>
      */
     DYNAMIC(17, 15),
@@ -149,7 +149,7 @@ public final class Ast {
      * <code>DELEGATED = 16;</code>
      *
      * <pre>
-     ** Delegated type kinds (Kotlin feature) 
+     ** A delegated type 
      * </pre>
      */
     DELEGATED(18, 16),
@@ -303,7 +303,7 @@ public final class Ast {
      * <code>SINGLETON = 14;</code>
      *
      * <pre>
-     ** Declared singletons (Kotlin object declarations) 
+     ** Types declared as a singletons 
      * </pre>
      */
     public static final int SINGLETON_VALUE = 14;
@@ -311,7 +311,7 @@ public final class Ast {
      * <code>DYNAMIC = 15;</code>
      *
      * <pre>
-     ** Types declared as explicitly dynamic (used in Kotlin -&gt; JS) 
+     ** Types declared as explicitly dynamic 
      * </pre>
      */
     public static final int DYNAMIC_VALUE = 15;
@@ -319,7 +319,7 @@ public final class Ast {
      * <code>DELEGATED = 16;</code>
      *
      * <pre>
-     ** Delegated type kinds (Kotlin feature) 
+     ** A delegated type 
      * </pre>
      */
     public static final int DELEGATED_VALUE = 16;
@@ -11879,14 +11879,26 @@ public final class Ast {
     // optional .boa.types.Expression delegate = 15;
     /**
      * <code>optional .boa.types.Expression delegate = 15;</code>
+     *
+     * <pre>
+     ** For delegated types, this is the expression to delegate to. 
+     * </pre>
      */
     boolean hasDelegate();
     /**
      * <code>optional .boa.types.Expression delegate = 15;</code>
+     *
+     * <pre>
+     ** For delegated types, this is the expression to delegate to. 
+     * </pre>
      */
     boa.types.Ast.Expression getDelegate();
     /**
      * <code>optional .boa.types.Expression delegate = 15;</code>
+     *
+     * <pre>
+     ** For delegated types, this is the expression to delegate to. 
+     * </pre>
      */
     boa.types.Ast.ExpressionOrBuilder getDelegateOrBuilder();
   }
@@ -12340,18 +12352,30 @@ public final class Ast {
     private boa.types.Ast.Expression delegate_;
     /**
      * <code>optional .boa.types.Expression delegate = 15;</code>
+     *
+     * <pre>
+     ** For delegated types, this is the expression to delegate to. 
+     * </pre>
      */
     public boolean hasDelegate() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
      * <code>optional .boa.types.Expression delegate = 15;</code>
+     *
+     * <pre>
+     ** For delegated types, this is the expression to delegate to. 
+     * </pre>
      */
     public boa.types.Ast.Expression getDelegate() {
       return delegate_;
     }
     /**
      * <code>optional .boa.types.Expression delegate = 15;</code>
+     *
+     * <pre>
+     ** For delegated types, this is the expression to delegate to. 
+     * </pre>
      */
     public boa.types.Ast.ExpressionOrBuilder getDelegateOrBuilder() {
       return delegate_;
@@ -13396,12 +13420,20 @@ public final class Ast {
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> delegateBuilder_;
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       public boolean hasDelegate() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       public boa.types.Ast.Expression getDelegate() {
         if (delegateBuilder_ == null) {
@@ -13412,6 +13444,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       public Builder setDelegate(boa.types.Ast.Expression value) {
         if (delegateBuilder_ == null) {
@@ -13428,6 +13464,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       public Builder setDelegate(
           boa.types.Ast.Expression.Builder builderForValue) {
@@ -13442,6 +13482,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       public Builder mergeDelegate(boa.types.Ast.Expression value) {
         if (delegateBuilder_ == null) {
@@ -13461,6 +13505,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       public Builder clearDelegate() {
         if (delegateBuilder_ == null) {
@@ -13474,6 +13522,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       public boa.types.Ast.Expression.Builder getDelegateBuilder() {
         bitField0_ |= 0x00000100;
@@ -13482,6 +13534,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       public boa.types.Ast.ExpressionOrBuilder getDelegateOrBuilder() {
         if (delegateBuilder_ != null) {
@@ -13492,6 +13548,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression delegate = 15;</code>
+       *
+       * <pre>
+       ** For delegated types, this is the expression to delegate to. 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
