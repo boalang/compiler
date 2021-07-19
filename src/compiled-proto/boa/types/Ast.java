@@ -113,6 +113,14 @@ public final class Ast {
      * </pre>
      */
     ARRAY(13, 11),
+    /**
+     * <code>IMMUTABLE = 12;</code>
+     *
+     * <pre>
+     ** Immutable data type 
+     * </pre>
+     */
+    IMMUTABLE(14, 12),
     ;
 
     /**
@@ -243,6 +251,14 @@ public final class Ast {
      * </pre>
      */
     public static final int ARRAY_VALUE = 11;
+    /**
+     * <code>IMMUTABLE = 12;</code>
+     *
+     * <pre>
+     ** Immutable data type 
+     * </pre>
+     */
+    public static final int IMMUTABLE_VALUE = 12;
 
 
     public final int getNumber() { return value; }
@@ -261,6 +277,7 @@ public final class Ast {
         case 9: return TRAIT;
         case 10: return PRIMITIVE;
         case 11: return ARRAY;
+        case 12: return IMMUTABLE;
         default: return null;
       }
     }
@@ -291,7 +308,7 @@ public final class Ast {
     }
 
     private static final TypeKind[] VALUES = {
-      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, TRAIT, PRIMITIVE, ARRAY, 
+      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, TRAIT, PRIMITIVE, ARRAY, IMMUTABLE, 
     };
 
     public static TypeKind valueOf(
@@ -42967,12 +42984,12 @@ public final class Ast {
       "\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016\n\nME" +
       "DIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPORT_RU",
       "LE\020\013\022\017\n\013XML_ELEMENT\020\014\"\'\n\tAttribute\022\013\n\003ke" +
-      "y\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\303\001\n\010TypeKind\022\t\n\005O" +
+      "y\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\322\001\n\010TypeKind\022\t\n\005O" +
       "THER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANON" +
       "YMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022" +
       "\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELE" +
       "GATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n\tPRIMIT" +
-      "IVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
+      "IVE\020\n\022\t\n\005ARRAY\020\013\022\r\n\tIMMUTABLE\020\014\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

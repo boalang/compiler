@@ -112,8 +112,9 @@ public class Java7BaseTest extends BaseTest {
 		String [] paths =  new String[1];
 		paths[0] = path;
 		parser.createASTs(paths, null, new String[0], r, null);
+		System.out.println("This is parser to string: " + parser.toString());
 		
-//		System.out.println("This is from parseJava: \n" + FileIO.normalizeEOL(sb.toString()));
+		System.out.println("This is from parseJava: \n" + FileIO.normalizeEOL(sb.toString()));
 		return FileIO.normalizeEOL(sb.toString());
 	}
 	

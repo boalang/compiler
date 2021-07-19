@@ -51,10 +51,12 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS3 = 3;
 	public static final int JLS4 = 4;
 	public static final int JLS8 = 8;
+	public static final int JLS9 = 9;
 	public static final int JLS10 = 10;
 	public static final int JLS14 = 14;
 	public static final int JLS15 = 15;
-
+	public static final int JLS16 = 16;
+	
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
 	protected String src = null;
@@ -93,6 +95,12 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	public Namespace getNamespaces(CompilationUnit node) {
+		System.out.println("++++++++++++++++++This is from JavaVisitor++++++++++++++++++++++++++++++");
+		for (Object t : node.types()) {
+			if (t instanceof RecordDeclaration) {
+				System.out.println("Record Pass");
+			}
+		}
 		root = node;
 		node.accept(this);
 		return b.build();
@@ -358,6 +366,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getIdentifier());
+		System.out.println("+++++++++++++++++++++++++ enum name is: " + node.getName().toString()+ "+++++++++++++++++++++++++");
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
@@ -487,7 +496,8 @@ public class JavaVisitor extends ASTVisitor {
 		if (index != null)
 			b.setDeclaringType(index);
 	}
-
+	
+	
 	protected void setTypeBinding(boa.types.Ast.Type.Builder b, org.eclipse.jdt.core.dom.Type type) {
 		ITypeBinding tb = type.resolveBinding();
 		if (tb != null) {
@@ -507,6 +517,8 @@ public class JavaVisitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
 			else if (tb.isArray())
 				b.setKind(boa.types.Ast.TypeKind.ARRAY);
+			else if (tb.isRecord())
+				b.setKind(boa.types.Ast.TypeKind.IMMUTABLE);
 			else
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
 			if (!tb.isPrimitive()) {
@@ -548,6 +560,8 @@ public class JavaVisitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
 			else if (tb.isArray())
 				b.setKind(boa.types.Ast.TypeKind.ARRAY);
+			else if (tb.isRecord())
+				b.setKind(boa.types.Ast.TypeKind.IMMUTABLE);
 			else
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
 			if (!tb.isPrimitive()) {
@@ -597,6 +611,8 @@ public class JavaVisitor extends ASTVisitor {
 			tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
 		else if (itb.isArray())
 			tb.setKind(boa.types.Ast.TypeKind.ARRAY);
+		else if (itb.isRecord())
+			tb.setKind(boa.types.Ast.TypeKind.IMMUTABLE);
 		else
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
 		if (!itb.isPrimitive()) {
@@ -2161,6 +2177,46 @@ public class JavaVisitor extends ASTVisitor {
 		return false;
 	}
 	
+	//begin Java 9 ()
+	@Override
+	public boolean visit(ModuleDeclaration node) {
+		setAstLevel(JLS9);
+		
+		b.setName(node.getName().getFullyQualifiedName());
+		
+		if(!node.annotations().isEmpty()) {
+//			not sure what's the name should be 
+//			b.setName(node.getName().getFullyQualifiedName());
+			b.addAllModifiers(visitAnnotationsList(node.annotations()));
+		}
+		
+		if(node.isOpen()) {
+			boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+			mb.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+			mb.setAnnotationName("open");
+			b.addModifiers(mb);
+		}
+		
+		//How should we deal with IModuleBinding
+		if(node.resolveBinding() != null) {
+//			IModuleBinding mb = node.resolveBinding();
+			
+		}
+		
+		boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
+		sb.setKind(boa.types.Ast.Statement.StatementKind.OTHER);
+		for (Object s : node.moduleStatements()) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
+			for (boa.types.Ast.Statement st : statements.pop())
+				sb.addStatements(st);
+		}
+		
+		b.addStatements(sb.build());
+			
+		return false;
+	}
+	
 	// begin java 15 (expression)
 	@Override
 	public boolean visit(TextBlock node) {
@@ -2171,6 +2227,94 @@ public class JavaVisitor extends ASTVisitor {
 		eb.setLiteral(node.getEscapedValue());
 		expressions.push(eb.build());
 		
+		return false;
+	}
+	
+	//begin Java 16 (Declaration)
+	@Override
+	public boolean visit(RecordDeclaration node) {
+		setAstLevel(JLS16);
+		
+		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
+		b.setName(node.getName().getIdentifier());
+		System.out.println("+++++++++++++++++++++++++ record name is: " + node.getName().toString()+ "+++++++++++++++++++++++++");
+		b.setKind(boa.types.Ast.TypeKind.IMMUTABLE);
+		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		setDeclaringClass(b, node.resolveBinding());
+		
+		//Should we set kind to OTHER or Record? Use OTHER for now 
+		
+		b.addAllModifiers(buildModifiers(node.modifiers()));
+		
+		if (!node.typeParameters().isEmpty()) {
+			for (Object t : node.typeParameters()) {
+				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+				String name = ((TypeParameter)t).getName().getFullyQualifiedName();
+				String bounds = "";
+				for (Object o : ((TypeParameter)t).typeBounds()) {
+					if (bounds.length() > 0)
+						bounds += " & ";
+					bounds += typeName((org.eclipse.jdt.core.dom.Type)o);
+				}
+				if (bounds.length() > 0)
+					name = name + " extends " + bounds;
+				tb.setName(name);
+				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+				setTypeBinding(tb, ((TypeParameter) t).getName());
+				b.addGenericParameters(tb.build());
+			}
+		}
+		
+		//element type: SingleVariableDeclaration
+		//how to set variable declaration
+		//Boa book: fields are array 
+		for(Object o: node.recordComponents()) {
+			fields.push(new ArrayList<boa.types.Ast.Variable>());
+			((SingleVariableDeclaration) o).accept(this);
+			for (boa.types.Ast.Variable v : fields.pop())
+				b.addFields(v);
+		}
+	
+		for (Object t : node.superInterfaceTypes()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
+			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			b.addParents(tb.build());
+		}
+		
+		for (Object d : node.bodyDeclarations()) {
+			if (d instanceof FieldDeclaration) {
+				fields.push(new ArrayList<boa.types.Ast.Variable>());
+				((FieldDeclaration) d).accept(this);
+				for (boa.types.Ast.Variable v : fields.pop())
+					b.addFields(v);
+			} else if (d instanceof MethodDeclaration) {
+				methods.push(new ArrayList<boa.types.Ast.Method>());
+				((MethodDeclaration) d).accept(this);
+				for (boa.types.Ast.Method m : methods.pop()){
+					if (b.getKind().equals(boa.types.Ast.TypeKind.INTERFACE)) {
+						for (Modifier mod: m.getModifiersList()) {
+							if (mod.getKind().equals(boa.types.Ast.Modifier.ModifierKind.STATIC))
+								setAstLevel(JLS8);
+						}
+					}
+
+					b.addMethods(m);
+				}
+			} else if (d instanceof Initializer) {
+				methods.push(new ArrayList<boa.types.Ast.Method>());
+				((Initializer) d).accept(this);
+				for (boa.types.Ast.Method m : methods.pop())
+					b.addMethods(m);
+			} else {
+				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
+				((BodyDeclaration) d).accept(this);
+				for (boa.types.Ast.Declaration nd : declarations.pop())
+					b.addNestedDeclarations(nd);
+			}
+		}
+		declarations.peek().add(b.build());
 		return false;
 	}
 

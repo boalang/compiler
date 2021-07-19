@@ -104,6 +104,8 @@ enum TypeKind {
 	PRIMITIVE = 10;
 	/** Array type */
 	ARRAY = 11;
+	/** Immutable data type */
+	IMMUTABLE = 12;
 }
 
 /** A type in an AST */
