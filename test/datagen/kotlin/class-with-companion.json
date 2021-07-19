@@ -9,12 +9,8 @@
                "nested_declarations": [
                   {
                      "name": "Companion",
-                     "kind": "CLASS",
+                     "kind": "SINGLETON",
                      "modifiers": [
-                        {
-                           "kind": "OTHER",
-                           "other": "SINGLETON"
-                        },
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"

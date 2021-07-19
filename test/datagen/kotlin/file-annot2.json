@@ -1,0 +1,80 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "modifiers": [
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_members": [
+                  "f",
+                  "g"
+               ],
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  },
+                  {
+                     "kind": "LITERAL",
+                     "literal": "3"
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_members": [
+                  "",
+                  ""
+               ],
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  },
+                  {
+                     "kind": "LITERAL",
+                     "literal": "3"
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_members": [
+                  ""
+               ],
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "other": "file"
+            }
+         ],
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS"
+            }
+         ],
+         "imports": [
+            "java.util.List"
+         ]
+      }
+   ]
+}
