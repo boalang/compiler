@@ -414,8 +414,22 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDelegatedSuperTypeEntry(final KtDelegatedSuperTypeEntry n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		final Type.Builder tb = Type.newBuilder();
+
+		tb.setKind(TypeKind.DELEGATED);
+
+		tb.setName(n.getTypeReference().getText());
+
+		if (n.getDelegateExpression() != null) {
+			final List<Expression> exprs = new ArrayList<Expression>();
+			expressions.push(exprs);
+			n.getDelegateExpression().accept(this, v);
+			tb.setDelegate(exprs.get(0));
+			expressions.pop();
+		}
+
+		types.peek().add(tb.build());
+
 		return null;
 	}
 
