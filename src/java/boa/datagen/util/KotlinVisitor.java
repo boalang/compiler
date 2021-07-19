@@ -926,8 +926,24 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitObjectLiteralExpression(final KtObjectLiteralExpression expr, final Void v) {
-		// TODO
-		expr.acceptChildren(this, v);
+		final Expression.Builder eb = Expression.newBuilder();
+
+		eb.setKind(Expression.ExpressionKind.NEW);
+
+		final List<Declaration> decls = new ArrayList<Declaration>();
+		declarations.push(decls);
+
+		expr.getObjectDeclaration().accept(this, v);
+
+		Declaration objLiteral = decls.get(0);
+		declarations.pop();
+
+		eb.setAnonDeclaration(objLiteral);
+
+		eb.setNewType(objLiteral.getParents(0));
+
+		expressions.peek().add(eb.build());
+
 		return null;
 	}
 
