@@ -459,7 +459,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		}
 
-		// TODO Implicit Call to type's constructor?
 		return null;
 	}
 
