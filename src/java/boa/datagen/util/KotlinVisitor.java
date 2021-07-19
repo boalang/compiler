@@ -108,6 +108,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "value":
 		case "inner":
 		case "sealed":
+		case "override":
 			mb.setKind(Modifier.ModifierKind.OTHER);
 			mb.setOther(m.getValue());
 			break;

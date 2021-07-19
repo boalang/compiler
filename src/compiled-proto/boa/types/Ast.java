@@ -141,7 +141,7 @@ public final class Ast {
      * <code>DYNAMIC = 15;</code>
      *
      * <pre>
-     ** Types declared as explicitly dynamic 
+     ** Types declared as explicitly dynamic (used in Kotlin -&gt; JS) 
      * </pre>
      */
     DYNAMIC(17, 15),
@@ -303,7 +303,7 @@ public final class Ast {
      * <code>DYNAMIC = 15;</code>
      *
      * <pre>
-     ** Types declared as explicitly dynamic 
+     ** Types declared as explicitly dynamic (used in Kotlin -&gt; JS) 
      * </pre>
      */
     public static final int DYNAMIC_VALUE = 15;
