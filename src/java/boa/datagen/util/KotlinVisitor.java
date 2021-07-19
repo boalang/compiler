@@ -53,6 +53,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	protected Stack<Boolean> expectExpression = new Stack<Boolean>();
 
+	protected List<Expression> superClassInitExprs = new ArrayList<Expression>();
+
 	public static final int KLS10 = 10;
 	public static final int KLS11 = 11;
 	public static final int KLS12 = 12;
@@ -435,8 +437,28 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSuperTypeCallEntry(final KtSuperTypeCallEntry n, final Void v) {
-		if (n.getTypeReference() != null)
+		if (n.getTypeReference() != null) {
 			types.peek().add(typeFromTypeRef(n.getTypeReference(), TypeKind.CLASS));
+
+			final Expression.Builder eb = Expression.newBuilder();
+
+			eb.setKind(Expression.ExpressionKind.METHODCALL);
+			eb.setMethod(n.getTypeReference().getText());
+
+			final List<Expression> args = new ArrayList<Expression>();
+
+			expressions.push(args);
+			if (n.getValueArgumentList() != null) {
+				n.getValueArgumentList().accept(this, v);
+			}
+			expressions.pop();
+
+			eb.addAllMethodArgs(args);
+
+			superClassInitExprs.add(eb.build());
+
+		}
+
 		// TODO Implicit Call to type's constructor?
 		return null;
 	}
@@ -1740,21 +1762,34 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		for (final KtTypeParameter type_param: klass.getTypeParameters())
 			db.addGenericParameters(typeFromTypeParameter(type_param));
 
+                if (klass.getSuperTypeList() != null) {
+			types.push(new ArrayList<Type>());
+			klass.getSuperTypeList().accept(this, v);
+			db.addAllParents(types.pop());
+		}
+
 		modifiers.push(new ArrayList<Modifier>());
 		fields.push(new ArrayList<Variable>());
 		declarations.push(new ArrayList<Declaration>());
 		methods.push(new ArrayList<Method>());
-		types.push(new ArrayList<Type>());
 
-		klass.acceptChildren(this, v);
+		if (klass.getPrimaryConstructor() != null)
+			klass.getPrimaryConstructor().accept(this, v);
 
-		db.addAllParents(types.pop());
+		if (klass.getModifierList() != null)
+			klass.getModifierList().accept(this, v);
+
+		if (klass.getBody() != null)
+			klass.getBody().accept(this, v);
+
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllModifiers(modifiers.pop());
 		db.addAllMethods(methods.pop());
 		db.addAllFields(fields.pop());
 
 		declarations.peek().add(db.build());
+
+		superClassInitExprs.clear();
 		return null;
 	}
 
@@ -1772,9 +1807,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		fields.push(new ArrayList<Variable>());
 		statements.push(new ArrayList<Statement>());
 
+		if (isPrimary)
+			for (final Expression expr: superClassInitExprs)
+				mb.addStatements(Statement.newBuilder()
+						 .setKind(Statement.StatementKind.EXPRESSION)
+						 .addExpressions(expr)
+						 .build());
+
 		constructor.acceptChildren(this, null);
 
 		mb.addAllStatements(statements.pop());
+
 		final List<Variable> methodFields = fields.pop();
 		mb.addAllArguments(methodFields);
 		mb.addAllModifiers(modifiers.pop());
