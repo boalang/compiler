@@ -290,7 +290,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		fields.push(new ArrayList<Variable>());
 		expressions.push(new ArrayList<Expression>());
 
-		System.out.println(d.getEntries().size());
 		for (final KtDestructuringDeclarationEntry entry : d.getEntries())
 			entry.accept(this, v);
 		if (d.hasInitializer())
@@ -852,7 +851,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitDoubleColonExpression(final KtDoubleColonExpression expr, final Void v) {
 		final Expression.Builder eb = Expression.newBuilder();
 
-		System.err.println("DOUBLE COLON: " + expr.getText());
 		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
 
 		if (expr.getReceiverExpression() != null) {
@@ -868,7 +866,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitCallableReferenceExpression(final KtCallableReferenceExpression expr, final Void v) {
-		System.err.println("CALLABLE REF EXP: " + expr.getText());
 		final Expression.Builder eb = Expression.newBuilder();
 
 		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
