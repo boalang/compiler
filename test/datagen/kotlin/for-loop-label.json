@@ -11,7 +11,12 @@
                      "variable_type": {
                         "name": "List<String>",
                         "kind": "OTHER"
-                     }
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
                   }
                ],
                "statements": [
@@ -57,14 +62,19 @@
                                        "variable_type": {
                                           "name": "String",
                                           "kind": "OTHER"
-                                       }
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
                                     }
                                  ]
                               }
                            ],
                            "expressions": [
                               {
-                                 "kind": "LITERAL",
+                                 "kind": "LABEL",
                                  "literal": "loop"
                               }
                            ]

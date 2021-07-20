@@ -15,7 +15,12 @@
                            "variable_type": {
                               "name": "List<String>",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [
@@ -58,7 +63,12 @@
                                        "variable_type": {
                                           "name": "String",
                                           "kind": "OTHER"
-                                       }
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
                                     }
                                  ]
                               }
@@ -74,7 +84,12 @@
                            "variable_type": {
                               "name": "List<String>",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [
@@ -118,14 +133,24 @@
                                              "variable_type": {
                                                 "name": "int",
                                                 "kind": "OTHER"
-                                             }
+                                             },
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
                                           },
                                           {
                                              "name": "value",
                                              "variable_type": {
                                                 "name": "String",
                                                 "kind": "OTHER"
-                                             }
+                                             },
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
                                           }
                                        ]
                                     }
@@ -143,7 +168,12 @@
                            "variable_type": {
                               "name": "List<String>",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [
@@ -181,7 +211,12 @@
                                        "variable_type": {
                                           "name": "String",
                                           "kind": "OTHER"
-                                       }
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
                                     }
                                  ]
                               }
@@ -195,4 +230,3 @@
       }
    ]
 }
-
