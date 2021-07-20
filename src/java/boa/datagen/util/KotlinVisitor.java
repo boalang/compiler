@@ -1866,6 +1866,24 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 						 .setKind(Statement.StatementKind.EXPRESSION)
 						 .addExpressions(expr)
 						 .build());
+		else {
+			if (!((KtSecondaryConstructor) constructor).hasImplicitDelegationCall()) {
+				expressions.push(new ArrayList<Expression>());
+			((KtSecondaryConstructor) constructor).getDelegationCall().accept(this, null);
+			statements.peek().add(Statement.newBuilder()
+					      .setKind(Statement.StatementKind.EXPRESSION)
+					      .addExpressions(Expression.newBuilder()
+							      .setKind(Expression.ExpressionKind.NEW)
+							      .setNewType(Type.newBuilder()
+									  .setKind(TypeKind.DELEGATED)
+									  .setName(constructor.getContainingClassOrObject().getName())
+									  .build())
+							      .addAllExpressions(expressions.pop())
+							      .build())
+					      .build());
+			}
+
+		}
 
 		if (constructor.getBodyExpression() != null)
 			constructor.getBodyExpression().accept(this, null);

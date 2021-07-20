@@ -5,3 +5,9 @@ class Person(val firstName: String) {
           println("hi")
       }
 }
+
+class Dog {
+      constructor(name: String, owner: Person) {
+          println("woof")
+      }
+}
