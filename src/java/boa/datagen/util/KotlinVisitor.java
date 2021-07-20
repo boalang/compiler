@@ -174,6 +174,28 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
+	public Void visitScript(final KtScript s, final Void v) {
+		modifiers.push(new ArrayList<Modifier>());
+		declarations.push(new ArrayList<Declaration>());
+		fields.push(new ArrayList<Variable>());
+		methods.push(new ArrayList<Method>());
+		statements.push(new ArrayList<Statement>());
+		expectExpression.push(false);
+
+		b.setName("");
+		s.acceptChildren(this);
+
+		expectExpression.pop();
+		b.addAllStatements(statements.pop());
+		b.addAllMethods(methods.pop());
+		b.addAllVariables(fields.pop());
+		b.addAllDeclarations(declarations.pop());
+		b.addAllModifiers(modifiers.pop());
+
+		return null;
+	}
+
+	@Override
 	public Void visitPackageDirective(final KtPackageDirective pkg, final Void v) {
 		b.setName(pkg.getQualifiedName());
 		return null;
@@ -351,14 +373,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		ta.getTypeConstraints();
 
 		statements.peek().add(sb.build());
-		return null;
-	}
-
-	@Override
-	public Void visitScript(final KtScript n, final Void v) {
-		// TODO
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
 		return null;
 	}
 
