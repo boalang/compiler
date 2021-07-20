@@ -11,7 +11,12 @@
                      "variable_type": {
                         "name": "Array<String>",
                         "kind": "OTHER"
-                     }
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
                   }
                ],
                "statements": [
@@ -86,7 +91,7 @@
                                              "kind": "CONTINUE",
                                              "expressions": [
                                                 {
-                                                   "kind": "LITERAL",
+                                                   "kind": "LABEL",
                                                    "literal": "first"
                                                 }
                                              ]
