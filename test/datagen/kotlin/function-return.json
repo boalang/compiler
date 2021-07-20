@@ -11,7 +11,12 @@
                      "variable_type": {
                         "name": "Int",
                         "kind": "OTHER"
-                     }
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
                   }
                ],
                "statements": [
@@ -101,4 +106,3 @@
       }
    ]
 }
-
