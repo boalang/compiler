@@ -1,9 +1,9 @@
 package boa.kotlin.test
 
-enum class Test {
+private enum class Test {
      ONE,
      TWO,
-     THREE
+     private THREE
 }
 
 enum class Color(val rgb: Int) {
