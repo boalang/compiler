@@ -1872,18 +1872,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		else {
 			if (!((KtSecondaryConstructor) constructor).hasImplicitDelegationCall()) {
 				expressions.push(new ArrayList<Expression>());
-			((KtSecondaryConstructor) constructor).getDelegationCall().accept(this, null);
-			statements.peek().add(Statement.newBuilder()
-					      .setKind(Statement.StatementKind.EXPRESSION)
-					      .addExpressions(Expression.newBuilder()
-							      .setKind(Expression.ExpressionKind.NEW)
-							      .setNewType(Type.newBuilder()
-									  .setKind(TypeKind.DELEGATED)
-									  .setName(constructor.getContainingClassOrObject().getName())
-									  .build())
-							      .addAllExpressions(expressions.pop())
-							      .build())
-					      .build());
+                                System.out.println(((KtSecondaryConstructor) constructor).getDelegationCall().getCalleeExpression());
+				((KtSecondaryConstructor) constructor).getDelegationCall().accept(this, null);
+				statements.peek().add(Statement.newBuilder()
+						      .setKind(Statement.StatementKind.EXPRESSION)
+						      .addExpressions(Expression.newBuilder()
+								      .setKind(Expression.ExpressionKind.METHODCALL)
+								      .setMethod(((KtSecondaryConstructor) constructor)
+										 .getDelegationCall()
+										 .getCalleeExpression()
+										 .isThis() ? "this" : "super") // TEMP
+								      .addAllExpressions(expressions.pop())
+								      .build())
+						      .build());
 			}
 
 		}
