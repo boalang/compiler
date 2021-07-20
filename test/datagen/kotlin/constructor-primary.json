@@ -21,6 +21,30 @@
                            "variable_type": {
                               "name": "String",
                               "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "lastName",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "phone",
+                           "variable_type": {
+                              "name": "String?",
+                              "kind": "OTHER"
                            }
                         }
                      ]
@@ -28,9 +52,21 @@
                ],
                "fields": [
                   {
-                     "name": "firstName",
+                     "name": "lastName",
                      "variable_type": {
                         "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "phone",
+                     "variable_type": {
+                        "name": "String?",
                         "kind": "OTHER"
                      }
                   }
@@ -40,4 +76,3 @@
       }
    ]
 }
-

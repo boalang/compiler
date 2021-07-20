@@ -1854,7 +1854,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 						.setKind(Modifier.ModifierKind.OTHER)
 						.setOther("primary")
 						.build());
-		fields.push(new ArrayList<Variable>());
+		if (constructor.getModifierList() != null)
+			constructor.getModifierList().accept(this, null);
+		mb.addAllModifiers(modifiers.pop());
+
 		statements.push(new ArrayList<Statement>());
 
 		if (isPrimary)
@@ -1864,17 +1867,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 						 .addExpressions(expr)
 						 .build());
 
-		constructor.acceptChildren(this, null);
+		if (constructor.getBodyExpression() != null)
+			constructor.getBodyExpression().accept(this, null);
 
 		mb.addAllStatements(statements.pop());
 
-		final List<Variable> methodFields = fields.pop();
-		mb.addAllArguments(methodFields);
-		mb.addAllModifiers(modifiers.pop());
+		fields.push(new ArrayList<Variable>());
+		if (constructor.getValueParameterList() != null)
+			constructor.getValueParameterList().accept(this, null);
+		mb.addAllArguments(fields.pop());
 
-		if (isPrimary)
-			for (final Variable var : methodFields)
-				fields.peek().add(var);
+		if (isPrimary && constructor.getValueParameterList() != null) {
+			for (final KtParameter p : constructor.getValueParameterList().getParameters())
+				if (p.hasValOrVar())
+					p.accept(this, null);
+		}
 
 		methods.peek().add(mb.build());
 	}
@@ -1944,7 +1951,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (param.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(param.getTypeReference()));
 
-		if (!param.isVarArg())
+		if (!param.hasValOrVar() || !param.isMutable())
 			vb.addModifiers(Modifier.newBuilder()
 					.setKind(Modifier.ModifierKind.FINAL)
 					.build());
