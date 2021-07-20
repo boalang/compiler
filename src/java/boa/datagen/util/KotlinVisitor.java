@@ -496,7 +496,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		sb.setKind(Statement.StatementKind.LABEL);
 
 		sb.addExpressions(Expression.newBuilder()
-				.setKind(Expression.ExpressionKind.LITERAL)
+				.setKind(Expression.ExpressionKind.LABEL)
 				.setLiteral(expr.getNameIdentifier().getText())
 				.build());
 
@@ -571,16 +571,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expr.acceptChildren(this, v);
 		sb.addAllExpressions(expressions.pop());
 
+		final String label = expr.getLabelName();
+		if (label != null)
+			sb.addExpressions(Expression.newBuilder()
+					.setLiteral(label)
+					.setKind(Expression.ExpressionKind.LABEL)
+					.build());
+
 		statements.peek().add(sb.build());
 
-		return null;
-	}
-
-	@Override
-	public Void visitExpressionWithLabel(final KtExpressionWithLabel n, final Void v) {
-		// TODO
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -1465,7 +1464,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (label != null)
 			b.addExpressions(Expression.newBuilder()
 					.setLiteral(label)
-					.setKind(Expression.ExpressionKind.LITERAL)
+					.setKind(Expression.ExpressionKind.LABEL)
 					.build());
 
 		statements.peek().add(b.build());
@@ -1482,7 +1481,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (label != null)
 			b.addExpressions(Expression.newBuilder()
 					.setLiteral(label)
-					.setKind(Expression.ExpressionKind.LITERAL)
+					.setKind(Expression.ExpressionKind.LABEL)
 					.build());
 
 		statements.peek().add(b.build());
