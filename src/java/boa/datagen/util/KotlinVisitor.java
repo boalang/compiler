@@ -402,9 +402,54 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitEnumEntry(final KtEnumEntry n, final Void v) {
-		// TODO
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
+		final Variable.Builder vb = Variable.newBuilder();
+		vb.setName(n.getNameAsSafeName().asString());
+
+		if (n.getModifierList() != null) {
+			modifiers.push(new ArrayList<Modifier>());
+			n.getModifierList().accept(this, v);
+			vb.addAllModifiers(modifiers.pop());
+		}
+
+		if (n.hasInitializer()) {
+			final KtInitializerList initList = n.getInitializerList();
+			if (initList != null) {
+				for (KtSuperTypeListEntry st : initList.getInitializers()) {
+					final List<Type> typesList = new ArrayList<Type>();
+					types.push(typesList);
+                                        st.accept(this, v);
+					types.pop();
+                                        vb.addExpressions(Expression.newBuilder()
+							  .setKind(Expression.ExpressionKind.NEW)
+							  .setNewType(typesList.get(0))
+							  .addAllExpressions(superClassInitExprs));
+					superClassInitExprs.clear();
+				}
+			}
+		} else if (n.getBody() != null) {
+			final Declaration.Builder db = Declaration.newBuilder();
+			db.setName("");
+			db.setKind(TypeKind.OTHER);
+
+			modifiers.push(new ArrayList<Modifier>());
+			fields.push(new ArrayList<Variable>());
+			declarations.push(new ArrayList<Declaration>());
+			methods.push(new ArrayList<Method>());
+
+
+			n.getBody().accept(this, v);
+
+			db.addAllNestedDeclarations(declarations.pop());
+			db.addAllModifiers(modifiers.pop());
+			db.addAllMethods(methods.pop());
+			db.addAllFields(fields.pop());
+			vb.setInitializer(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.NEW)
+					.setAnonDeclaration(db.build())
+					.build());
+		}
+
+		fields.peek().add(vb.build());
 		return null;
 	}
 
