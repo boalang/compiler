@@ -1966,7 +1966,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	private Type typeFromTypeParameter(final KtTypeParameter type) {
 		final Type.Builder tb = Type.newBuilder();
 		tb.setName(type.getText());
-		tb.setFullyQualifiedName(type.getText());
 		tb.setKind(TypeKind.OTHER);
 		return tb.build();
 	}
