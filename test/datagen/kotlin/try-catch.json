@@ -49,7 +49,12 @@
                                              "variable_type": {
                                                 "name": "Exception",
                                                 "kind": "OTHER"
-                                             }
+                                             },
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
                                           }
                                        ]
                                     },
@@ -79,4 +84,3 @@
       }
    ]
 }
-
