@@ -425,11 +425,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		tb.setName(n.getTypeReference().getText());
 
 		if (n.getDelegateExpression() != null) {
-			final List<Expression> exprs = new ArrayList<Expression>();
-			expressions.push(exprs);
+			expressions.push(new ArrayList<Expression>());
 			n.getDelegateExpression().accept(this, v);
-			tb.setDelegate(exprs.get(0));
-			expressions.pop();
+			tb.setDelegate(expressions.pop().get(0));
 		}
 
 		types.peek().add(tb.build());
@@ -439,28 +437,22 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSuperTypeCallEntry(final KtSuperTypeCallEntry n, final Void v) {
-		if (n.getTypeReference() != null) {
-			types.peek().add(typeFromTypeRef(n.getTypeReference(), TypeKind.CLASS));
+		if (n.getTypeReference() == null)
+			return null;
 
-			final Expression.Builder eb = Expression.newBuilder();
+		types.peek().add(typeFromTypeRef(n.getTypeReference(), TypeKind.CLASS));
 
-			eb.setKind(Expression.ExpressionKind.METHODCALL);
-			eb.setMethod(n.getTypeReference().getText());
+		final Expression.Builder eb = Expression.newBuilder();
 
-			final List<Expression> args = new ArrayList<Expression>();
+		eb.setKind(Expression.ExpressionKind.METHODCALL);
+		eb.setMethod(n.getTypeReference().getText());
 
-			expressions.push(args);
-			if (n.getValueArgumentList() != null) {
-				n.getValueArgumentList().accept(this, v);
-			}
-			expressions.pop();
+		expressions.push(new ArrayList<Expression>());
+		if (n.getValueArgumentList() != null)
+			n.getValueArgumentList().accept(this, v);
+		eb.addAllMethodArgs(expressions.pop());
 
-			eb.addAllMethodArgs(args);
-
-			superClassInitExprs.add(eb.build());
-
-		}
-
+		superClassInitExprs.add(eb.build());
 		return null;
 	}
 
@@ -1242,14 +1234,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitNamedDeclaration(final KtNamedDeclaration d, final Void v) {
-		// TODO
-		System.err.println(d.getClass());
-		// d.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitNullableType(final KtNullableType n, final Void v) {
 		// TODO
 		System.err.println(n.getClass());
@@ -1783,28 +1767,28 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		for (final KtTypeParameter type_param: klass.getTypeParameters())
 			db.addGenericParameters(typeFromTypeParameter(type_param));
 
-                if (klass.getSuperTypeList() != null) {
+		if (klass.getSuperTypeList() != null) {
 			types.push(new ArrayList<Type>());
 			klass.getSuperTypeList().accept(this, v);
 			db.addAllParents(types.pop());
 		}
 
 		modifiers.push(new ArrayList<Modifier>());
+		if (klass.getModifierList() != null)
+			klass.getModifierList().accept(this, v);
+		db.addAllModifiers(modifiers.pop());
+
 		fields.push(new ArrayList<Variable>());
-		declarations.push(new ArrayList<Declaration>());
 		methods.push(new ArrayList<Method>());
+		declarations.push(new ArrayList<Declaration>());
 
 		if (klass.getPrimaryConstructor() != null)
 			klass.getPrimaryConstructor().accept(this, v);
-
-		if (klass.getModifierList() != null)
-			klass.getModifierList().accept(this, v);
 
 		if (klass.getBody() != null)
 			klass.getBody().accept(this, v);
 
 		db.addAllNestedDeclarations(declarations.pop());
-		db.addAllModifiers(modifiers.pop());
 		db.addAllMethods(methods.pop());
 		db.addAllFields(fields.pop());
 
