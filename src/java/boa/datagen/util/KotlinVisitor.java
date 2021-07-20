@@ -1872,7 +1872,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		else {
 			if (!((KtSecondaryConstructor) constructor).hasImplicitDelegationCall()) {
 				expressions.push(new ArrayList<Expression>());
-                                System.out.println(((KtSecondaryConstructor) constructor).getDelegationCall().getCalleeExpression());
 				((KtSecondaryConstructor) constructor).getDelegationCall().accept(this, null);
 				statements.peek().add(Statement.newBuilder()
 						      .setKind(Statement.StatementKind.EXPRESSION)
