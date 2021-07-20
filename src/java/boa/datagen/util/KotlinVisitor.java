@@ -225,14 +225,16 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitAnnotation(final KtAnnotation annotation, final Void v) {
 		// TODO
-		annotation.acceptChildren(this, v);
+		System.err.println(annotation.getClass());
+		// annotation.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitDeclaration(final KtDeclaration d, final Void v) {
 		// TODO
-		d.acceptChildren(this, v);
+		System.err.println(d.getClass());
+		// d.acceptChildren(this, v);
 		return null;
 	}
 
@@ -278,7 +280,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitClassOrObject(final KtClassOrObject n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -354,63 +357,48 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitScript(final KtScript n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitClassBody(final KtClassBody n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitConstructorCalleeExpression(final KtConstructorCalleeExpression expr, final Void v) {
 		// TODO
-		expr.acceptChildren(this, v);
+		System.err.println(expr.getClass());
+		// expr.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitTypeParameterList(final KtTypeParameterList n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitTypeParameter(final KtTypeParameter n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitEnumEntry(final KtEnumEntry n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitParameterList(final KtParameterList n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitSuperTypeList(final KtSuperTypeList n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitSuperTypeListEntry(final KtSuperTypeListEntry n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -470,30 +458,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitConstructorDelegationCall(final KtConstructorDelegationCall n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitPropertyDelegate(final KtPropertyDelegate n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitTypeReference(final KtTypeReference n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitArgument(final KtValueArgument n, final Void v) {
-		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -508,7 +484,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitReferenceExpression(final KtReferenceExpression expr, final Void v) {
 		// TODO
-		expr.acceptChildren(this, v);
+		System.err.println(expr.getClass());
+		// expr.acceptChildren(this, v);
 		return null;
 	}
 
@@ -602,7 +579,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitExpressionWithLabel(final KtExpressionWithLabel n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -856,7 +834,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitAnnotatedExpression(final KtAnnotatedExpression expr, final Void v) {
 		// TODO
-		expr.acceptChildren(this, v);
+		System.err.println(expr.getClass());
+		// expr.acceptChildren(this, v);
 		return null;
 	}
 
@@ -877,7 +856,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitQualifiedExpression(final KtQualifiedExpression expr, final Void v) {
 		// TODO
-		expr.acceptChildren(this, v);
+		System.err.println(expr.getClass());
+		// expr.acceptChildren(this, v);
 		return null;
 	}
 
@@ -955,7 +935,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitSafeQualifiedExpression(final KtSafeQualifiedExpression expr, final Void v) {
 		// TODO
-		expr.acceptChildren(this, v);
+		System.err.println(expr.getClass());
+		// expr.acceptChildren(this, v);
 		return null;
 	}
 
@@ -1111,7 +1092,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitTypeArgumentList(final KtTypeArgumentList n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -1136,21 +1118,24 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitInitializerList(final KtInitializerList n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitAnonymousInitializer(final KtAnonymousInitializer n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitScriptInitializer(final KtScriptInitializer n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -1191,69 +1176,79 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitTypeConstraintList(final KtTypeConstraintList n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitTypeConstraint(final KtTypeConstraint n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitUserType(final KtUserType n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitDynamicType(final KtDynamicType n, final Void v) {
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitFunctionType(final KtFunctionType n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitSelfType(final KtSelfType n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitBinaryWithTypeRHSExpression(final KtBinaryExpressionWithTypeRHS n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitNamedDeclaration(final KtNamedDeclaration d, final Void v) {
 		// TODO
-		d.acceptChildren(this, v);
+		System.err.println(d.getClass());
+		// d.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitNullableType(final KtNullableType n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
 	@Override
 	public Void visitTypeProjection(final KtTypeProjection n, final Void v) {
 		// TODO
-		n.acceptChildren(this, v);
+		System.err.println(n.getClass());
+		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -1917,29 +1912,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitCallExpression(final KtCallExpression args, final Void v) {
-		// FIXME this visit can maybe go away?
+	public Void visitCallExpression(final KtCallExpression call, final Void v) {
 		final Expression.Builder eb = Expression.newBuilder();
 
 		eb.setKind(Expression.ExpressionKind.METHODCALL);
 
-		eb.setMethod(args.getCalleeExpression().getText());
+		eb.setMethod(call.getCalleeExpression().getText());
 
-		if (args.getValueArgumentList() != null) {
+		if (call.getValueArgumentList() != null) {
 			expressions.push(new ArrayList<Expression>());
-			for (final KtValueArgument arg : args.getValueArgumentList().getArguments())
+			for (final KtValueArgument arg : call.getValueArgumentList().getArguments())
 				arg.getArgumentExpression().accept(this, v);
 			eb.addAllMethodArgs(expressions.pop());
 		}
 
 		expressions.peek().add(eb.build());
-		return null;
-	}
-
-	@Override
-	public Void visitValueArgumentList(final KtValueArgumentList args, final Void v) {
-		// TODO
-		args.acceptChildren(this, v);
 		return null;
 	}
 
