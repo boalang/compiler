@@ -15,7 +15,12 @@
                            "variable_type": {
                               "name": "Array<String>",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [
@@ -53,7 +58,12 @@
                            "variable_type": {
                               "name": "Array<String>",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [
