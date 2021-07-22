@@ -10,12 +10,10 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "LITERAL",
-                     "literal": "\"foo\""
-                  }
-               ]
+               "initializer": {
+                  "kind": "LITERAL",
+                  "literal": "\"foo\""
+               }
             },
             {
                "name": "x",
@@ -24,34 +22,32 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "CONDITIONAL",
-                     "expressions": [
-                        {
-                           "kind": "TYPECOMPARE",
-                           "expressions": [
-                              {
-                                 "kind": "VARACCESS",
-                                 "variable": "y"
-                              }
-                           ],
-                           "new_type": {
-                              "name": "String",
-                              "kind": "OTHER"
+               "initializer": {
+                  "kind": "CONDITIONAL",
+                  "expressions": [
+                     {
+                        "kind": "TYPECOMPARE",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "y"
                            }
-                        },
-                        {
-                           "kind": "LITERAL",
-                           "literal": "3"
-                        },
-                        {
-                           "kind": "LITERAL",
-                           "literal": "5"
+                        ],
+                        "new_type": {
+                           "name": "String",
+                           "kind": "OTHER"
                         }
-                     ]
-                  }
-               ]
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "5"
+                     }
+                  ]
+               }
             },
             {
                "name": "z",
@@ -60,41 +56,40 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "CONDITIONAL",
-                     "expressions": [
-                        {
-                           "kind": "LOGICAL_NOT",
-                           "expressions": [
-                              {
-                                 "kind": "TYPECOMPARE",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "y"
-                                    }
-                                 ],
-                                 "new_type": {
-                                    "name": "String",
-                                    "kind": "OTHER"
+               "initializer": {
+                  "kind": "CONDITIONAL",
+                  "expressions": [
+                     {
+                        "kind": "LOGICAL_NOT",
+                        "expressions": [
+                           {
+                              "kind": "TYPECOMPARE",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
                                  }
+                              ],
+                              "new_type": {
+                                 "name": "String",
+                                 "kind": "OTHER"
                               }
-                           ]
-                        },
-                        {
-                           "kind": "LITERAL",
-                           "literal": "3"
-                        },
-                        {
-                           "kind": "LITERAL",
-                           "literal": "5"
-                        }
-                     ]
-                  }
-               ]
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "5"
+                     }
+                  ]
+               }
             }
          ]
       }
    ]
 }
+

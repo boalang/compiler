@@ -36,12 +36,10 @@
                                              "kind": "FINAL"
                                           }
                                        ],
-                                       "expressions": [
-                                          {
-                                             "kind": "LITERAL",
-                                             "literal": "5"
-                                          }
-                                       ]
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "5"
+                                       }
                                     }
                                  ]
                               }

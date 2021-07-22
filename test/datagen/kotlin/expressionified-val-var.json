@@ -21,12 +21,10 @@
                                        "variable_decls": [
                                           {
                                              "name": "q",
-                                             "expressions": [
-                                                {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "p"
-                                                }
-                                             ]
+                                             "initializer": {
+                                                "kind": "VARACCESS",
+                                                "variable": "p"
+                                             }
                                           }
                                        ]
                                     }
@@ -45,12 +43,10 @@
                                                    "kind": "FINAL"
                                                 }
                                              ],
-                                             "expressions": [
-                                                {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "u"
-                                                }
-                                             ]
+                                             "initializer": {
+                                                "kind": "VARACCESS",
+                                                "variable": "u"
+                                             }
                                           }
                                        ]
                                     }
@@ -68,7 +64,12 @@
                            "variable_type": {
                               "name": "T",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [
@@ -88,12 +89,10 @@
                                                    "kind": "FINAL"
                                                 }
                                              ],
-                                             "expressions": [
-                                                {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "p"
-                                                }
-                                             ]
+                                             "initializer": {
+                                                "kind": "VARACCESS",
+                                                "variable": "p"
+                                             }
                                           }
                                        ]
                                     }
@@ -127,21 +126,17 @@
                            "kind": "FINAL"
                         }
                      ],
-                     "expressions": [
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "y"
-                        }
-                     ]
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "variable": "y"
+                     }
                   },
                   {
                      "name": "y",
-                     "expressions": [
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "z"
-                        }
-                     ]
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "variable": "z"
+                     }
                   }
                ]
             }

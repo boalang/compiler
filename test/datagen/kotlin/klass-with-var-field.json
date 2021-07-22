@@ -13,21 +13,17 @@
                         "name": "Int",
                         "kind": "OTHER"
                      },
-                     "expressions": [
-                        {
-                           "kind": "LITERAL",
-                           "literal": "3"
-                        }
-                     ]
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     }
                   },
                   {
                      "name": "y",
-                     "expressions": [
-                        {
-                           "kind": "LITERAL",
-                           "literal": "5"
-                        }
-                     ]
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "5"
+                     }
                   }
                ]
             }
@@ -35,3 +31,4 @@
       }
    ]
 }
+

@@ -48,14 +48,13 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "LITERAL",
-                     "literal": "3"
-                  }
-               ]
+               "initializer": {
+                  "kind": "LITERAL",
+                  "literal": "3"
+               }
             }
          ]
       }
    ]
 }
+

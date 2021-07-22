@@ -22,12 +22,10 @@
                            "visibility": "PRIVATE"
                         }
                      ],
-                     "expressions": [
-                        {
-                           "kind": "LITERAL",
-                           "literal": "1"
-                        }
-                     ]
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     }
                   }
                ],
                "nested_declarations": [
@@ -62,24 +60,22 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "METHODCALL",
-                     "expressions": [
-                        {
-                           "kind": "METHODCALL",
-                           "expressions": [
-                              {
-                                 "kind": "VARACCESS",
-                                 "variable": "Outer"
-                              }
-                           ],
-                           "method": "Nested"
-                        }
-                     ],
-                     "method": "foo"
-                  }
-               ]
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "Outer"
+                           }
+                        ],
+                        "method": "Nested"
+                     }
+                  ],
+                  "method": "foo"
+               }
             }
          ]
       }

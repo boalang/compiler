@@ -10,22 +10,20 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "METHODCALL",
-                     "method": "foo",
-                     "method_args": [
-                        {
-                           "kind": "LITERAL",
-                           "literal": "3"
-                        },
-                        {
-                           "kind": "LITERAL",
-                           "literal": "4"
-                        }
-                     ]
-                  }
-               ]
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "foo",
+                  "method_args": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "4"
+                     }
+                  ]
+               }
             },
             {
                "name": "y",
@@ -34,24 +32,22 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "METHODCALL",
-                     "expressions": [
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "x"
-                        }
-                     ],
-                     "method": "bar",
-                     "method_args": [
-                        {
-                           "kind": "LITERAL",
-                           "literal": "7"
-                        }
-                     ]
-                  }
-               ]
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "x"
+                     }
+                  ],
+                  "method": "bar",
+                  "method_args": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "7"
+                     }
+                  ]
+               }
             }
          ]
       }

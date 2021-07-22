@@ -10,21 +10,19 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "ARRAYACCESS",
-                     "expressions": [
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "foo"
-                        },
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "y"
-                        }
-                     ]
-                  }
-               ]
+               "initializer": {
+                  "kind": "ARRAYACCESS",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "foo"
+                     },
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "y"
+                     }
+                  ]
+               }
             },
             {
                "name": "y",
@@ -33,30 +31,28 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "ARRAYACCESS",
-                     "expressions": [
-                        {
-                           "kind": "VARACCESS",
-                           "variable": "bar"
-                        },
-                        {
-                           "kind": "OP_ADD",
-                           "expressions": [
-                              {
-                                 "kind": "LITERAL",
-                                 "literal": "1"
-                              },
-                              {
-                                 "kind": "METHODCALL",
-                                 "method": "foo"
-                              }
-                           ]
-                        }
-                     ]
-                  }
-               ]
+               "initializer": {
+                  "kind": "ARRAYACCESS",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "bar"
+                     },
+                     {
+                        "kind": "OP_ADD",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "1"
+                           },
+                           {
+                              "kind": "METHODCALL",
+                              "method": "foo"
+                           }
+                        ]
+                     }
+                  ]
+               }
             }
          ]
       }

@@ -22,6 +22,11 @@
                               "name": "MutableList<Pet>",
                               "kind": "OTHER"
                            },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ],
                            "initializer": {
                               "kind": "METHODCALL",
                               "method": "mutableListOf"
@@ -37,6 +42,11 @@
                         "name": "MutableList<Pet>",
                         "kind": "OTHER"
                      },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
                      "initializer": {
                         "kind": "METHODCALL",
                         "method": "mutableListOf"
@@ -56,7 +66,12 @@
                            "variable_type": {
                               "name": "Person",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [

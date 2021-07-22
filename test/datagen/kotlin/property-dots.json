@@ -10,12 +10,10 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "VARACCESS",
-                     "variable": "bar.foo.bar"
-                  }
-               ]
+               "initializer": {
+                  "kind": "VARACCESS",
+                  "variable": "bar.foo.bar"
+               }
             },
             {
                "name": "foo",
@@ -28,14 +26,13 @@
                      "kind": "FINAL"
                   }
                ],
-               "expressions": [
-                  {
-                     "kind": "VARACCESS",
-                     "variable": "bar.foo.bar"
-                  }
-               ]
+               "initializer": {
+                  "kind": "VARACCESS",
+                  "variable": "bar.foo.bar"
+               }
             }
          ]
       }
    ]
 }
+

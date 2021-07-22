@@ -1769,10 +1769,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			prop.getModifierList().accept(this, v);
 		vb.addAllModifiers(modifiers.pop());
 
-		expressions.push(new ArrayList<Expression>());
-		if (prop.hasInitializer())
+		if (prop.hasInitializer()) {
+			final List<Expression> exprs = new ArrayList<Expression>();
+			expressions.push(exprs);
 			prop.getInitializer().accept(this, v);
-		vb.addAllExpressions(expressions.pop());
+			if (exprs.size() == 1)
+				vb.setInitializer(exprs.get(0));
+			expressions.pop();
+		}
 
 		if (prop.getGetter() != null)
 			prop.getGetter().accept(this, v);

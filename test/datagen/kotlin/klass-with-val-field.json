@@ -18,12 +18,10 @@
                            "kind": "FINAL"
                         }
                      ],
-                     "expressions": [
-                        {
-                           "kind": "LITERAL",
-                           "literal": "3"
-                        }
-                     ]
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     }
                   },
                   {
                      "name": "y",
@@ -32,12 +30,10 @@
                            "kind": "FINAL"
                         }
                      ],
-                     "expressions": [
-                        {
-                           "kind": "LITERAL",
-                           "literal": "5"
-                        }
-                     ]
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "5"
+                     }
                   }
                ]
             }
@@ -45,3 +41,4 @@
       }
    ]
 }
+

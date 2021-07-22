@@ -12,6 +12,11 @@
                         "name": "string",
                         "kind": "OTHER"
                      },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
                      "initializer": {
                         "kind": "LITERAL",
                         "literal": "\"world\""
