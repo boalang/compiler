@@ -199,15 +199,18 @@ public class FileIO {
 	}
 
 	public static class DirectoryRemover implements Runnable {
-		private String path;
+		private File file;
 
-		public DirectoryRemover(String path) {
-			this.path = path;
+		public DirectoryRemover(final String path) {
+			this.file = new File(path);
+		}
+
+		public DirectoryRemover(final File f) {
+			this.file = f;
 		}
 
 		@Override
 		public void run() {
-			File file = new File(path);
 			if (file.exists()) {
 //				System.out.println("Deleting cloned repo " + path);
 				org.apache.commons.io.FileUtils.deleteQuietly(file);
