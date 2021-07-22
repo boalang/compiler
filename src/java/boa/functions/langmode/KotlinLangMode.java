@@ -466,19 +466,19 @@ public class KotlinLangMode implements LangMode {
 				s += "return";
 				if (stmt.getExpressionsCount() > 0)
 					s += " " + prettyprint(stmt.getExpressions(0));
-				s += ";";
+				// s += ";";
 				return s;
 			case BREAK:
 				s += "break";
 				if (stmt.getExpressionsCount() > 0)
 					s += " " + prettyprint(stmt.getExpressions(0));
-				s += ";";
+				// s += ";";
 				return s;
 			case CONTINUE:
 				s += "continue";
 				if (stmt.getExpressionsCount() > 0)
 					s += " " + prettyprint(stmt.getExpressions(0));
-				s += ";";
+				// s += ";";
 				return s;
 
 			case ASSERT:
@@ -486,7 +486,7 @@ public class KotlinLangMode implements LangMode {
 				s += prettyprint(stmt.getConditions(0));
 				if (stmt.getExpressionsCount() > 0)
 					s += " " + prettyprint(stmt.getExpressions(0));
-				s += ";";
+				// s += ";";
 				return s;
 
 			case LABEL:
@@ -499,7 +499,7 @@ public class KotlinLangMode implements LangMode {
 				return "default:";
 
 			case EXPRESSION:
-				return prettyprint(stmt.getExpressions(0)) + ";";
+				return prettyprint(stmt.getExpressions(0)); // + ";";
 
 			case TYPEDECL:
 				return prettyprint(stmt.getTypeDeclaration());
@@ -619,7 +619,7 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case THROW:
-				return "throw " + prettyprint(stmt.getExpressions(0)) + ";";
+				return "throw " + prettyprint(stmt.getExpressions(0)); // + ";";
 
 			default: return s;
 		}
