@@ -268,9 +268,11 @@ public class KotlinLangMode implements LangMode {
 					s += prettyprintDeclarationBody(d);
 				break;
 			case ANONYMOUS:
+				s += prettyprintDeclarationBody(d);
 				break;
 			case ENUM:
 				s += "enum " + d.getName();
+				s += prettyprintDeclarationBody(d);
 				break;
 			case ANNOTATION:
 				s += "@interface class " + d.getName();
