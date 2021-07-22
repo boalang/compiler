@@ -64,6 +64,8 @@ public class SeqRepoImporter {
 	private final static int POOL_SIZE = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
 	private final static int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
 	private final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
+	private static final ImportTask[] workers = new ImportTask[POOL_SIZE];
+	private static int counter = 0;
 
 	public static void main(final String[] args) throws IOException, InterruptedException {
 		conf = new Configuration();
@@ -73,7 +75,6 @@ public class SeqRepoImporter {
 		getProcessedProjects();
 
 		// assign each thread with a worker
-		final ImportTask[] workers = new ImportTask[POOL_SIZE];
 		final Thread[] threads = new Thread[POOL_SIZE];
 		for (int i = 0; i < POOL_SIZE; i++) {
 			workers[i] = new ImportTask(i);
@@ -82,61 +83,71 @@ public class SeqRepoImporter {
 			Thread.sleep(10);
 		}
 
-		int counter = 0;
-		final File dir = new File(jsonPath);
-		for (final File file : dir.listFiles()) {
-			if (file.getName().endsWith(".json")) {
-				final String content = FileIO.readFileContents(file);
-				final Gson parser = new Gson();
+		processJSONdir(new File(jsonPath));
 
-				JsonArray repoArray = null;
-				try {
-					repoArray = parser.fromJson(content, JsonElement.class).getAsJsonArray();
-				} catch (final Exception e) {
-					System.err.println("Error proccessing page: " + file.getPath());
-					e.printStackTrace();
-					continue;
-				}
-				for (int i = 0; i < repoArray.size(); i++) {
-					try {
-						final JsonObject rp = repoArray.get(i).getAsJsonObject();
-						final RepoMetadata repo = new RepoMetadata(rp);
-						if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
-							final Project project = repo.toBoaMetaDataProtobuf(); // current project instance only contains metadata
-
-							// System.out.println(jRepo.toString());
-							boolean assigned = false;
-							while (!assigned) {
-								for (int j = 0; j < POOL_SIZE; j++) {
-									if (workers[j].isReady()) {
-										workers[j].setProject(project);
-										workers[j].setReady(false);
-										assigned = true;
-										break;
-									}
-								}
-								// Thread.sleep(100);
-							}
-							System.out.println("Assigned the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id
-									+ " from the " + i + "th object of the json file: " + file.getPath());
-						}
-					} catch (final Exception e) {
-						System.err.println("Error proccessing item " + i + " of page " + file.getPath());
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		for (int j = 0; j < POOL_SIZE; j++) {
+		for (int j = 0; j < POOL_SIZE; j++)
 			while (!workers[j].isReady())
 				Thread.sleep(100);
-		}
 		setDone(true);
 
 		// wait for workers to close writers and finish
 		for (final Thread thread : threads)
 			while (thread.isAlive())
 				Thread.sleep(1000);
+	}
+
+	static void processJSONdir(final File dir) {
+		if (!dir.isDirectory())
+			return;
+
+		for (final File file : dir.listFiles()) {
+			if (file.isDirectory())
+				processJSONdir(file);
+			else if (file.getName().endsWith(".json"))
+				processJSON(file);
+		}
+	}
+
+	static void processJSON(final File file) {
+		final String content = FileIO.readFileContents(file);
+		final Gson parser = new Gson();
+
+		JsonArray repoArray = null;
+		try {
+			repoArray = parser.fromJson(content, JsonElement.class).getAsJsonArray();
+		} catch (final Exception e) {
+			System.err.println("Error proccessing page: " + file.getPath());
+			e.printStackTrace();
+			return;
+		}
+		for (int i = 0; i < repoArray.size(); i++) {
+			try {
+				final JsonObject rp = repoArray.get(i).getAsJsonObject();
+				final RepoMetadata repo = new RepoMetadata(rp);
+				if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
+					final Project project = repo.toBoaMetaDataProtobuf(); // current project instance only contains metadata
+
+					// System.out.println(jRepo.toString());
+					boolean assigned = false;
+					while (!assigned) {
+						for (int j = 0; j < POOL_SIZE; j++) {
+							if (workers[j].isReady()) {
+								workers[j].setProject(project);
+								workers[j].setReady(false);
+								assigned = true;
+								break;
+							}
+						}
+						// Thread.sleep(100);
+					}
+					System.out.println("Assigned the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id
+							+ " from the " + i + "th object of the json file: " + file.getPath());
+				}
+			} catch (final Exception e) {
+				System.err.println("Error proccessing item " + i + " of page " + file.getPath());
+				e.printStackTrace();
+			}
+		}
 	}
 
 	synchronized static boolean getDone() {
