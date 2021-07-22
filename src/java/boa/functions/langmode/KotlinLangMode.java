@@ -264,6 +264,8 @@ public class KotlinLangMode implements LangMode {
 					}
 				}
 				s += " {\n";
+				if ((d.getFieldsCount() > 0) || (d.getMethodsList().size() > 0) || (d.getNestedDeclarationsList().size() > 0))
+					s += prettyprintDeclarationBody(d);
 				break;
 			case ANONYMOUS:
 				break;
@@ -295,32 +297,43 @@ public class KotlinLangMode implements LangMode {
 				break;
 			default:
 			case CLASS:
-				s += "class " + d.getName();
-				if (d.getGenericParametersCount() > 0) {
-					s += "<";
-					for (int i = 0; i < d.getGenericParametersCount(); i++) {
-						if (i != 0) s += ", ";
-						s += prettyprint(d.getGenericParameters(i));
-					}
-					s += ">";
-				}
-				if (d.getParentsCount() > 0) {
-					int i = 0;
-					if (d.getParents(i).getKind() == TypeKind.CLASS)
-						s += " extends " + prettyprint(d.getParents(i++));
-					if (i < d.getParentsCount()) {
-						s += " implements ";
-						for (int j = i; i < d.getParentsCount(); i++) {
-							if (i != j) s += ", ";
-							s += prettyprint(d.getParents(i));
-						}
-					}
-				}
+				s += prettyprintClass(d);
 				break;
 		}
 
-		s += " {\n";
+		return s;
+	}
 
+	public String prettyprintClass(final Declaration klass) {
+		String s = indent();
+		s += "class " + klass.getName();
+		if (klass.getGenericParametersCount() > 0) {
+			s += "<";
+			for (int i = 0; i < klass.getGenericParametersCount(); i++) {
+				if (i != 0) s += ", ";
+				s += prettyprint(klass.getGenericParameters(i));
+			}
+			s += ">";
+		}
+		if (klass.getParentsCount() > 0) {
+			int i = 0;
+			if (klass.getParents(i).getKind() == TypeKind.CLASS)
+				s += " extends " + prettyprint(klass.getParents(i++));
+			if (i < klass.getParentsCount()) {
+				s += " implements ";
+				for (int j = i; i < klass.getParentsCount(); i++) {
+					if (i != j) s += ", ";
+					s += prettyprint(klass.getParents(i));
+				}
+			}
+		}
+		if ((klass.getFieldsCount() > 0) || (klass.getMethodsList().size() > 0) || (klass.getNestedDeclarationsList().size() > 0))
+			s += prettyprintDeclarationBody(klass);
+		return s;
+	}
+
+	public String prettyprintDeclarationBody(final Declaration d) {
+		String s = " {\n";
 		indent++;
 		for (int i = 0; i < d.getFieldsCount(); i++) {
 			s += indent() + prettyprint(d.getFieldsList().get(i));
