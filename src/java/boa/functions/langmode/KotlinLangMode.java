@@ -17,6 +17,7 @@
 package boa.functions.langmode;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import com.intellij.core.CoreFileTypeRegistry;
 import com.intellij.lang.LanguageParserDefinitions;
@@ -401,15 +402,28 @@ public class KotlinLangMode implements LangMode {
 	public String prettyprint(final Variable v) {
 		// FIXME convert to Kotlin
 		if (v == null) return "";
+		boolean hasVal = false;
+
+		final List<Modifier> mods = v.getModifiersList();
+		final List<Modifier> newMods = new ArrayList<Modifier>();
+
+		for(Modifier mod : mods) {
+			if (mod.getKind() == Modifier.ModifierKind.FINAL)
+				hasVal = true;
+			else
+				newMods.add(mod);
+		}
 
 		String s = "";
-		if (v.getModifiersCount() > 0)
-			s += prettyprint(v.getModifiersList());
+		if (newMods.size() > 0)
+			s += prettyprint(newMods);
 
-		if (v.hasVariableType())
-			s += prettyprint(v.getVariableType()) + " ";
+		s += hasVal ? "val " : "var ";
 
 		s += v.getName();
+
+		if (v.hasVariableType())
+			s += " : " + prettyprint(v.getVariableType()) + " ";
 
 		if (v.getExpressionsCount() != 0)
 			s += "("+ prettyprint(v.getExpressions(0)) +")";
