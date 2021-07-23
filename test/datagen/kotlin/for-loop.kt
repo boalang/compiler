@@ -5,6 +5,8 @@ class Six {
           for(thing: String in things) {
                      println(thing)
           }
+          for ((index, value) in array.withIndex()) {
+          }
       }
       fun bar(things: List<String>) {
           for((index: int, value: String) in things.withIndex()) {
