@@ -428,53 +428,35 @@ public class KotlinLangMode implements LangMode {
 			case RETURN:
 				s += "return";
 				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
-				// s += ";";
+					s += "@" + prettyprint(stmt.getExpressions(0));
 				return s;
+
 			case BREAK:
 				s += "break";
 				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
-				// s += ";";
+					s += "@" + prettyprint(stmt.getExpressions(0));
 				return s;
+
 			case CONTINUE:
 				s += "continue";
 				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
-				// s += ";";
-				return s;
-
-			case ASSERT:
-				s += "assert ";
-				s += prettyprint(stmt.getConditions(0));
-				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
-				// s += ";";
+					s += "@" + prettyprint(stmt.getExpressions(0));
 				return s;
 
 			case LABEL:
-				return prettyprint(stmt.getExpressions(0)) + ": " + prettyprint(stmt.getStatements(0));
+				return prettyprint(stmt.getExpressions(0)) + "@ " + prettyprint(stmt.getStatements(0));
 
 			case CASE:
-				return "case " + prettyprint(stmt.getExpressions(0)) + ":";
+				return prettyprint(stmt.getExpressions(0)) + " -> ";
 
 			case DEFAULT:
-				return "default:";
+				return "else -> ";
 
 			case EXPRESSION:
-				return prettyprint(stmt.getExpressions(0)); // + ";";
+				return prettyprint(stmt.getExpressions(0)) + "\n";
 
 			case TYPEDECL:
 				return prettyprint(stmt.getTypeDeclaration());
-
-			case SYNCHRONIZED:
-				s += "synchronized () {\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += "}";
-				return s;
 
 			case CATCH:
 				s += indent() + "catch (";
@@ -497,43 +479,12 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case TRY:
-				s += "try";
-				if (stmt.getInitializationsCount() > 0) {
-					s += "(";
-					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
-						if (i > 0)
-							s += ", ";
-						s += prettyprint(stmt.getInitializations(i));
-					}
-					s += ")";
-				}
-				s += " ";
-				for (int i = 0; i < stmt.getStatementsCount(); i++) {
-					s += prettyprint(stmt.getStatements(i)) + "\n";
-				}
-				return s;
-
-			case FOR:
-				s += "for (";
-				if (stmt.hasVariableDeclaration()) {
-					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getConditions(0));
-				} else {
-					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
-						if (i > 0)
-							s += ", ";
-						s += prettyprint(stmt.getInitializations(i));
-					}
-					s += "; " + prettyprint(stmt.getConditions(0)) + "; ";
-					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
-						if (i > 0)
-							s += ", ";
-						s += prettyprint(stmt.getUpdates(i));
-					}
-				}
-				s += ")\n";
+				s += "try {\n";
 				indent++;
-				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += prettyprint(stmt.getStatements(i)) + "\n";
 				indent--;
+				s += indent() + "}";
 				return s;
 
 			case FOREACH:
@@ -573,7 +524,7 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case SWITCH:
-				s += "switch (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
+				s += "when (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -582,7 +533,7 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case THROW:
-				return "throw " + prettyprint(stmt.getExpressions(0)); // + ";";
+				return "throw " + prettyprint(stmt.getExpressions(0));
 
 			default: return s;
 		}
