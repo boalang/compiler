@@ -793,7 +793,7 @@ public class KotlinLangMode implements LangMode {
 			final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content);
 			final KtFile theKt = new KtFile(kProjectManager.findViewProvider(file), false);
 
-			if (errorCheck.hasError(theKt))
+			if (!debug && errorCheck.hasError(theKt))
 				return null;
 
 			return theKt;
