@@ -63,11 +63,26 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public static final int KLS15 = 15;
 	protected int astLevel = KLS10;
 
+	protected void reset() {
+		b = Namespace.newBuilder();
+		declarations.clear();
+		modifiers.clear();
+		expressions.clear();
+		fields.clear();
+		methods.clear();
+		statements.clear();
+		types.clear();
+		expectExpression.clear();
+		superClassInitExprs.clear();
+		astLevel = KLS10;
+	}
+
 	public int getAstLevel() {
 		return astLevel;
 	}
 
 	public Namespace getNamespace(final KtFile kt) {
+		reset();
 		kt.accept(this);
 
 		return b.build();
