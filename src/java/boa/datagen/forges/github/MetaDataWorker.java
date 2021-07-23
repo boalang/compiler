@@ -1,3 +1,20 @@
+/*
+ * Copyright 2015-2021, Hridesh Rajan, Robert Dyer, Hoan Nguyen
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package boa.datagen.forges.github;
 
 import java.io.File;
@@ -280,18 +297,26 @@ public class MetaDataWorker implements Runnable {
 		final Project.Builder projBuilder = Project.newBuilder(project);
 
 		final String name = project.getName();
-		File gitDir = new File(gitRootPath + "/" + name);
+		final File gitDir;
+		if (cache) {
+			final String id = project.getId().toString();
+			gitDir = new File(gitRootPath + "/" + id.charAt(0) + "/" + id.charAt(1) + "/" + id);
+		} else {
+			gitDir = new File(gitRootPath + "/" + name);
+		}
 
 		if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java") || project.getProgrammingLanguagesList().contains("JavaScript") || project.getProgrammingLanguagesList().contains("PHP")))
 			return project;
 
-		String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
-		try {
-			RepositoryCloner.clone(args);
-		} catch (Throwable t) {
-			System.err.println("Error cloning " + repo.getUrl());
-			t.printStackTrace();
-			return project;
+		if (!gitDir.exists()) {
+			String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
+			try {
+				RepositoryCloner.clone(args);
+			} catch (final Throwable t) {
+				System.err.println("Error cloning " + repo.getUrl());
+				t.printStackTrace();
+				return project;
+			}
 		}
 
 		if (debug)
@@ -327,9 +352,8 @@ public class MetaDataWorker implements Runnable {
 					printError(e, "Cannot close Git connector to " + gitDir.getAbsolutePath(), project.getName());
 				}
 			}
-			if (!cache) {
-				new Thread(new FileIO.DirectoryRemover(gitRootPath + "/" + project.getName())).start();
-			}
+			if (!cache)
+				new Thread(new FileIO.DirectoryRemover(gitDir)).start();
 		}
 
 		return project;
