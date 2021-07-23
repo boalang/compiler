@@ -99,24 +99,24 @@ public class BoaGenerator {
 	}
 
 	private static void addOptions(Options options) {
-		options.addOption("inputJson", "json", true, ".json files for metadata");
-		options.addOption("inputToken", "token", true, "token file");
-		options.addOption("inputRepo", "json", true, "cloned repo path");
-		options.addOption("threads", "threads", true, "number of threads");
-		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
-		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
-		options.addOption("nocommits", "nocommits", false, "do not store commits");
-		options.addOption("size", "size", true, "maximum size of a project object to be stored");
-		options.addOption("libs", "libs", true, "directory to store libraries");
-		options.addOption("output", "output", true, "directory where output is desired");
-		options.addOption("user", "user", true, "github username to authenticate");
-		options.addOption("password", "password", true, "github password to authenticate.");
-		options.addOption("targetUser", "targetUser", true, "username of target repository");
-		options.addOption("targetRepo", "targetRepo", true, "name of the target repository");
-		options.addOption("cache", "cache", false, "enable if you want to delete the cloned code for user.");
-		options.addOption("debug", "debug", false, "enable for debug mode.");
-		options.addOption("debugparse", "debugparse", false, "enable for debug mode when parsing source files.");
-		options.addOption("help", "help", false, "help");
+		options.addOption("inputJson", true, ".json files for metadata");
+		options.addOption("inputToken", true, "token file");
+		options.addOption("inputRepo", true, "cloned repo path");
+		options.addOption("threads", true, "number of threads");
+		options.addOption("projects", true, "maximum number of projects per sequence file");
+		options.addOption("commits", true, "maximum number of commits of a project to be stored in the project object");
+		options.addOption("nocommits", false, "do not store commits");
+		options.addOption("size", true, "maximum size of a project object to be stored");
+		options.addOption("libs", true, "directory to store libraries");
+		options.addOption("output", true, "directory where output is desired");
+		options.addOption("user", true, "github username to authenticate");
+		options.addOption("password", true, "github password to authenticate");
+		options.addOption("targetUser", true, "username of target repository");
+		options.addOption("targetRepo", true, "name of the target repository");
+		options.addOption("cache", false, "enable if you want to use already cloned repositories");
+		options.addOption("debug", false, "enable for debug mode");
+		options.addOption("debugparse", false, "enable for debug mode when parsing source files");
+		options.addOption("help", false, "shows this help");
 	}
 
 	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
