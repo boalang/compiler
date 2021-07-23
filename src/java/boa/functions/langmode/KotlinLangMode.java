@@ -493,12 +493,10 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case DO:
-				s += "do\n";
-				indent++;
+				s += "do ";
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += indent() + "while (" + prettyprint(stmt.getConditions(0)) + ");";
+					s += prettyprint(stmt.getStatements(i));
+				s += " while (" + prettyprint(stmt.getConditions(0)) + ")";
 				return s;
 
 			case WHILE:
