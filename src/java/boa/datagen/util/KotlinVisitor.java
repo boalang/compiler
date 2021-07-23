@@ -65,6 +65,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	protected void reset() {
 		b = Namespace.newBuilder();
+		b.setName("");
+
 		declarations.clear();
 		modifiers.clear();
 		expressions.clear();
@@ -83,7 +85,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	public Namespace getNamespace(final KtFile kt) {
 		reset();
-		kt.accept(this);
+		if (kt != null)
+			kt.accept(this);
 
 		return b.build();
 	}
@@ -175,7 +178,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		statements.push(new ArrayList<Statement>());
 		expectExpression.push(false);
 
-		b.setName("");
 		f.acceptChildren(this);
 
 		expectExpression.pop();

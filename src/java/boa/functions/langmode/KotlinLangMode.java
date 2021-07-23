@@ -858,41 +858,49 @@ public class KotlinLangMode implements LangMode {
 		}
 	}
 
-	public Expression parseexpression(final String s) {
-		final ASTRoot root = parse(s);
+	public Expression parseexpression(final String content) {
+		final ASTRoot root = parse(content);
 		if (root.getNamespacesCount() == 0) return null;
 		final Namespace n = root.getNamespaces(0);
 		if (n.getExpressionsCount() == 0) return null;
 		return n.getExpressions(0);
 	}
 
-	private PsiManager kProjectManager = null;
+	private static PsiManager kProjectManager = null;
+	private static final KotlinErrorCheckVisitor errorCheck = new KotlinErrorCheckVisitor();
 
-	public ASTRoot parse(final String s) {
-		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-
+	public static KtFile tryparse(final String path, final String content, final boolean debug) {
 		try {
 			if (kProjectManager == null) {
 				final Disposable disp = Disposer.newDisposable();
 				final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
-				final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
-				final Project proj = kpe.getProject();
+				final Project proj = new KotlinCoreProjectEnvironment(disp, kae).getProject();
 				((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
 				LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
 											new KotlinParserDefinition());
 				kProjectManager = PsiManager.getInstance(proj);
 			}
 
-			final VirtualFile file = new LightVirtualFile("boa.kt", KotlinFileType.INSTANCE, s);
+			final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content);
 			final KtFile theKt = new KtFile(kProjectManager.findViewProvider(file), false);
 
-			final KotlinErrorCheckVisitor errorCheck = new KotlinErrorCheckVisitor();
+			if (errorCheck.hasError(theKt))
+				return null;
 
-			if (!errorCheck.hasError(theKt))
-				ast.addNamespaces(new KotlinVisitor().getNamespace(theKt));
+			return theKt;
 		} catch (final Exception e) {
-			// do nothing
+			if (debug) e.printStackTrace();
+			return null;
 		}
+	}
+	private static final KotlinVisitor visitor = new KotlinVisitor();
+
+	public ASTRoot parse(final String content) {
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
+		final KtFile theKt = tryparse("boa.kt", content, false);
+		if (theKt != null)
+			ast.addNamespaces(visitor.getNamespace(theKt));
 
 		return ast.build();
 	}

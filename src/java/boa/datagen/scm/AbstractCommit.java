@@ -22,6 +22,8 @@ package boa.datagen.scm;
 import java.io.*;
 import java.util.*;
 
+import com.steadystate.css.dom.CSSStyleSheetImpl;
+
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -31,14 +33,13 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.php.internal.core.PHPVersion;
 import org.eclipse.php.internal.core.ast.nodes.Program;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
-
-import com.steadystate.css.dom.CSSStyleSheetImpl;
 
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -56,28 +57,12 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.JavaVisitor;
-import boa.datagen.util.KotlinErrorCheckVisitor;
 import boa.datagen.util.KotlinVisitor;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-
-import com.intellij.core.CoreFileTypeRegistry;
-import com.intellij.lang.LanguageParserDefinitions;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.testFramework.LightVirtualFile;
-import org.jetbrains.kotlin.idea.KotlinLanguage;
-import org.jetbrains.kotlin.idea.KotlinFileType;
-import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
-import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
+import boa.functions.langmode.KotlinLangMode;
 
 
 /**
@@ -599,70 +584,52 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	private PsiManager kProjectManager = null;
-	private final KotlinErrorCheckVisitor errorCheck = new KotlinErrorCheckVisitor();
+	private static final KotlinVisitor visitor = new KotlinVisitor();
 
 	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
-		KtFile theKt = null;
+		final KtFile theKt = KotlinLangMode.tryparse(path, content, false);
+
+		if (theKt == null)
+			return false;
 
 		try {
-			if (kProjectManager == null) {
-				final Disposable disp = Disposer.newDisposable();
-				final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
-				final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
-				final Project proj = kpe.getProject();
-				((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
-				LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
-											new KotlinParserDefinition());
-				kProjectManager = PsiManager.getInstance(proj);
+			final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
+			ast.addNamespaces(visitor.getNamespace(theKt));
+
+			switch (visitor.getAstLevel()) {
+				case KotlinVisitor.KLS10:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_0);
+					break;
+				case KotlinVisitor.KLS11:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_1);
+					break;
+				case KotlinVisitor.KLS12:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_2);
+					break;
+				case KotlinVisitor.KLS13:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_3);
+					break;
+				case KotlinVisitor.KLS14:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_4);
+					break;
+				case KotlinVisitor.KLS15:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_5);
+					break;
+				default:
+					fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
+					break;
 			}
 
-			final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content);
-			theKt = new KtFile(kProjectManager.findViewProvider(file), false);
-		} catch (final Throwable e) {
-			return false;
+			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
+
+			return true;
+		} catch (final IOException e) {
+			if (debug)
+				e.printStackTrace();
 		}
-
-		if (!errorCheck.hasError(theKt))
-			try {
-				final KotlinVisitor visitor = new KotlinVisitor();
-				final ASTRoot.Builder ast = ASTRoot.newBuilder();
-
-				ast.addNamespaces(visitor.getNamespace(theKt));
-
-				switch (visitor.getAstLevel()) {
-					case KotlinVisitor.KLS10:
-						fb.setKind(FileKind.SOURCE_KOTLIN_1_0);
-						break;
-					case KotlinVisitor.KLS11:
-						fb.setKind(FileKind.SOURCE_KOTLIN_1_1);
-						break;
-					case KotlinVisitor.KLS12:
-						fb.setKind(FileKind.SOURCE_KOTLIN_1_2);
-						break;
-					case KotlinVisitor.KLS13:
-						fb.setKind(FileKind.SOURCE_KOTLIN_1_3);
-						break;
-					case KotlinVisitor.KLS14:
-						fb.setKind(FileKind.SOURCE_KOTLIN_1_4);
-						break;
-					case KotlinVisitor.KLS15:
-						fb.setKind(FileKind.SOURCE_KOTLIN_1_5);
-						break;
-					default:
-						fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
-						break;
-				}
-
-				final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
-				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-				connector.astWriterLen += bw.getLength();
-
-				return true;
-			} catch (final IOException e) {
-				if (debug)
-					e.printStackTrace();
-			}
 
 		return false;
 	}

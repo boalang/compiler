@@ -18,24 +18,11 @@ package boa.test.datagen;
 
 import com.googlecode.protobuf.format.JsonFormat;
 
-import com.intellij.core.CoreFileTypeRegistry;
-import com.intellij.lang.LanguageParserDefinitions;
-import com.intellij.openapi.Disposable;
-import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.testFramework.LightVirtualFile;
-import org.jetbrains.kotlin.idea.KotlinLanguage;
-import org.jetbrains.kotlin.idea.KotlinFileType;
-import org.jetbrains.kotlin.parsing.KotlinParserDefinition;
 import org.jetbrains.kotlin.psi.KtFile;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreProjectEnvironment;
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreApplicationEnvironment;
 
 import boa.datagen.util.FileIO;
 import boa.datagen.util.KotlinVisitor;
+import boa.functions.langmode.KotlinLangMode;
 import boa.test.compiler.BaseTest;
 import boa.types.Ast.ASTRoot;
 
@@ -44,53 +31,31 @@ import boa.types.Ast.ASTRoot;
  * @author swflint
  */
 public class KotlinBaseTest extends BaseTest {
-	private static PsiManager kProjectManager = null;
-
-	protected static KtFile getKtFile(final String content) throws Exception {
-		if (kProjectManager == null) {
-			final Disposable disp = Disposer.newDisposable();
-			final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
-			final KotlinCoreProjectEnvironment kpe = new KotlinCoreProjectEnvironment(disp, kae);
-			final Project proj = kpe.getProject();
-			((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
-			LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
-										new KotlinParserDefinition());
-			kProjectManager = PsiManager.getInstance(proj);
-		}
-
-		final VirtualFile file = new LightVirtualFile("test.kt", KotlinFileType.INSTANCE, content);
-		return new KtFile(kProjectManager.findViewProvider(file), false);
-	}
-
-	private final static KotlinTreeDumper v = new KotlinTreeDumper();
-
 	protected static void dumpKotlin(final String content) {
 		dumpKotlin(content, false);
 	}
 
+	private final static KotlinTreeDumper treeDumper = new KotlinTreeDumper();
+
 	protected static void dumpKotlin(final String content, final boolean showEx) {
-		try {
-			getKtFile(content).accept(v);
-		} catch (final Throwable t) {
-			if (showEx) t.printStackTrace();
-		}
+		final KtFile theKt = KotlinLangMode.tryparse("test.kt", content, showEx);
+		if (theKt == null) return;
+		theKt.accept(treeDumper);
 	}
 
 	protected static String parseKotlin(final String content) {
 		return parseKotlin(content, false);
 	}
 
+	private static final KotlinVisitor ktToBoa = new KotlinVisitor();
+
 	protected static String parseKotlin(final String content, final boolean showEx) {
-		try {
-			final KotlinVisitor visitor = new KotlinVisitor();
-			final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		final KtFile theKt = KotlinLangMode.tryparse("test.kt", content, showEx);
+		if (theKt == null) return "";
 
-			ast.addNamespaces(visitor.getNamespace(getKtFile(content)));
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		ast.addNamespaces(ktToBoa.getNamespace(theKt));
 
-			return FileIO.normalizeEOL(JsonFormat.printToString(ast.build()));
-		} catch (final Throwable t) {
-			if (showEx) t.printStackTrace();
-			return "";
-		}
+		return FileIO.normalizeEOL(JsonFormat.printToString(ast.build()));
 	}
 }
