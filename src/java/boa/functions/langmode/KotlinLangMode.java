@@ -605,6 +605,7 @@ public class KotlinLangMode implements LangMode {
 				return ppPrefix("++", e);
 
 			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
+			case LABEL:
 			case LITERAL: return e.getLiteral();
 			case VARACCESS:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
