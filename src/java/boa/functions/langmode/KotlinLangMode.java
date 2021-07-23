@@ -194,7 +194,7 @@ public class KotlinLangMode implements LangMode {
 	private String indent() {
 		String s = "";
 		for (int i = 0; i < indent; i++)
-			s += "\t";
+			s += "    ";
 		return s;
 	}
 
@@ -214,16 +214,22 @@ public class KotlinLangMode implements LangMode {
 
 		String s = "";
 
-		s += prettyprint(n.getModifiersList());
+		for (final Modifier m : n.getModifiersList())
+			s += prettyprint(m) + "\n";
 
 		if (n.getName().length() > 0)
-			s += indent() + "package " + n.getName() + ";\n";
+			s += indent() + "package " + n.getName() + "\n\n";
 
 		for (final String i : n.getImportsList())
 			s += indent() + "import " + i + "\n";
+		if (n.getImportsList().size() > 0)
+			s += "\n";
 
 		for (final Variable v : n.getVariablesList())
 			s += prettyprint(v);
+
+		for (final Declaration d : n.getDeclarationsList())
+			s += prettyprint(d);
 
 		for (final Method m : n.getMethodsList())
 			s += prettyprint(m);
@@ -233,9 +239,6 @@ public class KotlinLangMode implements LangMode {
 
 		for (final Expression e : n.getExpressionsList())
 			s += prettyprint(e);
-
-		for (final Declaration d : n.getDeclarationsList())
-			s += prettyprint(d);
 
 		return s;
 	}
