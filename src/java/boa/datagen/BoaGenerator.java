@@ -86,16 +86,14 @@ public class BoaGenerator {
 	}
 
 	private static final void printHelp(Options options, String message) {
-		String header = "The most commonly used Boa options are:";
-		String footer = "\nPlease report issues at http://www.github.com/boalang/";
-		System.err.println(message);
-		new HelpFormatter().printHelp("boa", header, options, footer);
+		String header = "Boa dataset generation options:";
+		String footer = "\nPlease report issues at https://github.com/boalang/compiler/";
+		if (message != null) System.err.println(message);
+		new HelpFormatter().printHelp("boa -g [options]", header, options, footer);
 	}
 
 	private static final void printHelp(Options options) {
-		String header = "The most commonly used Boa options are:";
-		String footer = "\nPlease report issues at http://www.github.com/boalang/";
-		new HelpFormatter().printHelp("boa", header, options, footer);
+		printHelp(options, null);
 	}
 
 	private static void addOptions(Options options) {
@@ -162,7 +160,7 @@ public class BoaGenerator {
 			String message = cl.getOptionValue("help");
 			printHelp(options, message);
 		} else {
-			System.err.println("User must specify the path of the repository. Please see --remote and --local options");
+			System.err.println("Must specify the output, and the local input paths (JSON and repository) or remote login information.");
 			printHelp(options);
 		}
 		if (cl.hasOption("threads")) {
