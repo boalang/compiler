@@ -502,12 +502,20 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case WHILE:
-				s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
-				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
-				indent--;
-				s += indent() + "}";
+				s += "while (" + prettyprint(stmt.getConditions(0)) + ")";
+				if (stmt.getExpressionsCount() == 0) {
+					s += " ";
+					for (int i = 0; i < stmt.getStatementsCount(); i++) {
+						if (stmt.getStatements(i).getKind() != Statement.StatementKind.BLOCK) s += indent();
+						s += prettyprint(stmt.getStatements(i));
+					}
+				} else {
+					s += "\n";
+					indent++;
+					for (int i = 0; i < stmt.getExpressionsCount(); i++)
+						s += indent() + prettyprint(stmt.getExpressions(i)) + "\n";
+					indent--;
+				}
 				return s;
 
 			case IF:
