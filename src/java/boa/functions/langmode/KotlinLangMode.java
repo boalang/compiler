@@ -259,6 +259,10 @@ public class KotlinLangMode implements LangMode {
 				break;
 			default:
 			case CLASS:
+				if (d.getKind() == TypeKind.IMMUTABLE)
+					s += "data ";
+					if (d.getKind() == TypeKind.ENUM)
+					s += "enum ";
 				s += "class " + d.getName();
 				s += prettyprintClass(d);
 				break;
