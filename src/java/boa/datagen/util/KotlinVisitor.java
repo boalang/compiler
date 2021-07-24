@@ -1679,27 +1679,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			case "ushr":
 				eb.setKind(Expression.ExpressionKind.BIT_UNSIGNEDRSHIFT);
 				break;
-			case "until":
-			case "beats":
-			case "bind":
-			case "downTo":
-			case "hasTwoOrThreeNeighboursInPopulation":
-			case "isInHorizontalNeighbouringRangeOf":
-			case "isInNeighbouringRangeOf":
-			case "isInVerticalNeighbouringRangeOf":
-			case "shouldContain":
-			case "shouldEqual":
-			case "`should equal to`":
-			case "step":
-			case "to":
-			// FIXME maybe?
-				eb.setKind(Expression.ExpressionKind.OTHER);
-				eb.setLiteral(expr.getOperationReference().getText());
-				break;
 			default:
 				eb.setKind(Expression.ExpressionKind.OTHER);
 				eb.setLiteral(expr.getOperationReference().getText());
-				System.err.println("===> UNKNOWN BINARY OPERATOR ID: " + expr.getOperationReference().getText());
+				// System.err.println("===> UNKNOWN BINARY OPERATOR ID: " + expr.getOperationReference().getText());
 				break;
 			}
 			break;
