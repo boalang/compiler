@@ -610,13 +610,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			eb.setKind(Expression.ExpressionKind.OP_DEC);
 			break;
 		case "PLUS":
-			// FIXME is this ok?
 			eb.setKind(Expression.ExpressionKind.OP_ADD);
 			break;
 		case "EXCLEXCL":
-			// FIXME is this ok?
-			eb.setKind(Expression.ExpressionKind.OTHER);
-			eb.setLiteral(expr.getOperationToken().toString());
+			eb.setKind(Expression.ExpressionKind.OP_NOTNULL);
 			break;
 		case "PLUSPLUS":
 			eb.setKind(Expression.ExpressionKind.OP_INC);
@@ -1301,10 +1298,28 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitBinaryWithTypeRHSExpression(final KtBinaryExpressionWithTypeRHS n, final Void v) {
+	public Void visitBinaryWithTypeRHSExpression(final KtBinaryExpressionWithTypeRHS expr, final Void v) {
 		// TODO
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
+		final Expression.Builder eb = Expression.newBuilder();
+
+		expressions.push(new ArrayList<Expression>());
+		expr.getLeft().accept(this, v);
+		eb.addAllExpressions(expressions.pop());
+
+		eb.setNewType(typeFromTypeRef(expr.getRight()));
+
+		switch (expr.getOperationReference().getText()) {
+		case "as":
+			eb.setKind(Expression.ExpressionKind.CAST);
+			break;
+		case "as?":
+		default:
+			eb.setKind(Expression.ExpressionKind.CAST);
+			eb.setLiteral(expr.getOperationReference().getText());
+			break;
+		}
+
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
@@ -1617,7 +1632,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			eb.setKind(Expression.ExpressionKind.SHNEQ);
 			break;
 		case "NOT_IN":
-			eb.setKind(Expression.ExpressionKind.NOTIN);
+			eb.setKind(Expression.ExpressionKind.NOT_IN);
 			break;
 		case "ELVIS":
 			eb.setKind(Expression.ExpressionKind.OP_ELVIS);
