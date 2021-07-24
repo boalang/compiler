@@ -267,7 +267,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnnotation(final KtAnnotation annotation, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(annotation.getClass());
 		// annotation.acceptChildren(this, v);
 		return null;
@@ -275,7 +275,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDeclaration(final KtDeclaration d, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(d.getClass());
 		// d.acceptChildren(this, v);
 		return null;
@@ -321,7 +321,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitClassOrObject(final KtClassOrObject n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -401,7 +401,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitConstructorCalleeExpression(final KtConstructorCalleeExpression expr, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(expr.getClass());
 		// expr.acceptChildren(this, v);
 		return null;
@@ -409,7 +409,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeParameterList(final KtTypeParameterList n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -417,7 +417,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeParameter(final KtTypeParameter n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -478,7 +478,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSuperTypeListEntry(final KtSuperTypeListEntry n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -533,7 +533,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitPropertyDelegate(final KtPropertyDelegate n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -541,7 +541,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeReference(final KtTypeReference n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -557,7 +557,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitReferenceExpression(final KtReferenceExpression expr, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(expr.getClass());
 		// expr.acceptChildren(this, v);
 		return null;
@@ -899,7 +899,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnnotatedExpression(final KtAnnotatedExpression expr, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(expr.getClass());
 		// expr.acceptChildren(this, v);
 		return null;
@@ -921,7 +921,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitQualifiedExpression(final KtQualifiedExpression expr, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(expr.getClass());
 		// expr.acceptChildren(this, v);
 		return null;
@@ -1157,7 +1157,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeArgumentList(final KtTypeArgumentList n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1183,7 +1183,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitInitializerList(final KtInitializerList n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1191,7 +1191,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnonymousInitializer(final KtAnonymousInitializer n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1199,7 +1199,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitScriptInitializer(final KtScriptInitializer n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1241,7 +1241,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeConstraintList(final KtTypeConstraintList n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1249,7 +1249,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeConstraint(final KtTypeConstraint n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1257,7 +1257,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitUserType(final KtUserType n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1265,6 +1265,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDynamicType(final KtDynamicType n, final Void v) {
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1272,7 +1273,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitFunctionType(final KtFunctionType n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1280,7 +1281,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSelfType(final KtSelfType n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1296,7 +1297,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitNullableType(final KtNullableType n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1304,7 +1305,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeProjection(final KtTypeProjection n, final Void v) {
-		// TODO
+		// FIXME remove?
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
@@ -1599,7 +1600,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "NOT_IN":
 		case "EQEQEQ":
 		case "ELVIS":
-			// FIXME
+			// FIXME maybe?
 			eb.setKind(Expression.ExpressionKind.OTHER);
 			eb.setLiteral(expr.getOperationToken().toString());
 			break;
