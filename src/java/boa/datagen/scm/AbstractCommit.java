@@ -584,7 +584,7 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	private static final KotlinVisitor visitor = new KotlinVisitor();
+	private final KotlinVisitor visitor = new KotlinVisitor();
 
 	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		final KtFile theKt = KotlinLangMode.tryparse(path, content, false);

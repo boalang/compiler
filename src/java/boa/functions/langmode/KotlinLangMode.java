@@ -783,7 +783,6 @@ public class KotlinLangMode implements LangMode {
 	}
 
 	private static PsiManager kProjectManager = null;
-	private static final KotlinErrorCheckVisitor errorCheck = new KotlinErrorCheckVisitor();
 
 	public static KtFile tryparse(final String path, final String content, final boolean debug) {
 		try {
@@ -800,7 +799,7 @@ public class KotlinLangMode implements LangMode {
 			final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content);
 			final KtFile theKt = new KtFile(kProjectManager.findViewProvider(file), false);
 
-			if (!debug && errorCheck.hasError(theKt))
+			if (!debug && new KotlinErrorCheckVisitor().hasError(theKt))
 				return null;
 
 			return theKt;
