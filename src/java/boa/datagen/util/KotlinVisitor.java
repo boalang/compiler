@@ -132,6 +132,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "inline":
 		case "noinline":
 		case "operator":
+		case "vararg":
+		case "tailrec":
+		case "suspend":
+		case "external":
 		case "lateinit":
 			mb.setKind(Modifier.ModifierKind.OTHER);
 			mb.setOther(m.getValue());
