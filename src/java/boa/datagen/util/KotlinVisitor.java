@@ -255,13 +255,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (entry.getValueArgumentList() != null) {
 			expressions.push(new ArrayList<Expression>());
-			for (final KtValueArgument a : entry.getValueArgumentList().getArguments())
-				a.getArgumentExpression().accept(this, v);
+			entry.getValueArgumentList().accept(this, v);
 			mb.addAllAnnotationValues(expressions.pop());
 
-			for (final KtValueArgument a : entry.getValueArgumentList().getArguments()) {
-				if (a.getArgumentName() != null)
-					mb.addAnnotationMembers(a.getArgumentName().getText());
+			for (final KtValueArgument arg : entry.getValueArgumentList().getArguments()) {
+				if (arg.isNamed())
+					mb.addAnnotationMembers(arg.getArgumentName().getText());
 				else
 					mb.addAnnotationMembers("");
 			}
@@ -975,6 +974,16 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
+	public Void visitArgument(final KtValueArgument arg, final Void v) {
+		// FIXME
+		if (arg.getArgumentExpression() != null)
+			arg.getArgumentExpression().accept(this, v);
+		if (arg.isSpread())
+			;
+		return null;
+	}
+
+	@Override
 	public Void visitDotQualifiedExpression(final KtDotQualifiedExpression expr, final Void v) {
 		final KtExpression rcvr = expr.getReceiverExpression();
 		final KtExpression sel = expr.getSelectorExpression();
@@ -993,8 +1002,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 			if (call.getValueArgumentList() != null) {
 				expressions.push(new ArrayList<Expression>());
-				for (final KtValueArgument arg : call.getValueArgumentList().getArguments())
-					arg.getArgumentExpression().accept(this, v);
+				call.getValueArgumentList().accept(this, v);
 				eb.addAllMethodArgs(expressions.pop());
 			}
 
@@ -2070,8 +2078,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (call.getValueArgumentList() != null) {
 			expressions.push(new ArrayList<Expression>());
-			for (final KtValueArgument arg : call.getValueArgumentList().getArguments())
-				arg.getArgumentExpression().accept(this, v);
+			call.getValueArgumentList().accept(this, v);
 			eb.addAllMethodArgs(expressions.pop());
 		}
 
