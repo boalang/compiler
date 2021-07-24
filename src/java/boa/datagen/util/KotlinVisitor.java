@@ -271,14 +271,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitAnnotation(final KtAnnotation annotation, final Void v) {
-		// FIXME remove?
-		System.err.println(annotation.getClass());
-		// annotation.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitDeclaration(final KtDeclaration d, final Void v) {
 		// FIXME remove?
 		System.err.println(d.getClass());

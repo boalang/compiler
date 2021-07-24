@@ -1,8 +1,4 @@
-@file:JvmName(f = "Foo", g = 3)
-@file:JvmName("Foo", 3)
-@file:JvmName("Foo")
-@file:JvmName()
-@file:JvmName
+@file:[JvmName(f = "Foo", g = 3) JvmName("Foo", g = 3) JvmName(f = "Foo", 3)]
 import java.util.List
 
 class C {}
