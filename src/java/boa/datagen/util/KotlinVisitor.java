@@ -901,12 +901,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		eb.addAllVariableDecls(fields.pop());
 
 		if (expr.getBodyExpression() != null) {
-			expressions.push(new ArrayList<Expression>());
+			statements.push(new ArrayList<Statement>());
 			expr.getBodyExpression().accept(this, v);
-			eb.addStatements(Statement.newBuilder()
-					.setKind(Statement.StatementKind.EXPRESSION)
-					.addExpressions(expressions.pop().get(0))
-					.build());
+			eb.addAllStatements(statements.pop());
 		}
 
 		expressions.peek().add(eb.build());
