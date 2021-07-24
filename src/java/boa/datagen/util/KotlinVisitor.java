@@ -1610,13 +1610,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "EQEQ":
 			eb.setKind(Expression.ExpressionKind.EQ);
 			break;
-		case "NOT_IN":
 		case "EQEQEQ":
-		case "ELVIS":
+			eb.setKind(Expression.ExpressionKind.SHEQ);
+			break;
 		case "EXCLEQEQEQ":
-			// FIXME maybe?
-			eb.setKind(Expression.ExpressionKind.OTHER);
-			eb.setLiteral(expr.getOperationToken().toString());
+			eb.setKind(Expression.ExpressionKind.SHNEQ);
+			break;
+		case "NOT_IN":
+			eb.setKind(Expression.ExpressionKind.NOTIN);
+			break;
+		case "ELVIS":
+			eb.setKind(Expression.ExpressionKind.OP_ELVIS);
 			break;
 		case "EXCLEQ":
 			eb.setKind(Expression.ExpressionKind.NEQ);

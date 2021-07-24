@@ -374,6 +374,8 @@ message Expression {
 		NAMESPACENAME = 100;
 		TEMPLATE = 101;
 		LABEL = 102;
+		OP_ELVIS = 103;
+		NOTIN = 104;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
