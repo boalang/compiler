@@ -369,10 +369,12 @@ public class SeqRepoImporter {
 					new FileIO.DirectoryRemover(gitDir).run();
 					return null; // return null to skip empty project
 				}
-			}
 
-			if (debug)
-				System.out.println(Thread.currentThread().getName() + " id: " + Thread.currentThread().getId() + " cloned repository: " + name);
+				if (debug)
+					System.out.println(Thread.currentThread().getName() + " id: " + Thread.currentThread().getId() + " cloned repository: " + name);
+			} else if (debug) {
+				System.out.println(Thread.currentThread().getName() + " id: " + Thread.currentThread().getId() + " using cached repository: " + name);
+			}
 
 			AbstractConnector conn = null;
 			try {
