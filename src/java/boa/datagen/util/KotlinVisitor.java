@@ -136,6 +136,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "tailrec":
 		case "suspend":
 		case "external":
+		case "infix":
+		case "crossinline":
 		case "lateinit":
 			mb.setKind(Modifier.ModifierKind.OTHER);
 			mb.setOther(m.getValue());
@@ -616,6 +618,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "MINUSMINUS":
 			eb.setKind(Expression.ExpressionKind.OP_DEC);
 			break;
+		case "PLUS":
+			// FIXME is this ok?
+			eb.setKind(Expression.ExpressionKind.OP_ADD);
+			break;
+		case "EXCLEXCL":
+			// FIXME is this ok?
+			eb.setKind(Expression.ExpressionKind.OTHER);
+			eb.setLiteral(expr.getOperationToken().toString());
+			break;
 		case "PLUSPLUS":
 			eb.setKind(Expression.ExpressionKind.OP_INC);
 			break;
@@ -626,7 +637,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			eb.setKind(Expression.ExpressionKind.LOGICAL_NOT);
 			break;
 		default:
-			eb.setKind(Expression.ExpressionKind.OP_INC);
+			eb.setKind(Expression.ExpressionKind.OTHER);
+			eb.setLiteral(expr.getOperationToken().toString());
 			System.err.println("===> UNKNOWN UNARY OPERATOR: " + expr.getOperationToken().toString());
 			break;
 		}
@@ -1604,6 +1616,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "NOT_IN":
 		case "EQEQEQ":
 		case "ELVIS":
+		case "EXCLEQEQEQ":
 			// FIXME maybe?
 			eb.setKind(Expression.ExpressionKind.OTHER);
 			eb.setLiteral(expr.getOperationToken().toString());
@@ -1670,9 +1683,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				eb.setKind(Expression.ExpressionKind.BIT_UNSIGNEDRSHIFT);
 				break;
 			case "until":
-				// FIXME maybe?
+			case "beats":
+			case "bind":
+			case "downTo":
+			case "hasTwoOrThreeNeighboursInPopulation":
+			case "isInHorizontalNeighbouringRangeOf":
+			case "isInNeighbouringRangeOf":
+			case "isInVerticalNeighbouringRangeOf":
+			case "shouldContain":
+			case "shouldEqual":
+			case "`should equal to`":
+			case "step":
+			case "to":
+			// FIXME maybe?
 				eb.setKind(Expression.ExpressionKind.OTHER);
-				eb.setLiteral("until");
+				eb.setLiteral(expr.getOperationReference().getText());
 				break;
 			default:
 				eb.setKind(Expression.ExpressionKind.OTHER);
