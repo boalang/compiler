@@ -915,7 +915,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnnotatedExpression(final KtAnnotatedExpression expr, final Void v) {
-		// FIXME remove?
+		// TODO
 		System.err.println(expr.getClass());
 		// expr.acceptChildren(this, v);
 		return null;
@@ -1215,7 +1215,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitScriptInitializer(final KtScriptInitializer n, final Void v) {
-		// FIXME remove?
+		// TODO
 		System.err.println(n.getClass());
 		// n.acceptChildren(this, v);
 		return null;
