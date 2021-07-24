@@ -129,6 +129,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "inner":
 		case "sealed":
 		case "override":
+		case "inline":
+		case "noinline":
+		case "operator":
+		case "lateinit":
 			mb.setKind(Modifier.ModifierKind.OTHER);
 			mb.setOther(m.getValue());
 			break;
@@ -619,7 +623,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 		default:
 			eb.setKind(Expression.ExpressionKind.OP_INC);
-			System.err.println("===> UNKNOWN OPERATOR: " + expr.getOperationToken().toString());
+			System.err.println("===> UNKNOWN UNARY OPERATOR: " + expr.getOperationToken().toString());
 			break;
 		}
 
@@ -1592,6 +1596,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "EQEQ":
 			eb.setKind(Expression.ExpressionKind.EQ);
 			break;
+		case "NOT_IN":
+		case "EQEQEQ":
+		case "ELVIS":
+			// FIXME
+			eb.setKind(Expression.ExpressionKind.OTHER);
+			eb.setLiteral(expr.getOperationToken().toString());
+			break;
 		case "EXCLEQ":
 			eb.setKind(Expression.ExpressionKind.NEQ);
 			break;
@@ -1653,10 +1664,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			case "ushr":
 				eb.setKind(Expression.ExpressionKind.BIT_UNSIGNEDRSHIFT);
 				break;
+			case "until":
+				// FIXME maybe?
+				eb.setKind(Expression.ExpressionKind.OTHER);
+				eb.setLiteral("until");
+				break;
 			default:
 				eb.setKind(Expression.ExpressionKind.OTHER);
 				eb.setLiteral(expr.getOperationReference().getText());
-				System.err.println("===> UNKNOWN OPERATOR ID: " + expr.getOperationReference().getText());
+				System.err.println("===> UNKNOWN BINARY OPERATOR ID: " + expr.getOperationReference().getText());
 				break;
 			}
 			break;
@@ -1664,7 +1680,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		default:
 			eb.setKind(Expression.ExpressionKind.OTHER);
 			eb.setLiteral(expr.getOperationToken().toString());
-			System.err.println("===> UNKNOWN OPERATOR: " + expr.getOperationToken().toString());
+			System.err.println("===> UNKNOWN BINARY OPERATOR: " + expr.getOperationToken().toString());
 			break;
 		}
 
