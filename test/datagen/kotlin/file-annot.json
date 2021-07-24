@@ -27,6 +27,44 @@
                "annotation_name": "JvmName",
                "annotation_members": [
                   "",
+                  "g"
+               ],
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  },
+                  {
+                     "kind": "LITERAL",
+                     "literal": "3"
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_members": [
+                  "f",
+                  ""
+               ],
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  },
+                  {
+                     "kind": "LITERAL",
+                     "literal": "3"
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_members": [
+                  "",
                   ""
                ],
                "annotation_values": [
