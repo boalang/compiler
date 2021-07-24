@@ -2026,7 +2026,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		expectExpression.push(true);
 
-		vb.setName(param.getName());
+		if (param.getName() != null)
+			vb.setName(param.getName());
 
 		if (param.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(param.getTypeReference()));
