@@ -1243,7 +1243,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			exprs.clear();
 		}
 
-		expectExpression.push(true);
+		expectExpression.pop();
 
 		expressions.pop();
 		mb.addAllStatements(statements.pop());
