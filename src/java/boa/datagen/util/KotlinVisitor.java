@@ -1022,17 +1022,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		eb.setKind(Expression.ExpressionKind.NEW);
 
-		final List<Declaration> decls = new ArrayList<Declaration>();
-		declarations.push(decls);
-
+		declarations.push(new ArrayList<Declaration>());
 		expr.getObjectDeclaration().accept(this, v);
-
-		Declaration objLiteral = decls.get(0);
-		declarations.pop();
+		final Declaration objLiteral = declarations.pop().get(0);
 
 		eb.setAnonDeclaration(objLiteral);
 
-		eb.setNewType(objLiteral.getParents(0));
+		if (objLiteral.getParentsCount() > 0)
+			eb.setNewType(objLiteral.getParents(0));
 
 		expressions.peek().add(eb.build());
 
@@ -1479,7 +1476,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitWhenConditionWithExpression(final KtWhenConditionWithExpression expr, final Void v) {
-		expr.getExpression().accept(this, v);
+		if (expr.getExpression() != null)
+			expr.getExpression().accept(this, v);
 		return null;
 	}
 
