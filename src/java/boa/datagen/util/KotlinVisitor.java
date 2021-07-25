@@ -1714,8 +1714,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		expressions.push(new ArrayList<Expression>());
-		expr.getLeft().accept(this, v);
-		expr.getRight().accept(this, v);
+		if (expr.getLeft() != null)
+			expr.getLeft().accept(this, v);
+		if (expr.getRight() != null)
+			expr.getRight().accept(this, v);
 		eb.addAllExpressions(expressions.pop());
 
 		expressions.peek().add(eb.build());
@@ -2009,12 +2011,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			function.getBodyBlockExpression().accept(this, v);
 			mb.addAllStatements(statements.pop());
 		} else if (function.getBodyExpression() != null) {
-			expressions.push(new ArrayList<Expression>());
+			statements.push(new ArrayList<Statement>());
 			function.getBodyExpression().accept(this, v);
-			mb.addStatements(Statement.newBuilder()
-					.setKind(Statement.StatementKind.EXPRESSION)
-					.addExpressions(expressions.pop().get(0))
-					.build());
+			mb.addAllStatements(statements.pop());
 		}
 		expectExpression.pop();
 
