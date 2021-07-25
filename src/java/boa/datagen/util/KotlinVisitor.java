@@ -1482,6 +1482,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitWhenConditionWithExpression(final KtWhenConditionWithExpression expr, final Void v) {
+		// FIXME how is this possible???
 		if (expr.getExpression() != null)
 			expr.getExpression().accept(this, v);
 		return null;
@@ -1718,6 +1719,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		expressions.push(new ArrayList<Expression>());
+		// FIXME how can binary expression not have a left and right???
 		if (expr.getLeft() != null)
 			expr.getLeft().accept(this, v);
 		if (expr.getRight() != null)
