@@ -890,8 +890,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (expr.getBodyExpression() != null) {
 			statements.push(new ArrayList<Statement>());
+			expressions.push(new ArrayList<Expression>());
 			expr.getBodyExpression().accept(this, v);
 			eb.addAllStatements(statements.pop());
+			for (final Expression exp : expressions.pop())
+				eb.addStatements(Statement.newBuilder()
+						.setKind(Statement.StatementKind.EXPRESSION)
+						.addExpressions(exp)
+						.build());
 		}
 
 		expressions.peek().add(eb.build());
@@ -1779,8 +1785,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.addAllStatements(statements.pop());
 		} else if (acc.getBodyExpression() != null) {
 			statements.push(new ArrayList<Statement>());
+			expressions.push(new ArrayList<Expression>());
 			acc.getBodyExpression().accept(this, v);
 			mb.addAllStatements(statements.pop());
+			for (final Expression exp : expressions.pop())
+				mb.addStatements(Statement.newBuilder()
+						.setKind(Statement.StatementKind.EXPRESSION)
+						.addExpressions(exp)
+						.build());
 		}
 
 		methods.peek().add(mb.build());
@@ -2007,8 +2019,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.addAllStatements(statements.pop());
 		} else if (function.getBodyExpression() != null) {
 			statements.push(new ArrayList<Statement>());
+			expressions.push(new ArrayList<Expression>());
 			function.getBodyExpression().accept(this, v);
 			mb.addAllStatements(statements.pop());
+			for (final Expression exp : expressions.pop())
+				mb.addStatements(Statement.newBuilder()
+						.setKind(Statement.StatementKind.EXPRESSION)
+						.addExpressions(exp)
+						.build());
 		}
 		expectExpression.pop();
 
