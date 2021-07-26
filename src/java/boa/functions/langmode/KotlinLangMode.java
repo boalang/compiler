@@ -226,7 +226,7 @@ public class KotlinLangMode implements LangMode {
 			s += "\n";
 
 		for (final Variable v : n.getVariablesList())
-			s += prettyprint(v);
+			s += prettyprint(v) + "\n";
 
 		for (final Declaration d : n.getDeclarationsList())
 			s += prettyprint(d);
