@@ -1230,14 +1230,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitScriptInitializer(final KtScriptInitializer n, final Void v) {
-		// TODO
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitClassInitializer(final KtClassInitializer n, final Void v) {
 		final Method.Builder mb = Method.newBuilder();
 
