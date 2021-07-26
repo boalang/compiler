@@ -906,9 +906,16 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitAnnotatedExpression(final KtAnnotatedExpression expr, final Void v) {
-		// TODO
-		System.err.println(expr.getClass());
-		// expr.acceptChildren(this, v);
+		modifiers.push(new ArrayList<Modifier>());
+		for (final KtAnnotationEntry ann : expr.getAnnotationEntries())
+			ann.accept(this, v);
+
+		expressions.push(new ArrayList<Expression>());
+		expr.getBaseExpression().accept(this, v);
+
+		final Expression.Builder eb = Expression.newBuilder(expressions.pop().get(0));
+		eb.addAllModifiers(modifiers.pop());
+		expressions.peek().add(eb.build());
 		return null;
 	}
 

@@ -760,7 +760,7 @@ public class JavaLangMode implements LangMode {
 				return s;
 
 			case ANNOTATION:
-				return prettyprint(e.getAnnotation());
+				return prettyprint(e.getModifiersList());
 
 			case VARDECL:
 				s += prettyprint(e.getVariableDecls(0).getModifiersList());

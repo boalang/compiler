@@ -906,7 +906,7 @@ public class JavaVisitor extends ASTVisitor {
 		if (expressions.empty()) {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
-			eb.setAnnotation(modifiers.pop());
+			eb.addModifiers(modifiers.pop());
 			b.addAnnotationMembers("value");
 			b.addAnnotationValues(eb.build());
 		} else {
@@ -932,7 +932,7 @@ public class JavaVisitor extends ASTVisitor {
 			if (expressions.empty()) {
 				boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 				eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
-				eb.setAnnotation(modifiers.pop());
+				eb.addModifiers(modifiers.pop());
 				b.addAnnotationMembers(pair.getName().getFullyQualifiedName());
 				b.addAnnotationValues(eb.build());
 			} else {
@@ -1492,7 +1492,7 @@ public class JavaVisitor extends ASTVisitor {
 				// FIXME is it only possible from JLS8
 				boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 				eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
-				eb.setAnnotation(modifiers.pop());
+				eb.addModifiers(modifiers.pop());
 				b.addExpressions(eb.build());
 			} else {
 				b.addExpressions(expressions.pop());

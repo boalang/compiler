@@ -390,7 +390,7 @@ message Expression {
 	optional string method = 9;
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
-	optional Modifier annotation = 12;
+	repeated Modifier modifiers = 12;
 	/** 13 used to be lambda */
 	/** @exclude */
 	optional bool no_parens = 14;
