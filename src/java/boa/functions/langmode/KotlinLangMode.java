@@ -695,15 +695,10 @@ public class KotlinLangMode implements LangMode {
 				return prettyprint(e.getModifiersList());
 
 			case VARDECL:
-				s += prettyprint(e.getVariableDecls(0).getModifiersList());
-				s += prettyprint(e.getVariableDecls(0).getVariableType()) + " ";
 				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
-					if (i > 0)
-						s += ", ";
-					s += e.getVariableDecls(i).getName();
-					if (e.getVariableDecls(i).hasInitializer())
-						s += " = " + prettyprint(e.getVariableDecls(i).getInitializer());
+					s += prettyprint(e.getVariableDecls(i));
 				}
+
 				return s;
 
 			case LAMBDA:
