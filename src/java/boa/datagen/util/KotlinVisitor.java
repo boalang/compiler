@@ -292,6 +292,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		for (final KtTypeParameter type_param : d.getTypeParameters())
 			db.addGenericParameters(typeFromTypeParameter(type_param));
 
+                expectExpression.push(false);
+
 		modifiers.push(new ArrayList<Modifier>());
 		fields.push(new ArrayList<Variable>());
 		methods.push(new ArrayList<Method>());
@@ -311,6 +313,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		db.addAllMethods(methods.pop());
 		db.addAllFields(fields.pop());
 		db.addAllModifiers(modifiers.pop());
+
+		expectExpression.pop();
 
 		declarations.peek().add(db.build());
 		return null;
