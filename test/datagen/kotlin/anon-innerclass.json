@@ -55,7 +55,8 @@
                                           {
                                              "kind": "FINAL"
                                           }
-                                       ]
+                                       ],
+                                       "val_var": false
                                     }
                                  ],
                                  "statements": [
@@ -83,7 +84,8 @@
                                           {
                                              "kind": "FINAL"
                                           }
-                                       ]
+                                       ],
+                                       "val_var": false
                                     }
                                  ],
                                  "statements": [
@@ -96,7 +98,8 @@
                         }
                      }
                   ]
-               }
+               },
+               "val_var": true
             }
          ]
       }

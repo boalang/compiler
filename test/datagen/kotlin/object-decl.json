@@ -15,7 +15,15 @@
                            "variable_type": {
                               "name": "String",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [
@@ -62,8 +70,56 @@
                      ]
                   }
                ]
+            },
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "getObject",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "NEW",
+                                 "anon_declaration": {
+                                    "name": "",
+                                    "kind": "SINGLETON",
+                                    "fields": [
+                                       {
+                                          "name": "x",
+                                          "variable_type": {
+                                             "name": "String",
+                                             "kind": "OTHER"
+                                          },
+                                          "modifiers": [
+                                             {
+                                                "kind": "FINAL"
+                                             }
+                                          ],
+                                          "initializer": {
+                                             "kind": "LITERAL",
+                                             "literal": "\"x\""
+                                          }
+                                       }
+                                    ]
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
             }
          ]
       }
    ]
 }
+

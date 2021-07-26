@@ -449,6 +449,8 @@ message Modifier {
 		TRANSIENT = 12;
 		/** A volatile modifier */
 		VOLATILE = 13;
+                /** Modifier is implicit */
+                IMPLICIT = 14;
 	}
 	/** A visibility modifier */
 	enum Visibility {

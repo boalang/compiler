@@ -21,7 +21,15 @@
                            "variable_type": {
                               "name": "String",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ]
                   },
@@ -58,7 +66,15 @@
                            "variable_type": {
                               "name": "Int",
                               "kind": "OTHER"
-                           }
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
                         }
                      ],
                      "statements": [

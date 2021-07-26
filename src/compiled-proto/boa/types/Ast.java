@@ -33566,6 +33566,14 @@ public final class Ast {
        * </pre>
        */
       VOLATILE(15, 13),
+      /**
+       * <code>IMPLICIT = 14;</code>
+       *
+       * <pre>
+       ** Modifier is implicit 
+       * </pre>
+       */
+      IMPLICIT(16, 14),
       ;
 
       /**
@@ -33704,6 +33712,14 @@ public final class Ast {
        * </pre>
        */
       public static final int VOLATILE_VALUE = 13;
+      /**
+       * <code>IMPLICIT = 14;</code>
+       *
+       * <pre>
+       ** Modifier is implicit 
+       * </pre>
+       */
+      public static final int IMPLICIT_VALUE = 14;
 
 
       public final int getNumber() { return value; }
@@ -33724,6 +33740,7 @@ public final class Ast {
           case 11: return STRICTFP;
           case 12: return TRANSIENT;
           case 13: return VOLATILE;
+          case 14: return IMPLICIT;
           default: return null;
         }
       }
@@ -33754,7 +33771,7 @@ public final class Ast {
       }
 
       private static final ModifierKind[] VALUES = {
-        OTHER, VISIBILITY, ANNOTATION, FINAL, CONSTANT, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, SCOPE, GETTER, SETTER, NATIVE, STRICTFP, TRANSIENT, VOLATILE, 
+        OTHER, VISIBILITY, ANNOTATION, FINAL, CONSTANT, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, SCOPE, GETTER, SETTER, NATIVE, STRICTFP, TRANSIENT, VOLATILE, IMPLICIT, 
       };
 
       public static ModifierKind valueOf(

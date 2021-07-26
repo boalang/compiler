@@ -91,7 +91,15 @@
                      "variable_type": {
                         "name": "Int",
                         "kind": "OTHER"
-                     }
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
                   }
                ],
                "statements": [
@@ -185,3 +193,4 @@
       }
    ]
 }
+
