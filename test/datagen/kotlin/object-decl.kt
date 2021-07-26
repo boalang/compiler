@@ -5,3 +5,9 @@ object Greeter {
            println("Hello ${bar}!")
        }
 }
+
+class C {
+    private fun getObject() = object {
+        val x: String = "x"
+    }
+}
