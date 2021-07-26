@@ -1980,11 +1980,16 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		statements.push(new ArrayList<Statement>());
 
 		if (isPrimary) {
+			final List<Statement> stmts = new ArrayList<Statement>();
 			for (final Expression expr : superClassInitExprs)
-				mb.addStatements(Statement.newBuilder()
+				stmts.add(Statement.newBuilder()
 						.setKind(Statement.StatementKind.EXPRESSION)
 						.addExpressions(expr)
 						.build());
+			statements.peek().add(Statement.newBuilder()
+					.setKind(Statement.StatementKind.BLOCK)
+					.addAllStatements(stmts)
+					.build());
 		} else {
 			if (!((KtSecondaryConstructor) constructor).hasImplicitDelegationCall()) {
 				expressions.push(new ArrayList<Expression>());
