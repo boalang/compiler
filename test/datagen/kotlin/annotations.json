@@ -24,6 +24,9 @@
                            },
                            "modifiers": [
                               {
+                                 "kind": "FINAL"
+                              },
+                              {
                                  "kind": "ANNOTATION",
                                  "annotation_name": "Ann",
                                  "other": "field"
@@ -38,6 +41,9 @@
                            },
                            "modifiers": [
                               {
+                                 "kind": "FINAL"
+                              },
+                              {
                                  "kind": "ANNOTATION",
                                  "annotation_name": "Ann",
                                  "other": "get"
@@ -51,6 +57,9 @@
                               "kind": "OTHER"
                            },
                            "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
                               {
                                  "kind": "ANNOTATION",
                                  "annotation_name": "Ann",
@@ -70,6 +79,9 @@
                      },
                      "modifiers": [
                         {
+                           "kind": "FINAL"
+                        },
+                        {
                            "kind": "ANNOTATION",
                            "annotation_name": "Ann",
                            "other": "field"
@@ -83,6 +95,9 @@
                         "kind": "OTHER"
                      },
                      "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
                         {
                            "kind": "ANNOTATION",
                            "annotation_name": "Ann",
@@ -98,9 +113,102 @@
                      },
                      "modifiers": [
                         {
+                           "kind": "FINAL"
+                        },
+                        {
                            "kind": "ANNOTATION",
                            "annotation_name": "Ann",
                            "other": "param"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "f",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "initializer": {
+                                                "kind": "LITERAL",
+                                                "literal": "3"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "print",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Ann1",
+                                             "annotation_members": [
+                                                "",
+                                                ""
+                                             ],
+                                             "annotation_values": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "5"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Ann2"
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Ann3",
+                                             "annotation_members": [
+                                                "str"
+                                             ],
+                                             "annotation_values": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "\"hi\""
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
                         }
                      ]
                   }
