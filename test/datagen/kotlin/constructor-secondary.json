@@ -41,6 +41,9 @@
                            },
                            "modifiers": [
                               {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
                                  "kind": "FINAL"
                               }
                            ]
@@ -52,6 +55,9 @@
                               "kind": "OTHER"
                            },
                            "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
                               {
                                  "kind": "FINAL"
                               }
@@ -127,6 +133,9 @@
                            },
                            "modifiers": [
                               {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
                                  "kind": "FINAL"
                               }
                            ]
@@ -138,6 +147,9 @@
                               "kind": "OTHER"
                            },
                            "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
                               {
                                  "kind": "FINAL"
                               }
@@ -173,3 +185,4 @@
       }
    ]
 }
+

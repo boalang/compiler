@@ -20,7 +20,8 @@
                      "initializer": {
                         "kind": "LITERAL",
                         "literal": "\"world\""
-                     }
+                     },
+                     "val_var": false
                   }
                ],
                "statements": [

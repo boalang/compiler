@@ -366,6 +366,7 @@ public class KotlinLangMode implements LangMode {
 		// FIXME convert to Kotlin
 		if (v == null) return "";
 		boolean hasVal = false;
+		boolean isImplicit = false;
 
 		final List<Modifier> mods = v.getModifiersList();
 		final List<Modifier> newMods = new ArrayList<Modifier>();
@@ -373,6 +374,8 @@ public class KotlinLangMode implements LangMode {
 		for (Modifier mod : mods) {
 			if (mod.getKind() == Modifier.ModifierKind.FINAL)
 				hasVal = true;
+			else if (mod.getKind() == Modifier.ModifierKind.IMPLICIT)
+				isImplicit = true;
 			else
 				newMods.add(mod);
 		}
@@ -381,7 +384,8 @@ public class KotlinLangMode implements LangMode {
 		if (newMods.size() > 0)
 			s += prettyprint(newMods);
 
-		s += hasVal ? "val " : "var ";
+		if (!isImplicit)
+			s += hasVal ? "val " : "var ";
 
 		s += v.getName();
 

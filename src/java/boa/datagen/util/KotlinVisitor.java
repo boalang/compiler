@@ -355,6 +355,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		vb.setName(n.getName());
 
+		if (n.getValOrVarKeyword() == null)
+			vb.addModifiers(Modifier.newBuilder()
+					.setKind(Modifier.ModifierKind.IMPLICIT)
+					.build());
+
 		if (n.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(n.getTypeReference()));
 
@@ -428,6 +433,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitEnumEntry(final KtEnumEntry n, final Void v) {
 		final Variable.Builder vb = Variable.newBuilder();
 		vb.setName(n.getNameAsSafeName().asString());
+                vb.addModifiers(Modifier.newBuilder()
+				.setKind(Modifier.ModifierKind.IMPLICIT)
+				.build());
 
 		if (n.getModifierList() != null) {
 			modifiers.push(new ArrayList<Modifier>());
@@ -1816,6 +1824,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		else
 			vb.setName(prop.getNameIdentifier().getText());
 
+		if (prop.getValOrVarKeyword() == null)
+			vb.addModifiers(Modifier.newBuilder()
+					.setKind(Modifier.ModifierKind.IMPLICIT)
+					.build());
+
 		final KtTypeReference typeRef = prop.getTypeReference();
 		final KtPropertyDelegate propDelegate = prop.getDelegate();
 		if ((typeRef != null) && (propDelegate != null)) {
@@ -2051,6 +2064,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (param.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(param.getTypeReference()));
+
+		if (!param.hasValOrVar())
+			vb.addModifiers(Modifier.newBuilder()
+					.setKind(Modifier.ModifierKind.IMPLICIT)
+					.build());
 
 		if (!param.hasValOrVar() || !param.isMutable())
 			vb.addModifiers(Modifier.newBuilder()

@@ -33344,6 +33344,14 @@ public final class Ast {
        * </pre>
        */
       VOLATILE(15, 13),
+      /**
+       * <code>IMPLICIT = 14;</code>
+       *
+       * <pre>
+       ** Modifier is implicit 
+       * </pre>
+       */
+      IMPLICIT(16, 14),
       ;
 
       /**
@@ -33482,6 +33490,14 @@ public final class Ast {
        * </pre>
        */
       public static final int VOLATILE_VALUE = 13;
+      /**
+       * <code>IMPLICIT = 14;</code>
+       *
+       * <pre>
+       ** Modifier is implicit 
+       * </pre>
+       */
+      public static final int IMPLICIT_VALUE = 14;
 
 
       public final int getNumber() { return value; }
@@ -33502,6 +33518,7 @@ public final class Ast {
           case 11: return STRICTFP;
           case 12: return TRANSIENT;
           case 13: return VOLATILE;
+          case 14: return IMPLICIT;
           default: return null;
         }
       }
@@ -33532,7 +33549,7 @@ public final class Ast {
       }
 
       private static final ModifierKind[] VALUES = {
-        OTHER, VISIBILITY, ANNOTATION, FINAL, CONSTANT, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, SCOPE, GETTER, SETTER, NATIVE, STRICTFP, TRANSIENT, VOLATILE, 
+        OTHER, VISIBILITY, ANNOTATION, FINAL, CONSTANT, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, SCOPE, GETTER, SETTER, NATIVE, STRICTFP, TRANSIENT, VOLATILE, IMPLICIT, 
       };
 
       public static ModifierKind valueOf(
@@ -43336,59 +43353,59 @@ public final class Ast {
       "N\020`\022\t\n\005CLONE\020a\022\017\n\013TRAIT_ALIAS\020b\022\024\n\020TRAIT" +
       "_PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\022\014\n\010TEMP" +
       "LATE\020e\022\t\n\005LABEL\020f\022\014\n\010OP_ELVIS\020g\022\n\n\006NOT_I" +
-      "N\020h\022\016\n\nOP_NOTNULL\020i\032\002\020\001\"\233\005\n\010Modifier\022.\n\004",
+      "N\020h\022\016\n\nOP_NOTNULL\020i\032\002\020\001\"\251\005\n\010Modifier\022.\n\004",
       "kind\030\001 \002(\0162 .boa.types.Modifier.Modifier" +
       "Kind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.Mod" +
       "ifier.Visibility\022\027\n\017annotation_name\030\003 \001(" +
       "\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annotat" +
       "ion_values\030\005 \003(\0132\025.boa.types.Expression\022" +
       "\r\n\005other\030\006 \001(\t\022\013\n\003key\030\n \001(\005\022(\n\005scope\030\013 \001" +
-      "(\0162\031.boa.types.Modifier.Scope\"\346\001\n\014Modifi" +
+      "(\0162\031.boa.types.Modifier.Scope\"\364\001\n\014Modifi" +
       "erKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANN" +
       "OTATION\020\002\022\t\n\005FINAL\020\003\022\014\n\010CONSTANT\020\003\022\n\n\006ST" +
       "ATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010AB",
       "STRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n\006GETTER\020\010\022\n\n\006SETTE" +
       "R\020\t\022\n\n\006NATIVE\020\n\022\014\n\010STRICTFP\020\013\022\r\n\tTRANSIE" +
-      "NT\020\014\022\014\n\010VOLATILE\020\r\032\002\020\001\"o\n\nVisibility\022\n\n\006" +
-      "PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\t" +
-      "NAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\005\022\014\n" +
-      "\010INTERNAL\020\006\032\002\020\001\"$\n\005Scope\022\007\n\003VAR\020\001\022\007\n\003LET" +
-      "\020\002\022\t\n\005CONST\020\003\"\352\001\n\007Comment\022,\n\004kind\030\001 \002(\0162" +
-      "\036.boa.types.Comment.CommentKind\022\r\n\005value" +
-      "\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Pos" +
-      "itionInfo\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n",
-      "\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021" +
-      "\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICA" +
-      "TION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030" +
-      "\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(" +
-      "\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017" +
-      "\n\007end_col\030\006 \002(\005\"\233\001\n\010Document\022\r\n\005title\030\001 " +
-      "\001(\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Elemen" +
-      "t\022$\n\010doc_type\030\003 \001(\0132\022.boa.types.Element\022" +
-      "4\n\026processing_instruction\030\013 \003(\0132\024.boa.ty" +
-      "pes.Attribute\"\267\004\n\007Element\022\013\n\003tag\030\001 \002(\t\022,",
-      "\n\004kind\030\002 \002(\0162\036.boa.types.Element.Element" +
-      "Kind\022$\n\010elements\030\003 \003(\0132\022.boa.types.Eleme" +
-      "nt\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022(\n\nattrib" +
-      "utes\030\006 \003(\0132\024.boa.types.Attribute\022$\n\006scri" +
-      "pt\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003php\030\010 " +
-      "\001(\0132\024.boa.types.Namespace\022%\n\010var_decl\030\t " +
-      "\003(\0132\023.boa.types.Variable\022\r\n\005title\030\n \001(\t\022" +
-      "4\n\026processing_instruction\030\013 \003(\0132\024.boa.ty" +
-      "pes.Attribute\"\317\001\n\013ElementKind\022\t\n\005OTHER\020\000" +
-      "\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010DO",
-      "C_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RULE\020\006" +
-      "\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016\n\n" +
-      "MEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPORT_" +
-      "RULE\020\013\022\017\n\013XML_ELEMENT\020\014\"\'\n\tAttribute\022\013\n\003" +
-      "key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\210\002\n\010TypeKind\022\t\n" +
-      "\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tAN" +
-      "ONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020" +
-      "\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DE" +
-      "LEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n\tPRIM" +
-      "ITIVE\020\n\022\t\n\005ARRAY\020\013\022\r\n\tIMMUTABLE\020\014\022\t\n\005ALI",
-      "AS\020\r\022\r\n\tSINGLETON\020\016\022\013\n\007DYNAMIC\020\017\022\r\n\tDELE" +
-      "GATED\020\020\032\002\020\001B\002H\001"
+      "NT\020\014\022\014\n\010VOLATILE\020\r\022\014\n\010IMPLICIT\020\016\032\002\020\001\"o\n\n" +
+      "Visibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tP" +
+      "ROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013" +
+      "\n\007DEFAULT\020\005\022\014\n\010INTERNAL\020\006\032\002\020\001\"$\n\005Scope\022\007" +
+      "\n\003VAR\020\001\022\007\n\003LET\020\002\022\t\n\005CONST\020\003\"\352\001\n\007Comment\022" +
+      ",\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Commen" +
+      "tKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027" +
+      ".boa.types.PositionInfo\022\013\n\003key\030\007 \001(\005\"j\n\013",
+      "CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOC" +
+      "K\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020" +
+      "\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo" +
+      "\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\ns" +
+      "tart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010en" +
+      "d_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\"\233\001\n\010Docume" +
+      "nt\022\r\n\005title\030\001 \001(\t\022$\n\010elements\030\002 \003(\0132\022.bo" +
+      "a.types.Element\022$\n\010doc_type\030\003 \001(\0132\022.boa." +
+      "types.Element\0224\n\026processing_instruction\030" +
+      "\013 \003(\0132\024.boa.types.Attribute\"\267\004\n\007Element\022",
+      "\013\n\003tag\030\001 \002(\t\022,\n\004kind\030\002 \002(\0162\036.boa.types.E" +
+      "lement.ElementKind\022$\n\010elements\030\003 \003(\0132\022.b" +
+      "oa.types.Element\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005" +
+      " \003(\t\022(\n\nattributes\030\006 \003(\0132\024.boa.types.Att" +
+      "ribute\022$\n\006script\030\007 \001(\0132\024.boa.types.Names" +
+      "pace\022!\n\003php\030\010 \001(\0132\024.boa.types.Namespace\022" +
+      "%\n\010var_decl\030\t \003(\0132\023.boa.types.Variable\022\r" +
+      "\n\005title\030\n \001(\t\0224\n\026processing_instruction\030" +
+      "\013 \003(\0132\024.boa.types.Attribute\"\317\001\n\013ElementK" +
+      "ind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010",
+      "\n\004FORM\020\003\022\014\n\010DOC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022" +
+      "\r\n\tPAGE_RULE\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_F" +
+      "ACE_RULE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUER" +
+      "Y\020\n\022\017\n\013IMPORT_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\"\'\n" +
+      "\tAttribute\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\210" +
+      "\002\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINT" +
+      "ERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STR" +
+      "UCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNO" +
+      "TATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005T" +
+      "RAIT\020\t\022\r\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\022\r\n\tIMMU",
+      "TABLE\020\014\022\t\n\005ALIAS\020\r\022\r\n\tSINGLETON\020\016\022\013\n\007DYN" +
+      "AMIC\020\017\022\r\n\tDELEGATED\020\020\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

@@ -18,6 +18,9 @@
                            },
                            "modifiers": [
                               {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
                                  "kind": "FINAL"
                               }
                            ]
