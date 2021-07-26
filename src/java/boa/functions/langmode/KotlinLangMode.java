@@ -763,8 +763,10 @@ public class KotlinLangMode implements LangMode {
 				}
 
 			case ANNOTATION:
-				// FIXME convert to Kotlin - handle @file:[foo, bar] syntax
-				String s = "@" + m.getAnnotationName();
+				String s = "@";
+				if (m.hasOther())
+					s += m.getOther() + ":";
+				s += m.getAnnotationName();
 				if (m.getAnnotationMembersCount() > 0) s += "(";
 				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
 					if (i > 0) s += ", ";
