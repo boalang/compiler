@@ -427,8 +427,10 @@ public class KotlinLangMode implements LangMode {
 
 			case RETURN:
 				s += "return";
-				if (stmt.getExpressionsCount() > 0)
-					s += "@" + prettyprint(stmt.getExpressions(0));
+				if (stmt.getExpressionsCount() > 1)
+					s += "@" + prettyprint(stmt.getExpressions(0)) + " " + prettyprint(stmt.getExpressions(1));
+				else if (stmt.getExpressionsCount() > 0)
+					s += " " + prettyprint(stmt.getExpressions(0));
 				return s;
 
 			case BREAK:
