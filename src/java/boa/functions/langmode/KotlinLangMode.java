@@ -279,11 +279,13 @@ public class KotlinLangMode implements LangMode {
 		final List<Method> knownMethods = new ArrayList<Method>();
 		final List<Variable> knownFields = new ArrayList<Variable>();
 
-		for (final Method m: klass.getMethodsList()) {
+		for (int i = 0 ; i < klass.getMethodsCount() ; i++) {
+			final Method m = klass.getMethods(i);
 			boolean isPrimary = false;
-			for (final Modifier mod : m.getModifiersList()) {
+			for (int j = 0 ; j < m.getModifiersCount() ; i++) {
+				final Modifier mod = m.getModifiers(j);
 				if ((mod.getKind() == Modifier.ModifierKind.OTHER) && mod.getOther().equals("primary")) {
-                    isPrimary = true;
+					isPrimary = true;
 					break;
 				}
 			}
@@ -291,10 +293,12 @@ public class KotlinLangMode implements LangMode {
 			else knownMethods.add(m);
 		}
 
-		for (final Variable v: klass.getFieldsList()) {
-			boolean isInPrimary = false;
-			if (primaryMethod != null) {
-				for (final Variable vv: primaryMethod.getArgumentsList()) {
+		if(primaryMethod != null) {
+			for (int i = 0 ; i < klass.getFieldsCount() ; i++) {
+				final Variable v = klass.getFields(i);
+				boolean isInPrimary = false;
+				for (int j = 0 ; j < primaryMethod.getArgumentsCount() ; j ++) {
+					final Variable vv = primaryMethod.getArguments(j);
 					if (v.getName().equals(vv.getName())) {
 						isInPrimary = true;
 						break;
@@ -302,15 +306,16 @@ public class KotlinLangMode implements LangMode {
 				}
 				if (!isInPrimary) knownFields.add(v);
 			}
+		} else {
+			knownFields.addAll(klass.getFieldsList());
 		}
 
 		if (primaryMethod != null) {
 			s += "(";
 			boolean first = true;
-			for (final Variable v: primaryMethod.getArgumentsList()) {
-				if (!first) s += ", ";
-				else first = false;
-				s += prettyprint(v);
+			for (int i = 0 ; i < primaryMethod.getArgumentsCount(); i++) {
+				if (i > 0) s += ", ";
+				s += prettyprint(primaryMethod.getArguments(i));
 			}
 			s += ")";
 		}
