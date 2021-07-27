@@ -1,0 +1,99 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "foo",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "CAST",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "y"
+                     }
+                  ],
+                  "new_type": {
+                     "name": "String",
+                     "kind": "OTHER"
+                  }
+               }
+            },
+            {
+               "name": "bar",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "CAST",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "y"
+                     }
+                  ],
+                  "new_type": {
+                     "name": "String",
+                     "kind": "OTHER"
+                  },
+                  "literal": "as?"
+               }
+            },
+            {
+               "name": "baz",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "TYPECOMPARE",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "y"
+                     }
+                  ],
+                  "new_type": {
+                     "name": "String",
+                     "kind": "OTHER"
+                  }
+               }
+            },
+            {
+               "name": "quux",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "LOGICAL_NOT",
+                  "expressions": [
+                     {
+                        "kind": "TYPECOMPARE",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "y"
+                           }
+                        ],
+                        "new_type": {
+                           "name": "String",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
