@@ -53,10 +53,12 @@
                                        },
                                        "modifiers": [
                                           {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
                                              "kind": "FINAL"
                                           }
-                                       ],
-                                       "val_var": false
+                                       ]
                                     }
                                  ],
                                  "statements": [
@@ -82,10 +84,12 @@
                                        },
                                        "modifiers": [
                                           {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
                                              "kind": "FINAL"
                                           }
-                                       ],
-                                       "val_var": false
+                                       ]
                                     }
                                  ],
                                  "statements": [
@@ -98,8 +102,7 @@
                         }
                      }
                   ]
-               },
-               "val_var": true
+               }
             }
          ]
       }
