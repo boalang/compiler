@@ -271,14 +271,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitDeclaration(final KtDeclaration d, final Void v) {
-		// FIXME remove?
-		System.err.println(d.getClass());
-		// d.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitObjectDeclaration(final KtObjectDeclaration d, final Void v) {
 		final Declaration.Builder db = Declaration.newBuilder();
 
@@ -317,14 +309,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expectExpression.pop();
 
 		declarations.peek().add(db.build());
-		return null;
-	}
-
-	@Override
-	public Void visitClassOrObject(final KtClassOrObject n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -410,14 +394,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		// FIXME remove?
 		System.err.println(expr.getClass());
 		// expr.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitTypeParameterList(final KtTypeParameterList n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -1211,14 +1187,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitTypeArgumentList(final KtTypeArgumentList n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitThisExpression(final KtThisExpression expr, final Void v) {
 		expressions.peek().add(Expression.newBuilder()
 				.setKind(Expression.ExpressionKind.VARACCESS)
@@ -1233,14 +1201,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.setKind(Expression.ExpressionKind.VARACCESS)
 				.setVariable(expr.getText())
 				.build());
-		return null;
-	}
-
-	@Override
-	public Void visitInitializerList(final KtInitializerList n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
 		return null;
 	}
 
@@ -1283,14 +1243,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		mb.addAllStatements(statements.pop());
 
 		methods.peek().add(mb.build());
-		return null;
-	}
-
-	@Override
-	public Void visitTypeConstraintList(final KtTypeConstraintList n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
 		return null;
 	}
 
