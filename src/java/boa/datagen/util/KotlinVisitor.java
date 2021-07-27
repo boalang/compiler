@@ -257,13 +257,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(new ArrayList<Expression>());
 			entry.getValueArgumentList().accept(this, v);
 			mb.addAllAnnotationValues(expressions.pop());
-
-			for (final KtValueArgument arg : entry.getValueArgumentList().getArguments()) {
-				if (arg.isNamed())
-					mb.addAnnotationMembers(arg.getArgumentName().getText());
-				else
-					mb.addAnnotationMembers("");
-			}
 		}
 
 		modifiers.peek().add(mb.build());

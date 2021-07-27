@@ -12,12 +12,30 @@
                ],
                "annotation_values": [
                   {
-                     "kind": "LITERAL",
-                     "literal": "\"Foo\""
+                     "kind": "ASSIGN",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "f"
+                        },
+                        {
+                           "kind": "LITERAL",
+                           "literal": "\"Foo\""
+                        }
+                     ]
                   },
                   {
-                     "kind": "LITERAL",
-                     "literal": "3"
+                     "kind": "ASSIGN",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "g"
+                        },
+                        {
+                           "kind": "LITERAL",
+                           "literal": "3"
+                        }
+                     ]
                   }
                ],
                "other": "file"
@@ -35,8 +53,17 @@
                      "literal": "\"Foo\""
                   },
                   {
-                     "kind": "LITERAL",
-                     "literal": "3"
+                     "kind": "ASSIGN",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "g"
+                        },
+                        {
+                           "kind": "LITERAL",
+                           "literal": "3"
+                        }
+                     ]
                   }
                ],
                "other": "file"
@@ -50,8 +77,17 @@
                ],
                "annotation_values": [
                   {
-                     "kind": "LITERAL",
-                     "literal": "\"Foo\""
+                     "kind": "ASSIGN",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "f"
+                        },
+                        {
+                           "kind": "LITERAL",
+                           "literal": "\"Foo\""
+                        }
+                     ]
                   },
                   {
                      "kind": "LITERAL",
