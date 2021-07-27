@@ -377,7 +377,8 @@ public class KotlinLangMode implements LangMode {
 				s += indent() + prettyprint(decl) + "\n";
 			}
 
-			s += "}";
+			s += "}\n";
+			indent--;
 		}
 
 		return s;
