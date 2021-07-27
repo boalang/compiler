@@ -1,0 +1,183 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "asList",
+               "return_type": {
+                  "name": "List<T>",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "ts",
+                     "variable_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "vararg"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "VARDECL",
+                           "variable_decls": [
+                              {
+                                 "name": "result",
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "METHODCALL",
+                                    "method": "ArrayList<T>"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "FOREACH",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "result"
+                                          }
+                                       ],
+                                       "method": "add",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "t"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "initializations": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "ts"
+                              }
+                           ],
+                           "variable_declarations": [
+                              {
+                                 "name": "t",
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "result"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "arrayOf",
+                  "method_args": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "2"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "list",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "asList",
+                  "method_args": [
+                     {
+                        "kind": "OP_SUB",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "1"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "0"
+                     },
+                     {
+                        "kind": "OP_MULT",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "4"
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
