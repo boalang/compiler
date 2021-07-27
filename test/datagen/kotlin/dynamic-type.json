@@ -17,11 +17,9 @@
                "initializer": {
                   "kind": "LITERAL",
                   "literal": "2"
-               },
-               "val_var": true
+               }
             }
          ]
       }
    ]
 }
-
