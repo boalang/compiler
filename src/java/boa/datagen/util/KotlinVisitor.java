@@ -2039,15 +2039,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			function.getBodyBlockExpression().accept(this, v);
 			mb.addAllStatements(statements.pop());
 		} else if (function.getBodyExpression() != null) {
-			statements.push(new ArrayList<Statement>());
 			expressions.push(new ArrayList<Expression>());
 			function.getBodyExpression().accept(this, v);
-			mb.addAllStatements(statements.pop());
-			for (final Expression exp : expressions.pop())
-				mb.addStatements(Statement.newBuilder()
-						.setKind(Statement.StatementKind.EXPRESSION)
-						.addExpressions(exp)
-						.build());
+			mb.setExpression(expressions.pop().get(0));
 		}
 		expectExpression.pop();
 

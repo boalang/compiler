@@ -24,36 +24,32 @@
             },
             {
                "name": "f2",
-               "expressions": [
-                  {
-                     "kind": "LITERAL",
-                     "literal": "1"
-                  }
-               ]
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "1"
+               }
             },
             {
                "name": "f3",
-               "expressions": [
-                  {
-                     "kind": "LAMBDA",
-                     "statements": [
-                        {
-                           "kind": "BLOCK",
-                           "statements": [
-                              {
-                                 "kind": "RETURN",
-                                 "expressions": [
-                                    {
-                                       "kind": "LITERAL",
-                                       "literal": "1"
-                                    }
-                                 ]
-                              }
-                           ]
-                        }
-                     ]
-                  }
-               ]
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "RETURN",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "1"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
             }
          ]
       }
