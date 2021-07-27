@@ -172,10 +172,6 @@
                                           {
                                              "kind": "ANNOTATION",
                                              "annotation_name": "Ann1",
-                                             "annotation_members": [
-                                                "",
-                                                ""
-                                             ],
                                              "annotation_values": [
                                                 {
                                                    "kind": "LITERAL",
@@ -194,13 +190,19 @@
                                           {
                                              "kind": "ANNOTATION",
                                              "annotation_name": "Ann3",
-                                             "annotation_members": [
-                                                "str"
-                                             ],
                                              "annotation_values": [
                                                 {
-                                                   "kind": "LITERAL",
-                                                   "literal": "\"hi\""
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "str"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "\"hi\""
+                                                      }
+                                                   ]
                                                 }
                                              ]
                                           }
