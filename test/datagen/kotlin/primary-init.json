@@ -1,0 +1,206 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "InitOrderDemo",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "name",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<clinit>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "println",
+                                       "method_args": [
+                                          {
+                                             "kind": "TEMPLATE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "TEMPLATE",
+                                                   "literal": "\"First initializer block that prints \""
+                                                },
+                                                {
+                                                   "kind": "TEMPLATE",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "name"
+                                                      }
+                                                   ],
+                                                   "literal": "\"${name}\""
+                                                }
+                                             ],
+                                             "literal": "\"First initializer block that prints ${name}\""
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<clinit>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "println",
+                                       "method_args": [
+                                          {
+                                             "kind": "TEMPLATE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "TEMPLATE",
+                                                   "literal": "\"Second initializer block that prints \""
+                                                },
+                                                {
+                                                   "kind": "TEMPLATE",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "name.length"
+                                                      }
+                                                   ],
+                                                   "literal": "\"${name.length}\""
+                                                }
+                                             ],
+                                             "literal": "\"Second initializer block that prints ${name.length}\""
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "firstProperty",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "TEMPLATE",
+                              "expressions": [
+                                 {
+                                    "kind": "TEMPLATE",
+                                    "literal": "\"First property: \""
+                                 },
+                                 {
+                                    "kind": "TEMPLATE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "name"
+                                       }
+                                    ],
+                                    "literal": "\"$name\""
+                                 }
+                              ],
+                              "literal": "\"First property: $name\""
+                           }
+                        ],
+                        "method": "also",
+                        "method_args": [
+                           {
+                              "kind": "METHOD_REFERENCE",
+                              "method": "println"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "secondProperty",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "TEMPLATE",
+                              "expressions": [
+                                 {
+                                    "kind": "TEMPLATE",
+                                    "literal": "\"Second property: \""
+                                 },
+                                 {
+                                    "kind": "TEMPLATE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "name.length"
+                                       }
+                                    ],
+                                    "literal": "\"${name.length}\""
+                                 }
+                              ],
+                              "literal": "\"Second property: ${name.length}\""
+                           }
+                        ],
+                        "method": "also",
+                        "method_args": [
+                           {
+                              "kind": "METHOD_REFERENCE",
+                              "method": "println"
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

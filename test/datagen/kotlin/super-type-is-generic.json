@@ -1,0 +1,26 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "List",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "OTHER"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "Cons<T>",
+                     "kind": "CLASS"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
