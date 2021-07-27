@@ -273,6 +273,48 @@ public class KotlinLangMode implements LangMode {
 
 	public String prettyprintClass(final Declaration klass) {
 		String s = "";
+
+		Method primaryMethod = null;
+
+		final List<Method> knownMethods = new ArrayList<Method>();
+		final List<Variable> knownFields = new ArrayList<Variable>();
+
+		for (final Method m: klass.getMethodsList()) {
+			boolean isPrimary = false;
+			for (final Modifier mod : m.getModifiersList()) {
+				if ((mod.getKind() == Modifier.ModifierKind.OTHER) && mod.getOther().equals("primary")) {
+                    isPrimary = true;
+					break;
+				}
+			}
+			if (isPrimary) primaryMethod = m;
+			else knownMethods.add(m);
+		}
+
+		for (final Variable v: klass.getFieldsList()) {
+			boolean isInPrimary = false;
+			if (primaryMethod != null) {
+				for (final Variable vv: primaryMethod.getArgumentsList()) {
+					if (v.getName().equals(vv.getName())) {
+						isInPrimary = true;
+						break;
+					}
+				}
+				if (!isInPrimary) knownFields.add(v);
+			}
+		}
+
+		if (primaryMethod != null) {
+			s += "(";
+			boolean first = true;
+			for (final Variable v: primaryMethod.getArgumentsList()) {
+				if (!first) s += ", ";
+				else first = false;
+				s += prettyprint(v);
+			}
+			s += ")";
+		}
+
 		if (klass.getGenericParametersCount() > 0) {
 			s += "<";
 			for (int i = 0; i < klass.getGenericParametersCount(); i++) {
@@ -288,8 +330,25 @@ public class KotlinLangMode implements LangMode {
 				s += prettyprint(klass.getParents(i));
 			}
 		}
-		if ((klass.getFieldsCount() > 0) || (klass.getMethodsList().size() > 0) || (klass.getNestedDeclarationsList().size() > 0))
-			s += prettyprintDeclarationBody(klass);
+		if ((klass.getFieldsCount() > 0) || (klass.getMethodsList().size() > 0) || (klass.getNestedDeclarationsList().size() > 0)) {
+			s += " {\n";
+			indent++;
+
+			for (final Variable field : knownFields) {
+				s += indent() + prettyprint(field) + "\n";
+			}
+
+			for (final Method method : knownMethods) {
+				s += prettyprint(method) + "\n";
+			}
+
+			for (final Declaration decl : klass.getNestedDeclarationsList()) {
+				s += indent() + prettyprint(decl) + "\n";
+			}
+
+			s += "}";
+		}
+
 		return s;
 	}
 
