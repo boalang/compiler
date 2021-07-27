@@ -1772,8 +1772,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		mb.setName(propName + "." + (acc.isGetter() ? "<get>" : "<set>"));
 
 		fields.push(new ArrayList<Variable>());
+		expectExpression.push(false);
 		for (final KtParameter p : acc.getValueParameters())
 			p.accept(this, v);
+		expectExpression.pop();
 		mb.addAllArguments(fields.pop());
 
 		if (acc.getReturnTypeReference() != null) {
