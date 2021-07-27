@@ -385,7 +385,12 @@ public class KotlinLangMode implements LangMode {
 		if (m == null) return "";
 		String s = indent() + prettyprint(m.getModifiersList());
 
-		s += "fun ";
+		if (m.getName().equals("<init>"))
+			s += "constructor";
+		else if (m.getName().equals("<clinit>"))
+			s += "init ";
+		else
+			s += "fun ";
 
 		if (m.getGenericParametersCount() > 0) {
 			s += "<";
@@ -397,13 +402,18 @@ public class KotlinLangMode implements LangMode {
 			s += "> ";
 		}
 
-		s += m.getName() + "(";
-		for (int i = 0; i < m.getArgumentsCount(); i++) {
-			if (i > 0)
-				s += ", ";
-			s += prettyprint(m.getArguments(i));
+		if (!m.getName().equals("<init>") && !m.getName().equals("<clinit>"))
+			s += m.getName();
+
+		if (!m.getName().equals("<clinit>")) {
+			s += "(";
+			for (int i = 0; i < m.getArgumentsCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += prettyprint(m.getArguments(i));
+			}
+			s += ")";
 		}
-		s += ")";
 
 		if (!m.getReturnType().getName().equals(""))
 			s += " : " + prettyprint(m.getReturnType());
