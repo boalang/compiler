@@ -228,6 +228,7 @@ message Statement {
 		TRAIT_ALIAS = 36;
 		TRAIT_PRECEDENCE = 37;
 		TRAIT_USE = 38;
+		YIELD = 39;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -362,6 +363,7 @@ message Expression {
 		TRAIT_ALIAS = 98;
 		TRAIT_PRECEDENCE = 99;
 		NAMESPACENAME = 100;
+		SWITCH = 101;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

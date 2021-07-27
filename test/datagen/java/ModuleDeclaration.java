@@ -1,3 +1,3 @@
-open module myModule{
-	
-};
+open module ModuleDeclaration {
+	;
+}

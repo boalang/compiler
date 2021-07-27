@@ -53,6 +53,8 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS8 = 8;
 	public static final int JLS9 = 9;
 	public static final int JLS10 = 10;
+	public static final int JLS12 = 12;
+	public static final int JLS13 = 13;
 	public static final int JLS14 = 14;
 	public static final int JLS15 = 15;
 	public static final int JLS16 = 16;
@@ -95,12 +97,6 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	public Namespace getNamespaces(CompilationUnit node) {
-		System.out.println("++++++++++++++++++This is from JavaVisitor++++++++++++++++++++++++++++++");
-		for (Object t : node.types()) {
-			if (t instanceof RecordDeclaration) {
-				System.out.println("Record Pass");
-			}
-		}
 		root = node;
 		node.accept(this);
 		return b.build();
@@ -1032,15 +1028,18 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Block node) {
+		System.out.println("======================================================================");
+		System.out.println("************This is a single statement from block size is: " + node.statements().size());
+		System.out.println("======================================================================");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.statements()) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
-			for (boa.types.Ast.Statement st : statements.pop())
-				b.addStatements(st);
 		}
+		for (boa.types.Ast.Statement st : statements.pop())
+			b.addStatements(st);
 		list.add(b.build());
 		return false;
 	}
@@ -1411,8 +1410,9 @@ public class JavaVisitor extends ASTVisitor {
 		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FINALLY);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
-		for (final Object s : node.statements())
+		for (final Object s : node.statements()) {
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
+		}
 		for (boa.types.Ast.Statement st : statements.pop())
 			b.addStatements(st);
 		list.add(b.build());
@@ -2204,16 +2204,83 @@ public class JavaVisitor extends ASTVisitor {
 		}
 		
 		boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		sb.setKind(boa.types.Ast.Statement.StatementKind.OTHER);
 		for (Object s : node.moduleStatements()) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
-			for (boa.types.Ast.Statement st : statements.pop())
-				sb.addStatements(st);
+			
 		}
+		for (boa.types.Ast.Statement st : statements.pop())
+			sb.addStatements(st);
 		
 		b.addStatements(sb.build());
 			
+		return false;
+	}
+	
+	//begin java 12 
+	@Override
+	public boolean visit(SwitchExpression node) {
+		setAstLevel(JLS12);
+		
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.SWITCH);
+		node.getExpression().accept(this);
+		System.out.println("++++++++++++Expression is: " + node.getExpression().toString() + "+++++++++++");
+		eb.addExpressions(expressions.pop());
+		
+
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		
+		for (Object s: node.statements()) {	
+			((org.eclipse.jdt.core.dom.Statement) s).accept(this);
+		}
+		
+//		while(!statements.isEmpty()) {
+//			List<boa.types.Ast.Statement> tempList = statements.pop();
+//			int s = tempList.size();
+//			if (s != 0) {
+//				System.out.println("//////////////This is a statement poped: " + tempList.toString() + "/////////////////////////");
+//			}
+//			System.out.println("//////////////This is a statement poped: " + tempList.toString() + "/////////////////////////");
+//			System.out.println("//////////////This is a statement size is: " + s + "/////////////////////////");
+//		
+//		}
+		
+//		System.out.println("//////////////This is a statement poped: " + statements.pop().toString() + "/////////////////////////");
+//		System.out.println("//////////////This is a statement poped: " + statements.pop().toString() + "/////////////////////////");
+//		System.out.println("//////////////This is a statement poped: " + statements.pop().toString() + "/////////////////////////");
+		
+//		while(!statements.isEmpty()) {
+//			List<boa.types.Ast.Statement> tempList = statements.pop();
+//			int s = tempList.size();
+//			if (s > 0) {
+//				System.out.println("//////////////This is a statement poped: " + tempList.toString() + "/////////////////////////");
+//				for(boa.types.Ast.Statement st: statements.pop()) {	
+//					eb.addStatements(st);
+//				}
+//			}
+//		}
+		
+		for(boa.types.Ast.Statement st: statements.pop()) {	
+			eb.addStatements(st);
+		}
+		
+		expressions.push(eb.build());
+		return false;
+	}
+	
+	//begin java 13
+	@Override
+	public boolean visit(YieldStatement node) {
+		setAstLevel(JLS13);
+		
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.YIELD);
+		node.getExpression().accept(this);
+		b.addExpressions(expressions.pop());
+		list.add(b.build());
 		return false;
 	}
 	
@@ -2293,12 +2360,12 @@ public class JavaVisitor extends ASTVisitor {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((MethodDeclaration) d).accept(this);
 				for (boa.types.Ast.Method m : methods.pop()){
-					if (b.getKind().equals(boa.types.Ast.TypeKind.INTERFACE)) {
-						for (Modifier mod: m.getModifiersList()) {
-							if (mod.getKind().equals(boa.types.Ast.Modifier.ModifierKind.STATIC))
-								setAstLevel(JLS8);
-						}
-					}
+//					if (b.getKind().equals(boa.types.Ast.TypeKind.INTERFACE)) {
+//						for (Modifier mod: m.getModifiersList()) {
+//							if (mod.getKind().equals(boa.types.Ast.Modifier.ModifierKind.STATIC))
+//								setAstLevel(JLS8);
+//						}
+//					}
 
 					b.addMethods(m);
 				}
