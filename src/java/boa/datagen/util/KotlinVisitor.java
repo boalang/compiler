@@ -957,30 +957,27 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitArgument(final KtValueArgument arg, final Void v) {
-		if (arg.isNamed()) {
-			final List<Expression> exprs = new ArrayList<Expression>();
-			expressions.push(exprs);
+		// FIXME why would this be null?
+		if (arg.getArgumentExpression() != null) {
+			final List<Expression> list = expressions.peek();
 			arg.getArgumentExpression().accept(this, v);
-			expressions.pop();
-			expressions.peek().add(Expression.newBuilder()
-					.setKind(Expression.ExpressionKind.ASSIGN)
-					.addExpressions(Expression.newBuilder()
-							.setKind(Expression.ExpressionKind.VARACCESS)
-							.setVariable(arg.getArgumentName().getAsName().toString())
-							.build())
-					.addAllExpressions(exprs)
-					.build());
-		} else if (arg.isSpread()) {
-			final List<Expression> exprs = new ArrayList<Expression>();
-			expressions.push(exprs);
-			arg.getArgumentExpression().accept(this, v);
-			expressions.pop();
-			expressions.peek().add(Expression.newBuilder()
-					.setKind(Expression.ExpressionKind.REFERENCE)
-					.addAllExpressions(exprs)
-					.build());
-		} else if (arg.getArgumentExpression() != null)
-			arg.getArgumentExpression().accept(this, v);
+
+			if (arg.isNamed()) {
+				list.add(Expression.newBuilder()
+						.setKind(Expression.ExpressionKind.ASSIGN)
+						.addExpressions(Expression.newBuilder()
+								.setKind(Expression.ExpressionKind.VARACCESS)
+								.setVariable(arg.getArgumentName().getAsName().toString())
+								.build())
+						.addExpressions(list.remove(list.size() - 1))
+						.build());
+			} else if (arg.isSpread()) {
+				list.add(Expression.newBuilder()
+						.setKind(Expression.ExpressionKind.OP_MULT)
+						.addExpressions(list.remove(list.size() - 1))
+						.build());
+			}
+		}
 		return null;
 	}
 
