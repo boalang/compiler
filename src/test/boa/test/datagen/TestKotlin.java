@@ -19,6 +19,8 @@ package boa.test.datagen;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -34,9 +36,18 @@ import org.junit.runners.Parameterized.Parameters;
 public class TestKotlin extends KotlinBaseTest {
 	final private static String rootDir = "test/datagen/kotlin";
 
+	public static class FileTestCaseComparator implements Comparator<String[]> {
+		@Override
+		public int compare(final String[] o1, final String[] o2) {
+			return o1[0].compareTo(o2[0]);
+		}
+	}
+
 	@Parameters(name = "{0}")
 	public static List<String[]> data() {
-		return getData(new File(rootDir));
+		final List<String[]> data = getData(new File(rootDir));
+		Collections.sort(data, new FileTestCaseComparator());
+		return data;
 	}
 
 	private static List<String[]> getData(final File root) {
