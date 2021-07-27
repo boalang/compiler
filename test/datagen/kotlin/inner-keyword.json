@@ -41,17 +41,10 @@
                      "methods": [
                         {
                            "name": "foo",
-                           "statements": [
-                              {
-                                 "kind": "EXPRESSION",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "bar"
-                                    }
-                                 ]
-                              }
-                           ]
+                           "expression": {
+                              "kind": "VARACCESS",
+                              "variable": "bar"
+                           }
                         }
                      ]
                   }
@@ -87,4 +80,3 @@
       }
    ]
 }
-

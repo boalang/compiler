@@ -35,17 +35,10 @@
                      "methods": [
                         {
                            "name": "foo",
-                           "statements": [
-                              {
-                                 "kind": "EXPRESSION",
-                                 "expressions": [
-                                    {
-                                       "kind": "LITERAL",
-                                       "literal": "2"
-                                    }
-                                 ]
-                              }
-                           ]
+                           "expression": {
+                              "kind": "LITERAL",
+                              "literal": "2"
+                           }
                         }
                      ]
                   }
@@ -81,4 +74,3 @@
       }
    ]
 }
-
