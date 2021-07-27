@@ -1956,10 +1956,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 						.setKind(Statement.StatementKind.EXPRESSION)
 						.addExpressions(expr)
 						.build());
-			statements.peek().add(Statement.newBuilder()
-					.setKind(Statement.StatementKind.BLOCK)
-					.addAllStatements(stmts)
-					.build());
+			if (stmts.size() > 0)
+				statements.peek().add(Statement.newBuilder()
+						.setKind(Statement.StatementKind.BLOCK)
+						.addAllStatements(stmts)
+						.build());
 		} else {
 			if (!((KtSecondaryConstructor) constructor).hasImplicitDelegationCall()) {
 				expressions.push(new ArrayList<Expression>());
