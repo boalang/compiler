@@ -1087,7 +1087,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
         expectExpression.push(false);
 		for (final KtExpression e : expr.getStatements()) {
+			if (e instanceof KtProperty)
+				expectExpression.push(true);
 			e.accept(this, v);
+			if (e instanceof KtProperty)
+				expectExpression.pop();
 			for (final Expression ex : exprs)
 				stmts.add(Statement.newBuilder()
 						.setKind(Statement.StatementKind.EXPRESSION)
@@ -2099,7 +2103,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		expectExpression.pop();
 
-		fields.peek().add(vb.build());
+		if (expectExpression.peek())
+			expressions.peek().add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.VARDECL)
+					.addVariableDecls(vb.build())
+					.build());
+		else
+			fields.peek().add(vb.build());
 		return null;
 	}
 
