@@ -970,6 +970,15 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 							.build())
 					.addAllExpressions(exprs)
 					.build());
+		} else if (arg.isSpread()) {
+			final List<Expression> exprs = new ArrayList<Expression>();
+			expressions.push(exprs);
+			arg.getArgumentExpression().accept(this, v);
+			expressions.pop();
+			expressions.peek().add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.REFERENCE)
+					.addAllExpressions(exprs)
+					.build());
 		} else if (arg.getArgumentExpression() != null)
 			arg.getArgumentExpression().accept(this, v);
 		return null;
