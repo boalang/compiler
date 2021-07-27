@@ -35,19 +35,24 @@
                      "kind": "BLOCK",
                      "statements": [
                         {
-                           "kind": "VARDECL",
-                           "variable_decls": [
+                           "kind": "EXPRESSION",
+                           "expressions": [
                               {
-                                 "name": "result",
-                                 "modifiers": [
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
                                     {
-                                       "kind": "FINAL"
+                                       "name": "result",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "METHODCALL",
+                                          "method": "ArrayList<T>"
+                                       }
                                     }
-                                 ],
-                                 "initializer": {
-                                    "kind": "METHODCALL",
-                                    "method": "ArrayList<T>"
-                                 }
+                                 ]
                               }
                            ]
                         },
