@@ -967,7 +967,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 						.setKind(Expression.ExpressionKind.ASSIGN)
 						.addExpressions(Expression.newBuilder()
 								.setKind(Expression.ExpressionKind.VARACCESS)
-								.setVariable(arg.getArgumentName().getAsName().toString())
+								.setVariable(arg.getArgumentName().getText())
 								.build())
 						.addExpressions(list.remove(list.size() - 1))
 						.build());
