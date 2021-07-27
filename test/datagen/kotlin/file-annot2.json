@@ -6,10 +6,6 @@
             {
                "kind": "ANNOTATION",
                "annotation_name": "JvmName",
-               "annotation_members": [
-                  "f",
-                  "g"
-               ],
                "annotation_values": [
                   {
                      "kind": "ASSIGN",
@@ -43,10 +39,6 @@
             {
                "kind": "ANNOTATION",
                "annotation_name": "JvmName",
-               "annotation_members": [
-                  "",
-                  "g"
-               ],
                "annotation_values": [
                   {
                      "kind": "LITERAL",
@@ -71,10 +63,6 @@
             {
                "kind": "ANNOTATION",
                "annotation_name": "JvmName",
-               "annotation_members": [
-                  "f",
-                  ""
-               ],
                "annotation_values": [
                   {
                      "kind": "ASSIGN",
