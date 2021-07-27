@@ -409,7 +409,12 @@ public class KotlinLangMode implements LangMode {
 		// FIXME convert to Kotlin
 		if (t == null) return "";
 
-		return t.getName();
+		String s = t.getName();
+
+		if (t.getKind() == TypeKind.DELEGATED) {
+			s += " by " + prettyprint(t.getDelegate());
+		}
+		return s;
 	}
 
 	public String prettyprint(final Method m) {
