@@ -27199,29 +27199,29 @@ public final class Ast {
        */
       NAMESPACENAME(101, 100),
       /**
-       * <code>TEMPLATE = 101;</code>
+       * <code>SWITCH = 101;</code>
        */
-      TEMPLATE(102, 101),
+      SWITCH(102, 101),
       /**
-       * <code>LABEL = 102;</code>
+       * <code>TEMPLATE = 102;</code>
        */
-      LABEL(103, 102),
+      TEMPLATE(103, 102),
       /**
-       * <code>OP_ELVIS = 103;</code>
+       * <code>LABEL = 103;</code>
        */
-      OP_ELVIS(104, 103),
+      LABEL(104, 103),
       /**
-       * <code>NOT_IN = 104;</code>
+       * <code>OP_ELVIS = 104;</code>
        */
-      NOT_IN(105, 104),
+      OP_ELVIS(105, 104),
       /**
-       * <code>OP_NOTNULL = 105;</code>
+       * <code>NOT_IN = 105;</code>
        */
-      OP_NOTNULL(106, 105),
+      NOT_IN(106, 105),
       /**
-       * <code>SWITCH = 110;</code>
+       * <code>OP_NOTNULL = 106;</code>
        */
-      SWITCH(107, 110),
+      OP_NOTNULL(107, 106),
       ;
 
       /**
@@ -27669,29 +27669,29 @@ public final class Ast {
        */
       public static final int NAMESPACENAME_VALUE = 100;
       /**
-       * <code>TEMPLATE = 101;</code>
+       * <code>SWITCH = 101;</code>
        */
-      public static final int TEMPLATE_VALUE = 101;
+      public static final int SWITCH_VALUE = 101;
       /**
-       * <code>LABEL = 102;</code>
+       * <code>TEMPLATE = 102;</code>
        */
-      public static final int LABEL_VALUE = 102;
+      public static final int TEMPLATE_VALUE = 102;
       /**
-       * <code>OP_ELVIS = 103;</code>
+       * <code>LABEL = 103;</code>
        */
-      public static final int OP_ELVIS_VALUE = 103;
+      public static final int LABEL_VALUE = 103;
       /**
-       * <code>NOT_IN = 104;</code>
+       * <code>OP_ELVIS = 104;</code>
        */
-      public static final int NOT_IN_VALUE = 104;
+      public static final int OP_ELVIS_VALUE = 104;
       /**
-       * <code>OP_NOTNULL = 105;</code>
+       * <code>NOT_IN = 105;</code>
        */
-      public static final int OP_NOTNULL_VALUE = 105;
+      public static final int NOT_IN_VALUE = 105;
       /**
-       * <code>SWITCH = 110;</code>
+       * <code>OP_NOTNULL = 106;</code>
        */
-      public static final int SWITCH_VALUE = 110;
+      public static final int OP_NOTNULL_VALUE = 106;
 
 
       public final int getNumber() { return value; }
@@ -27799,12 +27799,12 @@ public final class Ast {
           case 98: return TRAIT_ALIAS;
           case 99: return TRAIT_PRECEDENCE;
           case 100: return NAMESPACENAME;
-          case 101: return TEMPLATE;
-          case 102: return LABEL;
-          case 103: return OP_ELVIS;
-          case 104: return NOT_IN;
-          case 105: return OP_NOTNULL;
-          case 110: return SWITCH;
+          case 101: return SWITCH;
+          case 102: return TEMPLATE;
+          case 103: return LABEL;
+          case 104: return OP_ELVIS;
+          case 105: return NOT_IN;
+          case 106: return OP_NOTNULL;
           default: return null;
         }
       }
@@ -27835,7 +27835,7 @@ public final class Ast {
       }
 
       private static final ExpressionKind[] VALUES = {
-        OTHER, LITERAL, VARACCESS, VARDECL, METHODCALL, CAST, ARRAYACCESS, ARRAYINIT, ARRAYLITERAL, TYPECOMPARE, NEW, NEWARRAY, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_INC, OP_DEC, BIT_LSHIFT, BIT_RSHIFT, BIT_UNSIGNEDRSHIFT, BIT_AND, BIT_OR, BIT_NOT, BIT_XOR, LOGICAL_NOT, LOGICAL_AND, LOGICAL_OR, EQ, NEQ, LT, GT, LTEQ, GTEQ, CONDITIONAL, NULLCOALESCE, ASSIGN, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MULT, ASSIGN_DIV, ASSIGN_MOD, ASSIGN_BITXOR, ASSIGN_BITAND, ASSIGN_BITOR, ASSIGN_LSHIFT, ASSIGN_RSHIFT, ASSIGN_UNSIGNEDRSHIFT, ANNOTATION, PAREN, METHOD_REFERENCE, LAMBDA, ANON_METHOD, YIELD, ARRAY_COMPREHENSION, EMPTY, SHEQ, SHNEQ, XML_DOTQUERY, OBJECT_LITERAL, METHODDECL, LOOP, GENERATOR, XML_LITERAL, XML_EXPRESSION, XML_PROPERTYREF, XML_MEMBERREF, XML_DOT, XML_DOTDOT, IN, TYPEOF, REGEXPLITERAL, DELETE, VOID, HASHTABLEACCESS, ARRAYELEMENT, OP_CONCAT, OP_POW, ASSIGN_CONCAT, ASSIGN_POW, BACKTICK, IDENTICAL, NOTIDENTICAL, STRING_AND, STRING_OR, STRING_XOR, OP_THREE_WAY_COMPARE, OP_UNPACK, QUOTE, IGNORE_ERROR, REQUIRE, REQUIRE_ONCE, INCLUDE, INCLUDE_ONCE, LIST, REFERENCE, REFLECTION, CLONE, TRAIT_ALIAS, TRAIT_PRECEDENCE, NAMESPACENAME, TEMPLATE, LABEL, OP_ELVIS, NOT_IN, OP_NOTNULL, SWITCH, 
+        OTHER, LITERAL, VARACCESS, VARDECL, METHODCALL, CAST, ARRAYACCESS, ARRAYINIT, ARRAYLITERAL, TYPECOMPARE, NEW, NEWARRAY, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_INC, OP_DEC, BIT_LSHIFT, BIT_RSHIFT, BIT_UNSIGNEDRSHIFT, BIT_AND, BIT_OR, BIT_NOT, BIT_XOR, LOGICAL_NOT, LOGICAL_AND, LOGICAL_OR, EQ, NEQ, LT, GT, LTEQ, GTEQ, CONDITIONAL, NULLCOALESCE, ASSIGN, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MULT, ASSIGN_DIV, ASSIGN_MOD, ASSIGN_BITXOR, ASSIGN_BITAND, ASSIGN_BITOR, ASSIGN_LSHIFT, ASSIGN_RSHIFT, ASSIGN_UNSIGNEDRSHIFT, ANNOTATION, PAREN, METHOD_REFERENCE, LAMBDA, ANON_METHOD, YIELD, ARRAY_COMPREHENSION, EMPTY, SHEQ, SHNEQ, XML_DOTQUERY, OBJECT_LITERAL, METHODDECL, LOOP, GENERATOR, XML_LITERAL, XML_EXPRESSION, XML_PROPERTYREF, XML_MEMBERREF, XML_DOT, XML_DOTDOT, IN, TYPEOF, REGEXPLITERAL, DELETE, VOID, HASHTABLEACCESS, ARRAYELEMENT, OP_CONCAT, OP_POW, ASSIGN_CONCAT, ASSIGN_POW, BACKTICK, IDENTICAL, NOTIDENTICAL, STRING_AND, STRING_OR, STRING_XOR, OP_THREE_WAY_COMPARE, OP_UNPACK, QUOTE, IGNORE_ERROR, REQUIRE, REQUIRE_ONCE, INCLUDE, INCLUDE_ONCE, LIST, REFERENCE, REFLECTION, CLONE, TRAIT_ALIAS, TRAIT_PRECEDENCE, NAMESPACENAME, SWITCH, TEMPLATE, LABEL, OP_ELVIS, NOT_IN, OP_NOTNULL, 
       };
 
       public static ExpressionKind valueOf(
@@ -43582,9 +43582,9 @@ public final class Ast {
       "IRE_ONCE\020[\022\013\n\007INCLUDE\020\\\022\020\n\014INCLUDE_ONCE\020" +
       "]\022\010\n\004LIST\020^\022\r\n\tREFERENCE\020_\022\016\n\nREFLECTION" +
       "\020`\022\t\n\005CLONE\020a\022\017\n\013TRAIT_ALIAS\020b\022\024\n\020TRAIT_" +
-      "PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\022\014\n\010TEMPL" +
-      "ATE\020e\022\t\n\005LABEL\020f\022\014\n\010OP_ELVIS\020g\022\n\n\006NOT_IN" +
-      "\020h\022\016\n\nOP_NOTNULL\020i\022\n\n\006SWITCH\020n\032\002\020\001\"\251\005\n\010M",
+      "PRECEDENCE\020c\022\021\n\rNAMESPACENAME\020d\022\n\n\006SWITC" +
+      "H\020e\022\014\n\010TEMPLATE\020f\022\t\n\005LABEL\020g\022\014\n\010OP_ELVIS" +
+      "\020h\022\n\n\006NOT_IN\020i\022\016\n\nOP_NOTNULL\020j\032\002\020\001\"\251\005\n\010M",
       "odifier\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifi" +
       "er.ModifierKind\0222\n\nvisibility\030\002 \001(\0162\036.bo" +
       "a.types.Modifier.Visibility\022\027\n\017annotatio" +

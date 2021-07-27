@@ -372,12 +372,12 @@ message Expression {
 		TRAIT_ALIAS = 98;
 		TRAIT_PRECEDENCE = 99;
 		NAMESPACENAME = 100;
-		TEMPLATE = 101;
-		LABEL = 102;
-		OP_ELVIS = 103;
-		NOT_IN = 104;
-		OP_NOTNULL = 105;
-		SWITCH = 110;
+		SWITCH = 101;
+		TEMPLATE = 102;
+		LABEL = 103;
+		OP_ELVIS = 104;
+		NOT_IN = 105;
+		OP_NOTNULL = 106;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
