@@ -751,7 +751,10 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case TYPECOMPARE:
-				return prettyprint(e.getExpressions(0)) + " instanceof " + prettyprint(e.getNewType());
+				if (e.getExpressionsCount() == 1)
+					s += prettyprint(e.getExpressions(0)) + " ";
+				s += "is " + prettyprint(e.getNewType());
+				return s;
 
 			case NEWARRAY:
 				s += "new ";
