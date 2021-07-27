@@ -67,15 +67,35 @@
                                  ]
                               },
                               {
-                                 "kind": "EXPRESSION",
-                                 "expressions": [
+                                 "kind": "BLOCK",
+                                 "statements": [
                                     {
-                                       "kind": "METHODCALL",
-                                       "method": "print",
-                                       "method_args": [
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
                                           {
-                                             "kind": "VARACCESS",
-                                             "variable": "x"
+                                             "kind": "METHODCALL",
+                                             "method": "print",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "print",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x"
+                                                }
+                                             ]
                                           }
                                        ]
                                     }
@@ -109,15 +129,20 @@
                                  "kind": "DEFAULT"
                               },
                               {
-                                 "kind": "EXPRESSION",
-                                 "expressions": [
+                                 "kind": "BLOCK",
+                                 "statements": [
                                     {
-                                       "kind": "METHODCALL",
-                                       "method": "print",
-                                       "method_args": [
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
                                           {
-                                             "kind": "VARACCESS",
-                                             "variable": "x"
+                                             "kind": "METHODCALL",
+                                             "method": "print",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x"
+                                                }
+                                             ]
                                           }
                                        ]
                                     }
@@ -158,11 +183,16 @@
                               "kind": "CASE",
                               "expressions": [
                                  {
-                                    "kind": "TYPECOMPARE",
-                                    "new_type": {
-                                       "name": "Int",
-                                       "kind": "OTHER"
-                                    }
+                                    "kind": "LOGICAL_NOT",
+                                    "expressions": [
+                                       {
+                                          "kind": "TYPECOMPARE",
+                                          "new_type": {
+                                             "name": "Int",
+                                             "kind": "OTHER"
+                                          }
+                                       }
+                                    ]
                                  }
                               ]
                            },
@@ -185,18 +215,23 @@
                               "kind": "CASE",
                               "expressions": [
                                  {
-                                    "kind": "IN",
+                                    "kind": "LOGICAL_NOT",
                                     "expressions": [
                                        {
-                                          "kind": "ARRAY_COMPREHENSION",
+                                          "kind": "IN",
                                           "expressions": [
                                              {
-                                                "kind": "LITERAL",
-                                                "literal": "1"
-                                             },
-                                             {
-                                                "kind": "LITERAL",
-                                                "literal": "5"
+                                                "kind": "ARRAY_COMPREHENSION",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "LITERAL",
+                                                      "literal": "1"
+                                                   },
+                                                   {
+                                                      "kind": "LITERAL",
+                                                      "literal": "5"
+                                                   }
+                                                ]
                                              }
                                           ]
                                        }
@@ -205,15 +240,35 @@
                               ]
                            },
                            {
-                              "kind": "EXPRESSION",
-                              "expressions": [
+                              "kind": "BLOCK",
+                              "statements": [
                                  {
-                                    "kind": "METHODCALL",
-                                    "method": "print",
-                                    "method_args": [
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
                                        {
-                                          "kind": "VARACCESS",
-                                          "variable": "x"
+                                          "kind": "METHODCALL",
+                                          "method": "print",
+                                          "method_args": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "METHODCALL",
+                                          "method": "print",
+                                          "method_args": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             }
+                                          ]
                                        }
                                     ]
                                  }
@@ -247,15 +302,20 @@
                               "kind": "DEFAULT"
                            },
                            {
-                              "kind": "EXPRESSION",
-                              "expressions": [
+                              "kind": "BLOCK",
+                              "statements": [
                                  {
-                                    "kind": "METHODCALL",
-                                    "method": "print",
-                                    "method_args": [
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
                                        {
-                                          "kind": "VARACCESS",
-                                          "variable": "x"
+                                          "kind": "METHODCALL",
+                                          "method": "print",
+                                          "method_args": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             }
+                                          ]
                                        }
                                     ]
                                  }
@@ -276,4 +336,3 @@
       }
    ]
 }
-
