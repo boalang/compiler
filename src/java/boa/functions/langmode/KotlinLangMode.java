@@ -642,7 +642,7 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case SWITCH:
-				s += "when (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
+				s += "when (" + prettyprint(stmt.getConditions(0)) + ") {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
