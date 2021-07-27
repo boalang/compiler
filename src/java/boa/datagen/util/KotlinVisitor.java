@@ -292,7 +292,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		for (final KtTypeParameter type_param : d.getTypeParameters())
 			db.addGenericParameters(typeFromTypeParameter(type_param));
 
-                expectExpression.push(false);
+		expectExpression.push(false);
 
 		modifiers.push(new ArrayList<Modifier>());
 		fields.push(new ArrayList<Variable>());
@@ -433,7 +433,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitEnumEntry(final KtEnumEntry n, final Void v) {
 		final Variable.Builder vb = Variable.newBuilder();
 		vb.setName(n.getNameAsSafeName().asString());
-                vb.addModifiers(Modifier.newBuilder()
+		vb.addModifiers(Modifier.newBuilder()
 				.setKind(Modifier.ModifierKind.IMPLICIT)
 				.build());
 
@@ -1866,11 +1866,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			tb.setName(typeRef.getText());
 
 			if (propDelegate.getExpression() != null) {
-				final List<Expression> exprs = new ArrayList<Expression>();
-				expressions.push(exprs);
+				// FIXME
+				expressions.push(new ArrayList<Expression>());
 				propDelegate.getExpression().accept(this, v);
-				tb.setDelegate(exprs.get(0));
-				expressions.pop();
+				tb.setDelegate(expressions.pop().get(0));
 			}
 
 			vb.setVariableType(tb.build());
