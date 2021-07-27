@@ -840,12 +840,17 @@ public class KotlinLangMode implements LangMode {
 	private String ppInfix(final String op, final List<Expression> exps) {
 		StringBuilder s = new StringBuilder();
 
-		s.append(prettyprint(exps.get(0)));
-		for (int i = 1; i < exps.size(); i++) {
-			s.append(" ");
+		if (exps.size() == 1) {
 			s.append(op);
-			s.append(" ");
-			s.append(prettyprint(exps.get(i)));
+			s.append(prettyprint(exps.get(0)));
+		} else {
+			s.append(prettyprint(exps.get(0)));
+			for (int i = 1; i < exps.size(); i++) {
+				s.append(" ");
+				s.append(op);
+				s.append(" ");
+				s.append(prettyprint(exps.get(i)));
+			}
 		}
 
 		return s.toString();
