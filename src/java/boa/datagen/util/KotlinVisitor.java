@@ -1035,9 +1035,38 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSafeQualifiedExpression(final KtSafeQualifiedExpression expr, final Void v) {
-		// TODO
-		System.err.println(expr.getClass());
-		// expr.acceptChildren(this, v);
+		final KtExpression rcvr = expr.getReceiverExpression();
+		final KtExpression sel = expr.getSelectorExpression();
+
+		if (sel instanceof KtCallExpression) {
+			final KtCallExpression call = (KtCallExpression)sel;
+			final Expression.Builder eb = Expression.newBuilder();
+
+			eb.setKind(Expression.ExpressionKind.METHODCALL);
+
+			expressions.push(new ArrayList<Expression>());
+			rcvr.accept(this, v);
+			eb.addAllExpressions(expressions.pop());
+			// FIXME need to add the '?' into this somehow
+
+			eb.setMethod(call.getCalleeExpression().getText());
+
+			if (call.getValueArgumentList() != null) {
+				expressions.push(new ArrayList<Expression>());
+				call.getValueArgumentList().accept(this, v);
+				eb.addAllMethodArgs(expressions.pop());
+			}
+
+			expressions.peek().add(eb.build());
+		} else {
+			final Expression.Builder eb = Expression.newBuilder();
+
+			eb.setKind(Expression.ExpressionKind.VARACCESS);
+			eb.setVariable(expr.getText());
+
+			expressions.peek().add(eb.build());
+		}
+
 		return null;
 	}
 
