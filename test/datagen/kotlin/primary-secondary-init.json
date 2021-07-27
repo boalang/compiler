@@ -116,19 +116,9 @@
                         }
                      ]
                   }
-               ],
-               "fields": [
-                  {
-                     "name": "s",
-                     "variable_type": {
-                        "name": "String",
-                        "kind": "OTHER"
-                     }
-                  }
                ]
             }
          ]
       }
    ]
 }
-
