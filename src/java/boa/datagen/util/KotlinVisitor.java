@@ -541,14 +541,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitPropertyDelegate(final KtPropertyDelegate n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitTypeReference(final KtTypeReference n, final Void v) {
 		// FIXME remove?
 		System.err.println(n.getClass());
