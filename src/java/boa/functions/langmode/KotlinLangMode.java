@@ -325,9 +325,35 @@ public class KotlinLangMode implements LangMode {
 		}
 		if (klass.getParentsCount() > 0) {
 			s += " : ";
+			List<Statement> statementsToSearch = null;
+			if (primaryMethod != null) {
+				if (primaryMethod.getStatementsCount() > 0) {
+					if (primaryMethod.getStatementsList().get(0).getKind() == Statement.StatementKind.BLOCK)
+						statementsToSearch = primaryMethod.getStatementsList().get(0).getStatementsList();
+					else
+						statementsToSearch = primaryMethod.getStatementsList();
+				}
+			}
 			for (int i = 0; i < klass.getParentsCount(); i++) {
 				if (i > 0) s += ", ";
 				s += prettyprint(klass.getParents(i));
+				if (statementsToSearch != null) {
+					for (final Statement st : statementsToSearch) {
+						if ((st.getKind() == Statement.StatementKind.EXPRESSION)
+								&& (st.getExpressionsList().get(0).getKind() == Expression.ExpressionKind.METHODCALL)) {
+							final Expression expr = st.getExpressionsList().get(0);
+							if (expr.getMethod().equals(klass.getParents(i).getName())) {
+								s += "(";
+								for (int j = 0 ; j < expr.getMethodArgsCount() ; j++) {
+									if (j > 0) s += ", ";
+									s += prettyprint(expr.getMethodArgs(j));
+								}
+								s += ")";
+								break;
+							}
+						}
+					}
+				}
 			}
 		}
 		if ((klass.getFieldsCount() > 0) || (klass.getMethodsList().size() > 0) || (klass.getNestedDeclarationsList().size() > 0)) {
