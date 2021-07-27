@@ -14,14 +14,16 @@
                      },
                      "modifiers": [
                         {
+                           "kind": "IMPLICIT"
+                        },
+                        {
                            "kind": "FINAL"
                         }
                      ],
                      "initializer": {
                         "kind": "LITERAL",
                         "literal": "\"world\""
-                     },
-                     "val_var": false
+                     }
                   }
                ],
                "statements": [
@@ -71,4 +73,3 @@
       }
    ]
 }
-
