@@ -83,38 +83,31 @@
                            "visibility": "PRIVATE"
                         }
                      ],
-                     "statements": [
-                        {
-                           "kind": "EXPRESSION",
-                           "expressions": [
+                     "expression": {
+                        "kind": "NEW",
+                        "anon_declaration": {
+                           "name": "",
+                           "kind": "SINGLETON",
+                           "fields": [
                               {
-                                 "kind": "NEW",
-                                 "anon_declaration": {
-                                    "name": "",
-                                    "kind": "SINGLETON",
-                                    "fields": [
-                                       {
-                                          "name": "x",
-                                          "variable_type": {
-                                             "name": "String",
-                                             "kind": "OTHER"
-                                          },
-                                          "modifiers": [
-                                             {
-                                                "kind": "FINAL"
-                                             }
-                                          ],
-                                          "initializer": {
-                                             "kind": "LITERAL",
-                                             "literal": "\"x\""
-                                          }
-                                       }
-                                    ]
+                                 "name": "x",
+                                 "variable_type": {
+                                    "name": "String",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "LITERAL",
+                                    "literal": "\"x\""
                                  }
                               }
                            ]
                         }
-                     ]
+                     }
                   }
                ]
             }
@@ -122,4 +115,3 @@
       }
    ]
 }
-
