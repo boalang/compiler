@@ -27,7 +27,6 @@ import com.google.protobuf.Message;
 import boa.datagen.BoaGenerator;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
-import boa.datagen.util.ProtoMessageVisitor;
 import boa.functions.BoaIntrinsics;
 import boa.test.datagen.java.Java8BaseTest;
 import boa.types.Ast.ASTRoot;

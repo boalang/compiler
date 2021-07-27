@@ -46,9 +46,9 @@ import boa.types.Ast.Declaration;
 import boa.types.Diff.ChangedFile;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaVisitor;
-import boa.datagen.util.ProtoMessageVisitor;
 import boa.test.compiler.BaseTest;
 import boa.test.datagen.ASTDumper;
+import boa.test.datagen.ProtoMessageVisitor;
 import boa.test.datagen.UglyMathCommentsExtractor;
 
 /*

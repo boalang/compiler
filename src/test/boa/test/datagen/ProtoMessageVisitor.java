@@ -1,4 +1,4 @@
-package boa.datagen.util;
+package boa.test.datagen;
 
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +18,6 @@ public class ProtoMessageVisitor {
 	}
 
 	public boolean preVisit(Message message) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 
