@@ -811,6 +811,14 @@ public class KotlinLangMode implements LangMode {
 
 				return s;
 
+			case IN:
+				if (e.getExpressionsCount() > 1) {
+					s += prettyprint(e.getExpressions(0)) + " in " + prettyprint(e.getExpressions(1));
+				} else if (e.getExpressionsCount() > 0) {
+					s += "in " + prettyprint(e.getExpressions(0));
+				}
+				return s;
+
 			case LAMBDA:
 				s += "(";
 				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
