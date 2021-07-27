@@ -957,11 +957,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitArgument(final KtValueArgument arg, final Void v) {
-		// FIXME
-		if (arg.getArgumentExpression() != null)
+		if (arg.isNamed()) {
+			final List<Expression> exprs = new ArrayList<Expression>();
+			expressions.push(exprs);
 			arg.getArgumentExpression().accept(this, v);
-		if (arg.isSpread())
-			;
+			expressions.pop();
+			expressions.peek().add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.ASSIGN)
+					.addExpressions(Expression.newBuilder()
+							.setKind(Expression.ExpressionKind.VARACCESS)
+							.setVariable(arg.getArgumentName().getAsName().toString())
+							.build())
+					.addAllExpressions(exprs)
+					.build());
+		} else if (arg.getArgumentExpression() != null)
+			arg.getArgumentExpression().accept(this, v);
 		return null;
 	}
 
