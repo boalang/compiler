@@ -27,75 +27,62 @@
                      "kind": "BLOCK",
                      "statements": [
                         {
-                           "kind": "EXPRESSION",
-                           "expressions": [
+                           "kind": "IF",
+                           "statements": [
                               {
-                                 "kind": "CONDITIONAL",
+                                 "kind": "RETURN",
                                  "expressions": [
                                     {
-                                       "kind": "LTEQ",
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "RETURN",
+                                 "expressions": [
+                                    {
+                                       "kind": "OP_MULT",
                                        "expressions": [
                                           {
                                              "kind": "VARACCESS",
                                              "variable": "x"
                                           },
                                           {
-                                             "kind": "LITERAL",
-                                             "literal": "1"
-                                          }
-                                       ]
-                                    },
-                                    {
-                                       "kind": "OTHER",
-                                       "statements": [
-                                          {
-                                             "kind": "RETURN",
-                                             "expressions": [
+                                             "kind": "METHODCALL",
+                                             "method": "factorial",
+                                             "method_args": [
                                                 {
-                                                   "kind": "LITERAL",
-                                                   "literal": "1"
-                                                }
-                                             ]
-                                          }
-                                       ]
-                                    },
-                                    {
-                                       "kind": "OTHER",
-                                       "statements": [
-                                          {
-                                             "kind": "RETURN",
-                                             "expressions": [
-                                                {
-                                                   "kind": "OP_MULT",
+                                                   "kind": "OP_SUB",
                                                    "expressions": [
                                                       {
                                                          "kind": "VARACCESS",
                                                          "variable": "x"
                                                       },
                                                       {
-                                                         "kind": "METHODCALL",
-                                                         "method": "factorial",
-                                                         "method_args": [
-                                                            {
-                                                               "kind": "OP_SUB",
-                                                               "expressions": [
-                                                                  {
-                                                                     "kind": "VARACCESS",
-                                                                     "variable": "x"
-                                                                  },
-                                                                  {
-                                                                     "kind": "LITERAL",
-                                                                     "literal": "1"
-                                                                  }
-                                                               ]
-                                                            }
-                                                         ]
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
                                                       }
                                                    ]
                                                 }
                                              ]
                                           }
                                        ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "LTEQ",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
                                     }
                                  ]
                               }

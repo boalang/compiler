@@ -1101,6 +1101,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final List<Expression> exprs = new ArrayList<Expression>();
 		expressions.push(exprs);
 
+        expectExpression.push(false);
 		for (final KtExpression e : expr.getStatements()) {
 			e.accept(this, v);
 			for (final Expression ex : exprs)
@@ -1110,6 +1111,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 						.build());
 			exprs.clear();
 		}
+		expectExpression.pop();
 
 		sb.addAllStatements(statements.pop());
 		expressions.pop();
@@ -1384,31 +1386,42 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitWhenExpression(final KtWhenExpression expr, final Void v) {
-		final Statement.Builder sb = Statement.newBuilder();
-
-		sb.setKind(Statement.StatementKind.SWITCH);
-
-		statements.push(new ArrayList<Statement>());
 
 		final List<Expression> exprs = new ArrayList<Expression>();
 		expressions.push(exprs);
-
+		expectExpression.push(true);
 		if (expr.getSubjectVariable() != null) {
-			fields.push(new ArrayList<Variable>());
 			expr.getSubjectVariable().accept(this, v);
-			sb.addAllVariableDeclarations(fields.pop());
 		} else if (expr.getSubjectExpression() != null) {
 			expr.getSubjectExpression().accept(this, v);
-			sb.addAllExpressions(exprs);
-			exprs.clear();
 		}
+		expectExpression.pop();
+		expressions.pop();
+
+		final List<Statement> children = new ArrayList<Statement>();
+        statements.push(children);
+		expectExpression.push(false);
 
 		for (final KtWhenEntry entry : expr.getEntries())
 			entry.accept(this, v);
-		sb.addAllStatements(statements.pop());
-		expressions.pop();
 
-		statements.peek().add(sb.build());
+        statements.pop();
+		expectExpression.pop();
+
+		if (expectExpression.peek()) {
+			final Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(Expression.ExpressionKind.SWITCH);
+			eb.addAllExpressions(exprs);
+			eb.addAllStatements(children);
+			expressions.peek().add(eb.build());
+		} else {
+			final Statement.Builder sb = Statement.newBuilder();
+			sb.setKind(Statement.StatementKind.SWITCH);
+			sb.addAllConditions(exprs);
+			sb.addAllStatements(children);
+			statements.peek().add(sb.build());
+		}
+
 		return null;
 	}
 

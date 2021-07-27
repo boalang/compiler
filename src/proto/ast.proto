@@ -376,7 +376,8 @@ message Expression {
 		LABEL = 102;
 		OP_ELVIS = 103;
 		NOT_IN = 104;
-        OP_NOTNULL = 105;
+		OP_NOTNULL = 105;
+		SWITCH = 110;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
