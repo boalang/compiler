@@ -13,7 +13,7 @@ fun f() : Unit {
 }
 
 var x = when(x) {
-    when (x) {
+    3 -> when (x) {
         !is Int -> print(x)
         !in 1..5 -> {
             print(x)
@@ -24,4 +24,5 @@ var x = when(x) {
             print(x)
         }
     }
+    else -> print(y)
 }
