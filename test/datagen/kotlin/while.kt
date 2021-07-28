@@ -5,4 +5,6 @@ fun foo(x: Int) : Unit {
         println(x)
         x++
     }
+    while (x == 7)
+        println(x)
 }

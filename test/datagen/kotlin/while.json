@@ -84,6 +84,41 @@
                                  ]
                               }
                            ]
+                        },
+                        {
+                           "kind": "WHILE",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "println",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "EQ",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "7"
+                                    }
+                                 ]
+                              }
+                           ]
                         }
                      ]
                   }
@@ -93,4 +128,3 @@
       }
    ]
 }
-

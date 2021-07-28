@@ -849,13 +849,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Expression.Builder eb = Expression.newBuilder();
 
 		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
+		eb.setMethod(expr.getText());
 
 		if (expr.getReceiverExpression() != null) {
 			expressions.push(new ArrayList<Expression>());
 			expr.getReceiverExpression().accept(this, v);
 			eb.addAllExpressions(expressions.pop());
 		}
-		eb.setMethod(expr.getText());
 
 		expressions.peek().add(eb.build());
 		return null;
@@ -866,13 +866,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Expression.Builder eb = Expression.newBuilder();
 
 		eb.setKind(Expression.ExpressionKind.METHOD_REFERENCE);
+		eb.setMethod(expr.getCallableReference().getText());
 
 		if (expr.getReceiverExpression() != null) {
 			expressions.push(new ArrayList<Expression>());
 			expr.getReceiverExpression().accept(this, v);
 			eb.addAllExpressions(expressions.pop());
 		}
-		eb.setMethod(expr.getCallableReference().getText());
 
 		expressions.peek().add(eb.build());
 		return null;
@@ -880,27 +880,28 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitArgument(final KtValueArgument arg, final Void v) {
-		// FIXME why would this be null?
-		if (arg.getArgumentExpression() != null) {
-			final List<Expression> list = expressions.peek();
-			arg.getArgumentExpression().accept(this, v);
+		arg.getArgumentExpression().accept(this, v);
 
-			if (arg.isNamed()) {
-				list.add(Expression.newBuilder()
-						.setKind(Expression.ExpressionKind.ASSIGN)
-						.addExpressions(Expression.newBuilder()
-								.setKind(Expression.ExpressionKind.VARACCESS)
-								.setVariable(arg.getArgumentName().getText())
-								.build())
-						.addExpressions(list.remove(list.size() - 1))
-						.build());
-			} else if (arg.isSpread()) {
-				list.add(Expression.newBuilder()
-						.setKind(Expression.ExpressionKind.OP_MULT)
-						.addExpressions(list.remove(list.size() - 1))
-						.build());
-			}
+		if (arg.isSpread()) {
+			final List<Expression> list = expressions.peek();
+			list.add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.OP_MULT)
+					.addExpressions(list.remove(list.size() - 1))
+					.build());
 		}
+
+		if (arg.isNamed()) {
+			final List<Expression> list = expressions.peek();
+			list.add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.ASSIGN)
+					.addExpressions(Expression.newBuilder()
+							.setKind(Expression.ExpressionKind.VARACCESS)
+							.setVariable(arg.getArgumentName().getText())
+							.build())
+					.addExpressions(list.remove(list.size() - 1))
+					.build());
+		}
+
 		return null;
 	}
 
