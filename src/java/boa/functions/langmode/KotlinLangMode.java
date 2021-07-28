@@ -849,6 +849,10 @@ public class KotlinLangMode implements LangMode {
 				indent--;
 				s += indent() + "}";
 
+			case TEMPLATE:
+				s += e.getLiteral();
+				return s;
+
 			default: return s;
 		}
 	}

@@ -1,0 +1,293 @@
+{
+   "namespaces": [
+      {
+         "name": "kotlinx.ast.common",
+         "modifiers": [
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  }
+               ],
+               "other": "file"
+            }
+         ],
+         "declarations": [
+            {
+               "name": "AstSource",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "sealed"
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "filename",
+                     "variable_type": {
+                        "name": "kotlin.String?",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ABSTRACT"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "description",
+                     "variable_type": {
+                        "name": "kotlin.String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ABSTRACT"
+                        }
+                     ]
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "File",
+                     "kind": "IMMUTABLE",
+                     "parents": [
+                        {
+                           "name": "AstSource",
+                           "kind": "CLASS"
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "<init>",
+                           "modifiers": [
+                              {
+                                 "kind": "OTHER",
+                                 "other": "primary"
+                              }
+                           ],
+                           "arguments": [
+                              {
+                                 "name": "filename",
+                                 "variable_type": {
+                                    "name": "kotlin.String",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "override"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "AstSource"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ],
+                     "fields": [
+                        {
+                           "name": "filename",
+                           "variable_type": {
+                              "name": "kotlin.String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "override"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "description",
+                           "variable_type": {
+                              "name": "kotlin.String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "override"
+                              }
+                           ],
+                           "initializer": {
+                              "kind": "TEMPLATE",
+                              "expressions": [
+                                 {
+                                    "kind": "TEMPLATE",
+                                    "literal": "\"file:/\""
+                                 },
+                                 {
+                                    "kind": "TEMPLATE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "filename"
+                                       }
+                                    ],
+                                    "literal": "\"$filename\""
+                                 }
+                              ],
+                              "literal": "\"file:/$filename\""
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "String",
+                     "kind": "IMMUTABLE",
+                     "parents": [
+                        {
+                           "name": "AstSource",
+                           "kind": "CLASS"
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "<init>",
+                           "modifiers": [
+                              {
+                                 "kind": "OTHER",
+                                 "other": "primary"
+                              }
+                           ],
+                           "arguments": [
+                              {
+                                 "name": "description",
+                                 "variable_type": {
+                                    "name": "kotlin.String",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "override"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "content",
+                                 "variable_type": {
+                                    "name": "kotlin.String",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "AstSource"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ],
+                     "fields": [
+                        {
+                           "name": "description",
+                           "variable_type": {
+                              "name": "kotlin.String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "override"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "content",
+                           "variable_type": {
+                              "name": "kotlin.String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "filename",
+                           "variable_type": {
+                              "name": "kotlin.String?",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "override"
+                              }
+                           ],
+                           "initializer": {
+                              "kind": "LITERAL",
+                              "literal": "null"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
