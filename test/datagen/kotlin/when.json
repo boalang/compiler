@@ -174,7 +174,13 @@
                   ],
                   "statements": [
                      {
-                        "kind": "CASE"
+                        "kind": "CASE",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "3"
+                           }
+                        ]
                      },
                      {
                         "kind": "SWITCH",
@@ -328,6 +334,24 @@
                               "variable": "x"
                            }
                         ]
+                     },
+                     {
+                        "kind": "DEFAULT"
+                     },
+                     {
+                        "kind": "EXPRESSION",
+                        "expressions": [
+                           {
+                              "kind": "METHODCALL",
+                              "method": "print",
+                              "method_args": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 }
+                              ]
+                           }
+                        ]
                      }
                   ]
                }
@@ -336,3 +360,4 @@
       }
    ]
 }
+
