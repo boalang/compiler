@@ -13,18 +13,135 @@
                            "kind": "IF",
                            "statements": [
                               {
-                                 "kind": "BLOCK",
+                                 "kind": "EXPRESSION",
                                  "expressions": [
                                     {
                                        "kind": "ASSIGN",
                                        "expressions": [
                                           {
                                              "kind": "VARACCESS",
-                                             "variable": "x"
+                                             "variable": "xEE"
                                           },
                                           {
                                              "kind": "LITERAL",
-                                             "literal": "8"
+                                             "literal": "1"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "xEE"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "2"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "EQ",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "y"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "ASSIGN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "xBE"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "xBE"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "2"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "EQ",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "y"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "xEB"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
                                           }
                                        ]
                                     }
@@ -32,17 +149,88 @@
                               },
                               {
                                  "kind": "BLOCK",
-                                 "expressions": [
+                                 "statements": [
                                     {
-                                       "kind": "ASSIGN",
+                                       "kind": "EXPRESSION",
                                        "expressions": [
                                           {
-                                             "kind": "VARACCESS",
-                                             "variable": "x"
-                                          },
+                                             "kind": "ASSIGN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "xEB"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "2"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "EQ",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "y"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
                                           {
-                                             "kind": "LITERAL",
-                                             "literal": "5"
+                                             "kind": "ASSIGN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "xBB"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "ASSIGN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "xBB"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "2"
+                                                }
+                                             ]
                                           }
                                        ]
                                     }
@@ -84,35 +272,225 @@
                }
             },
             {
-               "name": "x",
+               "name": "xEE",
                "modifiers": [
                   {
                      "kind": "FINAL"
                   }
                ],
                "initializer": {
-                  "kind": "CONDITIONAL",
-                  "expressions": [
+                  "kind": "STATEMENT",
+                  "statements": [
                      {
-                        "kind": "EQ",
-                        "expressions": [
+                        "kind": "IF",
+                        "statements": [
                            {
-                              "kind": "VARACCESS",
-                              "variable": "y"
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "1"
+                                 }
+                              ]
                            },
                            {
-                              "kind": "LITERAL",
-                              "literal": "3"
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "2"
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "EQ",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 },
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "3"
+                                 }
+                              ]
                            }
                         ]
-                     },
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "xEB",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "STATEMENT",
+                  "statements": [
                      {
-                        "kind": "LITERAL",
-                        "literal": "5"
-                     },
+                        "kind": "IF",
+                        "statements": [
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "1"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "2"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "EQ",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 },
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "3"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "xBE",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "STATEMENT",
+                  "statements": [
                      {
-                        "kind": "LITERAL",
-                        "literal": "8"
+                        "kind": "IF",
+                        "statements": [
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "1"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "2"
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "EQ",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 },
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "3"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "xBB",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "IF",
+                        "statements": [
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "1"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "2"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "EQ",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 },
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "3"
+                                 }
+                              ]
+                           }
+                        ]
                      }
                   ]
                }
