@@ -604,7 +604,18 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case FOREACH:
-				s += "for (" + prettyprint(stmt.getVariableDeclarations(0)) + " in " + prettyprint(stmt.getInitializations(0)) + ")\n";
+				s += "for (";
+				if (stmt.getVariableDeclarationsCount() == 1)
+					s += prettyprint(stmt.getVariableDeclarations(0));
+				else {
+					s += "(";
+					for (int i = 0 ; i < stmt.getVariableDeclarationsCount() ; i++) {
+						if (i > 0) s += ", ";
+						s += prettyprint(stmt.getVariableDeclarations(i));
+					}
+					s += ")";
+				}
+				s += " in " + prettyprint(stmt.getInitializations(0)) + ")\n";
 				s += indent() + prettyprint(stmt.getStatements(0));
 				return s;
 
