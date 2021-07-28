@@ -1056,37 +1056,30 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			sb.addAllVariableDeclarations(fields.pop());
 		}
 
-		if (n.getCatchBody() != null) {
-			final List<Statement> stmts = new ArrayList<Statement>();
-			statements.push(stmts);
+		final KtExpression body = n.getCatchBody();
 
-			final List<Expression> exprs = new ArrayList<Expression>();
-			expressions.push(exprs);
-
-			final KtExpression body = n.getCatchBody();
-
-			if (body instanceof KtBlockExpression) {
-				for (final KtExpression e : ((KtBlockExpression) body).getStatements()) {
-					e.accept(this, v);
-					for (final Expression ex : exprs)
-						stmts.add(Statement.newBuilder()
-								.setKind(Statement.StatementKind.EXPRESSION)
-								.addExpressions(ex)
-								.build());
-					exprs.clear();
-				}
-			} else {
-				body.accept(this, v);
-				for (final Expression ex : exprs)
-					stmts.add(Statement.newBuilder()
+		if (body instanceof KtBlockExpression) {
+			for (final KtExpression e : ((KtBlockExpression) body).getStatements()) {
+				statements.push(new ArrayList<Statement>());
+				expressions.push(new ArrayList<Expression>());
+				e.accept(this, v);
+				for (final Expression ex : expressions.pop())
+					sb.addStatements(Statement.newBuilder()
 							.setKind(Statement.StatementKind.EXPRESSION)
 							.addExpressions(ex)
 							.build());
-				exprs.clear();
+				sb.addAllStatements(statements.pop());
 			}
-
+		} else {
+			statements.push(new ArrayList<Statement>());
+			expressions.push(new ArrayList<Expression>());
+			body.accept(this, v);
+			for (final Expression ex : expressions.pop())
+				sb.addStatements(Statement.newBuilder()
+						.setKind(Statement.StatementKind.EXPRESSION)
+						.addExpressions(ex)
+						.build());
 			sb.addAllStatements(statements.pop());
-			expressions.pop();
 		}
 
 		statements.peek().add(sb.build());
@@ -1100,27 +1093,16 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		sb.setKind(Statement.StatementKind.FINALLY);
 
-		if (n.getFinalExpression() != null) {
-			final List<Statement> stmts = new ArrayList<Statement>();
-			statements.push(stmts);
-
-			final List<Expression> exprs = new ArrayList<Expression>();
-			expressions.push(exprs);
-
-			for (final KtExpression e : n.getFinalExpression().getStatements()) {
-				e.accept(this, v);
-				for (final Expression ex : exprs)
-					stmts.add(Statement.newBuilder()
-							.setKind(Statement.StatementKind.EXPRESSION)
-							.addExpressions(ex)
-							.build());
-				exprs.clear();
-			}
-
-			exprs.clear();
-
+		for (final KtExpression e : n.getFinalExpression().getStatements()) {
+			statements.push(new ArrayList<Statement>());
+			expressions.push(new ArrayList<Expression>());
+			e.accept(this, v);
+			for (final Expression ex : expressions.pop())
+				sb.addStatements(Statement.newBuilder()
+						.setKind(Statement.StatementKind.EXPRESSION)
+						.addExpressions(ex)
+						.build());
 			sb.addAllStatements(statements.pop());
-			expressions.pop();
 		}
 
 		statements.peek().add(sb.build());
@@ -1160,28 +1142,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		mb.setName("<clinit>");
 
-		final List<Statement> stmts = new ArrayList<Statement>();
-		statements.push(stmts);
-
-		final List<Expression> exprs = new ArrayList<Expression>();
-		expressions.push(exprs);
-
+		statements.push(new ArrayList<Statement>());
+		expressions.push(new ArrayList<Expression>());
 		expectExpression.push(true);
 
-		if (n.getBody() != null) {
-			n.getBody().accept(this, v);
-			for (final Expression e : exprs) {
-				stmts.add(Statement.newBuilder()
-						.setKind(Statement.StatementKind.EXPRESSION)
-						.addExpressions(e)
-						.build());
-			}
-			exprs.clear();
-		}
+		n.getBody().accept(this, v);
 
 		expectExpression.pop();
-
-		expressions.pop();
+		for (final Expression e : expressions.pop())
+			mb.addStatements(Statement.newBuilder()
+					.setKind(Statement.StatementKind.EXPRESSION)
+					.addExpressions(e)
+					.build());
 		mb.addAllStatements(statements.pop());
 
 		methods.peek().add(mb.build());
@@ -1230,7 +1202,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitBinaryWithTypeRHSExpression(final KtBinaryExpressionWithTypeRHS expr, final Void v) {
-		// TODO
 		final Expression.Builder eb = Expression.newBuilder();
 
 		expressions.push(new ArrayList<Expression>());
@@ -1245,6 +1216,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 		case "as?":
 		default:
+			// FIXME maybe different kind?
 			eb.setKind(Expression.ExpressionKind.CAST);
 			eb.setLiteral(expr.getOperationReference().getText());
 			break;
@@ -1300,41 +1272,30 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitWhenEntry(final KtWhenEntry n, final Void v) {
 		final Statement.Builder sb = Statement.newBuilder();
 
-		final List<Statement> stmts = new ArrayList<Statement>();
-		statements.push(stmts);
-
-		final List<Expression> exprs = new ArrayList<Expression>();
-		expressions.push(exprs);
-
 		if (n.isElse()) {
 			sb.setKind(Statement.StatementKind.DEFAULT);
 		} else {
 			sb.setKind(Statement.StatementKind.CASE);
+
 			if (n.getConditions().length != 0) {
+				expressions.push(new ArrayList<Expression>());
 				for (final KtWhenCondition cond : n.getConditions())
 					cond.accept(this, v);
-				sb.addAllExpressions(exprs);
-				exprs.clear();
+				sb.addAllExpressions(expressions.pop());
 			}
 		}
 
+		statements.peek().add(sb.build());
+
 		if (n.getExpression() != null) {
+			expressions.push(new ArrayList<Expression>());
 			n.getExpression().accept(this, v);
-			for (final Expression e : exprs) {
-				stmts.add(Statement.newBuilder()
+			for (final Expression e : expressions.pop())
+				statements.peek().add(Statement.newBuilder()
 						.setKind(Statement.StatementKind.EXPRESSION)
 						.addExpressions(e)
 						.build());
-			}
-			exprs.clear();
 		}
-
-		statements.pop();
-		expressions.pop();
-		statements.peek().add(sb.build());
-
-		for (final Statement s : stmts)
-			statements.peek().add(s);
 
 		return null;
 	}
@@ -1422,8 +1383,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 					.setLiteral("\"" + entries[0].getText() + "\"")
 					.build());
 		} else {
-			final List<Expression> exprs = new ArrayList<Expression>();
-			expressions.push(exprs);
+			expressions.push(new ArrayList<Expression>());
 
 			final StringBuilder sb = new StringBuilder();
 			sb.append("\"");
@@ -1432,7 +1392,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				sb.append(e.getText());
 			}
 			sb.append("\"");
-			expressions.pop();
+			final List<Expression> exprs = expressions.pop();
 
 			expressions.peek().add(Expression.newBuilder()
 					.setKind(Expression.ExpressionKind.TEMPLATE)
@@ -1643,11 +1603,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		expressions.push(new ArrayList<Expression>());
-		// FIXME how can binary expression not have a left and right???
-		if (expr.getLeft() != null)
-			expr.getLeft().accept(this, v);
-		if (expr.getRight() != null)
-			expr.getRight().accept(this, v);
+		expr.getLeft().accept(this, v);
+		expr.getRight().accept(this, v);
 		eb.addAllExpressions(expressions.pop());
 
 		expressions.peek().add(eb.build());
@@ -1822,10 +1779,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			db.addAllParents(types.pop());
 		}
 
-		modifiers.push(new ArrayList<Modifier>());
-		if (klass.getModifierList() != null)
+		if (klass.getModifierList() != null) {
+			modifiers.push(new ArrayList<Modifier>());
 			klass.getModifierList().accept(this, v);
-		db.addAllModifiers(modifiers.pop());
+			db.addAllModifiers(modifiers.pop());
+		}
 
 		fields.push(new ArrayList<Variable>());
 		methods.push(new ArrayList<Method>());
@@ -1887,7 +1845,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 								.setMethod(((KtSecondaryConstructor) constructor)
 									.getDelegationCall()
 									.getCalleeExpression()
-									.isThis() ? "this" : "super") // TEMP
+									.isThis() ? "this" : "super") // FIXME TEMP
 								.addAllExpressions(expressions.pop())
 								.build())
 						.build());
@@ -1904,11 +1862,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			constructor.getValueParameterList().accept(this, null);
 		mb.addAllArguments(fields.pop());
 
-		if (isPrimary && constructor.getValueParameterList() != null) {
+		if (isPrimary && constructor.getValueParameterList() != null)
 			for (final KtParameter p : constructor.getValueParameterList().getParameters())
 				if (p.hasValOrVar())
 					p.accept(this, null);
-		}
 
 		methods.peek().add(mb.build());
 	}
