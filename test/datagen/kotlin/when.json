@@ -165,23 +165,8 @@
             {
                "name": "x",
                "initializer": {
-                  "kind": "SWITCH",
-                  "expressions": [
-                     {
-                        "kind": "VARACCESS",
-                        "variable": "x"
-                     }
-                  ],
+                  "kind": "STATEMENT",
                   "statements": [
-                     {
-                        "kind": "CASE",
-                        "expressions": [
-                           {
-                              "kind": "LITERAL",
-                              "literal": "3"
-                           }
-                        ]
-                     },
                      {
                         "kind": "SWITCH",
                         "statements": [
@@ -189,75 +174,26 @@
                               "kind": "CASE",
                               "expressions": [
                                  {
-                                    "kind": "LOGICAL_NOT",
-                                    "expressions": [
-                                       {
-                                          "kind": "TYPECOMPARE",
-                                          "new_type": {
-                                             "name": "Int",
-                                             "kind": "OTHER"
-                                          }
-                                       }
-                                    ]
+                                    "kind": "LITERAL",
+                                    "literal": "3"
                                  }
                               ]
                            },
                            {
-                              "kind": "EXPRESSION",
-                              "expressions": [
-                                 {
-                                    "kind": "METHODCALL",
-                                    "method": "print",
-                                    "method_args": [
-                                       {
-                                          "kind": "VARACCESS",
-                                          "variable": "x"
-                                       }
-                                    ]
-                                 }
-                              ]
-                           },
-                           {
-                              "kind": "CASE",
-                              "expressions": [
-                                 {
-                                    "kind": "LOGICAL_NOT",
-                                    "expressions": [
-                                       {
-                                          "kind": "IN",
-                                          "expressions": [
-                                             {
-                                                "kind": "ARRAY_COMPREHENSION",
-                                                "expressions": [
-                                                   {
-                                                      "kind": "LITERAL",
-                                                      "literal": "1"
-                                                   },
-                                                   {
-                                                      "kind": "LITERAL",
-                                                      "literal": "5"
-                                                   }
-                                                ]
-                                             }
-                                          ]
-                                       }
-                                    ]
-                                 }
-                              ]
-                           },
-                           {
-                              "kind": "BLOCK",
+                              "kind": "SWITCH",
                               "statements": [
                                  {
-                                    "kind": "EXPRESSION",
+                                    "kind": "CASE",
                                     "expressions": [
                                        {
-                                          "kind": "METHODCALL",
-                                          "method": "print",
-                                          "method_args": [
+                                          "kind": "LOGICAL_NOT",
+                                          "expressions": [
                                              {
-                                                "kind": "VARACCESS",
-                                                "variable": "x"
+                                                "kind": "TYPECOMPARE",
+                                                "new_type": {
+                                                   "name": "Int",
+                                                   "kind": "OTHER"
+                                                }
                                              }
                                           ]
                                        }
@@ -277,39 +213,79 @@
                                           ]
                                        }
                                     ]
-                                 }
-                              ]
-                           },
-                           {
-                              "kind": "CASE",
-                              "expressions": [
+                                 },
                                  {
-                                    "kind": "LITERAL",
-                                    "literal": "\"foo\""
-                                 }
-                              ]
-                           },
-                           {
-                              "kind": "EXPRESSION",
-                              "expressions": [
-                                 {
-                                    "kind": "METHODCALL",
-                                    "method": "print",
-                                    "method_args": [
+                                    "kind": "CASE",
+                                    "expressions": [
                                        {
-                                          "kind": "VARACCESS",
-                                          "variable": "x"
+                                          "kind": "LOGICAL_NOT",
+                                          "expressions": [
+                                             {
+                                                "kind": "IN",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "ARRAY_COMPREHENSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "LITERAL",
+                                                            "literal": "1"
+                                                         },
+                                                         {
+                                                            "kind": "LITERAL",
+                                                            "literal": "5"
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
                                        }
                                     ]
-                                 }
-                              ]
-                           },
-                           {
-                              "kind": "DEFAULT"
-                           },
-                           {
-                              "kind": "BLOCK",
-                              "statements": [
+                                 },
+                                 {
+                                    "kind": "BLOCK",
+                                    "statements": [
+                                       {
+                                          "kind": "EXPRESSION",
+                                          "expressions": [
+                                             {
+                                                "kind": "METHODCALL",
+                                                "method": "print",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "x"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       },
+                                       {
+                                          "kind": "EXPRESSION",
+                                          "expressions": [
+                                             {
+                                                "kind": "METHODCALL",
+                                                "method": "print",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "x"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "kind": "CASE",
+                                    "expressions": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "\"foo\""
+                                       }
+                                    ]
+                                 },
                                  {
                                     "kind": "EXPRESSION",
                                     "expressions": [
@@ -324,6 +300,53 @@
                                           ]
                                        }
                                     ]
+                                 },
+                                 {
+                                    "kind": "DEFAULT"
+                                 },
+                                 {
+                                    "kind": "BLOCK",
+                                    "statements": [
+                                       {
+                                          "kind": "EXPRESSION",
+                                          "expressions": [
+                                             {
+                                                "kind": "METHODCALL",
+                                                "method": "print",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "x"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ],
+                              "conditions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "x"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "DEFAULT"
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "print",
+                                    "method_args": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "y"
+                                       }
+                                    ]
                                  }
                               ]
                            }
@@ -332,24 +355,6 @@
                            {
                               "kind": "VARACCESS",
                               "variable": "x"
-                           }
-                        ]
-                     },
-                     {
-                        "kind": "DEFAULT"
-                     },
-                     {
-                        "kind": "EXPRESSION",
-                        "expressions": [
-                           {
-                              "kind": "METHODCALL",
-                              "method": "print",
-                              "method_args": [
-                                 {
-                                    "kind": "VARACCESS",
-                                    "variable": "y"
-                                 }
-                              ]
                            }
                         ]
                      }
