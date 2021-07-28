@@ -1595,6 +1595,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				break;
 			case "downTo":
 				eb.setKind(Expression.ExpressionKind.ARRAY_COMPREHENSION);
+				eb.setLiteral("downTo");
 				break;
 			case "step":
 				expressions.push(new ArrayList<Expression>());

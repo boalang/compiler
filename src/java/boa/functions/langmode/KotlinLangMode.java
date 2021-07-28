@@ -724,7 +724,17 @@ public class KotlinLangMode implements LangMode {
 			case ASSIGN_LSHIFT:         return ppInfix("<<=",  e.getExpressionsList());
 			case ASSIGN_RSHIFT:         return ppInfix(">>=",  e.getExpressionsList());
 			case ASSIGN_UNSIGNEDRSHIFT: return ppInfix(">>>=", e.getExpressionsList());
-			case ARRAY_COMPREHENSION:   return ppInfix("..", e.getExpressionsList());
+			case ARRAY_COMPREHENSION:
+                if (e.getExpressionsCount() == 2) {
+					return ppInfix((e.hasLiteral() ? e.getLiteral() : ".."), e.getExpressionsList());
+				} else if (e.getExpressionsCount() == 3) {
+					s += prettyprint(e.getExpressions(0));
+					s += " " + (e.hasLiteral() ? e.getLiteral() : "..") + " ";
+					s += prettyprint(e.getExpressions(1));
+					s += " step ";
+					s += prettyprint(e.getExpressions(2));
+				}
+				return s;
 
 			case LOGICAL_NOT: return ppPrefix("!", e);
 			case BIT_NOT:     return ppPrefix("~", e);
