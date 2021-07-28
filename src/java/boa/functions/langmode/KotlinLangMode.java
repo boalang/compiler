@@ -947,7 +947,7 @@ public class KotlinLangMode implements LangMode {
 
 			return theKt;
 		} catch (final Exception e) {
-			if (debug) e.printStackTrace();
+			if (debug) throw e;
 			return null;
 		}
 	}

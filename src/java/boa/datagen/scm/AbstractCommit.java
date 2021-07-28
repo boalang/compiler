@@ -587,7 +587,16 @@ public abstract class AbstractCommit {
 	private final KotlinVisitor visitor = new KotlinVisitor();
 
 	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
-		final KtFile theKt = KotlinLangMode.tryparse(path, content, false);
+		final KtFile theKt;
+
+		try {
+			theKt = KotlinLangMode.tryparse(path, content, debug);
+		} catch (final Exception e) {
+			if (debug)
+				System.err.println("Error visiting Kotlin file: " + path  + " from: " + projectName);
+			e.printStackTrace();
+			return false;
+		}
 
 		if (theKt == null)
 			return false;
