@@ -310,18 +310,26 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		eb.setKind(Expression.ExpressionKind.VARDECL);
 
-		fields.push(new ArrayList<Variable>());
-		expressions.push(new ArrayList<Expression>());
+		if(expectExpression.peek()) {
+			fields.push(new ArrayList<Variable>());
+			expressions.push(new ArrayList<Expression>());
+		}
 
 		for (final KtDestructuringDeclarationEntry entry : d.getEntries())
 			entry.accept(this, v);
-		if (d.hasInitializer())
+		if (d.hasInitializer()) {
+			expectExpression.push(true);
 			d.getInitializer().accept(this, v);
+			expectExpression.pop();
+		}
 
-		eb.addAllExpressions(expressions.pop());
-		eb.addAllVariableDecls(fields.pop());
+		if (expectExpression.peek()) {
+			eb.addAllExpressions(expressions.pop());
+			eb.addAllVariableDecls(fields.pop());
 
-		expressions.peek().add(eb.build());
+			expressions.peek().add(eb.build());
+		}
+
 		return null;
 	}
 
@@ -705,8 +713,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (expr.getDestructuringDeclaration() != null) {
 			expressions.push(new ArrayList<Expression>());
+			fields.push(new ArrayList<Variable>());
+			expectExpression.push(false);
 			expr.getDestructuringDeclaration().accept(this, v);
+			expectExpression.pop();
 			sb.addAllInitializations(expressions.pop());
+			sb.addAllVariableDeclarations(fields.pop());
 		} else if (expr.getLoopParameter() != null) {
 			fields.push(new ArrayList<Variable>());
 			expr.getLoopParameter().accept(this, v);
