@@ -4,4 +4,7 @@ fun f() {
     items.fold(0, { 
         acc: Int, i: Int -> acc + i
     })
+
+    val x = { print("hi") }
+    x()
 }
