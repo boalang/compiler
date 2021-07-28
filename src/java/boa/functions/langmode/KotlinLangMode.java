@@ -461,9 +461,13 @@ public class KotlinLangMode implements LangMode {
 				s += " " + prettyprint(m.getExceptionTypes(i));
 		}
 
-		s += "\n";
-		for (int i = 0; i < m.getStatementsCount(); i++)
-			s += indent() + prettyprint(m.getStatements(i)) + "\n";
+		if (m.hasExpression()) {
+			s += " = " + prettyprint(m.getExpression());
+		} else {
+			s += "\n";
+			for (int i = 0; i < m.getStatementsCount(); i++)
+				s += indent() + prettyprint(m.getStatements(i)) + "\n";
+		}
 
 		return s;
 	}
