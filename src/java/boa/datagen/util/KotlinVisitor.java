@@ -636,7 +636,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 					.setKind(Expression.ExpressionKind.LABEL)
 					.build());
 
-		statements.peek().add(sb.build());
+		pushStatementOrExpr(sb);
 		return null;
 	}
 
@@ -828,7 +828,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			ann.accept(this, v);
 
 		expressions.push(new ArrayList<Expression>());
+		expectExpression.push(true);
 		expr.getBaseExpression().accept(this, v);
+		expectExpression.pop();
 
 		final Expression.Builder eb = Expression.newBuilder(expressions.pop().get(0));
 		eb.addAllModifiers(modifiers.pop());
