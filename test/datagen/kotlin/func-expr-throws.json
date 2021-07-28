@@ -1,0 +1,42 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "TracksContentProvider",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "delete",
+                     "return_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "THROW",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "UnsupportedOperationException",
+                                    "method_args": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "\"Not yet implemented\""
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
