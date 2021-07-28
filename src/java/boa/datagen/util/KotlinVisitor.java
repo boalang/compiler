@@ -1794,19 +1794,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		if (acc.getBodyBlockExpression() != null) {
+			expectExpression.push(false);
 			statements.push(new ArrayList<Statement>());
 			acc.getBodyBlockExpression().accept(this, v);
 			mb.addAllStatements(statements.pop());
+			expectExpression.pop();
 		} else if (acc.getBodyExpression() != null) {
-			statements.push(new ArrayList<Statement>());
+			expectExpression.push(true);
 			expressions.push(new ArrayList<Expression>());
 			acc.getBodyExpression().accept(this, v);
-			mb.addAllStatements(statements.pop());
-			for (final Expression exp : expressions.pop())
-				mb.addStatements(Statement.newBuilder()
-						.setKind(Statement.StatementKind.EXPRESSION)
-						.addExpressions(exp)
-						.build());
+			mb.setExpression(expressions.pop().get(0));
+			expectExpression.pop();
 		}
 
 		methods.peek().add(mb.build());
@@ -2017,10 +2015,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitNamedFunction(final KtNamedFunction function, final Void v) {
 		final Method.Builder mb = Method.newBuilder();
 
-		if (function.getName() != null)
-			mb.setName(function.getName());
-		else
-			mb.setName("");
+		mb.setName(function.getName() != null ? function.getName() : "");
 
 		if (function.getModifierList() != null) {
 			modifiers.push(new ArrayList<Modifier>());
@@ -2031,26 +2026,27 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (function.hasDeclaredReturnType())
 			mb.setReturnType(typeFromTypeRef(function.getTypeReference()));
 
-		for(final KtTypeParameter p : function.getTypeParameters()) {
+		for (final KtTypeParameter p : function.getTypeParameters())
 			mb.addGenericParameters(typeFromTypeParameter(p));
-		}
 
 		fields.push(new ArrayList<Variable>());
 		for (final KtParameter p : function.getValueParameters())
 			p.accept(this, v);
 		mb.addAllArguments(fields.pop());
 
-		expectExpression.push(true);
 		if (function.getBodyBlockExpression() != null) {
+			expectExpression.push(false);
 			statements.push(new ArrayList<Statement>());
 			function.getBodyBlockExpression().accept(this, v);
 			mb.addAllStatements(statements.pop());
+			expectExpression.pop();
 		} else if (function.getBodyExpression() != null) {
+			expectExpression.push(true);
 			expressions.push(new ArrayList<Expression>());
 			function.getBodyExpression().accept(this, v);
 			mb.setExpression(expressions.pop().get(0));
+			expectExpression.pop();
 		}
-		expectExpression.pop();
 
 		methods.peek().add(mb.build());
 		return null;
