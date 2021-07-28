@@ -712,12 +712,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		sb.setKind(Statement.StatementKind.FOREACH);
 
+		expectExpression.push(false);
 		if (expr.getDestructuringDeclaration() != null) {
 			fields.push(new ArrayList<Variable>());
 			expressions.push(new ArrayList<Expression>());
-			expectExpression.push(false);
 			expr.getDestructuringDeclaration().accept(this, v);
-			expectExpression.pop();
 			sb.addAllInitializations(expressions.pop());
 			sb.addAllVariableDeclarations(fields.pop());
 		} else if (expr.getLoopParameter() != null) {
@@ -725,6 +724,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expr.getLoopParameter().accept(this, v);
 			sb.addAllVariableDeclarations(fields.pop());
 		}
+		expectExpression.pop();
 
 		if (expr.getLoopRange() != null) {
 			expressions.push(new ArrayList<Expression>());
