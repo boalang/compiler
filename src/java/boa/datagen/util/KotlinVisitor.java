@@ -330,7 +330,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final Variable.Builder vb = Variable.newBuilder();
 
 		vb.setName(n.getName());
-		
+
 		if (n.getTypeReference() != null)
 			vb.setVariableType(typeFromTypeRef(n.getTypeReference()));
 
@@ -907,12 +907,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDotQualifiedExpression(final KtDotQualifiedExpression expr, final Void v) {
+		final Expression.Builder eb = Expression.newBuilder();
+
 		final KtExpression rcvr = expr.getReceiverExpression();
 		final KtExpression sel = expr.getSelectorExpression();
 
 		if (sel instanceof KtCallExpression) {
 			final KtCallExpression call = (KtCallExpression)sel;
-			final Expression.Builder eb = Expression.newBuilder();
 
 			eb.setKind(Expression.ExpressionKind.METHODCALL);
 
@@ -927,28 +928,24 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				call.getValueArgumentList().accept(this, v);
 				eb.addAllMethodArgs(expressions.pop());
 			}
-
-			expressions.peek().add(eb.build());
 		} else {
-			final Expression.Builder eb = Expression.newBuilder();
-
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
 			eb.setVariable(expr.getText());
-
-			expressions.peek().add(eb.build());
 		}
 
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
 	@Override
 	public Void visitSafeQualifiedExpression(final KtSafeQualifiedExpression expr, final Void v) {
+		final Expression.Builder eb = Expression.newBuilder();
+
 		final KtExpression rcvr = expr.getReceiverExpression();
 		final KtExpression sel = expr.getSelectorExpression();
 
 		if (sel instanceof KtCallExpression) {
 			final KtCallExpression call = (KtCallExpression)sel;
-			final Expression.Builder eb = Expression.newBuilder();
 
 			eb.setKind(Expression.ExpressionKind.METHODCALL);
 
@@ -964,17 +961,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				call.getValueArgumentList().accept(this, v);
 				eb.addAllMethodArgs(expressions.pop());
 			}
-
-			expressions.peek().add(eb.build());
 		} else {
-			final Expression.Builder eb = Expression.newBuilder();
-
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
 			eb.setVariable(expr.getText());
-
-			expressions.peek().add(eb.build());
 		}
 
+		expressions.peek().add(eb.build());
 		return null;
 	}
 
@@ -1001,32 +993,24 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitBlockExpression(final KtBlockExpression expr, final Void v) {
 		final Statement.Builder sb = Statement.newBuilder();
+
 		sb.setKind(Statement.StatementKind.BLOCK);
 
-		final List<Statement> stmts = new ArrayList<Statement>();
-		statements.push(stmts);
-
-		final List<Expression> exprs = new ArrayList<Expression>();
-		expressions.push(exprs);
-
-		expectExpression.push(false);
 		for (final KtExpression e : expr.getStatements()) {
-			if (e instanceof KtProperty)
-				expectExpression.push(true);
+			statements.push(new ArrayList<Statement>());
+			expressions.push(new ArrayList<Expression>());
+
+			expectExpression.push(e instanceof KtProperty);
 			e.accept(this, v);
-			if (e instanceof KtProperty)
-				expectExpression.pop();
-			for (final Expression ex : exprs)
-				stmts.add(Statement.newBuilder()
+			expectExpression.pop();
+
+			for (final Expression ex : expressions.pop())
+				sb.addStatements(Statement.newBuilder()
 						.setKind(Statement.StatementKind.EXPRESSION)
 						.addExpressions(ex)
 						.build());
-			exprs.clear();
+			sb.addAllStatements(statements.pop());
 		}
-		expectExpression.pop();
-
-		sb.addAllStatements(statements.pop());
-		expressions.pop();
 
 		statements.peek().add(sb.build());
 		return null;
