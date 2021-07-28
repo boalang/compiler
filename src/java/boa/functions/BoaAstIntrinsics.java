@@ -19,8 +19,6 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import com.google.protobuf.CodedInputStream;
@@ -34,13 +32,8 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper.Context;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
 
 import boa.datagen.DefaultProperties;
-import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.datagen.util.JavaVisitor;
 import boa.functions.langmode.JavaLangMode;
 import boa.functions.langmode.LangMode;
 import boa.functions.langmode.PythonLangMode;
@@ -53,7 +46,6 @@ import boa.types.Ast.Modifier;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
-import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;

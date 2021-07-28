@@ -251,7 +251,7 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "traversal" })
-	public static String cfgToDot(final CFG cfg, final BoaAbstractTraversal t) {
+	public static String cfgToDot(final CFG cfg, final BoaAbstractTraversal<?> t) {
 		return cfgToDot(cfg, "", t);
 	}
 
@@ -295,7 +295,7 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "string", "traversal" })
-	public static String cfgToDot(final CFG cfg, final String label, final BoaAbstractTraversal t) {
+	public static String cfgToDot(final CFG cfg, final String label, final BoaAbstractTraversal<?> t) {
 		if (cfg == null || cfg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		final StringBuilder str2 = new StringBuilder();
@@ -377,7 +377,7 @@ public class BoaGraphIntrinsics {
 
 			final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(n.getOutEdges());
 			Collections.sort(edges);
-			for (final boa.graphs.Edge e : edges) {
+			for (final boa.graphs.Edge<?,?> e : edges) {
 				str2.append("\t");
 				str2.append(n.getId());
 				str2.append(" -> ");

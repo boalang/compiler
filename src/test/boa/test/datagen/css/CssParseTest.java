@@ -13,28 +13,22 @@ import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 
 public class CssParseTest {
-
 	@Test
-	public void parseTest(){
+	public void parseTest() {
 	//	InputSource source = new InputSource(new StringReader("h1 { background: #ffcc44; }"));
 	//	CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
 	//	CSSStyleSheet sheet = parser.parseStyleSheet(source, null, null);
 		
-		com.steadystate.css.parser.CSSOMParser parser = new com.steadystate.css.parser.CSSOMParser();
-		String content = FileIO.readFileContents(new File("test/datagen/Css/ParseTest.css"));
-		InputSource source = new InputSource(new StringReader(content));
+		final com.steadystate.css.parser.CSSOMParser parser = new com.steadystate.css.parser.CSSOMParser();
+		final String content = FileIO.readFileContents(new File("test/datagen/Css/ParseTest.css"));
+		final InputSource source = new InputSource(new StringReader(content));
 		try {
-			com.steadystate.css.dom.CSSStyleSheetImpl sSheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
-			CssVisitor visitor = new CssVisitor();
+			final com.steadystate.css.dom.CSSStyleSheetImpl sSheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
+			final CssVisitor visitor = new CssVisitor();
 			boa.types.Ast.Element document = visitor.getStyleSheet(sSheet);
 			System.out.println(document.toString());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
-		
-		
 	}
-	
-	
 }

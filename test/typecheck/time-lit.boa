@@ -1,0 +1,8 @@
+o: output sum of int;
+o << 1;
+
+t: time;
+
+t = time(100000);
+t = time("June 30, 2009, 7:03:47 AM UTC");
+t = T"Tue Jun 30 2009 07:03:47 PDT";

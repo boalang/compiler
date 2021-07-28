@@ -44,10 +44,12 @@ import boa.types.Ast.Variable;
  */
 public class JavaVisitor extends ASTVisitor {
 	public static final String PROPERTY_INDEX = "i";
-	@SuppressWarnings("deprecation")
 	public static final int JLS1 = 1;
+	@SuppressWarnings("deprecation")
 	public static final int JLS2 = AST.JLS2;
+	@SuppressWarnings("deprecation")
 	public static final int JLS3 = AST.JLS3;
+	@SuppressWarnings("deprecation")
 	public static final int JLS4 = AST.JLS4;
 	public static final int JLS8 = AST.JLS8;
 	

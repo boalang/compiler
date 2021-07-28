@@ -136,7 +136,7 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
         if (this == o) return true;
         if (!(o instanceof Edge)) return false;
 
-        final Edge e = (Edge) o;
+        final Edge<?,?> e = (Edge<?,?>) o;
 
         if (this.label == null && e.label != null) return false;
         return src.equals(e.src) && dest.equals(e.dest) && label.equals(e.label);
