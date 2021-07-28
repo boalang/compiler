@@ -820,20 +820,19 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case LAMBDA:
-				s += "(";
+				s += "{ ";
 				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
 					if (i > 0)
 						s += ", ";
-					String type = prettyprint(e.getVariableDecls(i).getVariableType());
-					if (!type.equals(""))
-						s += type + " ";
-					s += e.getVariableDecls(i).getName();
+					s+= prettyprint(e.getVariableDecls(i));
 				}
-				s += ") -> ";
+				if (e.getVariableDeclsCount() > 0)
+					s += " -> ";
 				if (e.getStatementsCount() != 0)
 					s += prettyprint(e.getStatements(0));
 				if (e.getExpressionsCount() != 0)
 					s += prettyprint(e.getExpressions(0));
+				s += "}";
 				return s;
 
 			default: return s;
