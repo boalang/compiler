@@ -1,7 +1,8 @@
 package boa.kotlin.test
 
-val x = {
+fun foo(x: Int) : Unit {
     while (x <= 7) {
-            println(x)
+        println(x)
+        x++
     }
 }
