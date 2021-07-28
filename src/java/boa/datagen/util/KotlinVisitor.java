@@ -2031,6 +2031,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (function.hasDeclaredReturnType())
 			mb.setReturnType(typeFromTypeRef(function.getTypeReference()));
 
+		for(final KtTypeParameter p : function.getTypeParameters()) {
+			mb.addGenericParameters(typeFromTypeParameter(p));
+		}
+
 		fields.push(new ArrayList<Variable>());
 		for (final KtParameter p : function.getValueParameters())
 			p.accept(this, v);
