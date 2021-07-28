@@ -282,7 +282,7 @@ public class KotlinLangMode implements LangMode {
 		for (int i = 0 ; i < klass.getMethodsCount() ; i++) {
 			final Method m = klass.getMethods(i);
 			boolean isPrimary = false;
-			for (int j = 0 ; j < m.getModifiersCount() ; i++) {
+			for (int j = 0 ; j < m.getModifiersCount() ; j++) {
 				final Modifier mod = m.getModifiers(j);
 				if ((mod.getKind() == Modifier.ModifierKind.OTHER) && mod.getOther().equals("primary")) {
 					isPrimary = true;
