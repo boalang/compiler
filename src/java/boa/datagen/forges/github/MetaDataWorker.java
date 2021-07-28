@@ -305,7 +305,7 @@ public class MetaDataWorker implements Runnable {
 			gitDir = new File(gitRootPath + "/" + name);
 		}
 
-		if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java") || project.getProgrammingLanguagesList().contains("JavaScript") || project.getProgrammingLanguagesList().contains("PHP")))
+		if (project.getForked() || !(project.getProgrammingLanguagesList().contains("Java") || project.getProgrammingLanguagesList().contains("JavaScript") || project.getProgrammingLanguagesList().contains("Python") || project.getProgrammingLanguagesList().contains("Jupyter Notebook") || project.getProgrammingLanguagesList().contains("PHP")))
 			return project;
 
 		if (!gitDir.exists()) {
