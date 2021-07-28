@@ -732,6 +732,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			sb.addAllInitializations(expressions.pop());
 		}
 
+		expectExpression.push(false);
 		statements.push(new ArrayList<Statement>());
 		expressions.push(new ArrayList<Expression>());
 		expr.getBody().accept(this, v);
@@ -741,6 +742,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 					.addExpressions(e)
 					.build());
 		sb.addAllStatements(statements.pop());
+		expectExpression.pop();
 
 		pushStatementOrExpr(sb);
 		return null;
@@ -1591,6 +1593,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			case "ushr":
 				eb.setKind(Expression.ExpressionKind.BIT_UNSIGNEDRSHIFT);
 				break;
+			case "downto":
+				eb.setKind(Expression.ExpressionKind.ARRAY_COMPREHENSION);
+				break;
+			case "step":
+				expressions.push(new ArrayList<Expression>());
+				expr.getLeft().accept(this, v);
+				final Expression.Builder eb2 = Expression.newBuilder(expressions.pop().get(0));
+				expressions.push(new ArrayList<Expression>());
+				expr.getRight().accept(this, v);
+				eb2.addExpressions(expressions.pop().get(0));
+				expressions.peek().add(eb2.build());
+				return null;
 			default:
 				eb.setKind(Expression.ExpressionKind.OTHER);
 				eb.setLiteral(expr.getOperationReference().getText());
