@@ -663,6 +663,12 @@ public class KotlinLangMode implements LangMode {
 
 		String s = "";
 
+		if (e.getModifiersCount() > 0) {
+			for(int i = 0 ; i < e.getModifiersCount() ; i++) {
+				s += prettyprint(e.getModifiers(i)) + " ";
+			}
+		}
+
 		switch (e.getKind()) {
 			case OP_ADD:
 				if (e.getExpressionsCount() == 1)
