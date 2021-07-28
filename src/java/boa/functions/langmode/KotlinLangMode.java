@@ -852,8 +852,11 @@ public class KotlinLangMode implements LangMode {
 				if (e.getStatementsCount() != 0)
 					s += prettyprint(e.getStatements(0));
 				if (e.getExpressionsCount() != 0)
-					s += prettyprint(e.getExpressions(0));
-				s += "}";
+					for(int i = 0 ; i < e.getExpressionsCount() ; i++) {
+						if (i > 0) s += " ";
+						s += prettyprint(e.getExpressions(i));
+					}
+				s += " }";
 				return s;
 
 			case STATEMENT:
