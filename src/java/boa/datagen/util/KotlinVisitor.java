@@ -306,17 +306,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitDestructuringDeclaration(final KtDestructuringDeclaration d, final Void v) {
-		final Expression.Builder eb = Expression.newBuilder();
-
-		eb.setKind(Expression.ExpressionKind.VARDECL);
-
-		if(expectExpression.peek()) {
+		if (expectExpression.peek()) {
 			fields.push(new ArrayList<Variable>());
 			expressions.push(new ArrayList<Expression>());
 		}
 
 		for (final KtDestructuringDeclarationEntry entry : d.getEntries())
 			entry.accept(this, v);
+
 		if (d.hasInitializer()) {
 			expectExpression.push(true);
 			d.getInitializer().accept(this, v);
@@ -324,6 +321,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		if (expectExpression.peek()) {
+			final Expression.Builder eb = Expression.newBuilder();
+
+			eb.setKind(Expression.ExpressionKind.VARDECL);
+
 			eb.addAllExpressions(expressions.pop());
 			eb.addAllVariableDecls(fields.pop());
 
@@ -712,8 +713,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		sb.setKind(Statement.StatementKind.FOREACH);
 
 		if (expr.getDestructuringDeclaration() != null) {
-			expressions.push(new ArrayList<Expression>());
 			fields.push(new ArrayList<Variable>());
+			expressions.push(new ArrayList<Expression>());
 			expectExpression.push(false);
 			expr.getDestructuringDeclaration().accept(this, v);
 			expectExpression.pop();
