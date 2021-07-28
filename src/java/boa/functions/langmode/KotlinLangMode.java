@@ -898,12 +898,12 @@ public class KotlinLangMode implements LangMode {
 				if (m.hasOther())
 					s += m.getOther() + ":";
 				s += m.getAnnotationName();
-				if (m.getAnnotationMembersCount() > 0) s += "(";
-				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
+				if (m.getAnnotationValuesCount() > 0) s += "(";
+				for (int i = 0; i < m.getAnnotationValuesCount(); i++) {
 					if (i > 0) s += ", ";
-					s += m.getAnnotationMembers(i) + " = " + prettyprint(m.getAnnotationValues(i));
+					s += prettyprint(m.getAnnotationValues(i));
 				}
-				if (m.getAnnotationMembersCount() > 0) s += ")";
+				if (m.getAnnotationValuesCount() > 0) s += ")";
 				return s;
 
 			case FINAL:    return "final";
