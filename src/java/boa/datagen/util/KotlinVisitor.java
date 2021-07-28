@@ -1593,7 +1593,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			case "ushr":
 				eb.setKind(Expression.ExpressionKind.BIT_UNSIGNEDRSHIFT);
 				break;
-			case "downto":
+			case "downTo":
 				eb.setKind(Expression.ExpressionKind.ARRAY_COMPREHENSION);
 				break;
 			case "step":
