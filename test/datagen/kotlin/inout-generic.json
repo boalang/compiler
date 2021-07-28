@@ -1,0 +1,49 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "out T",
+                     "kind": "OTHER"
+                  },
+                  {
+                     "name": "in S",
+                     "kind": "OTHER"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "m",
+                     "generic_parameters": [
+                        {
+                           "name": "out Q",
+                           "kind": "OTHER"
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "String<in T, out S>",
+                  "kind": "OTHER"
+               }
+            }
+         ]
+      }
+   ]
+}
+

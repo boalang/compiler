@@ -9,6 +9,12 @@
                   "name": "List<T>",
                   "kind": "OTHER"
                },
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "OTHER"
+                  }
+               ],
                "arguments": [
                   {
                      "name": "ts",
@@ -49,7 +55,7 @@
                                        ],
                                        "initializer": {
                                           "kind": "METHODCALL",
-                                          "method": "ArrayList<T>"
+                                          "method": "ArrayList"
                                        }
                                     }
                                  ]
@@ -186,3 +192,4 @@
       }
    ]
 }
+
