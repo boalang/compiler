@@ -593,7 +593,7 @@ public abstract class AbstractCommit {
 			theKt = KotlinLangMode.tryparse(path, content, debug);
 		} catch (final Exception e) {
 			if (debug)
-				System.err.println("Error visiting Kotlin file: " + path  + " from: " + projectName);
+				System.err.println("Error parsing Kotlin file: " + path  + " from: " + projectName);
 			e.printStackTrace();
 			return false;
 		}
@@ -638,6 +638,10 @@ public abstract class AbstractCommit {
 		} catch (final IOException e) {
 			if (debug)
 				e.printStackTrace();
+		} catch (final Exception e) {
+			if (debug)
+				System.err.println("Error visiting Kotlin file: " + path  + " from: " + projectName);
+			e.printStackTrace();
 		}
 
 		return false;
