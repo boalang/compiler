@@ -809,8 +809,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			eb.setReturnType(typeFromTypeRef(expr.getFunctionLiteral().getTypeReference()));
 
 		fields.push(new ArrayList<Variable>());
+		expectExpression.push(false);
 		for (final KtParameter p : expr.getValueParameters())
 			p.accept(this, v);
+		expectExpression.pop();
 		eb.addAllVariableDecls(fields.pop());
 
 		if (expr.getBodyExpression() != null) {
