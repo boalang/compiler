@@ -167,6 +167,8 @@ message Method {
 	optional Expression computed_name = 14;
 	/** The method body expression, if the body is not composed of statements. */
 	optional Expression expression = 15;
+	/** Reciever types */
+	optional Type reciever_type = 16;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */

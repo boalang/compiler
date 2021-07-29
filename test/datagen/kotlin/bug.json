@@ -1,0 +1,58 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "METHODDECL",
+                                          "methods": [
+                                             {
+                                                "name": "",
+                                                "return_type": {
+                                                   "name": "String",
+                                                   "kind": "OTHER"
+                                                },
+                                                "expression": {
+                                                   "kind": "LITERAL",
+                                                   "literal": "\"hi\""
+                                                },
+                                                "reciever_type": {
+                                                   "name": "String",
+                                                   "kind": "OTHER"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
