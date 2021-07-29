@@ -1,0 +1,39 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f",
+               "expression": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "LABEL",
+                        "expressions": [
+                           {
+                              "kind": "LABEL",
+                              "literal": "ExampleIndices"
+                           },
+                           {
+                              "kind": "ARRAYACCESS",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "indices"
+                                 },
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "0"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}

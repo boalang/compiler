@@ -555,25 +555,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.build());
 
 		if (expr.getBaseExpression() != null) {
-			final List<Statement> stmts = new ArrayList<Statement>();
-			statements.push(stmts);
-
-			final List<Expression> exprs = new ArrayList<Expression>();
-			expressions.push(exprs);
-
+			expectExpression.push(true);
+			expressions.push(new ArrayList<Expression>());
 			expr.getBaseExpression().accept(this, v);
-			for (final Expression e : exprs)
-				stmts.add(Statement.newBuilder()
-					.setKind(Statement.StatementKind.EXPRESSION)
-					.addExpressions(e)
-					.build());
-			exprs.clear();
-
-			expressions.pop();
-			sb.addAllStatements(statements.pop());
+			sb.addAllExpressions(expressions.pop());
+			expectExpression.pop();
 		}
 
-		statements.peek().add(sb.build());
+		pushStatementOrExpr(sb);
 		return null;
 	}
 

@@ -28,60 +28,63 @@
                      "statements": [
                         {
                            "kind": "LABEL",
-                           "statements": [
+                           "expressions": [
                               {
-                                 "kind": "FOREACH",
+                                 "kind": "LABEL",
+                                 "literal": "loop"
+                              },
+                              {
+                                 "kind": "STATEMENT",
                                  "statements": [
                                     {
-                                       "kind": "BLOCK",
+                                       "kind": "FOREACH",
                                        "statements": [
                                           {
-                                             "kind": "EXPRESSION",
-                                             "expressions": [
+                                             "kind": "BLOCK",
+                                             "statements": [
                                                 {
-                                                   "kind": "METHODCALL",
-                                                   "method": "println",
-                                                   "method_args": [
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
                                                       {
-                                                         "kind": "VARACCESS",
-                                                         "variable": "thing"
+                                                         "kind": "METHODCALL",
+                                                         "method": "println",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "thing"
+                                                            }
+                                                         ]
                                                       }
                                                    ]
                                                 }
                                              ]
                                           }
-                                       ]
-                                    }
-                                 ],
-                                 "initializations": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "things"
-                                    }
-                                 ],
-                                 "variable_declarations": [
-                                    {
-                                       "name": "thing",
-                                       "variable_type": {
-                                          "name": "String",
-                                          "kind": "OTHER"
-                                       },
-                                       "modifiers": [
+                                       ],
+                                       "initializations": [
                                           {
-                                             "kind": "IMPLICIT"
-                                          },
+                                             "kind": "VARACCESS",
+                                             "variable": "things"
+                                          }
+                                       ],
+                                       "variable_declarations": [
                                           {
-                                             "kind": "FINAL"
+                                             "name": "thing",
+                                             "variable_type": {
+                                                "name": "String",
+                                                "kind": "OTHER"
+                                             },
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
                                           }
                                        ]
                                     }
                                  ]
-                              }
-                           ],
-                           "expressions": [
-                              {
-                                 "kind": "LABEL",
-                                 "literal": "loop"
                               }
                            ]
                         }
