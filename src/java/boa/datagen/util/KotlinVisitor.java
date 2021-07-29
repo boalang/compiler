@@ -784,15 +784,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expr.getCondition().accept(this, v);
 		sb.addAllConditions(expressions.pop());
 
-		statements.push(new ArrayList<Statement>());
-		expressions.push(new ArrayList<Expression>());
-		expr.getBody().accept(this, v);
-		for (final Expression e : expressions.pop())
-			sb.addStatements(Statement.newBuilder()
-					.setKind(Statement.StatementKind.EXPRESSION)
-					.addExpressions(e)
-					.build());
-		sb.addAllStatements(statements.pop());
+		if (expr.getBody() != null) {
+			statements.push(new ArrayList<Statement>());
+			expressions.push(new ArrayList<Expression>());
+			expr.getBody().accept(this, v);
+			for (final Expression e : expressions.pop())
+				sb.addStatements(Statement.newBuilder()
+						.setKind(Statement.StatementKind.EXPRESSION)
+						.addExpressions(e)
+						.build());
+			sb.addAllStatements(statements.pop());
+		}
 
 		statements.peek().add(sb.build());
 		return null;
