@@ -2,6 +2,5 @@
 fun foo() {
     super.foo();
     super<Int>.foo();
-    super<>.foo();
     super<Int>@label.foo();
 }

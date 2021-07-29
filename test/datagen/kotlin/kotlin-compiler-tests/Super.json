@@ -47,21 +47,6 @@
                                  "expressions": [
                                     {
                                        "kind": "VARACCESS",
-                                       "variable": "super<>"
-                                    }
-                                 ],
-                                 "method": "foo"
-                              }
-                           ]
-                        },
-                        {
-                           "kind": "EXPRESSION",
-                           "expressions": [
-                              {
-                                 "kind": "METHODCALL",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
                                        "variable": "super<Int>@label"
                                     }
                                  ],
