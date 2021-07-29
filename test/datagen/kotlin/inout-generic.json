@@ -9,11 +9,11 @@
                "generic_parameters": [
                   {
                      "name": "out T",
-                     "kind": "OTHER"
+                     "kind": "GENERIC"
                   },
                   {
                      "name": "in S",
-                     "kind": "OTHER"
+                     "kind": "GENERIC"
                   }
                ],
                "methods": [
@@ -22,7 +22,7 @@
                      "generic_parameters": [
                         {
                            "name": "out Q",
-                           "kind": "OTHER"
+                           "kind": "GENERIC"
                         }
                      ],
                      "statements": [
@@ -46,4 +46,3 @@
       }
    ]
 }
-

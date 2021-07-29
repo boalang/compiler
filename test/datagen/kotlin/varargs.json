@@ -12,7 +12,7 @@
                "generic_parameters": [
                   {
                      "name": "T",
-                     "kind": "OTHER"
+                     "kind": "GENERIC"
                   }
                ],
                "arguments": [
@@ -55,6 +55,12 @@
                                        ],
                                        "initializer": {
                                           "kind": "METHODCALL",
+                                          "generic_parameters": [
+                                             {
+                                                "name": "T",
+                                                "kind": "GENERIC"
+                                             }
+                                          ],
                                           "method": "ArrayList"
                                        }
                                     }
@@ -192,4 +198,3 @@
       }
    ]
 }
-

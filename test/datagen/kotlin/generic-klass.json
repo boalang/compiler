@@ -9,15 +9,15 @@
                "generic_parameters": [
                   {
                      "name": "D",
-                     "kind": "OTHER"
+                     "kind": "GENERIC"
                   },
                   {
                      "name": "T : S",
-                     "kind": "OTHER"
+                     "kind": "GENERIC"
                   },
                   {
                      "name": "F",
-                     "kind": "OTHER"
+                     "kind": "GENERIC"
                   }
                ],
                "parents": [
@@ -35,4 +35,3 @@
       }
    ]
 }
-
