@@ -1048,7 +1048,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expr.acceptChildren(this, v);
 		sb.addAllStatements(statements.pop());
 
-		statements.peek().add(sb.build());
+		pushStatementOrExpr(sb);
 		return null;
 	}
 
