@@ -12,7 +12,24 @@
                ],
                "initializer": {
                   "kind": "METHODCALL",
-                  "method": "ActionListener"
+                  "method": "ActionListener",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "expressions": [
+                           {
+                              "kind": "METHODCALL",
+                              "method": "println",
+                              "method_args": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "\"clicked\""
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
                }
             }
          ]
