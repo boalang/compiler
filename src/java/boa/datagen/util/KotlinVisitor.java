@@ -1738,11 +1738,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		vb.addAllModifiers(modifiers.pop());
 
 		if (prop.hasInitializer()) {
-			final List<Expression> exprs = new ArrayList<Expression>();
-			expressions.push(exprs);
+			expressions.push(new ArrayList<Expression>());
+			expectExpression.push(true);
+
 			prop.getInitializer().accept(this, v);
-			vb.setInitializer(exprs.get(0));
-			expressions.pop();
+
+			expectExpression.pop();
+			vb.setInitializer(expressions.pop().get(0));
 		}
 
 		if (prop.getGetter() != null)
@@ -1927,7 +1929,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expectExpression.pop();
 		}
 
-		methods.peek().add(mb.build());
+		if (expectExpression.peek())
+			expressions.peek().add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.METHODDECL)
+					.addMethods(mb.build())
+					.build());
+		else
+			methods.peek().add(mb.build());
 		return null;
 	}
 
