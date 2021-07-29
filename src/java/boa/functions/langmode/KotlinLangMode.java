@@ -975,6 +975,7 @@ public class KotlinLangMode implements LangMode {
 				final KotlinCoreApplicationEnvironment kae = KotlinCoreApplicationEnvironment.create(disp, false);
 				final Project proj = new KotlinCoreProjectEnvironment(disp, kae).getProject();
 				((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kt");
+				((CoreFileTypeRegistry)FileTypeRegistry.getInstance()).registerFileType(KotlinFileType.INSTANCE, "kts");
 				LanguageParserDefinitions.INSTANCE.addExplicitExtension(KotlinLanguage.INSTANCE,
 											new KotlinParserDefinition());
 				kProjectManager = PsiManager.getInstance(proj);
