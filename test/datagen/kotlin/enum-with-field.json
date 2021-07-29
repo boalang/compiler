@@ -1,0 +1,152 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "Color",
+               "kind": "ENUM",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "rgb",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "rgb",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "RED",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0xFF0000"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "new_type": {
+                              "name": "Color",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "GREEN",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0x00FF00"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "new_type": {
+                              "name": "Color",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "BLUE",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0x0000FF"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "new_type": {
+                              "name": "Color",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
