@@ -2001,12 +2001,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		eb.setKind(Expression.ExpressionKind.METHODCALL);
 
-		eb.setMethod(call.getCalleeExpression().getText());
-
 		if ((call.getParent() instanceof KtCallableReferenceExpression) && (call.getValueArgumentList() == null)) {
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
 			eb.setVariable(call.getCalleeExpression().getText());
-			eb.clearMethod();
+		} else {
+			eb.setMethod(call.getCalleeExpression().getText());
 		}
 
 		if (call.getValueArgumentList() != null) {
