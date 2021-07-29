@@ -123,6 +123,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.setKind(Modifier.ModifierKind.ANNOTATION);
 			break;
 
+		case "actual":
+		case "impl":
+		case "expect":
+		case "header":
+		case "fun":
+		case "reified":
 		case "open":
 		case "value":
 		case "inner":
@@ -134,6 +140,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "vararg":
 		case "tailrec":
 		case "suspend":
+		case "in":
+		case "out":
 		case "external":
 		case "infix":
 		case "crossinline":
