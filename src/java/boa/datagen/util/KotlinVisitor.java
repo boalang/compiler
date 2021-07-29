@@ -1858,7 +1858,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 								.setMethod(((KtSecondaryConstructor) constructor)
 									.getDelegationCall()
 									.getCalleeExpression()
-									.isThis() ? "this" : "super") // FIXME TEMP
+									.isThis() ? "this" : "super")
 								.addAllExpressions(expressions.pop())
 								.build())
 						.build());
