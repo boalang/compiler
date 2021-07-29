@@ -15,6 +15,10 @@
                "fields": [
                   {
                      "name": "ONE",
+                     "variable_type": {
+                        "name": "Test",
+                        "kind": "ENUM"
+                     },
                      "modifiers": [
                         {
                            "kind": "IMPLICIT"
@@ -23,6 +27,10 @@
                   },
                   {
                      "name": "TWO",
+                     "variable_type": {
+                        "name": "Test",
+                        "kind": "ENUM"
+                     },
                      "modifiers": [
                         {
                            "kind": "IMPLICIT"
@@ -31,6 +39,10 @@
                   },
                   {
                      "name": "THREE",
+                     "variable_type": {
+                        "name": "Test",
+                        "kind": "ENUM"
+                     },
                      "modifiers": [
                         {
                            "kind": "IMPLICIT"
