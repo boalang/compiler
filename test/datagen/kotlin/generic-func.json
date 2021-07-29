@@ -1,0 +1,91 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "v",
+                     "variable_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ADD",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "v"
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "v"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "f2",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "generic_parameters": [
+                                    {
+                                       "name": "Int",
+                                       "kind": "GENERIC"
+                                    }
+                                 ],
+                                 "method": "f",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

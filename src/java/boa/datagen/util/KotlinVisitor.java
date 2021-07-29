@@ -282,7 +282,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		db.setKind(TypeKind.SINGLETON);
 
 		for (final KtTypeParameter type_param : d.getTypeParameters())
-			db.addGenericParameters(typeFromTypeParameter(type_param));
+			db.addGenericParameters(typeFromTypeParameter(type_param, TypeKind.GENERIC));
 
 		expectExpression.push(false);
 
@@ -1260,9 +1260,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeProjection(final KtTypeProjection n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
+		types.peek().add(typeFromTypeRef(n.getTypeReference(), TypeKind.GENERIC));
 		return null;
 	}
 
@@ -1812,7 +1810,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			db.setKind(TypeKind.CLASS);
 
 		for (final KtTypeParameter type_param : klass.getTypeParameters())
-			db.addGenericParameters(typeFromTypeParameter(type_param));
+			db.addGenericParameters(typeFromTypeParameter(type_param, TypeKind.GENERIC));
 
 		if (klass.getSuperTypeList() != null) {
 			types.push(new ArrayList<Type>());
@@ -1939,7 +1937,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.setReturnType(typeFromTypeRef(function.getTypeReference()));
 
 		for (final KtTypeParameter p : function.getTypeParameters())
-			mb.addGenericParameters(typeFromTypeParameter(p));
+			mb.addGenericParameters(typeFromTypeParameter(p, TypeKind.GENERIC));
 
 		fields.push(new ArrayList<Variable>());
 		for (final KtParameter p : function.getValueParameters())
@@ -2030,6 +2028,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			eb.addAllMethodArgs(expressions.pop());
 		}
 
+		if (call.getLambdaArguments() != null) {
+			expressions.push(new ArrayList<Expression>());
+			for (final KtLambdaArgument arg : call.getLambdaArguments())
+				arg.accept(this, v);
+			eb.addAllMethodArgs(expressions.pop());
+		}
+
+		if (call.getTypeArgumentList() != null) {
+			types.push(new ArrayList<Type>());
+			call.getTypeArgumentList().accept(this, v);
+			eb.addAllGenericParameters(types.pop());
+		}
+
 		expressions.peek().add(eb.build());
 		return null;
 	}
@@ -2055,9 +2066,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	private Type typeFromTypeParameter(final KtTypeParameter type) {
+		return typeFromTypeParameter(type, TypeKind.OTHER);
+	}
+
+	private Type typeFromTypeParameter(final KtTypeParameter type, TypeKind kind) {
 		final Type.Builder tb = Type.newBuilder();
 		tb.setName(type.getText());
-		tb.setKind(TypeKind.OTHER);
+		tb.setKind(kind);
 		return tb.build();
 	}
 
