@@ -61,17 +61,10 @@
                   "name": "Int",
                   "kind": "OTHER"
                },
-               "statements": [
-                  {
-                     "kind": "EXPRESSION",
-                     "expressions": [
-                        {
-                           "kind": "LITERAL",
-                           "literal": "3"
-                        }
-                     ]
-                  }
-               ]
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "3"
+               }
             },
             {
                "name": "foo.foo.<set>",
@@ -193,4 +186,3 @@
       }
    ]
 }
-
