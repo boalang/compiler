@@ -415,6 +415,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.setKind(Modifier.ModifierKind.IMPLICIT)
 				.build());
 
+		final String parentName = ((KtClassOrObject) (n.getParent().getParent())).getNameAsSafeName().asString();
+		final Type theType = Type.newBuilder()
+			.setKind(TypeKind.ENUM)
+			.setName(parentName)
+			.build();
+		vb.setVariableType(theType);
+
 		if (n.getModifierList() != null) {
 			modifiers.push(new ArrayList<Modifier>());
 			n.getModifierList().accept(this, v);
@@ -428,7 +435,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 					st.accept(this, v);
 					vb.addExpressions(Expression.newBuilder()
 							.setKind(Expression.ExpressionKind.NEW)
-							.setNewType(types.pop().get(0))
+							.setNewType(theType)
 							.addAllExpressions(superClassInitExprs));
 					superClassInitExprs.clear();
 				}
@@ -438,8 +445,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (n.getBody() != null) {
 			final Declaration.Builder db = Declaration.newBuilder();
 
-			db.setName("");
-			db.setKind(TypeKind.OTHER);
+			db.setName(parentName);
+			db.setKind(TypeKind.ENUM);
 
 			fields.push(new ArrayList<Variable>());
 			methods.push(new ArrayList<Method>());
