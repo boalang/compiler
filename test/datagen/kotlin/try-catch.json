@@ -80,6 +80,51 @@
                            ]
                         }
                      ]
+                  },
+                  {
+                     "name": "f",
+                     "return_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "TRY",
+                              "statements": [
+                                 {
+                                    "kind": "BLOCK",
+                                    "statements": [
+                                       {
+                                          "kind": "EXPRESSION",
+                                          "expressions": [
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "3"
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "kind": "FINALLY",
+                                    "statements": [
+                                       {
+                                          "kind": "EXPRESSION",
+                                          "expressions": [
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "5"
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
                   }
                ]
             }
