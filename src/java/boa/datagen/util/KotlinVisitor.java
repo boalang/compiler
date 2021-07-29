@@ -1360,7 +1360,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitWhenConditionWithExpression(final KtWhenConditionWithExpression expr, final Void v) {
 		// FIXME how is this possible???
-		if (expr.getExpression() != null)
+		// if (expr.getExpression() != null)
 			expr.getExpression().accept(this, v);
 		return null;
 	}
