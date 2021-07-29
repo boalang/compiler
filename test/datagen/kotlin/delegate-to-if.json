@@ -1,0 +1,63 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "EdgeToEdge",
+               "kind": "SINGLETON",
+               "parents": [
+                  {
+                     "name": "EdgeToEdgeImpl",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "IF",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "METHODCALL",
+                                          "method": "EdgeToEdgeApi21"
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "METHODCALL",
+                                          "method": "EdgeToEdgeBase"
+                                       }
+                                    ]
+                                 }
+                              ],
+                              "conditions": [
+                                 {
+                                    "kind": "GTEQ",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "Build.VERSION.SDK_INT"
+                                       },
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "21"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

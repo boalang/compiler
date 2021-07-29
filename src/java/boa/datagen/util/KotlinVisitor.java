@@ -481,7 +481,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (n.getDelegateExpression() != null) {
 			expressions.push(new ArrayList<Expression>());
+			expectExpression.push(true);
 			n.getDelegateExpression().accept(this, v);
+			expectExpression.pop();
 			tb.setDelegate(expressions.pop().get(0));
 		}
 
