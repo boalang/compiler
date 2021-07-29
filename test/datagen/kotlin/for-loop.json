@@ -286,6 +286,38 @@
                                        ]
                                     }
                                  ]
+                              },
+                              {
+                                 "kind": "FOREACH",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "EMPTY"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "initializations": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "iterator"
+                                    }
+                                 ],
+                                 "variable_declarations": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
                               }
                            ]
                         }
@@ -297,4 +329,3 @@
       }
    ]
 }
-

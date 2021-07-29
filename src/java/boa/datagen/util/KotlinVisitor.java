@@ -732,7 +732,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expectExpression.push(false);
 		statements.push(new ArrayList<Statement>());
 		expressions.push(new ArrayList<Expression>());
-		expr.getBody().accept(this, v);
+		if (expr.getBody() != null)
+			expr.getBody().accept(this, v);
+		else
+			pushEmpty();
 		for (final Expression e : expressions.pop())
 			sb.addStatements(Statement.newBuilder()
 					.setKind(Statement.StatementKind.EXPRESSION)

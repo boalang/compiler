@@ -15,5 +15,6 @@ class Six {
       fun baz(things: List<String>) {
           for (thing: String in things)
              println(thing)
+          for (x in iterator);
       }
 }
