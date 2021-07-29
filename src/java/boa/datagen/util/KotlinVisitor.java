@@ -1212,7 +1212,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeProjection(final KtTypeProjection n, final Void v) {
-		types.peek().add(typeFromTypeRef(n.getTypeReference(), TypeKind.GENERIC));
+		if (n.getTypeReference() != null)
+			types.peek().add(typeFromTypeRef(n.getTypeReference(), TypeKind.GENERIC));
+		else
+			types.peek().add(Type.newBuilder()
+					.setName("*")
+					.setKind(TypeKind.GENERIC)
+					.build());
 		return null;
 	}
 

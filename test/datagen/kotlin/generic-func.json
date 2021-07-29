@@ -61,6 +61,52 @@
                      "kind": "BLOCK",
                      "statements": [
                         {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "expected",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "METHODCALL",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "properties"
+                                             }
+                                          ],
+                                          "method": "map",
+                                          "method_args": [
+                                             {
+                                                "kind": "METHOD_REFERENCE",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "generic_parameters": [
+                                                         {
+                                                            "name": "*",
+                                                            "kind": "GENERIC"
+                                                         }
+                                                      ],
+                                                      "method": "KCallable"
+                                                   }
+                                                ],
+                                                "method": "name"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
                            "kind": "RETURN",
                            "expressions": [
                               {
