@@ -1061,7 +1061,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expr.getTryBlock().accept(this, v);
 		for (final KtCatchClause c : expr.getCatchClauses())
 			c.accept(this, v);
-		expr.getFinallyBlock().accept(this, v);
+		if (expr.getFinallyBlock() != null)
+			expr.getFinallyBlock().accept(this, v);
 
 		expectExpression.pop();
 		sb.addAllStatements(statements.pop());
