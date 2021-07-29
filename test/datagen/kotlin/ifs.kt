@@ -23,4 +23,14 @@ fun z() {
     } else {
         xBB = 2
     }
+
+    if (y == 3)
+        ;
+    else
+        xNoT = 2
+
+    if (y == 3)
+        xNoF = 1
+    else
+        ;
 }

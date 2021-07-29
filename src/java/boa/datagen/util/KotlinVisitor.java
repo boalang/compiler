@@ -687,10 +687,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 					.build());
 		sb.addAllStatements(statements.pop());
 
-		if (expr.getElse() != null) {
+		if (expr.getElse() != null || expr.getElseKeyword() != null) {
 			statements.push(new ArrayList<Statement>());
 			expressions.push(new ArrayList<Expression>());
-			expr.getElse().accept(this, v);
+			if (expr.getElse() != null)
+				expr.getElse().accept(this, v);
+			else
+				pushEmpty();
 			for (final Expression e : expressions.pop())
 				sb.addStatements(Statement.newBuilder()
 						.setKind(Statement.StatementKind.EXPRESSION)
