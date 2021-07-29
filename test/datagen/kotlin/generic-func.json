@@ -87,7 +87,7 @@
                                                 "kind": "METHOD_REFERENCE",
                                                 "expressions": [
                                                    {
-                                                      "kind": "METHODCALL",
+                                                      "kind": "VARACCESS",
                                                       "generic_parameters": [
                                                          {
                                                             "name": "*",
@@ -135,4 +135,3 @@
       }
    ]
 }
-
