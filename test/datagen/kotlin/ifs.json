@@ -4,7 +4,7 @@
          "name": "",
          "methods": [
             {
-               "name": "z",
+               "name": "asStmt",
                "statements": [
                   {
                      "kind": "BLOCK",
@@ -340,6 +340,251 @@
                                     {
                                        "kind": "LITERAL",
                                        "literal": "3"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "asArgument",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "CoNLLStats",
+                                 "method_args": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "precision"
+                                          },
+                                          {
+                                             "kind": "STATEMENT",
+                                             "statements": [
+                                                {
+                                                   "kind": "IF",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "OP_DIV",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "correctDouble"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "outputTotal"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      },
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "0.0"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "conditions": [
+                                                      {
+                                                         "kind": "GT",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "outputTotal"
+                                                            },
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "0"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "recall"
+                                          },
+                                          {
+                                             "kind": "STATEMENT",
+                                             "statements": [
+                                                {
+                                                   "kind": "IF",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "OP_DIV",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "correctDouble"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "goldTotal"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      },
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "0.0"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "conditions": [
+                                                      {
+                                                         "kind": "GT",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "goldTotal"
+                                                            },
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "0"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "f1Score"
+                                          },
+                                          {
+                                             "kind": "STATEMENT",
+                                             "statements": [
+                                                {
+                                                   "kind": "IF",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "OP_DIV",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "OP_MULT",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "LITERAL",
+                                                                           "literal": "2"
+                                                                        },
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "correctDouble"
+                                                                        }
+                                                                     ]
+                                                                  },
+                                                                  {
+                                                                     "kind": "PAREN",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "OP_ADD",
+                                                                           "expressions": [
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "outputTotal"
+                                                                              },
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "goldTotal"
+                                                                              }
+                                                                           ]
+                                                                        }
+                                                                     ]
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      },
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "0.0"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "conditions": [
+                                                      {
+                                                         "kind": "LOGICAL_AND",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "GT",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "outputTotal"
+                                                                  },
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "0"
+                                                                  }
+                                                               ]
+                                                            },
+                                                            {
+                                                               "kind": "GT",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "goldTotal"
+                                                                  },
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "0"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
                                     }
                                  ]
                               }

@@ -4,7 +4,7 @@ val xEB = if (y == 3) 1 else { 2 }
 val xBE = if (y == 3) { 1 } else 2
 val xBB = if (y == 3) { 1 } else { 2 }
 
-fun z() {
+fun asStmt() {
     if (y == 3)
         xEE = 1
     else
@@ -33,4 +33,12 @@ fun z() {
         xNoF = 1
     else
         ;
+}
+
+fun asArgument() {
+    CoNLLStats(
+      precision = if (outputTotal > 0) correctDouble / outputTotal else 0.0,
+      recall = if (goldTotal > 0) correctDouble / goldTotal else 0.0,
+      f1Score = if (outputTotal > 0 && goldTotal > 0) 2 * correctDouble / (outputTotal + goldTotal) else 0.0
+    )
 }
