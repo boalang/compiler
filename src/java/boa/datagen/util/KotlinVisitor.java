@@ -408,14 +408,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitTypeParameter(final KtTypeParameter n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitEnumEntry(final KtEnumEntry n, final Void v) {
 		final Variable.Builder vb = Variable.newBuilder();
 		vb.setName(n.getNameAsSafeName().asString());
