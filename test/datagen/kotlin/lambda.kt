@@ -7,4 +7,6 @@ fun f() {
 
     val x = { print("hi") }
     x()
+
+    items.forEach { it % 2 }
 }
