@@ -1185,38 +1185,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitUserType(final KtUserType n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitDynamicType(final KtDynamicType n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitFunctionType(final KtFunctionType n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
-	public Void visitSelfType(final KtSelfType n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitBinaryWithTypeRHSExpression(final KtBinaryExpressionWithTypeRHS expr, final Void v) {
 		final Expression.Builder eb = Expression.newBuilder();
 
@@ -1239,14 +1207,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		expressions.peek().add(eb.build());
-		return null;
-	}
-
-	@Override
-	public Void visitNullableType(final KtNullableType n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
 		return null;
 	}
 
