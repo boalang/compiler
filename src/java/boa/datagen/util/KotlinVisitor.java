@@ -764,17 +764,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expr.getCondition().accept(this, v);
 		sb.addAllConditions(expressions.pop());
 
-		if (expr.getBody() != null) {
-			statements.push(new ArrayList<Statement>());
-			expressions.push(new ArrayList<Expression>());
+		statements.push(new ArrayList<Statement>());
+		expressions.push(new ArrayList<Expression>());
+		if (expr.getBody() != null)
 			expr.getBody().accept(this, v);
-			for (final Expression e : expressions.pop())
-				sb.addStatements(Statement.newBuilder()
-						.setKind(Statement.StatementKind.EXPRESSION)
-						.addExpressions(e)
-						.build());
-			sb.addAllStatements(statements.pop());
-		}
+		else
+			pushEmpty();
+		for (final Expression e : expressions.pop())
+			sb.addStatements(Statement.newBuilder()
+					.setKind(Statement.StatementKind.EXPRESSION)
+					.addExpressions(e)
+					.build());
+		sb.addAllStatements(statements.pop());
 
 		pushStatementOrExpr(sb);
 		return null;
@@ -790,17 +791,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expr.getCondition().accept(this, v);
 		sb.addAllConditions(expressions.pop());
 
-		if (expr.getBody() != null) {
-			statements.push(new ArrayList<Statement>());
-			expressions.push(new ArrayList<Expression>());
+		statements.push(new ArrayList<Statement>());
+		expressions.push(new ArrayList<Expression>());
+		if (expr.getBody() != null)
 			expr.getBody().accept(this, v);
-			for (final Expression e : expressions.pop())
-				sb.addStatements(Statement.newBuilder()
-						.setKind(Statement.StatementKind.EXPRESSION)
-						.addExpressions(e)
-						.build());
-			sb.addAllStatements(statements.pop());
-		}
+		else
+			pushEmpty();
+		for (final Expression e : expressions.pop())
+			sb.addStatements(Statement.newBuilder()
+					.setKind(Statement.StatementKind.EXPRESSION)
+					.addExpressions(e)
+					.build());
+		sb.addAllStatements(statements.pop());
 
 		statements.peek().add(sb.build());
 		return null;

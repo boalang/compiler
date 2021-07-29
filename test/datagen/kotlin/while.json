@@ -119,6 +119,37 @@
                                  ]
                               }
                            ]
+                        },
+                        {
+                           "kind": "WHILE",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "EMPTY"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "mutableList"
+                                    }
+                                 ],
+                                 "method": "remove",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              }
+                           ]
                         }
                      ]
                   }
