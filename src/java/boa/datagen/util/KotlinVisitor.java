@@ -1592,11 +1592,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				break;
 			case "step":
 				expressions.push(new ArrayList<Expression>());
+				expectExpression.push(true);
 				expr.getLeft().accept(this, v);
 				final Expression.Builder eb2 = Expression.newBuilder(expressions.pop().get(0));
 				expressions.push(new ArrayList<Expression>());
 				expr.getRight().accept(this, v);
 				eb2.addExpressions(expressions.pop().get(0));
+				expectExpression.pop();
 				expressions.peek().add(eb2.build());
 				return null;
 			default:
@@ -1614,10 +1616,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 		}
 
+		expectExpression.push(true);
 		expressions.push(new ArrayList<Expression>());
 		expr.getLeft().accept(this, v);
 		expr.getRight().accept(this, v);
 		eb.addAllExpressions(expressions.pop());
+		expectExpression.pop();
 
 		expressions.peek().add(eb.build());
 		return null;
