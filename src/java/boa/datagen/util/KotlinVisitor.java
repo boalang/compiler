@@ -1007,7 +1007,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			eb.setNewType(objLiteral.getParents(0));
 
 		expressions.peek().add(eb.build());
-
 		return null;
 	}
 
@@ -1090,7 +1089,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		statements.peek().add(sb.build());
-
 		return null;
 	}
 
@@ -1113,7 +1111,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		statements.peek().add(sb.build());
-
 		return null;
 	}
 
@@ -1660,7 +1657,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expectExpression.push(true);
 			expressions.push(new ArrayList<Expression>());
 			acc.getBodyExpression().accept(this, v);
-			// FIXME what if there is more than 1?
 			mb.setExpression(expressions.pop().get(0));
 			expectExpression.pop();
 		}
@@ -1718,8 +1714,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			final List<Expression> exprs = new ArrayList<Expression>();
 			expressions.push(exprs);
 			prop.getInitializer().accept(this, v);
-			if (exprs.size() == 1)
-				vb.setInitializer(exprs.get(0));
+			vb.setInitializer(exprs.get(0));
 			expressions.pop();
 		}
 
@@ -1901,7 +1896,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expectExpression.push(true);
 			expressions.push(new ArrayList<Expression>());
 			function.getBodyExpression().accept(this, v);
-			// FIXME what if there is more than 1?
 			mb.setExpression(expressions.pop().get(0));
 			expectExpression.pop();
 		}
@@ -1943,8 +1937,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(exprs);
 			statements.push(new ArrayList<Statement>());
 			param.getDefaultValue().accept(this, v);
-			if (exprs.size() > 0)
-				vb.setInitializer(exprs.get(0));
+			vb.setInitializer(exprs.get(0));
 			statements.pop();
 			expressions.pop();
 		}
