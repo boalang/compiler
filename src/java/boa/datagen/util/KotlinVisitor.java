@@ -1731,7 +1731,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expectExpression.push(true);
 
 		if (prop.getReceiverTypeReference() != null)
-			vb.setName(typeFromTypeRef(prop.getReceiverTypeReference()) + "." + prop.getName());
+			vb.setName(prop.getReceiverTypeReference().getText() + "." + prop.getName());
 		else
 			vb.setName(prop.getName());
 
