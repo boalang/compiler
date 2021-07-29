@@ -165,6 +165,41 @@
                                  "method": "x"
                               }
                            ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "items"
+                                    }
+                                 ],
+                                 "method": "forEach",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "expressions": [
+                                          {
+                                             "kind": "OP_MOD",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "it"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "2"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
                         }
                      ]
                   }
