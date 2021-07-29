@@ -1,0 +1,94 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "PAREN",
+                                 "expressions": [
+                                    {
+                                       "kind": "ARRAY_COMPREHENSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "5"
+                                          },
+                                          {
+                                             "kind": "STATEMENT",
+                                             "statements": [
+                                                {
+                                                   "kind": "IF",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "1"
+                                                            }
+                                                         ]
+                                                      },
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "2"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "conditions": [
+                                                      {
+                                                         "kind": "EQ",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "OP_MOD",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "number"
+                                                                  },
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "2"
+                                                                  }
+                                                               ]
+                                                            },
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "0"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
