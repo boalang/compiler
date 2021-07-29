@@ -94,7 +94,7 @@
                                                             "kind": "GENERIC"
                                                          }
                                                       ],
-                                                      "method": "KCallable"
+                                                      "variable": "KCallable"
                                                    }
                                                 ],
                                                 "method": "name"
