@@ -755,6 +755,14 @@ public class KotlinLangMode implements LangMode {
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					s += prettyprint(e.getExpressions(i)) + ".";
 				s += e.getVariable();
+				if (e.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0 ; i < e.getGenericParametersCount(); i++) {
+						if (i > 0) s += ", ";
+						s += prettyprint(e.getGenericParameters(i));
+					}
+					s += ">";
+				}
 				return s;
 			case CAST: return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
 			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
