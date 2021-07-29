@@ -900,7 +900,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitArgument(final KtValueArgument arg, final Void v) {
+		expectExpression.push(true);
 		arg.getArgumentExpression().accept(this, v);
+		expectExpression.pop();
 
 		if (arg.isSpread()) {
 			final List<Expression> list = expressions.peek();
