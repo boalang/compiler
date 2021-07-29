@@ -1,0 +1,51 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "T?",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "y",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "VARACCESS",
+                  "variable": "x!!.z!!.prop"
+               }
+            },
+            {
+               "name": "q",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "OP_NOTNULL",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "x"
+                           }
+                        ]
+                     }
+                  ],
+                  "is_postfix": true
+               }
+            }
+         ]
+      }
+   ]
+}
