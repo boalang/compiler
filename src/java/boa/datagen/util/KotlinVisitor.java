@@ -1019,11 +1019,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		for (final KtExpression e : expr.getStatements()) {
 			statements.push(new ArrayList<Statement>());
 			expressions.push(new ArrayList<Expression>());
-
 			expectExpression.push(e instanceof KtProperty);
-			e.accept(this, v);
-			expectExpression.pop();
 
+			e.accept(this, v);
+
+			expectExpression.pop();
 			for (final Expression ex : expressions.pop())
 				sb.addStatements(Statement.newBuilder()
 						.setKind(Statement.StatementKind.EXPRESSION)
@@ -1043,7 +1043,14 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		sb.setKind(Statement.StatementKind.TRY);
 
 		statements.push(new ArrayList<Statement>());
-		expr.acceptChildren(this, v);
+		expectExpression.push(false);
+
+		expr.getTryBlock().accept(this, v);
+		for (final KtCatchClause c : expr.getCatchClauses())
+			c.accept(this, v);
+		expr.getFinallyBlock().accept(this, v);
+
+		expectExpression.pop();
 		sb.addAllStatements(statements.pop());
 
 		pushStatementOrExpr(sb);
@@ -1068,7 +1075,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			for (final KtExpression e : ((KtBlockExpression) body).getStatements()) {
 				statements.push(new ArrayList<Statement>());
 				expressions.push(new ArrayList<Expression>());
+
 				e.accept(this, v);
+
 				for (final Expression ex : expressions.pop())
 					sb.addStatements(Statement.newBuilder()
 							.setKind(Statement.StatementKind.EXPRESSION)
@@ -1079,7 +1088,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		} else {
 			statements.push(new ArrayList<Statement>());
 			expressions.push(new ArrayList<Expression>());
+
 			body.accept(this, v);
+
 			for (final Expression ex : expressions.pop())
 				sb.addStatements(Statement.newBuilder()
 						.setKind(Statement.StatementKind.EXPRESSION)
@@ -1101,7 +1112,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		for (final KtExpression e : n.getFinalExpression().getStatements()) {
 			statements.push(new ArrayList<Statement>());
 			expressions.push(new ArrayList<Expression>());
+
 			e.accept(this, v);
+
 			for (final Expression ex : expressions.pop())
 				sb.addStatements(Statement.newBuilder()
 						.setKind(Statement.StatementKind.EXPRESSION)
@@ -1146,7 +1159,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		statements.push(new ArrayList<Statement>());
 		expressions.push(new ArrayList<Expression>());
-		expectExpression.push(true);
+		expectExpression.push(false);
 
 		n.getBody().accept(this, v);
 
