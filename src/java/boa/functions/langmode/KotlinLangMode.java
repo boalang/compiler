@@ -963,7 +963,7 @@ public class KotlinLangMode implements LangMode {
 				kProjectManager = PsiManager.getInstance(proj);
 			}
 
-			final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content);
+			final VirtualFile file = new LightVirtualFile(path, KotlinFileType.INSTANCE, content.replaceAll("\r\n", "\n"));
 			final KtFile theKt = new KtFile(kProjectManager.findViewProvider(file), false);
 
 			if (!debug && new KotlinErrorCheckVisitor().hasError(theKt))
