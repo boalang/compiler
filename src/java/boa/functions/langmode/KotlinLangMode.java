@@ -888,16 +888,7 @@ public class KotlinLangMode implements LangMode {
 
 			case METHOD_REFERENCE:
 				for (int i = 0 ; i < e.getExpressionsCount() ; i ++) {
-					final Expression ex = e.getExpressions(i);
-					s += ex.getMethod();
-					if (ex.getGenericParametersCount() > 0) {
-						s += "<";
-						for(int j = 0 ; j < ex.getGenericParametersCount() ; j++) {
-							if (j > 0) s += ", ";
-							s += ex.getGenericParameters(j).getName();
-						}
-						s += ">";
-					}
+					s += prettyprint(e.getExpressions(i));
 					s += "::";
 				}
 				s += e.getMethod();
