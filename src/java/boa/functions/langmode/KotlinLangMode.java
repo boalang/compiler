@@ -763,6 +763,7 @@ public class KotlinLangMode implements LangMode {
 			case METHODCALL:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					s += prettyprint(e.getExpressions(i)) + ".";
+				s += e.getMethod();
 				if (e.getGenericParametersCount() > 0) {
 					s += "<";
 					for (int i = 0; i < e.getGenericParametersCount(); i++) {
@@ -772,7 +773,7 @@ public class KotlinLangMode implements LangMode {
 					}
 					s += ">";
 				}
-				s += e.getMethod() + "(";
+				s += "(";
 				for (int i = 0; i < e.getMethodArgsCount(); i++) {
 					if (i > 0)
 						s += ", ";
@@ -875,6 +876,23 @@ public class KotlinLangMode implements LangMode {
 
 			case TEMPLATE:
 				s += e.getLiteral();
+				return s;
+
+			case METHOD_REFERENCE:
+				for (int i = 0 ; i < e.getExpressionsCount() ; i ++) {
+					final Expression ex = e.getExpressions(i);
+					s += ex.getMethod();
+					if (ex.getGenericParametersCount() > 0) {
+						s += "<";
+						for(int j = 0 ; j < ex.getGenericParametersCount() ; j++) {
+							if (j > 0) s += ", ";
+							s += ex.getGenericParameters(j).getName();
+						}
+						s += ">";
+					}
+					s += "::";
+				}
+				s += e.getMethod();
 				return s;
 
 			default: return s;
