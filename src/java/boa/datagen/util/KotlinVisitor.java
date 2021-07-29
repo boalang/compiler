@@ -1973,10 +1973,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (param.hasDefaultValue()) {
 			final List<Expression> exprs = new ArrayList<Expression>();
 			expressions.push(exprs);
-			statements.push(new ArrayList<Statement>());
+			expectExpression.push(true);
 			param.getDefaultValue().accept(this, v);
 			vb.setInitializer(exprs.get(0));
-			statements.pop();
+			expectExpression.pop();
 			expressions.pop();
 		}
 
