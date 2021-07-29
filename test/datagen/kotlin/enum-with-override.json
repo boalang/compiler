@@ -1,0 +1,98 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "ProtocolState",
+               "kind": "ENUM",
+               "methods": [
+                  {
+                     "name": "signal",
+                     "modifiers": [
+                        {
+                           "kind": "ABSTRACT"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "ProtocolState",
+                        "kind": "OTHER"
+                     }
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "WAITING",
+                     "variable_type": {
+                        "name": "ProtocolState",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "NEW",
+                        "anon_declaration": {
+                           "name": "ProtocolState",
+                           "kind": "ENUM",
+                           "methods": [
+                              {
+                                 "name": "signal",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "override"
+                                    }
+                                 ],
+                                 "expression": {
+                                    "kind": "VARACCESS",
+                                    "variable": "TALKING"
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  {
+                     "name": "TALKING",
+                     "variable_type": {
+                        "name": "ProtocolState",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "NEW",
+                        "anon_declaration": {
+                           "name": "ProtocolState",
+                           "kind": "ENUM",
+                           "methods": [
+                              {
+                                 "name": "signal",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "override"
+                                    }
+                                 ],
+                                 "expression": {
+                                    "kind": "VARACCESS",
+                                    "variable": "WAITING"
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
