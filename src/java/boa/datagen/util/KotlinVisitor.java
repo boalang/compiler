@@ -1145,11 +1145,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitAnonymousInitializer(final KtAnonymousInitializer n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
+	public Void visitScriptInitializer(final KtScriptInitializer n, final Void v) {
+		// TODO
+		throw new RuntimeException("not yet implemented");
 	}
 
 	@Override
