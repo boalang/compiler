@@ -917,7 +917,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (expr.getReceiverExpression() != null) {
 			expressions.push(new ArrayList<Expression>());
 			expr.getReceiverExpression().accept(this, v);
-			eb.addAllExpressions(expressions.pop());
+			if (expr.getHasQuestionMarks()) {
+				final Expression.Builder eb2 = Expression.newBuilder(expressions.peek().get(0));
+				if((eb2.getKind() == Expression.ExpressionKind.METHODCALL) || (eb2.getKind() == Expression.ExpressionKind.METHOD_REFERENCE)) {
+					eb2.setMethod(eb2.getMethod() + "?");
+				} else {
+					eb2.setVariable(eb2.getVariable() + "?");
+				}
+				eb.addExpressions(eb2.build());
+				expressions.pop();
+			} else
+				eb.addAllExpressions(expressions.pop());
 		}
 
 		expressions.peek().add(eb.build());
