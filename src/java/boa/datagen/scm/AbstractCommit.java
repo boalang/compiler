@@ -228,7 +228,7 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted " + fb.getKind() + ": revision " + id + ": file " + path);
 			} else {
 				if (debugparse)
-					System.err.println("Found Kotlin parse error in: revision " + id + ": file " + path);
+					System.err.println("Found Java parse error in: revision " + id + ": file " + path);
 			}
 		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
