@@ -25,6 +25,7 @@ import java.io.File;
 public class DefaultProperties {
 	public static String NUM_THREADS = "1";
 	public static String MAX_PROJECTS = "1000";
+	public static String TOTAL_MAX_PROJECTS = "" + Long.MAX_VALUE;
 	public static String MAX_COMMITS = "10000";
 	public static String MAX_SIZE_FOR_PROJECT_WITH_COMMITS = String.valueOf(1 << 26); // Integer.MAX_VALUE / 3
 	

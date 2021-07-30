@@ -121,6 +121,10 @@ public class SeqRepoImporter {
 			return;
 		}
 		for (int i = 0; !getDone() && i < repoArray.size(); i++) {
+			if (counter >= Integer.parseInt(DefaultProperties.TOTAL_MAX_PROJECTS)) {
+				setDone(true);
+				return;
+			}
 			try {
 				final JsonObject rp = repoArray.get(i).getAsJsonObject();
 				final RepoMetadata repo = new RepoMetadata(rp);
