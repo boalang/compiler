@@ -63,6 +63,8 @@ public class SeqRepoImporter {
 
 	private final static int POOL_SIZE = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
 	private final static int MAX_SIZE_FOR_PROJECT_WITH_COMMITS = Integer.valueOf(DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS);
+	private final static long TOTAL_MAX_PROJECTS = Long.parseLong(DefaultProperties.TOTAL_MAX_PROJECTS);
+	private final static int MAX_PROJECTS = Integer.parseInt(DefaultProperties.MAX_PROJECTS);
 	private final static boolean STORE_COMMITS = DefaultProperties.STORE_COMMITS;
 	private static final ImportTask[] workers = new ImportTask[POOL_SIZE];
 	private static int counter = 0;
@@ -121,7 +123,7 @@ public class SeqRepoImporter {
 			return;
 		}
 		for (int i = 0; !getDone() && i < repoArray.size(); i++) {
-			if (counter >= Integer.parseInt(DefaultProperties.TOTAL_MAX_PROJECTS)) {
+			if (counter >= TOTAL_MAX_PROJECTS) {
 				setDone(true);
 				return;
 			}
@@ -328,7 +330,7 @@ public class SeqRepoImporter {
 					}
 					counter++;
 					allCounter++;
-					if (counter >= Integer.parseInt(DefaultProperties.MAX_PROJECTS)) {
+					if (counter >= MAX_PROJECTS) {
 						closeWriters();
 						openWriters();
 						counter = 0;
