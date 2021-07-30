@@ -306,7 +306,13 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".java")) {
 			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			parseJavaFile(path, fb, content, false); // parse java file
+			if (parseJavaFile(path, fb, content, false)) {
+				if (debugparse)
+					System.err.println("Accepted " + fb.getKind() + ": revision " + id + ": file " + path);
+			} else {
+				if (debugparse)
+					System.err.println("Found Java parse error in: revision " + id + ": file " + path);
+			}
 		} else if (lowerPath.endsWith(".py")) {
 			if (lowerPath.contains(largeFiles1) || lowerPath.contains(largeFiles2)) {
 				fb.setKind(FileKind.SOURCE_PY_ERROR);
