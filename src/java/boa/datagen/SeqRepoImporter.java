@@ -86,7 +86,7 @@ public class SeqRepoImporter {
 		processJSONdir(new File(jsonPath));
 
 		for (int j = 0; j < POOL_SIZE; j++)
-			while (!workers[j].isReady())
+			while (workers[j].isReady())
 				Thread.sleep(100);
 		setDone(true);
 
@@ -97,7 +97,7 @@ public class SeqRepoImporter {
 	}
 
 	static void processJSONdir(final File dir) {
-		if (!dir.isDirectory())
+		if (getDone() || !dir.isDirectory())
 			return;
 
 		for (final File file : dir.listFiles()) {
@@ -120,7 +120,7 @@ public class SeqRepoImporter {
 			e.printStackTrace();
 			return;
 		}
-		for (int i = 0; i < repoArray.size(); i++) {
+		for (int i = 0; !getDone() && i < repoArray.size(); i++) {
 			try {
 				final JsonObject rp = repoArray.get(i).getAsJsonObject();
 				final RepoMetadata repo = new RepoMetadata(rp);
@@ -129,19 +129,20 @@ public class SeqRepoImporter {
 
 					// System.out.println(jRepo.toString());
 					boolean assigned = false;
-					while (!assigned) {
-						for (int j = 0; j < POOL_SIZE; j++) {
-							if (workers[j].isReady()) {
+					while (!getDone() && !assigned) {
+						for (int j = 0; !getDone() && j < POOL_SIZE; j++) {
+							if (!workers[j].isAssigned()) {
 								workers[j].setProject(project);
-								workers[j].setReady(false);
+								workers[j].setAssigned(true);
 								assigned = true;
 								break;
 							}
 						}
 						// Thread.sleep(100);
 					}
-					System.out.println("Assigned the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id
-							+ " from the " + i + "th object of the json file: " + file.getPath());
+					if (assigned)
+						System.out.println("Assigned the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id
+								+ " from the " + i + "th object of the json file: " + file.getPath());
 				}
 			} catch (final Exception e) {
 				System.err.println("Error proccessing item " + i + " of page " + file.getPath());
@@ -203,6 +204,7 @@ public class SeqRepoImporter {
 		private long commitWriterLen = 1;
 		private long contentWriterLen = 1;
 		private volatile boolean ready = true;
+		private volatile boolean assigned = false;
 		private volatile Project project;
 
 		public ImportTask(int id) {
@@ -266,9 +268,7 @@ public class SeqRepoImporter {
 			openWriters();
 
 			while (true) {
-				while (isReady()) {
-					if (getDone())
-						break;
+				while (!getDone() && !isAssigned()) {
 					try {
 						Thread.sleep(10);
 					} catch (final InterruptedException e) {
@@ -332,10 +332,11 @@ public class SeqRepoImporter {
 				} catch (final Throwable e) {
 					e.printStackTrace();
 				}
-				setReady(true);
+				setAssigned(false);
 			}
 
 			closeWriters();
+			setReady(false);
 		}
 
 		private synchronized Project storeRepository(final Project project, final int i) {
@@ -460,6 +461,14 @@ public class SeqRepoImporter {
 
 		public synchronized void setReady(boolean ready) {
 			this.ready = ready;
+		}
+
+		public synchronized boolean isAssigned() {
+			return this.assigned;
+		}
+
+		public synchronized void setAssigned(boolean assigned) {
+			this.assigned = assigned;
 		}
 
 		public synchronized int getId() {
