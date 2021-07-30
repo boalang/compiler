@@ -680,26 +680,6 @@ public class BoaAstIntrinsics {
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is an integer literal.
 	 *
-	 * The test is a simplified grammar, based on the one from:
-	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
-	 *
-	 * DecimalNumeral:
-	 * 	[0-9] [lL]?
-	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
-	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
-	 *
-	 * HexNumeral:
-	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
-	 *
-	 * OctalNumeral:
-	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
-	 *
-	 * BinaryNumeral:
-	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
-	 *
-	 * If any of these match, it returns <code>true</code>.  Otherwise it
-	 * returns <code>false</code>.
-	 *
 	 * @param e the expression to test
 	 * @return true if the expression is an integer literal, otherwise false
 	 */
@@ -711,19 +691,6 @@ public class BoaAstIntrinsics {
 	/**
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is a float literal.
-	 *
-	 * The test is a simplified grammar, based on the one from:
-	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
-	 *
-	 * DecimalFloatingPointLiteral:
-	 *  [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]* [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
-	 *  \\. [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
-	 *  [0-9] ([0-9_]* [0-9])? [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
-	 *  [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]
-	 *
-	 * HexadecimalFloatingPointLiteral:
-	 *  0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
-	 *  0 [Xx] ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a char literal, otherwise false
