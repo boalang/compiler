@@ -131,7 +131,7 @@ public class SeqRepoImporter {
 					boolean assigned = false;
 					while (!getDone() && !assigned) {
 						for (int j = 0; !getDone() && j < POOL_SIZE; j++) {
-							if (!workers[j].isAssigned() && !getDone()) {
+							if (workers[j].isReady() && !workers[j].isAssigned()) {
 								workers[j].setProject(project);
 								workers[j].setAssigned(true);
 								assigned = true;
