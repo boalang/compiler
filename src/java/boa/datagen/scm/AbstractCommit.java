@@ -71,14 +71,14 @@ public abstract class AbstractCommit {
 	protected AbstractConnector connector;
 	protected String projectName;
 
-	protected AbstractCommit(AbstractConnector cnn) {
+	protected AbstractCommit(final AbstractConnector cnn) {
 		this.connector = cnn;
 	}
 
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 
-	protected ChangedFile.Builder getChangedFile(String path, ChangeKind changeKind) {
+	protected ChangedFile.Builder getChangedFile(final String path, final ChangeKind changeKind) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
@@ -180,10 +180,10 @@ public abstract class AbstractCommit {
 			revision.setLog("");
 
 		if (this.parentIndices != null)
-			for (int parentIndex : this.parentIndices)
+			for (final int parentIndex : this.parentIndices)
 				revision.addParents(parentIndex);
 
-		for (ChangedFile.Builder cfb : changedFiles) {
+		for (final ChangedFile.Builder cfb : changedFiles) {
 			cfb.setKind(FileKind.OTHER);
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
 				cfb.setKey(0);
@@ -197,8 +197,8 @@ public abstract class AbstractCommit {
 	}
 
 	Builder processChangeFile(final ChangedFile.Builder fb) {
-		long len = connector.astWriterLen;
-		String path = fb.getName();
+		final long len = connector.astWriterLen;
+		final String path = fb.getName();
 
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".txt"))
@@ -208,9 +208,8 @@ public abstract class AbstractCommit {
 		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java")) {
-			final String content = getFileContents(path);
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			if (parseJavaFile(path, fb, content, false)) {
+			if (parseJavaFile(path, fb, getFileContents(path), false)) {
 				if (debugparse)
 					System.err.println("Accepted " + fb.getKind() + ": revision " + id + ": file " + path);
 			} else {
@@ -358,7 +357,7 @@ public abstract class AbstractCommit {
 				}
 			}
 		}*/
-		 
+
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
 			fb.setAst(true);
@@ -368,19 +367,21 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseHTML(String path, Builder fb, String content, boolean b, Writer astWriter) {
-		Document doc;
-		HtmlVisitor visitor = new HtmlVisitor();
+	private boolean parseHTML(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
+		final Document doc;
+		final HtmlVisitor visitor = new HtmlVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
 		try {
 			doc = Jsoup.parse(content);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (debug) {
 				System.err.println("Error parsing HTML file: " + path);
 				e.printStackTrace();
 			}
 			return false;
 		}
+
 		try {
 			ast.setDocument(visitor.getDocument(doc));
 		} catch (final UnsupportedOperationException e) {
@@ -392,33 +393,37 @@ public abstract class AbstractCommit {
 			System.exit(-1);
 			return false;
 		}
+
 		try {
 			// System.out.println("writing=" + count + "\t" + path);
-			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 			connector.astWriterLen += bw.getLength();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+
 		return true;
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseXML(String path, Builder fb, String content, boolean b, Writer astWriter) {
-		org.dom4j.Document doc;
-		XMLVisitor visitor = new XMLVisitor();
+	private boolean parseXML(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
+		final org.dom4j.Document doc;
+		final XMLVisitor visitor = new XMLVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
 		try {
 			org.dom4j.dom.DOMDocumentFactory di = new org.dom4j.dom.DOMDocumentFactory();
 			SAXReader reader = new SAXReader(di);
 			doc = reader.read(content);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (debug) {
 				System.err.println("Error parsing HTML file: " + path);
 				e.printStackTrace();
 			}
 			return false;
 		}
+
 		try {
 			ast.setDocument(visitor.getDocument((DOMDocument) doc));
 		} catch (final UnsupportedOperationException e) {
@@ -430,33 +435,37 @@ public abstract class AbstractCommit {
 			System.exit(-1);
 			return false;
 		}
+
 		try {
 			// System.out.println("writing=" + count + "\t" + path);
-			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 			connector.astWriterLen += bw.getLength();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+
 		return true;
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseCSS(String path, Builder fb, String content, boolean b, Writer astWriter) {
+	private boolean parseCSS(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
 		com.steadystate.css.dom.CSSStyleSheetImpl sSheet = null;
-		CssVisitor visitor = new CssVisitor();
+		final CssVisitor visitor = new CssVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
 		try {
 			com.steadystate.css.parser.CSSOMParser parser = new com.steadystate.css.parser.CSSOMParser();
 			InputSource source = new InputSource(new StringReader(content));
 			sSheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			if (debug) {
 				System.err.println("Error parsing HTML file: " + path);
 				e.printStackTrace();
 			}
 			return false;
 		}
+
 		try {
 			ast.setDocument(visitor.getDocument(sSheet));
 		} catch (final UnsupportedOperationException e) {
@@ -468,22 +477,25 @@ public abstract class AbstractCommit {
 			System.exit(-1);
 			return false;
 		}
+
 		try {
 			// System.out.println("writing=" + count + "\t" + path);
-			BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 			connector.astWriterLen += bw.getLength();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
+
 		return true;
 	}
-	
+
 	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content,
 			final PHPVersion astLevel, final boolean storeOnError) {
-		org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser
+		final org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser
 				.newParser(astLevel);
-		Program cu = null;
+		final Program cu;
+
 		try {
 			parser.setSource(content.toCharArray());
 			cu = parser.createAST(null);
@@ -495,10 +507,12 @@ public abstract class AbstractCommit {
 			// e.printStackTrace();
 			return false;
 		}
-		PHPErrorCheckVisitor errorCheck = new PHPErrorCheckVisitor();
+
+		final PHPErrorCheckVisitor errorCheck = new PHPErrorCheckVisitor();
 		if (!errorCheck.hasError || storeOnError) {
 			final ASTRoot.Builder ast = ASTRoot.newBuilder();
-			PHPVisitor visitor = new PHPVisitor(content);
+			final PHPVisitor visitor = new PHPVisitor(content);
+
 			try {
 				ast.addNamespaces(visitor.getNamespace(cu));
 			} catch (final UnsupportedOperationException e) {
@@ -510,12 +524,13 @@ public abstract class AbstractCommit {
 				System.exit(-1);
 				return false;
 			}
+
 			try {
 				// System.out.println("writing=" + count + "\t" + path);
-				BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+				final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 				connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 				connector.astWriterLen += bw.getLength();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
@@ -526,11 +541,11 @@ public abstract class AbstractCommit {
 			final int astLevel, final boolean storeOnError) {
 		try {
 			// System.out.println("parsing=" + (++count) + "\t" + path);
-			CompilerEnvirons cp = new CompilerEnvirons();
+			final CompilerEnvirons cp = new CompilerEnvirons();
 			cp.setLanguageVersion(astLevel);
 			final org.mozilla.javascript.Parser parser = new org.mozilla.javascript.Parser(cp);
 
-			AstRoot cu;
+			final AstRoot cu;
 			try {
 				cu = parser.parse(content, null, 0);
 			} catch (java.lang.IllegalArgumentException ex) {
@@ -559,7 +574,7 @@ public abstract class AbstractCommit {
 					return false;
 				} catch (final Throwable e) {
 					if (debug)
-						System.err.println("Error visiting JS file: " + path  + " from: " + projectName);
+						System.err.println("Error visiting JS file: " + path + " from: " + projectName);
 					e.printStackTrace();
 					System.exit(-1);
 					return false;
@@ -567,7 +582,7 @@ public abstract class AbstractCommit {
 
 				try {
 					// System.out.println("writing=" + count + "\t" + path);
-					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+					final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
 				} catch (IOException e) {
@@ -607,60 +622,57 @@ public abstract class AbstractCommit {
 			parser.setCompilerOptions(options);
 
 			final CompilationUnit cu;
-			
+
 			try {
 				cu = (CompilationUnit) parser.createAST(null);
-			} catch(Throwable e) {
+			} catch (final Throwable e) {
 				return false;
 			}
 
 			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 			cu.accept(errorCheck);
-			
+
 			if (!errorCheck.hasError || storeOnError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
 				final JavaVisitor visitor = new JavaVisitor(content);
 				try {
-					
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					
+
 //					for (final Comment c : visitor.getComments()) comments.addComments(c);
-					 
 				} catch (final Throwable e) {
 					if (debug) {
-						System.err.println("Error visiting Java file: " + path  + " from: " + projectName);
+						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
 						e.printStackTrace();
 					}
 					System.exit(-1);
 					return false;
 				}
-				
+
 				switch (visitor.getAstLevel()) {
-					case JavaVisitor.JLS2:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-						break;
-					case JavaVisitor.JLS3:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-						break;
-					case JavaVisitor.JLS4:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-						break;
-					case JavaVisitor.JLS8:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						break;
-					default:
-						fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+				case JavaVisitor.JLS2:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
+					break;
+				case JavaVisitor.JLS3:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
+					break;
+				case JavaVisitor.JLS4:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
+					break;
+				case JavaVisitor.JLS8:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+					break;
+				default:
+					fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 				}
 
 				try {
-					BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+					final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
-				} catch (IOException e) {
-					if (debug) 
+				} catch (final IOException e) {
+					if (debug)
 						e.printStackTrace();
-					
 				}
 				// fb.setComments(comments);
 			}
@@ -672,7 +684,7 @@ public abstract class AbstractCommit {
 			return false;
 		}
 	}
-	
+
 	protected String processLOC(final String path) {
 		String loc = "";
 
@@ -713,5 +725,4 @@ public abstract class AbstractCommit {
 
 		return loc;
 	}
-	
 }
