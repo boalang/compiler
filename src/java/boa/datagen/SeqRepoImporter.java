@@ -86,7 +86,7 @@ public class SeqRepoImporter {
 		processJSONdir(new File(jsonPath));
 
 		for (int j = 0; j < POOL_SIZE; j++)
-			while (workers[j].isReady())
+			while (workers[j].isAssigned())
 				Thread.sleep(100);
 		setDone(true);
 
