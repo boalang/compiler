@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Farheen Sultana
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, 
  *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *
@@ -17,21 +17,15 @@
  */
 package boa.test.datagen.java;
 
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-
 /*
- * @author sfarheen
  * @author rdyer
  */
-public class TestRepeatingAnnotations extends Java8BaseTest {
-	@Test
-	public void repeatedAnnotation() throws IOException {
-		assertEquals(
-			load("test/datagen/boa/repeating-annot.boa").trim(),
-			parseJava(load("test/datagen/java/repeating-annot.java")).trim()
-		);
+public class JavaToBoa extends Java8BaseTest {
+	public static void main(String[] args) {
+		for (final String s : args)
+			if (s.indexOf("class ") == -1)
+				System.out.println(parseWrapped(s));
+			else
+				System.out.println(parseJava(s));
 	}
 }

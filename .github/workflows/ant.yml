@@ -13,7 +13,7 @@ on:
       - master
 
 jobs:
-  build:
+  compile:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,7 +26,7 @@ jobs:
       run: ant -noinput -buildfile build.xml package
 
   test-compiler:
-    needs: build
+    needs: compile
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -39,7 +39,7 @@ jobs:
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-compiler
 
   test-functions:
-    needs: build
+    needs: compile
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -52,7 +52,7 @@ jobs:
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-functions
 
   test-datagen-java:
-    needs: build
+    needs: compile
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -65,7 +65,7 @@ jobs:
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-java
 
   test-datagen-js:
-    needs: build
+    needs: compile
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -78,7 +78,7 @@ jobs:
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-js
 
   test-datagen-php:
-    needs: build
+    needs: compile
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -90,7 +90,7 @@ jobs:
     - name: Run unit tests - datagen - PHP
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-php
 
-  style-check:
+  checkstyle:
     runs-on: ubuntu-latest
     if: always()
     steps:
