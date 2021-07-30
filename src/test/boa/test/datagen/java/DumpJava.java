@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, 
- *                 Iowa State University of Science and Technology,
+ * Copyright 2017, Robert Dyer, 
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,19 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.test.datagen;
-
-import boa.test.datagen.java.Java8BaseTest;
+package boa.test.datagen.java;
 
 /*
  * @author rdyer
  */
-public class JavaToBoa extends Java8BaseTest {
+public class DumpJava extends Java8BaseTest {
 	public static void main(String[] args) {
 		for (final String s : args)
 			if (s.indexOf("class ") == -1)
-				System.out.println(parseWrapped(s));
+				dumpJavaWrapped(s);
 			else
-				System.out.println(parseJava(s));
+				dumpJava(s);
 	}
 }

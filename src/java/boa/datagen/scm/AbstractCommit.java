@@ -330,7 +330,7 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.Source_HTML);
-			if (!HTMLParse(path, fb, content, false, astWriter)) {
+			if (!parseHTML(path, fb, content, false, astWriter)) {
 				if (debugparse)
 					System.err.println("Found an HTML parse error in : revision " + id + ": file " + path);
 				fb.setKind(FileKind.SOURCE_HTML_ERROR);
@@ -341,7 +341,7 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.Source_XML);
-			if (!XMLParse(path, fb, content, false, astWriter)) {
+			if (!parseXML(path, fb, content, false, astWriter)) {
 				if (debugparse)
 					System.err.println("Found an XML parse error in : revision " + id + ": file " + path);
 				fb.setKind(FileKind.SOURCE_XML_ERROR);
@@ -351,7 +351,7 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.Source_CSS);
-			if (!CSSParse(path, fb, content, false, astWriter)) {
+			if (!parseCSS(path, fb, content, false, astWriter)) {
 				if (debugparse)
 					System.err.println("Found an CSS parse error in : revision " + id + ": file " + path);
 				fb.setKind(FileKind.SOURCE_CSS_ERROR);
@@ -381,7 +381,7 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean HTMLParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
+	private boolean parseHTML(String path, Builder fb, String content, boolean b, Writer astWriter) {
 		Document doc;
 		HtmlVisitor visitor = new HtmlVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -417,7 +417,7 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean XMLParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
+	private boolean parseXML(String path, Builder fb, String content, boolean b, Writer astWriter) {
 		org.dom4j.Document doc;
 		XMLVisitor visitor = new XMLVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -455,7 +455,7 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean CSSParse(String path, Builder fb, String content, boolean b, Writer astWriter) {
+	private boolean parseCSS(String path, Builder fb, String content, boolean b, Writer astWriter) {
 		com.steadystate.css.dom.CSSStyleSheetImpl sSheet = null;
 		CssVisitor visitor = new CssVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
