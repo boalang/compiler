@@ -377,7 +377,7 @@ public class BoaGraphIntrinsics {
 
 			final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(n.getOutEdges());
 			Collections.sort(edges);
-			for (final boa.graphs.Edge<?,?> e : edges) {
+			for (final boa.graphs.Edge<?, ?> e : edges) {
 				str2.append("\t");
 				str2.append(n.getId());
 				str2.append(" -> ");
