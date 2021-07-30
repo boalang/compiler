@@ -17,33 +17,29 @@
  */
 package boa.test.datagen.java;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.google.protobuf.CodedInputStream;
-import com.google.protobuf.Message;
-import com.google.protobuf.Descriptors.FieldDescriptor;
-import com.google.protobuf.Descriptors.FieldDescriptor.Type;
-import com.googlecode.protobuf.format.JsonFormat;
-
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Writable;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
-import static org.junit.Assert.assertEquals;
+import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FieldDescriptor.Type;
+import com.google.protobuf.Message;
+import com.googlecode.protobuf.format.JsonFormat;
 
-import boa.types.Ast.ASTRoot;
-import boa.types.Ast.Declaration;
-import boa.types.Diff.ChangedFile;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaVisitor;
@@ -51,6 +47,9 @@ import boa.datagen.util.ProtoMessageVisitor;
 import boa.test.compiler.BaseTest;
 import boa.test.datagen.ASTDumper;
 import boa.test.datagen.UglyMathCommentsExtractor;
+import boa.types.Ast.ASTRoot;
+import boa.types.Ast.Declaration;
+import boa.types.Diff.ChangedFile;
 
 /*
  * @author rdyer

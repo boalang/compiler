@@ -1,3 +1,3 @@
-open module ModuleDeclaration {
-	;
+module module-info {
+	requires ;
 }

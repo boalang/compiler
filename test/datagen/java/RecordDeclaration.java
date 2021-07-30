@@ -1,6 +1,6 @@
-public record RecordDeclaration(String brand, String licensePlate) {
-	
-	public String brandAsLowerCase() {
-		return brand().toLowerCase();
+public record RecordDeclaration(int x, int y) { 
+	RecordDeclaration(int x, int y){
+		this.x = x;
+		this.y = y;
 	}
-};
+}

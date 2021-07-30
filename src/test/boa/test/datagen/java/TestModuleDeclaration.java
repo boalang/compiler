@@ -9,7 +9,7 @@ public class TestModuleDeclaration extends Java8BaseTest {
 	@Test
 	public void moduleDeclaration() throws IOException {
 		testWrapped(
-			"test/datagen/java/ModuleDeclaration.java",
+			"/boa/test/datagen/java/module-info.java",
 			load("test/datagen/boa/ModuleDeclaration.boa").trim()
 		);
 	}

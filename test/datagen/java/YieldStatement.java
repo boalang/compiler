@@ -1,10 +1,9 @@
 class t {
-	void m(Day d) {
-		int len = switch (d) {
-		case SATURDAY, SUNDAY -> d.ordinal();
-		default -> {
-			yield d.toString().length();
-		}
+	void m() {
+		String d = "MONDAY";
+		int num = switch (d) {
+		case "MONDA", "SUNDAY": yield 6;
+		default: yield 2;
 		};
 	}
 }

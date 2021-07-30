@@ -119,6 +119,10 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit node) {
+		System.out.println("This is from CompilationUnit and length is: " + node.getClass().toString());
+//		for(int i = 0; i < node.getLength(); i ++) {
+//			System.out.println("This is length: " + i + "----------" + node.getNodeType());
+//		}
 		PackageDeclaration pkg = node.getPackage();
 		if (pkg == null) {
 			b.setName("");
@@ -140,6 +144,12 @@ public class JavaVisitor extends ASTVisitor {
 			if (id.isOnDemand())
 				imp += ".*";
 			b.addImports(imp);
+		}
+		
+		System.out.println("types size is: " + node.types().size());
+		
+		for(int i = 0; i < node.types().size(); i ++) {
+			System.out.println("This type is: " + ((AbstractTypeDeclaration)node.types().get(i)).getName().toString());	
 		}
 		for (Object t : node.types()) {
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());
@@ -2180,6 +2190,7 @@ public class JavaVisitor extends ASTVisitor {
 	//begin Java 9 ()
 	@Override
 	public boolean visit(ModuleDeclaration node) {
+		System.out.println("This is ModuleDeclaration node: " + node.getLength());
 		setAstLevel(JLS9);
 		
 		b.setName(node.getName().getFullyQualifiedName());
@@ -2274,7 +2285,8 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(YieldStatement node) {
 		setAstLevel(JLS13);
-		
+		System.out.println("=============================================================");
+		System.out.println("Yield is visible: " + node.isImplicit());
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.YIELD);

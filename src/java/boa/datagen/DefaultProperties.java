@@ -19,6 +19,8 @@ package boa.datagen;
 
 import java.io.File;
 
+import org.eclipse.jdt.core.dom.AST;
+
 /**
  * @author rdyer
  */
@@ -78,7 +80,7 @@ public class DefaultProperties {
 	public static String localDataPath = null;
 	
 	//default version 
-	public static int DEFAULT_JAVA_ASTLEVEL = 15;
+	public static int DEFAULT_JAVA_ASTLEVEL = AST.JLS15;
 	
 	@SuppressWarnings("unused")
 	private static String getRoot() {
