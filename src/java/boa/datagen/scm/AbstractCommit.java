@@ -214,7 +214,13 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java")) {
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			parseJavaFile(path, fb, getFileContents(path), false); // parse java file
+			if (parseJavaFile(path, fb, getFileContents(path), false)) {
+				if (debugparse)
+					System.err.println("Accepted " + fb.getKind() + ": revision " + id + ": file " + path);
+			} else {
+				if (debugparse)
+					System.err.println("Found Kotlin parse error in: revision " + id + ": file " + path);
+			}
 		} else if (lowerPath.endsWith(".kt") || lowerPath.endsWith(".kts")) {
 			fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
 			if (parseKotlinFile(path, fb, getFileContents(path), false)) {
