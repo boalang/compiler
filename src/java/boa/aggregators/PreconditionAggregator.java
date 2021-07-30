@@ -231,7 +231,7 @@ public class PreconditionAggregator extends Aggregator {
 	 */
 	private List<Map.Entry<String, Double>> doRanking(final Map<String, Double> filteredPreconds) {
 		final Map<String, Double> finalPreconds = new HashMap<String, Double>();
-		final Set<SortedSet<String>> argsComb = kCombinations(); // k = 2^(args+1) - 1
+		final Set<SortedSet<String>> argsComb = generateCombinations(); // k = 2^(args+1) - 1
 
 		for (final SortedSet<String> s : argsComb) {
 			final Map<String, Double> argPrecond = new HashMap<String, Double>();
@@ -266,7 +266,7 @@ public class PreconditionAggregator extends Aggregator {
 	 *
 	 * @return set of all combinations of arguments
 	 */
-	private Set<SortedSet<String>> kCombinations() {
+	private Set<SortedSet<String>> generateCombinations() {
 		final Set<SortedSet<String>> comb = new HashSet<SortedSet<String>>();
 		final List<String> argList = new ArrayList<String>();
 		comb.add(new TreeSet<String>(Collections.singletonList("$RECEIVER$")));
