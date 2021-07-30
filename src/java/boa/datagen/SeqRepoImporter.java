@@ -340,6 +340,7 @@ public class SeqRepoImporter {
 			}
 
 			closeWriters();
+			setAssigned(false);
 			setReady(false);
 		}
 
