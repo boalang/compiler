@@ -280,7 +280,7 @@ public class SeqRepoImporter {
 					}
 				}
 
-				if (getDone())
+				if (!isAssigned())
 					break;
 
 				storeProject : try {
