@@ -16,12 +16,12 @@
  */
 package boa.test.datagen;
 
-import boa.test.datagen.java.Java8BaseTest;
+import boa.test.datagen.java.Java15BaseTest;
 
 /*
  * @author rdyer
  */
-public class DumpJava extends Java8BaseTest {
+public class DumpJava extends Java15BaseTest {
 	public static void main(String[] args) {
 		for (final String s : args)
 			if (s.indexOf("class ") == -1)
