@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,14 +50,14 @@ import boa.io.EmitValue;
 public abstract class BoaRunner extends Configured implements Tool {
 	/**
 	 * Create a {@link Job} describing the work to be done by this Boa job.
-	 * 
+	 *
 	 * @param ins
 	 *            An array of {@link Path} containing the locations of the input
 	 *            files
-	 * 
+	 *
 	 * @param out
 	 *            A {@link Path} containing the location of the output file
-	 * 
+	 *
 	 * @return A {@link Job} describing the work to be done by this Boa job
 	 */
 	public Job job(final Path[] ins, final Path out) throws IOException {
@@ -119,6 +120,16 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.hasArg()
 										.withArgName("INPUT")
 										.create("c"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("splitsize")
+										.withDescription("split size in BYTES")
+										.hasArg()
+										.withArgName("BYTES")
+										.create("s"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("excludelist")
+										.withDescription("A comma-separated list of project IDs to exclude when running.")
+										.hasArg()
+										.withArgName("PROJECT_IDS")
+										.create("x"));
 	}
 
 	protected static Options getOptions() { return options; }
