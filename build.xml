@@ -252,14 +252,13 @@
 		<delete file="SecurityAuth.audit" />
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
-	<target name="test-compiler" depends="-compile-tests" description="Run all unit tests, excluding datagen.">
+	<target name="test-compiler" depends="-compile-tests" description="Run all compiler unit tests.">
 		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-					<include name="**/Test*.class" />
-					<exclude name="boa/test/datagen/**/*.class" />
+					<include name="boa/test/compiler/Test*.class" /> 
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>

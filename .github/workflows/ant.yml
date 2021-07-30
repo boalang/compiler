@@ -24,7 +24,15 @@ jobs:
       with:
         java-version: '8'
         distribution: 'adopt'
-    - name: Run unit tests
-      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test
+    - name: Run unit tests - compiler
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-compiler
+    - name: Run unit tests - functions
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-functions
+    - name: Run unit tests - datagen - Java
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-java
+    - name: Run unit tests - datagen - JavaScript
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-js
+    - name: Run unit tests - datagen - PHP
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-php
     - name: Run style checker
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true checkstyle
