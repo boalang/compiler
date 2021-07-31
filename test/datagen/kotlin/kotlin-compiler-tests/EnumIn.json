@@ -1,0 +1,27 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Foo",
+               "kind": "ENUM",
+               "fields": [
+                  {
+                     "name": "in",
+                     "variable_type": {
+                        "name": "Foo",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
