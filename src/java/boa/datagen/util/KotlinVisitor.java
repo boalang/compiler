@@ -228,6 +228,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	@Override
 	public Void visitPackageDirective(final KtPackageDirective pkg, final Void v) {
 		b.setName(pkg.getQualifiedName());
+		if (pkg.getModifierList() != null) {
+			modifiers.push(new ArrayList<Modifier>());
+			pkg.getModifierList().accept(this, v);
+			b.addAllModifiers(modifiers.pop());
+		}
 		return null;
 	}
 
