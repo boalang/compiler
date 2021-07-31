@@ -1,0 +1,185 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "5"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "y",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "CAST",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             }
+                                          ],
+                                          "new_type": {
+                                             "name": "Float",
+                                             "kind": "OTHER"
+                                          }
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "3"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "TYPECOMPARE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    }
+                                 ],
+                                 "new_type": {
+                                    "name": "String",
+                                    "kind": "OTHER"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "3"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "LOGICAL_NOT",
+                                 "expressions": [
+                                    {
+                                       "kind": "TYPECOMPARE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ],
+                                       "new_type": {
+                                          "name": "String",
+                                          "kind": "OTHER"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "z",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "CAST",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             }
+                                          ],
+                                          "new_type": {
+                                             "name": "Float",
+                                             "kind": "OTHER"
+                                          },
+                                          "literal": "as?"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
