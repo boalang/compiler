@@ -1,0 +1,42 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "THROW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "Exception"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "z",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "VARACCESS",
+                  "variable": "System.out"
+               }
+            }
+         ]
+      }
+   ]
+}
