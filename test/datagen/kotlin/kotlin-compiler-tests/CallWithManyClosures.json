@@ -1,0 +1,164 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "f",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "f",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "f",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "f",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "(f)",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "(f)",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "generic_parameters": [
+                     {
+                        "name": "A",
+                        "kind": "GENERIC"
+                     }
+                  ],
+                  "method": "(f)",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     },
+                     {
+                        "kind": "LAMBDA"
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
