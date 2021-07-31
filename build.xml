@@ -175,28 +175,8 @@
 		</delete>
 	</target>
 
-<<<<<<< HEAD
-	<target name="test" depends="-compile-tests, package" description="Run all unit tests.">
-		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
-			<classpath refid="test.class.path" />
-			<batchtest>
-				<formatter type="plain" usefile="false" />
-				<fileset dir="build/tests">
-					<include name="boa/test/compiler/Test*.class" />
-					<include name="boa/test/functions/Test*.class" />
-					<!--include name="boa/test/datagen/Test*.class" /-->
-					<!--include name="boa/test/datagen/queries/Test*.class" /-->
-					<include name="boa/test/datagen/java/Test*.class" />
-					<include name="boa/test/datagen/js/Test*.class" />
-					<include name="boa/test/datagen/php/Test*.class" />
-					<exclude name="**/*$*.class" />
-				</fileset>
-			</batchtest>
-		</junit>
-=======
 
 	<target name="test" depends="test-compiler,test-functions,test-datagen" description="Run all unit tests.">
->>>>>>> master
 		<delete file="SecurityAuth.audit" />
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
