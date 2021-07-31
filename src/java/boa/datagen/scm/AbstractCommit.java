@@ -390,7 +390,6 @@ public abstract class AbstractCommit {
 			if (debug)
 				System.err.println("Error visiting HTML file: " + path);
 			e.printStackTrace();
-			System.exit(-1);
 			return false;
 		}
 
@@ -432,7 +431,6 @@ public abstract class AbstractCommit {
 			if (debug)
 				System.err.println("Error visiting HTML file: " + path);
 			e.printStackTrace();
-			System.exit(-1);
 			return false;
 		}
 
@@ -474,7 +472,6 @@ public abstract class AbstractCommit {
 			if (debug)
 				System.err.println("Error visiting HTML file: " + path);
 			e.printStackTrace();
-			System.exit(-1);
 			return false;
 		}
 
@@ -501,7 +498,7 @@ public abstract class AbstractCommit {
 			cu = parser.createAST(null);
 			if (cu == null)
 				return false;
-		} catch (Exception e) {
+		} catch (final Throwable e) {
 			if (debug)
 				System.err.println("Error parsing PHP file: " + path + " from: " + projectName);
 			// e.printStackTrace();
@@ -521,7 +518,6 @@ public abstract class AbstractCommit {
 				if (debug)
 					System.err.println("Error visiting PHP file: " + path + " from: " + projectName);
 				e.printStackTrace();
-				System.exit(-1);
 				return false;
 			}
 
@@ -576,7 +572,6 @@ public abstract class AbstractCommit {
 					if (debug)
 						System.err.println("Error visiting JS file: " + path + " from: " + projectName);
 					e.printStackTrace();
-					System.exit(-1);
 					return false;
 				}
 
@@ -645,7 +640,6 @@ public abstract class AbstractCommit {
 						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
 						e.printStackTrace();
 					}
-					System.exit(-1);
 					return false;
 				}
 
