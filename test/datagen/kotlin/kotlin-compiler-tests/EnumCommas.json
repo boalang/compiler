@@ -1,0 +1,63 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Color",
+               "kind": "ENUM",
+               "fields": [
+                  {
+                     "name": "NORTH",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "SOUTH",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "WEST",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "EAST",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
