@@ -1,0 +1,15 @@
+{
+   "namespaces": [
+      {
+         "name": "foo.bar.goo",
+         "imports": [
+            "foo",
+            "foo.bar",
+            "foo as bar",
+            "foo.bar as bar",
+            "foo.*",
+            "foo.*"
+         ]
+      }
+   ]
+}
