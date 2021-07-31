@@ -1,0 +1,38 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "size",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "1"
+               },
+               "reciever_type": {
+                  "name": "java.util.Map<*,*>",
+                  "kind": "OTHER"
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "java.util.Map<*,*>.size",
+               "variable_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
