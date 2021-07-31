@@ -1,0 +1,132 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "initializer": {
+                                          "kind": "VARACCESS",
+                                          "variable": "a"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "y",
+                                       "initializer": {
+                                          "kind": "OP_INC",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             }
+                                          ],
+                                          "is_postfix": true
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "RETURN",
+                                 "expressions": [
+                                    {
+                                       "kind": "OP_SUB",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "NEQ",
+                                 "expressions": [
+                                    {
+                                       "kind": "OP_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "y"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "x"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
