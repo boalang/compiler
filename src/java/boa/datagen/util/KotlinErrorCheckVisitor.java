@@ -30,16 +30,17 @@ public class KotlinErrorCheckVisitor extends PsiElementVisitor {
 	private boolean hasError = false;
 
 	public boolean hasError(final KtFile kt) {
-        hasError = false;
-        kt.accept(this);
-        return hasError;
-    }
+		hasError = kt == null;
+		if (!hasError)
+			kt.accept(this);
+		return hasError;
+	}
 
-    @Override
+	@Override
 	public void visitElement(final PsiElement element) {
-        if (element instanceof PsiErrorElementImpl)
-            hasError = true;
-        if (!hasError)
-            element.acceptChildren(this);
+		if (element instanceof PsiErrorElementImpl)
+			hasError = true;
+		if (!hasError)
+			element.acceptChildren(this);
 	}
 }

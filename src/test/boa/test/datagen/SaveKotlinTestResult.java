@@ -29,6 +29,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import boa.datagen.util.KotlinErrorCheckVisitor;
+import boa.functions.langmode.KotlinLangMode;
+
 /**
  * @author rdyer
  */
@@ -63,11 +66,17 @@ public class SaveKotlinTestResult extends KotlinBaseTest {
 		this.jsonFileName = jsonFileName + "2";
 	}
 
+	private final KotlinErrorCheckVisitor errorCheck = new KotlinErrorCheckVisitor();
 
 	@Test
 	public void savekotlinresult() throws IOException {
-        final String content = parseKotlin(load(kotlinFileName)).trim();
-        if (!content.equals(load(actualJsonFileName).trim()))
-            boa.datagen.util.FileIO.writeFileContents(new File(jsonFileName), content, false);
+		final String src = load(kotlinFileName);
+		final String content = parseKotlin(src).trim();
+		if (errorCheck.hasError(KotlinLangMode.tryparse("test.kt", src, false))) {
+			boa.datagen.util.FileIO.writeFileContents(new File(jsonFileName + ".error"), content, false);
+		} else {
+			if (!content.equals(load(actualJsonFileName).trim()))
+				boa.datagen.util.FileIO.writeFileContents(new File(jsonFileName), content, false);
+		}
 	}
 }
