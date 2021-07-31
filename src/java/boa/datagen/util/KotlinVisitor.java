@@ -119,10 +119,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.setKind(Modifier.ModifierKind.FINAL);
 			break;
 
-		case "annotation":
-			mb.setKind(Modifier.ModifierKind.ANNOTATION);
-			break;
-
 		case "actual":
 		case "impl":
 		case "expect":
@@ -173,6 +169,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "data":
 		case "enum":
 		case "companion":
+		case "annotation":
 			// do nothing because these are already handled by the class
 			return;
 
@@ -1798,6 +1795,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			db.setKind(TypeKind.ENUM);
 		else if (klass.isData())
 			db.setKind(TypeKind.IMMUTABLE);
+		else if (klass.isAnnotation())
+			db.setKind(TypeKind.ANNOTATION);
 		else
 			db.setKind(TypeKind.CLASS);
 
