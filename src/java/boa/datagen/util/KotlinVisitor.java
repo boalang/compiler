@@ -802,7 +802,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 					.build());
 		sb.addAllStatements(statements.pop());
 
-		statements.peek().add(sb.build());
+		pushStatementOrExpr(sb);
 		return null;
 	}
 
@@ -1440,35 +1440,35 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitBreakExpression(final KtBreakExpression expr, final Void v) {
-		final Statement.Builder b = Statement.newBuilder();
+		final Statement.Builder sb = Statement.newBuilder();
 
-		b.setKind(Statement.StatementKind.BREAK);
+		sb.setKind(Statement.StatementKind.BREAK);
 
 		final String label = expr.getLabelName();
 		if (label != null)
-			b.addExpressions(Expression.newBuilder()
+			sb.addExpressions(Expression.newBuilder()
 					.setLiteral(label)
 					.setKind(Expression.ExpressionKind.LABEL)
 					.build());
 
-		statements.peek().add(b.build());
+		pushStatementOrExpr(sb);
 		return null;
 	}
 
 	@Override
 	public Void visitContinueExpression(final KtContinueExpression expr, final Void v) {
-		final Statement.Builder b = Statement.newBuilder();
+		final Statement.Builder sb = Statement.newBuilder();
 
-		b.setKind(Statement.StatementKind.CONTINUE);
+		sb.setKind(Statement.StatementKind.CONTINUE);
 
 		final String label = expr.getLabelName();
 		if (label != null)
-			b.addExpressions(Expression.newBuilder()
+			sb.addExpressions(Expression.newBuilder()
 					.setLiteral(label)
 					.setKind(Expression.ExpressionKind.LABEL)
 					.build());
 
-		statements.peek().add(b.build());
+		pushStatementOrExpr(sb);
 		return null;
 	}
 
@@ -1996,8 +1996,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(exprs);
 			expectExpression.push(true);
 			param.getDefaultValue().accept(this, v);
-			vb.setInitializer(exprs.get(0));
 			expectExpression.pop();
+			vb.setInitializer(exprs.get(0));
 			expressions.pop();
 		}
 
