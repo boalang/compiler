@@ -1,0 +1,1764 @@
+{
+   "namespaces": [
+      {
+         "name": "foo.bar.goo",
+         "declarations": [
+            {
+               "name": "Bar",
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PROTECTED"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "INTERNAL"
+                  },
+                  {
+                     "kind": "ABSTRACT"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "override"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "ABSTRACT"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PROTECTED"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "INTERNAL"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "in"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "out"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "suspend"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "abstract",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "abstract enum : T",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "out open",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "public protected private internal abstract\n    open\n    enum\n    open\n    annotation\n    override\n    open\n    abstract\n    private\n    protected\n    public\n    internal open",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "A",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "VARACCESS",
+                        "variable": "b"
+                     }
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "B",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "coroutine.<get>",
+                     "expression": {
+                        "kind": "VARACCESS",
+                        "variable": "a"
+                     }
+                  },
+                  {
+                     "name": "coroutine.<set>",
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "S",
+                           "variable_type": {
+                              "name": "s",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "abstract",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PUBLIC"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PROTECTED"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "INTERNAL"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "abstract",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "open",
+                     "return_type": {
+                        "name": "open",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "enum",
+                     "return_type": {
+                        "name": "enum",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "open",
+                     "return_type": {
+                        "name": "open",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "annotation",
+                     "return_type": {
+                        "name": "annotation",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "override",
+                     "return_type": {
+                        "name": "override",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "open",
+                     "return_type": {
+                        "name": "open",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "abstract",
+                     "return_type": {
+                        "name": "abstract",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "private",
+                     "return_type": {
+                        "name": "private",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "protected",
+                     "return_type": {
+                        "name": "protected",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "public",
+                     "return_type": {
+                        "name": "public",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "internal",
+                     "return_type": {
+                        "name": "internal",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "lazy",
+                     "return_type": {
+                        "name": "lazy",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "wraps",
+                     "return_type": {
+                        "name": "wraps",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "import",
+                     "return_type": {
+                        "name": "import",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "where",
+                     "return_type": {
+                        "name": "where",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "by",
+                     "return_type": {
+                        "name": "by",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "get",
+                     "return_type": {
+                        "name": "get",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "set",
+                     "return_type": {
+                        "name": "set",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "public",
+                     "return_type": {
+                        "name": "public",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "private",
+                     "return_type": {
+                        "name": "private",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "protected",
+                     "return_type": {
+                        "name": "protected",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "internal",
+                     "return_type": {
+                        "name": "internal",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "field",
+                     "return_type": {
+                        "name": "field",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "property",
+                     "return_type": {
+                        "name": "property",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "receiver",
+                     "return_type": {
+                        "name": "receiver",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "param",
+                     "return_type": {
+                        "name": "param",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "setparam",
+                     "return_type": {
+                        "name": "setparam",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "lateinit",
+                     "return_type": {
+                        "name": "lateinit",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "const",
+                     "return_type": {
+                        "name": "const",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "test",
+                     "arguments": [
+                        {
+                           "name": "abstract",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "open",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "enum",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "open",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "annotation",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "override",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "open",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "abstract",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "private",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "protected",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "public",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "internal",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "lazy",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "wraps",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "import",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "where",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "by",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "get",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "set",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "public",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "private",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "protected",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "internal",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "field",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "property",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "receiver",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "param",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "setparam",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "lateinit",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "const",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "open",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PUBLIC"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PROTECTED"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PRIVATE"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "INTERNAL"
+                              },
+                              {
+                                 "kind": "ABSTRACT"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "open"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "open"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "override"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "open"
+                              },
+                              {
+                                 "kind": "ABSTRACT"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PRIVATE"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PROTECTED"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PUBLIC"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "INTERNAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "abstract",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PUBLIC"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PROTECTED"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "INTERNAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "open",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "enum",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "open",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "annotation",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "override",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "open",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "abstract",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "private",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "protected",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "public",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "internal",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "lazy",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "wraps",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "import",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "where",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "by",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "get",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "set",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "public",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "private",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "protected",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "internal",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "field",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "property",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "receiver",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "param",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "setparam",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "lateinit",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "const",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "suspend",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "coroutine",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "F",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "foo",
+                           "variable_type": {
+                              "name": "bar",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "abstract",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "open",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "enum",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "open",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "annotation",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "override",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "open",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "abstract",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "private",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "protected",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "public",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "internal",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "lazy",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "wraps",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "import",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "where",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "by",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "get",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "set",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "public",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "private",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "protected",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "internal",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "field",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "property",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "receiver",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "param",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "setparam",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "lateinit",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "const",
+                           "variable_type": {
+                              "name": "t",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "open",
+                           "variable_type": {
+                              "name": "b",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PUBLIC"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PROTECTED"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PRIVATE"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "INTERNAL"
+                              },
+                              {
+                                 "kind": "ABSTRACT"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "open"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "open"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "override"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "open"
+                              },
+                              {
+                                 "kind": "ABSTRACT"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PRIVATE"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PROTECTED"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "PUBLIC"
+                              },
+                              {
+                                 "kind": "VISIBILITY",
+                                 "visibility": "INTERNAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "foo",
+                     "variable_type": {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "imports": [
+            "foo"
+         ]
+      }
+   ]
+}
