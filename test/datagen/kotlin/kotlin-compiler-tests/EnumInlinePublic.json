@@ -1,0 +1,59 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "My",
+               "kind": "ENUM",
+               "fields": [
+                  {
+                     "name": "public",
+                     "variable_type": {
+                        "name": "My",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "inline"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "private",
+                     "variable_type": {
+                        "name": "My",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "inner"
+                        }
+                     ]
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
