@@ -1,0 +1,52 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "$",
+               "kind": "CLASS"
+            },
+            {
+               "name": "$$",
+               "kind": "CLASS"
+            },
+            {
+               "name": " ",
+               "kind": "CLASS"
+            },
+            {
+               "name": "1",
+               "kind": "CLASS"
+            }
+         ],
+         "methods": [
+            {
+               "name": "package",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "`return`"
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "`class`"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
