@@ -1,0 +1,37 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "My",
+               "kind": "ENUM",
+               "methods": [
+                  {
+                     "name": "foo",
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "FIRST",
+                     "variable_type": {
+                        "name": "My",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
