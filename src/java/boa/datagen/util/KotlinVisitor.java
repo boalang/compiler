@@ -1192,6 +1192,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		mb.setName("<clinit>");
 
+		modifiers.push(new ArrayList<Modifier>());
+		if (n.getModifierList() != null)
+			n.getModifierList().accept(this, v);
+		mb.addAllModifiers(modifiers.pop());
+
 		statements.push(new ArrayList<Statement>());
 		expressions.push(new ArrayList<Expression>());
 		expectExpression.push(false);
