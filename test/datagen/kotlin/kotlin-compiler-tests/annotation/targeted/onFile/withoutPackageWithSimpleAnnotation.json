@@ -1,0 +1,39 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "modifiers": [
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "foo",
+               "other": "file"
+            }
+         ],
+         "methods": [
+            {
+               "name": "foo",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "foo"
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "bar"
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "baz",
+                     "other": "file"
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
