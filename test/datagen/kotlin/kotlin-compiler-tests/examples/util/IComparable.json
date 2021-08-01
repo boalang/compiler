@@ -1,0 +1,51 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "IComparable",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "in T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "compareTo",
+                     "return_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "other",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
