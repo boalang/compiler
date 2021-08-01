@@ -1,0 +1,89 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "reciever_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            },
+            {
+               "name": "foo",
+               "reciever_type": {
+                  "name": "dynamic?",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo",
+               "reciever_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            },
+            {
+               "name": "foo",
+               "reciever_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            },
+            {
+               "name": "foo",
+               "reciever_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            },
+            {
+               "name": "foo",
+               "reciever_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "dynamic.foo",
+               "variable_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "dynamic?.foo",
+               "variable_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "variable_type": {
+                  "name": "dynamic.() -> Unit",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
