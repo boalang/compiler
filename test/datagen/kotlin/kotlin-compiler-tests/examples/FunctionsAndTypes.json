@@ -1,0 +1,165 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f1",
+               "return_type": {
+                  "name": "X",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "t",
+                     "variable_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "METHODCALL",
+                  "method": "something",
+                  "method_args": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "t"
+                     }
+                  ]
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "f1",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
+                     {
+                        "kind": "METHODCALL",
+                        "method": "something",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "t"
+                           }
+                        ]
+                     }
+                  ],
+                  "variable_decls": [
+                     {
+                        "name": "t",
+                        "variable_type": {
+                           "name": "T",
+                           "kind": "OTHER"
+                        },
+                        "modifiers": [
+                           {
+                              "kind": "IMPLICIT"
+                           },
+                           {
+                              "kind": "FINAL"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "f1",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
+                     {
+                        "kind": "METHODCALL",
+                        "method": "something",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "t"
+                           }
+                        ]
+                     }
+                  ],
+                  "variable_decls": [
+                     {
+                        "name": "t",
+                        "modifiers": [
+                           {
+                              "kind": "IMPLICIT"
+                           },
+                           {
+                              "kind": "FINAL"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "f1",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
+                     {
+                        "kind": "METHODCALL",
+                        "method": "something",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "it"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "f1",
+               "variable_type": {
+                  "name": "(T) -> X",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
+                     {
+                        "kind": "METHODCALL",
+                        "method": "X"
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
