@@ -1,0 +1,135 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "PriorityQueueAsPushPop",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IPushPop<T>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "wrapped",
+                           "variable_type": {
+                              "name": "IPriorityQueue<T>",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "pop",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "wrapped"
+                           }
+                        ],
+                        "method": "extract"
+                     }
+                  },
+                  {
+                     "name": "push",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "item",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "wrapped"
+                           }
+                        ],
+                        "method": "add",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "item"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "isEmpty.<get>",
+                     "expression": {
+                        "kind": "VARACCESS",
+                        "variable": "wrapped.isEmpty"
+                     }
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "isEmpty",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
