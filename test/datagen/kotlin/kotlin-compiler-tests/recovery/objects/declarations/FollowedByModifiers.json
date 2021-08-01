@@ -1,0 +1,37 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Foo",
+               "kind": "SINGLETON"
+            },
+            {
+               "name": "Bar",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  }
+               ]
+            },
+            {
+               "name": "Foo",
+               "kind": "SINGLETON"
+            },
+            {
+               "name": "Bar",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "foo"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
