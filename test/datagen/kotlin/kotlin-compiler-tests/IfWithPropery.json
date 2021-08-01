@@ -1,0 +1,147 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "IF",
+                        "statements": [
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARDECL",
+                                          "variable_decls": [
+                                             {
+                                                "name": "f",
+                                                "initializer": {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "a"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "null"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "1"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "IF",
+                        "statements": [
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARDECL",
+                                          "variable_decls": [
+                                             {
+                                                "name": "f",
+                                                "initializer": {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "a"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "null"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "1"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
