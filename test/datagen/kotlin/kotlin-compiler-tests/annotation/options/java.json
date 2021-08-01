@@ -1,0 +1,58 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "my",
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "java.lang.annotation.Retention",
+                     "annotation_values": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "RetentionPolicy.CLASS"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "my1",
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Retention",
+                     "annotation_values": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "RetentionPolicy.RUNTIME"
+                        }
+                     ]
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Target",
+                     "annotation_values": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "ElementType.ANNOTATION_TYPE"
+                        },
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "ElementType.CONSTRUCTOR"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "imports": [
+            "java.lang.annotation.*"
+         ]
+      }
+   ]
+}
