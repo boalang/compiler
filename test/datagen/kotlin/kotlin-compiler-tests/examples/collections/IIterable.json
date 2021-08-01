@@ -1,0 +1,34 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "IIterable",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "out T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "iterator",
+                     "return_type": {
+                        "name": "IIterator<T>",
+                        "kind": "OTHER"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
