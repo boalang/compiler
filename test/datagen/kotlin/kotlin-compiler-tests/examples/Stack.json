@@ -1,0 +1,143 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Stack",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IPushPop<T>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "push",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "item",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "data"
+                                          }
+                                       ],
+                                       "method": "add",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "item"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "pop",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "data"
+                           }
+                        ],
+                        "method": "removeLast"
+                     }
+                  },
+                  {
+                     "name": "isEmpty.<get>",
+                     "expression": {
+                        "kind": "VARACCESS",
+                        "variable": "data.isEmpty"
+                     }
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "data",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "generic_parameters": [
+                           {
+                              "name": "T",
+                              "kind": "GENERIC"
+                           }
+                        ],
+                        "method": "ArrayList"
+                     }
+                  },
+                  {
+                     "name": "isEmpty",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
