@@ -1,0 +1,61 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "ISet",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IIterable<T>",
+                     "kind": "CLASS"
+                  },
+                  {
+                     "name": "ISized",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "contains",
+                     "return_type": {
+                        "name": "Boolean",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "item",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
