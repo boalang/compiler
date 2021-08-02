@@ -283,8 +283,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		db.setKind(TypeKind.SINGLETON);
 
-		for (final KtTypeParameter type_param : d.getTypeParameters())
-			db.addGenericParameters(typeFromTypeParameter(type_param, TypeKind.GENERIC));
+		for (final KtTypeParameter p : d.getTypeParameters())
+			db.addGenericParameters(buildGenericParam(p, d.getTypeConstraints()));
 
 		expectExpression.push(false);
 
@@ -1147,7 +1147,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitScriptInitializer(final KtScriptInitializer n, final Void v) {
-		// TODO
+		// TODO support script initializers
 		throw new RuntimeException("not yet implemented");
 	}
 
@@ -1182,11 +1182,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeConstraint(final KtTypeConstraint n, final Void v) {
-		// TODO
+		// FIXME can remove this when type constraints handled everywhere
 		System.err.println(n.getClass());
-		// n.getSubjectTypeParameterName().accept(this, v);
-		// if (n.getBoundTypeReference() != null)
-		// 	n.getBoundTypeReference().accept(this, v);
 		return null;
 	}
 
@@ -1780,8 +1777,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		else
 			db.setKind(TypeKind.CLASS);
 
-		for (final KtTypeParameter type_param : klass.getTypeParameters())
-			db.addGenericParameters(typeFromTypeParameter(type_param, TypeKind.GENERIC));
+		for (final KtTypeParameter p : klass.getTypeParameters())
+			db.addGenericParameters(buildGenericParam(p, klass.getTypeConstraints()));
 
 		if (klass.getSuperTypeList() != null) {
 			types.push(new ArrayList<Type>());
@@ -1804,10 +1801,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (klass.getBody() != null)
 			klass.getBody().accept(this, v);
-
-		// TODO type constraints
-		if (klass.getTypeConstraintList() != null)
-			klass.getTypeConstraintList().accept(this, v);
 
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllMethods(methods.pop());
@@ -1912,11 +1905,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.setReturnType(typeFromTypeRef(function.getTypeReference()));
 
 		for (final KtTypeParameter p : function.getTypeParameters())
-			mb.addGenericParameters(typeFromTypeParameter(p, TypeKind.GENERIC));
+			mb.addGenericParameters(buildGenericParam(p, function.getTypeConstraints()));
 
-		if (function.getReceiverTypeReference() != null) {
+		if (function.getReceiverTypeReference() != null)
 			mb.setRecieverType(typeFromTypeRef(function.getReceiverTypeReference()));
-		}
 
 		fields.push(new ArrayList<Variable>());
 		for (final KtParameter p : function.getValueParameters())
@@ -1936,10 +1928,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.setExpression(expressions.pop().get(0));
 			expectExpression.pop();
 		}
-
-		// TODO type constraints
-		if (function.getTypeConstraintList() != null)
-			function.getTypeConstraintList().accept(this, v);
 
 		if (expectExpression.peek())
 			expressions.peek().add(Expression.newBuilder()
@@ -2083,5 +2071,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		expressions.peek().add(Expression.newBuilder()
 				.setKind(Expression.ExpressionKind.EMPTY)
 				.build());
+	}
+
+	private Type buildGenericParam(final KtTypeParameter p, final List<KtTypeConstraint> tcList) {
+		String genericName = p.getName() + " : " + p.getExtendsBound().getText();
+
+		if (tcList != null)
+			for (final KtTypeConstraint tc : tcList)
+				if (tc.getSubjectTypeParameterName().getReferencedName() == p.getName())
+					genericName += " & " + tc.getBoundTypeReference().getText();
+
+		return Type.newBuilder()
+				.setName(genericName)
+				.setKind(TypeKind.GENERIC)
+				.build();
 	}
 }
