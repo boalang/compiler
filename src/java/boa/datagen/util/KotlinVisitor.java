@@ -1184,8 +1184,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitTypeConstraint(final KtTypeConstraint n, final Void v) {
 		// TODO
 		System.err.println(n.getClass());
-		// n.getBoundTypeReference().accept(this, v);
 		// n.getSubjectTypeParameterName().accept(this, v);
+		// if (n.getBoundTypeReference() != null)
+		// 	n.getBoundTypeReference().accept(this, v);
 		return null;
 	}
 
