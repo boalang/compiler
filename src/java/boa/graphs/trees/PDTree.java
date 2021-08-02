@@ -170,7 +170,6 @@ public class PDTree {
      *
      * @param cfg control flow graph
      * @return map of nodes and corresponding set of post-dominator nodes
-     * @throws Exception
      */
     private Map<CFGNode, BitSet> computePostDomonitors(final CFG cfg) {
         final CFGNode[] cfgNodes = cfg.reverseSortNodes();
@@ -268,7 +267,7 @@ public class PDTree {
                 boolean isIPDom = true;
                 for (int pd2 = 0; pd2 < bs1.size(); pd2++) {
                     if (!bs1.get(pd2) || pd1 == pd2) continue;
-                    if (pdom.containsKey(pd2) && pdom.get(pd2).get(pd1)) {
+                    if (pdom.containsKey(cfg.getNode(pd2)) && pdom.get(cfg.getNode(pd2)).get(pd1)) {
                         isIPDom = false;
                         break;
                     }

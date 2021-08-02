@@ -70,8 +70,7 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 			SeqCombiner.main(new String[0]);
-		} else if (tokenAvailable) { // when user provides local repo and does
-										// not have json files
+		} else if (tokenAvailable) { // when user provides local repo and doesn't have json files
 			MetaDataMaster mdm = new MetaDataMaster();
 			mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
 
@@ -92,37 +91,36 @@ public class BoaGenerator {
 	}
 
 	private static final void printHelp(Options options, String message) {
-		String header = "The most commonly used Boa options are:";
-		String footer = "\nPlease report issues at http://www.github.com/boalang/";
-		System.err.println(message);
-		new HelpFormatter().printHelp("boa", header, options, footer);
+		String header = "Boa dataset generation options:";
+		String footer = "\nPlease report issues at https://github.com/boalang/compiler/";
+		if (message != null) System.err.println(message);
+		new HelpFormatter().printHelp("boa -g [options]", header, options, footer);
 	}
 
 	private static final void printHelp(Options options) {
-		String header = "The most commonly used Boa options are:";
-		String footer = "\nPlease report issues at http://www.github.com/boalang/";
-		new HelpFormatter().printHelp("boa", header, options, footer);
+		printHelp(options, null);
 	}
 
 	private static void addOptions(Options options) {
-		options.addOption("inputJson", "json", true, ".json files for metadata");
-		options.addOption("inputToken", "token", true, "token file");
-		options.addOption("inputRepo", "json", true, "cloned repo path");
-		options.addOption("threads", "threads", true, "number of threads");
-		options.addOption("projects", "projects", true, "maximum number of projects per sequence file");
-		options.addOption("commits", "commits", true, "maximum number of commits of a project to be stored in the project object");
-		options.addOption("nocommits", "nocommits", false, "do not store commits");
-		options.addOption("size", "size", true, "maximum size of a project object to be stored");
-		options.addOption("libs", "libs", true, "directory to store libraries");
-		options.addOption("output", "output", true, "directory where output is desired");
-		options.addOption("user", "user", true, "github username to authenticate");
-		options.addOption("password", "password", true, "github password to authenticate.");
-		options.addOption("targetUser", "targetUser", true, "username of target repository");
-		options.addOption("targetRepo", "targetRepo", true, "name of the target repository");
-		options.addOption("cache", "cache", false, "enable if you want to delete the cloned code for user.");
-		options.addOption("debug", "debug", false, "enable for debug mode.");
-		options.addOption("debugparse", "debugparse", false, "enable for debug mode when parsing source files.");
-		options.addOption("help", "help", false, "help");
+		options.addOption("inputJson", true, ".json files for metadata");
+		options.addOption("inputToken", true, "token file");
+		options.addOption("inputRepo", true, "cloned repo path");
+		options.addOption("threads", true, "number of threads");
+		options.addOption("projects", true, "maximum number of projects per sequence file");
+		options.addOption("maxprojects", true, "total maximum number of projects");
+		options.addOption("commits", true, "maximum number of commits of a project to be stored in the project object");
+		options.addOption("nocommits", false, "do not store commits");
+		options.addOption("size", true, "maximum size of a project object to be stored");
+		options.addOption("libs", true, "directory to store libraries");
+		options.addOption("output", true, "directory where output is desired");
+		options.addOption("user", true, "github username to authenticate");
+		options.addOption("password", true, "github password to authenticate");
+		options.addOption("targetUser", true, "username of target repository");
+		options.addOption("targetRepo", true, "name of the target repository");
+		options.addOption("cache", false, "enable if you want to use already cloned repositories");
+		options.addOption("debug", false, "enable for debug mode");
+		options.addOption("debugparse", false, "enable for debug mode when parsing source files");
+		options.addOption("help", false, "shows this help");
 	}
 
 	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
@@ -168,7 +166,7 @@ public class BoaGenerator {
 			String message = cl.getOptionValue("help");
 			printHelp(options, message);
 		} else {
-			System.err.println("User must specify the path of the repository. Please see --remote and --local options");
+			System.err.println("Must specify the output, and the local input paths (JSON and repository) or remote login information.");
 			printHelp(options);
 		}
 		if (cl.hasOption("threads")) {
@@ -182,6 +180,9 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("size")) {
 			DefaultProperties.MAX_SIZE_FOR_PROJECT_WITH_COMMITS = cl.getOptionValue("size");
+		}
+		if (cl.hasOption("maxprojects")) {
+			DefaultProperties.TOTAL_MAX_PROJECTS = cl.getOptionValue("maxprojects");
 		}
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;

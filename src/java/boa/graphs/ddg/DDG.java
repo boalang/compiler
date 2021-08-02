@@ -152,7 +152,6 @@ public class DDG {
      *
      * @param cfg control flow graph
      * @return map of in and out variables for each node
-     * @throws Exception
      */
     private Map<Integer, InOut> getLiveVariables(final CFG cfg) {
         Map<Integer, BitSet> liveVarsIn = new HashMap<Integer, BitSet>();
@@ -277,8 +276,8 @@ public class DDG {
         for (final int i : nodeids) {
             if (i != 0) {
                 final DDGNode dest = getNode(i);
-                if (dest.getPredecessors().size() == 0 ||
-                        (dest.getPredecessors().size() == 1 && dest.getPredecessors().get(0).equals(dest))) {
+                if (dest.getPredecessors().size() == 0
+                        || (dest.getPredecessors().size() == 1 && dest.getPredecessors().get(0).equals(dest))) {
                     new DDGEdge(entryNode, dest);
                 }
             }
@@ -308,19 +307,9 @@ public class DDG {
         Set<Pair> in;
         Set<Pair> out;
 
-        InOut() {
-            in = new HashSet<Pair>();
-            out = new HashSet<Pair>();
-        }
-
         InOut(final Set<Pair> in, final Set<Pair> out){
             this.in = in;
             this.out = out;
-        }
-
-        InOut(final InOut inout){
-            this.in = new HashSet<Pair>(inout.in);
-            this.out = new HashSet<Pair>(inout.out);
         }
     }
 

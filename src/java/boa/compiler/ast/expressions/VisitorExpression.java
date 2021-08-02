@@ -40,7 +40,7 @@ public class VisitorExpression extends Operand {
 		return body;
 	}
 
-	public VisitorExpression (final VisitorType t, final Block body) {
+	public VisitorExpression(final VisitorType t, final Block body) {
 		if (t != null)
 			t.setParent(this);
 		if (body != null)
@@ -51,7 +51,7 @@ public class VisitorExpression extends Operand {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

@@ -1,0 +1,104 @@
+# This workflow will build a Java project with Ant
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-ant
+
+name: Java CI
+
+on:
+  push:
+    branches:
+      - master
+      - compiler-*
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+    - name: Compiler source
+      run: ant -noinput -buildfile build.xml package
+
+  test-compiler:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+    - name: Run unit tests - compiler
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-compiler
+
+  test-functions:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+    - name: Run unit tests - functions
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-functions
+
+  test-datagen-java:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+    - name: Run unit tests - datagen - Java
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-java
+
+  test-datagen-js:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+    - name: Run unit tests - datagen - JavaScript
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-js
+
+  test-datagen-php:
+    needs: compile
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+    - name: Run unit tests - datagen - PHP
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-php
+
+  checkstyle:
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'adopt'
+    - name: Run style checker
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true checkstyle

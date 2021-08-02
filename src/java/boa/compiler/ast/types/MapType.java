@@ -38,7 +38,7 @@ public class MapType extends AbstractType {
 		return value;
 	}
 
-	public MapType (final Component index, final Component value) {
+	public MapType(final Component index, final Component value) {
 		if (index != null)
 			index.setParent(this);
 		if (value != null)
@@ -49,7 +49,7 @@ public class MapType extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

@@ -16,7 +16,6 @@
  */
 package boa.compiler.ast;
 
-import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
@@ -52,11 +51,11 @@ public class Comparison extends Node {
 		return rhs;
 	}
 
-	public Comparison (final SimpleExpr lhs) {
+	public Comparison(final SimpleExpr lhs) {
 		this(lhs, null, null);
 	}
 
-	public Comparison (final SimpleExpr lhs, final String op, final SimpleExpr rhs) {
+	public Comparison(final SimpleExpr lhs, final String op, final SimpleExpr rhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		if (rhs != null)
@@ -68,7 +67,7 @@ public class Comparison extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

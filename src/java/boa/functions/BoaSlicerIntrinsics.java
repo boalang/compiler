@@ -22,7 +22,7 @@ import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.python.parser.ast.PythonModuleDeclaration;
 
 import boa.datagen.treed.python.BoaToPythonConverter;
-import boa.datagen.util.NewPythonVisitor;
+import boa.datagen.util.PythonVisitor;
 import boa.graphs.slicers.python.ForwardSlicer;
 import boa.graphs.slicers.python.InitialSliceCriteriaMode;
 import boa.graphs.slicers.python.SliceOutputLevel;
@@ -273,7 +273,7 @@ public class BoaSlicerIntrinsics {
 	}
 	
 	public static ASTRoot pythonAstToBoaAST(final PythonModuleDeclaration module, final String path) throws Exception {
-		NewPythonVisitor visitor = new NewPythonVisitor();
+		PythonVisitor visitor = new PythonVisitor();
 		visitor.enableDiff=true;
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		ast.addNamespaces(visitor.getNamespace(module, path));

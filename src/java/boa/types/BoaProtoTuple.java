@@ -53,7 +53,7 @@ public class BoaProtoTuple extends BoaTuple {
 			return false;
 		if (!super.equals(obj))
 			return false;
-//		final BoaProtoTuple other = (BoaProtoTuple) obj;
+		//final BoaProtoTuple other = (BoaProtoTuple) obj;
 		return true;
 	}
 

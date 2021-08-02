@@ -123,7 +123,6 @@ public class BoaEnum extends BoaScalar {
 			return this.parent.toJavaType();
 
 		String s = "";
-		int k = 0;
 
 		for (final String name : this.names.keySet())
 			s += name + this.values.get(this.names.get(name)) + "_";

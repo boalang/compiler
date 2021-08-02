@@ -44,17 +44,17 @@ public abstract class QueryTest {
 	
 	@Before
 	public void prep() {
-		File outputDir = new File("test/datagen/temp_output");
+		final File outputDir = new File("test/datagen/temp_output");
 		if (outputDir.exists()) {
 			try {
 				FileUtils.deleteDirectory(outputDir);
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public String getResults(File outputDir) {
+	public String getResults(final File outputDir) {
 		for (final File f : outputDir.listFiles()) {
 			if (f.getName().startsWith("part")) {
 				return FileIO.readFileContents(f);
@@ -63,14 +63,14 @@ public abstract class QueryTest {
 		return "";
 	}
 
-	public void queryTest(String inputPath, String expected) {
-		String[] args = { "-i", inputPath, "-d", "test/datagen/test_datagen", "-o", "test/datagen/temp_output" };
+	public void queryTest(final String inputPath, final String expected) {
+		final String[] args = { "-i", inputPath, "-d", "test/datagen/test_datagen", "-o", "test/datagen/temp_output" };
 		BoaEvaluator.main(args);
-		File outputDir = new File("test/datagen/temp_output");
-		String actual = getResults(outputDir);
+		final File outputDir = new File("test/datagen/temp_output");
+		final String actual = getResults(outputDir);
 		try {
 			FileUtils.deleteDirectory(outputDir);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		assertEquals(expected, actual);
@@ -87,43 +87,39 @@ public abstract class QueryTest {
 	}
 	
 	public List<String> setPaths() throws IOException {
-		File gitDir = new File("test/datagen/boalang/repos/boalang/test-datagen");
+		final File gitDir = new File("test/datagen/boalang/repos/boalang/test-datagen");
 		if (!gitDir.exists()) {
-			String url = "https://github.com/boalang/test-datagen.git";
+			final String url = "https://github.com/boalang/test-datagen.git";
 			try {
 				RepositoryCloner.clone(new String[] { url, gitDir.getAbsolutePath() });
-			} catch (InvalidRemoteException e1) {
-				// TODO Auto-generated catch block
+			} catch (final InvalidRemoteException e1) {
 				e1.printStackTrace();
-			} catch (TransportException e1) {
-				// TODO Auto-generated catch block
+			} catch (final TransportException e1) {
 				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
+			} catch (final IOException e1) {
 				e1.printStackTrace();
-			} catch (GitAPIException e1) {
-				// TODO Auto-generated catch block
+			} catch (final GitAPIException e1) {
 				e1.printStackTrace();
 			}
 		}
 		repository = new FileRepositoryBuilder().setGitDir(new File(gitDir + "/.git")).build();
 
-		GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "test-datagen");
+		final GitConnector gc = new GitConnector(gitDir.getAbsolutePath(), "test-datagen");
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
 		System.out.println("Finish building head snapshot");
-		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
+		final List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();
 		revwalk = new RevWalk(repository);
 		revwalk.reset();
-		Set<RevCommit> heads = getHeads();
+		final Set<RevCommit> heads = getHeads();
 		revwalk.markStart(heads);
 		revwalk.sort(RevSort.TOPO, true);
 		revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 		revwalk.sort(RevSort.REVERSE, true);
 
-		for (RevCommit rc : revwalk) {
-			TreeWalk tw = new TreeWalk(repository);
+		for (final RevCommit rc : revwalk) {
+			final TreeWalk tw = new TreeWalk(repository);
 			tw.reset();
 			try {
 				tw.addTree(rc.getTree());
@@ -131,14 +127,14 @@ public abstract class QueryTest {
 				while (tw.next())
 					if (!tw.isSubtree())
 						filePathGitObjectIds.put(tw.getPathString(), tw.getObjectId(0));
-			} catch (IOException e) {
+			} catch (final IOException e) {
 			}
 			tw.close();
 		}
 		return snapshot2;
 	}
 	
-	protected void visitPath(String path, org.eclipse.jdt.core.dom.ASTVisitor visitor) {
+	protected void visitPath(final String path, final org.eclipse.jdt.core.dom.ASTVisitor visitor) {
 		ObjectId oi = filePathGitObjectIds.get(path);
 		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
 		parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
@@ -150,25 +146,22 @@ public abstract class QueryTest {
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 		parser.setCompilerOptions(options);
 
-		CompilationUnit cu = null;
-
 		try {
-			cu = (CompilationUnit) parser.createAST(null);
-		} catch (Throwable e) {
+			CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+			cu.accept(visitor);
+		} catch (final Throwable e) {
 		}
-		
-		cu.accept(visitor);
 	}
 	
 	private static Set<RevCommit> getHeads() {
-		Git git = new Git(repository);
-		Set<RevCommit> heads = new HashSet<RevCommit>();
+		final Git git = new Git(repository);
+		final Set<RevCommit> heads = new HashSet<RevCommit>();
 		try {
 			for (final Ref ref : git.branchList().call()) {
 				heads.add(revwalk.parseCommit(repository.resolve(ref.getName())));
 			}
 		} catch (final GitAPIException e) {
-		}catch (final IOException e) {
+		} catch (final IOException e) {
 		}
 		git.close();
 		return heads;

@@ -20,7 +20,7 @@ import com.googlecode.protobuf.format.JsonFormat;
 
 import boa.types.Ast.ASTRoot;
 import boa.datagen.util.FileIO;
-import boa.datagen.util.NewPythonVisitor;
+import boa.datagen.util.PythonVisitor;
 import boa.test.compiler.BaseTest;
 
 import org.eclipse.dltk.python.internal.core.parser.PythonSourceParser;
@@ -52,7 +52,7 @@ public class PythonBaseTest extends BaseTest {
 		};
 
         final ASTRoot.Builder ast = ASTRoot.newBuilder();
-        NewPythonVisitor visitor = new NewPythonVisitor();
+        PythonVisitor visitor = new PythonVisitor();
         visitor.enableDiff = false;
 
         try {

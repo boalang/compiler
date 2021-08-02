@@ -21,7 +21,7 @@ import org.junit.Test;
 public class TestQ28 extends QueryTest {
 	
 	@Test
-	public void testQ28 () throws MissingObjectException, IncorrectObjectTypeException, IOException {
+	public void testQ28() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int throwStatements = 0;
 		int throwMax = 0;
 		int throwMin = Integer.MAX_VALUE;

@@ -33,8 +33,8 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
 		return this.dest.getNodeId() - edge.dest.getNodeId();
 	}
 
-    public Edge() {
-    }
+	public Edge() {
+	}
 
 	@SuppressWarnings("unchecked")
 	public Edge(final N src, final N dest) {
@@ -91,9 +91,9 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
 
 	@SuppressWarnings("unchecked")
 	public void delete() {
-        this.src.removeOutEdge(this);
-        this.dest.removeInEdge(this);
-        this.src = this.dest = null;
+		this.src.removeOutEdge(this);
+		this.dest.removeInEdge(this);
+		this.src = this.dest = null;
 	}
 
 	public boa.types.Control.Edge.Builder newBuilder() {
@@ -131,28 +131,28 @@ public abstract class Edge<N extends Node, E extends Edge<N, E>> implements Comp
 		return sb.toString();
 	}
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Edge)) return false;
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Edge)) return false;
 
-        final Edge e = (Edge) o;
+		final Edge<?, ?> e = (Edge<?, ?>) o;
 
-        if (this.label == null && e.label != null) return false;
-        return src.equals(e.src) && dest.equals(e.dest) && label.equals(e.label);
-    }
+		if (this.label == null && e.label != null) return false;
+		return src.equals(e.src) && dest.equals(e.dest) && label.equals(e.label);
+	}
 
-    private int hash = -1;
+	private int hash = -1;
 
-    @Override
-    public int hashCode() {
-        if (hash == -1) {
-            hash = 1;
-            if (label != null)
-                hash = 31 * hash + label.hashCode();
-            hash = 31 * hash + src.hashCode();
-            hash = 31 * hash + dest.hashCode();
-        }
-        return hash;
-    }
+	@Override
+	public int hashCode() {
+		if (hash == -1) {
+			hash = 1;
+			if (label != null)
+				hash = 31 * hash + label.hashCode();
+			hash = 31 * hash + src.hashCode();
+			hash = 31 * hash + dest.hashCode();
+		}
+		return hash;
+	}
 }

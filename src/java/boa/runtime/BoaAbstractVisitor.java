@@ -30,10 +30,10 @@ import boa.types.Toplevel.Project;
 /**
  * Boa abstract AST visitor.
  * 
- * The <code>visit()</code> methods first call <code>preVisit()</code> for the node.
+ * <p>The <code>visit()</code> methods first call <code>preVisit()</code> for the node.
  * If <code>preVisit()</code> returns <code>true</code>, then each of that node's children are visited and then <code>postVisit()</code> is called.
  * 
- * By default, all <code>preVisit()</code> methods call {@link #defaultPreVisit()} and return <code>true</code>.
+ * <p>By default, all <code>preVisit()</code> methods call {@link #defaultPreVisit()} and return <code>true</code>.
  * By default, all <code>postVisit()</code> methods call {@link #defaultPostVisit()}.
  * 
  * @author rdyer
@@ -208,6 +208,8 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final ChangedFile node) throws Exception {
+		BoaAstIntrinsics.setlang(node.getKind());
+
 		if (preVisit(node)) {
 			visit(BoaAstIntrinsics.getast(node));
 

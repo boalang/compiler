@@ -30,7 +30,7 @@ import boa.datagen.util.Properties;
  * @author hridesh
  */
 public class MapFileGen {
-//	private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "");
+	//private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "");
 	private final static String SEQ_FILE_PATH = Properties.getProperty("output.path", DefaultProperties.OUTPUT);
 	public static void main(String[] args) throws Exception {
 		System.out.println("generating data and index file");
@@ -46,5 +46,4 @@ public class MapFileGen {
 		}
 		fs.close();
 	}
-
 }

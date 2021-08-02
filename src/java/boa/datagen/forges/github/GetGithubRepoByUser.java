@@ -7,12 +7,10 @@ import java.io.IOException;
 import boa.datagen.util.FileIO;
 
 public class GetGithubRepoByUser {
-
 	/**
-	 * @param args
+	 * @param args command-line arguments
 	 */
 	public static void main(String[] args) {
-
 		if (args == null || args.length < 5) {
 //			System.out.println("Command line arguments are not correct");
 			return;
@@ -48,88 +46,73 @@ public class GetGithubRepoByUser {
 		System.out.println(mc.getUrl());
 		if (mc.authenticate()) {
 			while (true) {
-					mc.getResponseJson();
-					pageContent = mc.getContent();
-					if (pageContent.equals("[]"))
-						break;
-					if (!pageContent.isEmpty()) {
-						String path = outDir  + "/repos/";
-						File f = new File(path);
-						if(!f.exists()){
-							f.mkdirs();
-						}
-						path =outDir  + "/repos/repo"+".json";
-						f= new File(path);
-						FileWriter file = null;
-						try {
-							file = new FileWriter(path);
-							file.write(pageContent);
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}finally {
-							try {
-								file.flush();
-								file.close();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-						}
-							
-						}
-						break;
+				mc.getResponseJson();
+				pageContent = mc.getContent();
+				if (pageContent.equals("[]"))
+					break;
+				if (!pageContent.isEmpty()) {
+					String path = outDir + "/repos/";
+					File f = new File(path);
+					if (!f.exists()) {
+						f.mkdirs();
 					}
-
+					path =outDir  + "/repos/repo"+".json";
+					f= new File(path);
+					FileWriter file = null;
+					try {
+						file = new FileWriter(path);
+						file.write(pageContent);
+					} catch (final IOException e1) {
+						e1.printStackTrace();
+					} finally {
+						try {
+							file.flush();
+							file.close();
+						} catch (final IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
-		else {
+				break;
+			}
+		} else {
 			System.out.println("Authentication failed!");
 		}
-		
-		
-		
-		
+
 		mc = new MetadataCacher(url + "/"+args[3]+"/"+args[4]+"/languages", username, password);
 //		System.out.println(mc.getUrl());
 		if (mc.authenticate()) {
 			while (true) {
-					mc.getResponseJson();
-					pageContent = mc.getContent();
-					if (pageContent.equals("[]"))
-						break;
-					if (!pageContent.isEmpty()) {
-						String path = outDir  + "/languages/";
-						File f = new File(path);
-						if(!f.exists()){
-							f.mkdirs();
-						}
-						path =outDir  + "/languages/lang"+".json";
-						f= new File(path);
-						FileWriter file = null;
-						try {
-							file = new FileWriter(path);
-							file.write(pageContent);
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}finally {
-							try {
-								file.flush();
-								file.close();
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							
-						}
-							
-						}
-						break;
+				mc.getResponseJson();
+				pageContent = mc.getContent();
+				if (pageContent.equals("[]"))
+					break;
+				if (!pageContent.isEmpty()) {
+					String path = outDir + "/languages/";
+					File f = new File(path);
+					if (!f.exists()) {
+						f.mkdirs();
 					}
-
+					path = outDir + "/languages/lang"+".json";
+					f = new File(path);
+					FileWriter file = null;
+					try {
+						file = new FileWriter(path);
+						file.write(pageContent);
+					} catch (final IOException e1) {
+						e1.printStackTrace();
+					} finally {
+						try {
+							file.flush();
+							file.close();
+						} catch (final IOException e) {
+							e.printStackTrace();
+						}
+					}
 				}
-		else {
+				break;
+			}
+		} else {
 			System.out.println("Authentication failed!");
 		}
 	}

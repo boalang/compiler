@@ -14,7 +14,8 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 public class MetadataCacher {
 	private String url;
 
-	private String username, password;
+	private String username;
+	private String password;
 	private boolean authenticated = false;
 	private HttpURLConnection connection = null;
 	private int responseCode = -1;

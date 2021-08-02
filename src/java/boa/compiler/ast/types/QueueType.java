@@ -32,7 +32,7 @@ public class QueueType extends AbstractType {
 		return value;
 	}
 
-	public QueueType (final Component value) {
+	public QueueType(final Component value) {
 		if (value != null)
 			value.setParent(this);
 		this.value = value;
@@ -40,7 +40,7 @@ public class QueueType extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

@@ -117,7 +117,8 @@ public class BoaIntrinsics {
 		if (commitOffset == cr.getHead())
 			return getSnapshot(cr, kinds);
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>();
+		Set<String> adds = new HashSet<String>();
+		Set<String> dels = new HashSet<String>();
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer i1, Integer i2) {
@@ -143,7 +144,8 @@ public class BoaIntrinsics {
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "Revision", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final Revision commit, final String... kinds) {
 		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>();
+		Set<String> adds = new HashSet<String>();
+		Set<String> dels = new HashSet<String>();
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer i1, Integer i2) {
@@ -542,6 +544,7 @@ public class BoaIntrinsics {
 		return arr2;
 	}
 
+	@SafeVarargs
 	public static <T> T[] concat(final T[] first, final T[]... rest) {
 		int totalLength = first.length;
 		for (final T[] array : rest)
