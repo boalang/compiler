@@ -412,17 +412,19 @@
 		</java>
 	</target>
 
-	<target name="kotlin-to-boa" depends="-compile-tests" description="Convert Kotlin code to Boa AST (set -Dkotlin.code).">
+	<target name="kotlin-to-boa" depends="-compile-tests" description="Convert Kotlin code to Boa AST (set -Dkotlin.code, -Dkotlin.name for filename optional).">
 		<java classname="boa.test.datagen.KotlinToBoa" fork="true" failonerror="true">
 			<classpath refid="test.class.path" />
 			<arg value="${kotlin.code}" />
+                        <arg value="${kotlin.name}" />
 		</java>
 	</target>
 
-	<target name="dump-kotlin" depends="-compile-tests" description="Parse and dump Kotlin AST (set -Dkotlin.code).">
+	<target name="dump-kotlin" depends="-compile-tests" description="Parse and dump Kotlin AST (set -Dkotlin.code, -Dkotlin.name for filename optional).">
 		<java classname="boa.test.datagen.DumpKotlin" fork="true" failonerror="true">
 			<classpath refid="test.class.path" />
 			<arg value="${kotlin.code}" />
+                        <arg value="${kotlin.name}" />
 		</java>
 	</target>
 

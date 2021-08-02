@@ -23,7 +23,9 @@ package boa.test.datagen;
  */
 public class KotlinToBoa extends KotlinBaseTest {
 	public static void main(String[] args) {
-		for (final String s : args)
-			System.out.println(parseKotlin(s, true));
+		if (args[1].equals("${kotlin.name}"))
+			System.out.println(parseKotlin(args[0], "test.kt", true));
+		else
+			System.out.println(parseKotlin(args[0], args[1], true));
 	}
 }

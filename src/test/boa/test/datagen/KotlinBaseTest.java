@@ -32,25 +32,41 @@ import boa.types.Ast.ASTRoot;
  */
 public class KotlinBaseTest extends BaseTest {
 	protected static void dumpKotlin(final String content) {
-		dumpKotlin(content, false);
+		dumpKotlin(content, "test.kt", false);
+	}
+
+	protected static void dumpKotlin(final String content, final String name) {
+		dumpKotlin(content, name, false);
+	}
+
+	protected static void dumpKotlin(final String content, final boolean showEx) {
+		dumpKotlin(content, "test.kt", showEx);
 	}
 
 	private final static KotlinTreeDumper treeDumper = new KotlinTreeDumper();
 
-	protected static void dumpKotlin(final String content, final boolean showEx) {
-		final KtFile theKt = KotlinLangMode.tryparse("test.kt", content, showEx);
+	protected static void dumpKotlin(final String content, final String name, final boolean showEx) {
+		final KtFile theKt = KotlinLangMode.tryparse(name, content, showEx);
 		if (theKt == null) return;
 		theKt.accept(treeDumper);
 	}
 
 	protected static String parseKotlin(final String content) {
-		return parseKotlin(content, false);
+		return parseKotlin(content, "test.kt", false);
+	}
+
+	protected static String parseKotlin(final String content, final String name) {
+		return parseKotlin(content, name, false);
+	}
+
+	protected static String parseKotlin(final String content, final boolean showEx) {
+		return parseKotlin(content, "test.kt", showEx);
 	}
 
 	private static final KotlinVisitor ktToBoa = new KotlinVisitor();
 
-	protected static String parseKotlin(final String content, final boolean showEx) {
-		final KtFile theKt = KotlinLangMode.tryparse("test.kt", content, showEx);
+	protected static String parseKotlin(final String content, final String name, final boolean showEx) {
+		final KtFile theKt = KotlinLangMode.tryparse(name, content, showEx);
 		if (theKt == null) return "";
 
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
