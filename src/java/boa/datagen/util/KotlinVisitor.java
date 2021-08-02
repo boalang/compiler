@@ -394,7 +394,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.addAllGenericParameters(types.pop())
 				.build());
 
-		// TODO type params
+		// TODO type constraints
 		ta.getTypeConstraints();
 
 		statements.peek().add(sb.build());
@@ -1007,6 +1007,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(new ArrayList<Expression>());
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
+			// eb.addExpressions(Expression.newBuilder()
+			// 		.setKind(Expression.ExpressionKind.VARACCESS)
+			// 		.setVariable(rcvr.getText() + "?")
+			// 		.build());
 			// FIXME need to add the '?' into this somehow
 
 			eb.setMethod(call.getCalleeExpression().getText());
@@ -1745,7 +1749,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			tb.setName(typeRef.getText());
 
 			if (propDelegate.getExpression() != null) {
-				// FIXME
 				expressions.push(new ArrayList<Expression>());
 				propDelegate.getExpression().accept(this, v);
 				tb.setDelegate(expressions.pop().get(0));
@@ -1779,6 +1782,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			prop.getGetter().accept(this, v);
 		if (prop.getSetter() != null)
 			prop.getSetter().accept(this, v);
+
+		// TODO type constraints
+		prop.getTypeConstraints();
 
 		expectExpression.pop();
 
@@ -1834,6 +1840,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		if (klass.getBody() != null)
 			klass.getBody().accept(this, v);
+
+		// TODO type constraints
+		klass.getTypeConstraints();
 
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllMethods(methods.pop());
@@ -1962,6 +1971,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.setExpression(expressions.pop().get(0));
 			expectExpression.pop();
 		}
+
+		// TODO type constraints
+		function.getTypeConstraints();
 
 		if (expectExpression.peek())
 			expressions.peek().add(Expression.newBuilder()
