@@ -965,10 +965,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(new ArrayList<Expression>());
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
-			eb.addExpressions(Expression.newBuilder()
-					.setKind(Expression.ExpressionKind.VARACCESS)
-					.setVariable(rcvr.getText() + "?")
-					.build());
+			// eb.addExpressions(Expression.newBuilder()
+			// 		.setKind(Expression.ExpressionKind.VARACCESS)
+			// 		.setVariable(rcvr.getText() + "?")
+			// 		.build());
+			// FIXME need to add the '?' into this somehow
 
 			eb.setMethod(call.getCalleeExpression().getText());
 
