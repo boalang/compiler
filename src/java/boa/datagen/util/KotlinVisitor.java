@@ -395,17 +395,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.build());
 
 		// TODO type constraints
-		ta.getTypeConstraints();
+		for (final KtTypeConstraint tc : ta.getTypeConstraints())
+			tc.accept(this, v);
 
 		statements.peek().add(sb.build());
-		return null;
-	}
-
-	@Override
-	public Void visitConstructorCalleeExpression(final KtConstructorCalleeExpression expr, final Void v) {
-		// FIXME remove?
-		System.err.println(expr.getClass());
-		// expr.acceptChildren(this, v);
 		return null;
 	}
 
@@ -473,14 +466,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitSuperTypeListEntry(final KtSuperTypeListEntry n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitDelegatedSuperTypeEntry(final KtDelegatedSuperTypeEntry n, final Void v) {
 		final Type.Builder tb = Type.newBuilder();
 
@@ -531,26 +516,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitTypeReference(final KtTypeReference n, final Void v) {
-		// FIXME remove?
-		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitSimpleNameExpression(final KtSimpleNameExpression expr, final Void v) {
 		expressions.peek().add(Expression.newBuilder()
 				.setKind(Expression.ExpressionKind.VARACCESS)
 				.setVariable(expr.getReferencedName()).build());
-		return null;
-	}
-
-	@Override
-	public Void visitReferenceExpression(final KtReferenceExpression expr, final Void v) {
-		// FIXME remove?
-		System.err.println(expr.getClass());
-		// expr.acceptChildren(this, v);
 		return null;
 	}
 
@@ -881,14 +850,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		eb.addAllExpressions(expressions.pop());
 
 		expressions.peek().add(eb.build());
-		return null;
-	}
-
-	@Override
-	public Void visitQualifiedExpression(final KtQualifiedExpression expr, final Void v) {
-		// FIXME remove?
-		System.err.println(expr.getClass());
-		// expr.acceptChildren(this, v);
 		return null;
 	}
 
@@ -1784,7 +1745,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			prop.getSetter().accept(this, v);
 
 		// TODO type constraints
-		prop.getTypeConstraints();
+		for (final KtTypeConstraint tc : prop.getTypeConstraints())
+			tc.accept(this, v);
 
 		expectExpression.pop();
 
@@ -1842,7 +1804,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			klass.getBody().accept(this, v);
 
 		// TODO type constraints
-		klass.getTypeConstraints();
+		for (final KtTypeConstraint tc : klass.getTypeConstraints())
+			tc.accept(this, v);
 
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllMethods(methods.pop());
@@ -1973,7 +1936,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		// TODO type constraints
-		function.getTypeConstraints();
+		for (final KtTypeConstraint tc : function.getTypeConstraints())
+			tc.accept(this, v);
 
 		if (expectExpression.peek())
 			expressions.peek().add(Expression.newBuilder()
