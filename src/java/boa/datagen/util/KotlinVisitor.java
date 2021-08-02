@@ -283,9 +283,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		db.setKind(TypeKind.SINGLETON);
 
-		for (final KtTypeParameter p : d.getTypeParameters())
-			db.addGenericParameters(buildGenericParam(p, d.getTypeConstraints()));
-
 		expectExpression.push(false);
 
 		modifiers.push(new ArrayList<Modifier>());
@@ -968,11 +965,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(new ArrayList<Expression>());
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
-			// eb.addExpressions(Expression.newBuilder()
-			// 		.setKind(Expression.ExpressionKind.VARACCESS)
-			// 		.setVariable(rcvr.getText() + "?")
-			// 		.build());
-			// FIXME need to add the '?' into this somehow
+			eb.addExpressions(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.VARACCESS)
+					.setVariable(rcvr.getText() + "?")
+					.build());
 
 			eb.setMethod(call.getCalleeExpression().getText());
 
