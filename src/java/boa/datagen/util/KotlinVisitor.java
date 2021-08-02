@@ -395,7 +395,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.build());
 
 		// TODO type constraints
-		ta.getTypeConstraintList().accept(this, v);
+		if (ta.getTypeConstraintList() != null)
+			ta.getTypeConstraintList().accept(this, v);
 
 		statements.peek().add(sb.build());
 		return null;
@@ -1745,7 +1746,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			prop.getSetter().accept(this, v);
 
 		// TODO type constraints
-		prop.getTypeConstraintList().accept(this, v);
+		if (prop.getTypeConstraintList() != null)
+			prop.getTypeConstraintList().accept(this, v);
 
 		expectExpression.pop();
 
@@ -1803,7 +1805,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			klass.getBody().accept(this, v);
 
 		// TODO type constraints
-		klass.getTypeConstraintList().accept(this, v);
+		if (klass.getTypeConstraintList() != null)
+			klass.getTypeConstraintList().accept(this, v);
 
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllMethods(methods.pop());
@@ -1934,7 +1937,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		// TODO type constraints
-		function.getTypeConstraintList().accept(this, v);
+		if (function.getTypeConstraintList() != null)
+			function.getTypeConstraintList().accept(this, v);
 
 		if (expectExpression.peek())
 			expressions.peek().add(Expression.newBuilder()
