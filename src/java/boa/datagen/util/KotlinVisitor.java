@@ -395,8 +395,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.build());
 
 		// TODO type constraints
-		for (final KtTypeConstraint tc : ta.getTypeConstraints())
-			tc.accept(this, v);
+		ta.getTypeConstraintList().accept(this, v);
 
 		statements.peek().add(sb.build());
 		return null;
@@ -1182,9 +1181,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeConstraint(final KtTypeConstraint n, final Void v) {
-		// FIXME remove?
+		// TODO
 		System.err.println(n.getClass());
-		// n.acceptChildren(this, v);
+		// n.getBoundTypeReference().accept(this, v);
+		// n.getSubjectTypeParameterName().accept(this, v);
 		return null;
 	}
 
@@ -1745,8 +1745,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			prop.getSetter().accept(this, v);
 
 		// TODO type constraints
-		for (final KtTypeConstraint tc : prop.getTypeConstraints())
-			tc.accept(this, v);
+		prop.getTypeConstraintList().accept(this, v);
 
 		expectExpression.pop();
 
@@ -1804,8 +1803,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			klass.getBody().accept(this, v);
 
 		// TODO type constraints
-		for (final KtTypeConstraint tc : klass.getTypeConstraints())
-			tc.accept(this, v);
+		klass.getTypeConstraintList().accept(this, v);
 
 		db.addAllNestedDeclarations(declarations.pop());
 		db.addAllMethods(methods.pop());
@@ -1936,8 +1934,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		}
 
 		// TODO type constraints
-		for (final KtTypeConstraint tc : function.getTypeConstraints())
-			tc.accept(this, v);
+		function.getTypeConstraintList().accept(this, v);
 
 		if (expectExpression.peek())
 			expressions.peek().add(Expression.newBuilder()
