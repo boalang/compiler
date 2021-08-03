@@ -14,7 +14,13 @@
                            "expressions": [
                               {
                                  "kind": "VARACCESS",
-                                 "variable": "1._some"
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ],
+                                 "variable": "_some"
                               }
                            ]
                         },
@@ -23,7 +29,13 @@
                            "expressions": [
                               {
                                  "kind": "VARACCESS",
-                                 "variable": "1.__some"
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ],
+                                 "variable": "__some"
                               }
                            ]
                         },
@@ -32,7 +44,13 @@
                            "expressions": [
                               {
                                  "kind": "VARACCESS",
-                                 "variable": "1_1._some"
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1_1"
+                                    }
+                                 ],
+                                 "variable": "_some"
                               }
                            ]
                         },
@@ -41,7 +59,13 @@
                            "expressions": [
                               {
                                  "kind": "VARACCESS",
-                                 "variable": "1._1some"
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ],
+                                 "variable": "_1some"
                               }
                            ]
                         },
@@ -50,7 +74,13 @@
                            "expressions": [
                               {
                                  "kind": "VARACCESS",
-                                 "variable": "1._1_some"
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ],
+                                 "variable": "_1_some"
                               }
                            ]
                         }
@@ -62,3 +92,4 @@
       }
    ]
 }
+

@@ -33,10 +33,17 @@
                ],
                "initializer": {
                   "kind": "VARACCESS",
-                  "variable": "System.out"
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "System"
+                     }
+                  ],
+                  "variable": "out"
                }
             }
          ]
       }
    ]
 }
+

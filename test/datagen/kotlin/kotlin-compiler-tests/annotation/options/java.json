@@ -13,7 +13,13 @@
                      "annotation_values": [
                         {
                            "kind": "VARACCESS",
-                           "variable": "RetentionPolicy.CLASS"
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "RetentionPolicy"
+                              }
+                           ],
+                           "variable": "CLASS"
                         }
                      ]
                   }
@@ -29,7 +35,13 @@
                      "annotation_values": [
                         {
                            "kind": "VARACCESS",
-                           "variable": "RetentionPolicy.RUNTIME"
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "RetentionPolicy"
+                              }
+                           ],
+                           "variable": "RUNTIME"
                         }
                      ]
                   },
@@ -39,11 +51,23 @@
                      "annotation_values": [
                         {
                            "kind": "VARACCESS",
-                           "variable": "ElementType.ANNOTATION_TYPE"
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "ElementType"
+                              }
+                           ],
+                           "variable": "ANNOTATION_TYPE"
                         },
                         {
                            "kind": "VARACCESS",
-                           "variable": "ElementType.CONSTRUCTOR"
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "ElementType"
+                              }
+                           ],
+                           "variable": "CONSTRUCTOR"
                         }
                      ]
                   }
@@ -56,3 +80,4 @@
       }
    ]
 }
+

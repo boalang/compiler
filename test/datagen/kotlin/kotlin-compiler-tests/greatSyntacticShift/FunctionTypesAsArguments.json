@@ -41,7 +41,13 @@
                   "expressions": [
                      {
                         "kind": "VARACCESS",
-                        "variable": "java.util"
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "java"
+                           }
+                        ],
+                        "variable": "util"
                      }
                   ],
                   "generic_parameters": [
@@ -61,3 +67,4 @@
       }
    ]
 }
+
