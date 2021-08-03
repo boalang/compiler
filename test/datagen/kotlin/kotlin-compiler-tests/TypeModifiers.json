@@ -1,0 +1,245 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f1",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "a"
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@a a",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "f2",
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "(@a a.(a) -> a)",
+                  "kind": "OTHER"
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "p1",
+               "variable_type": {
+                  "name": "suspend a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p2",
+               "variable_type": {
+                  "name": "suspend (a) -> a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p3",
+               "variable_type": {
+                  "name": "suspend (a) -> suspend a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p4",
+               "variable_type": {
+                  "name": "suspend a.() -> a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p4a",
+               "variable_type": {
+                  "name": "@a a.() -> a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p5",
+               "variable_type": {
+                  "name": "(suspend a).() -> a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p5a",
+               "variable_type": {
+                  "name": "(@a a).() -> a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p6",
+               "variable_type": {
+                  "name": "a<in suspend a>",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p7",
+               "variable_type": {
+                  "name": "a<out suspend @a a>",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p8",
+               "variable_type": {
+                  "name": "a<out @a suspend @a a>",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p9",
+               "variable_type": {
+                  "name": "a<out @[a] suspend @[a] a>",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p10",
+               "variable_type": {
+                  "name": "suspend a<a>",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p11",
+               "variable_type": {
+                  "name": "suspend @a a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p12",
+               "variable_type": {
+                  "name": "@a suspend a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p13",
+               "variable_type": {
+                  "name": "@a suspend @a a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p14",
+               "variable_type": {
+                  "name": "@[a] suspend @[a] a",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "p15",
+               "variable_type": {
+                  "name": "suspend (suspend (() -> Unit)) -> Unit",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
