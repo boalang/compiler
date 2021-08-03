@@ -1,0 +1,267 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "parents": [
+                  {
+                     "name": "b",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "VARACCESS",
+                        "variable": "a"
+                     }
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "parents": [
+                  {
+                     "name": "b",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "OP_ADD",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           },
+                           {
+                              "kind": "OP_MULT",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "b"
+                                 },
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "5"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "parents": [
+                  {
+                     "name": "b",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           }
+                        ]
+                     }
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "parents": [
+                  {
+                     "name": "b",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "METHODCALL",
+                              "method": "a",
+                              "method_args": [
+                                 {
+                                    "kind": "LAMBDA"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "parents": [
+                  {
+                     "name": "b",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "ARRAYACCESS",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           },
+                           {
+                              "kind": "METHODCALL",
+                              "method": "a",
+                              "method_args": [
+                                 {
+                                    "kind": "LAMBDA"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "parents": [
+                  {
+                     "name": "b",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "METHODCALL",
+                        "method": "a",
+                        "method_args": [
+                           {
+                              "kind": "METHODCALL",
+                              "method": "a",
+                              "method_args": [
+                                 {
+                                    "kind": "LAMBDA"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "parents": [
+                  {
+                     "name": "b",
+                     "kind": "DELEGATED",
+                     "delegate": {
+                        "kind": "NEW",
+                        "anon_declaration": {
+                           "name": "",
+                           "kind": "SINGLETON",
+                           "methods": [
+                              {
+                                 "name": "f",
+                                 "expression": {
+                                    "kind": "METHODCALL",
+                                    "method": "a",
+                                    "method_args": [
+                                       {
+                                          "kind": "LAMBDA"
+                                       }
+                                    ]
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
