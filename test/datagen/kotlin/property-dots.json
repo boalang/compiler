@@ -12,7 +12,19 @@
                ],
                "initializer": {
                   "kind": "VARACCESS",
-                  "variable": "bar.foo.bar"
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "bar"
+                           }
+                        ],
+                        "variable": "foo"
+                     }
+                  ],
+                  "variable": "bar"
                }
             },
             {
@@ -28,10 +40,23 @@
                ],
                "initializer": {
                   "kind": "VARACCESS",
-                  "variable": "bar.foo.bar"
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "bar"
+                           }
+                        ],
+                        "variable": "foo"
+                     }
+                  ],
+                  "variable": "bar"
                }
             }
          ]
       }
    ]
 }
+

@@ -107,7 +107,13 @@
                                  "expressions": [
                                     {
                                        "kind": "VARACCESS",
-                                       "variable": "foo.bar"
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "foo"
+                                          }
+                                       ],
+                                       "variable": "bar"
                                     },
                                     {
                                        "kind": "VARACCESS",
@@ -186,3 +192,4 @@
       }
    ]
 }
+

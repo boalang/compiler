@@ -99,7 +99,13 @@
                                                    "expressions": [
                                                       {
                                                          "kind": "VARACCESS",
-                                                         "variable": "name.length"
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "name"
+                                                            }
+                                                         ],
+                                                         "variable": "length"
                                                       }
                                                    ],
                                                    "literal": "\"${name.length}\""
@@ -179,7 +185,13 @@
                                     "expressions": [
                                        {
                                           "kind": "VARACCESS",
-                                          "variable": "name.length"
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "name"
+                                             }
+                                          ],
+                                          "variable": "length"
                                        }
                                     ],
                                     "literal": "\"${name.length}\""

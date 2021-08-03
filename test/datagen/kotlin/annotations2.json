@@ -13,7 +13,13 @@
                      "annotation_values": [
                         {
                            "kind": "VARACCESS",
-                           "variable": "AnnotationRetention.SOURCE"
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "AnnotationRetention"
+                              }
+                           ],
+                           "variable": "SOURCE"
                         }
                      ]
                   },
@@ -334,3 +340,4 @@
       }
    ]
 }
+

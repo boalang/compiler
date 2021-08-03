@@ -89,7 +89,13 @@
                                        "expressions": [
                                           {
                                              "kind": "VARACCESS",
-                                             "variable": "owner.pets"
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "owner"
+                                                }
+                                             ],
+                                             "variable": "pets"
                                           }
                                        ],
                                        "method": "add",

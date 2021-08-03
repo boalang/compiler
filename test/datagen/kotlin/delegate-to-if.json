@@ -41,7 +41,19 @@
                                     "expressions": [
                                        {
                                           "kind": "VARACCESS",
-                                          "variable": "Build.VERSION.SDK_INT"
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "Build"
+                                                   }
+                                                ],
+                                                "variable": "VERSION"
+                                             }
+                                          ],
+                                          "variable": "SDK_INT"
                                        },
                                        {
                                           "kind": "LITERAL",

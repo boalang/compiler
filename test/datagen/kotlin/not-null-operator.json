@@ -19,7 +19,31 @@
                ],
                "initializer": {
                   "kind": "VARACCESS",
-                  "variable": "x!!.z!!.prop"
+                  "expressions": [
+                     {
+                        "kind": "OP_NOTNULL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "expressions": [
+                                 {
+                                    "kind": "OP_NOTNULL",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "x"
+                                       }
+                                    ],
+                                    "is_postfix": true
+                                 }
+                              ],
+                              "variable": "z"
+                           }
+                        ],
+                        "is_postfix": true
+                     }
+                  ],
+                  "variable": "prop"
                }
             },
             {
@@ -49,3 +73,4 @@
       }
    ]
 }
+
