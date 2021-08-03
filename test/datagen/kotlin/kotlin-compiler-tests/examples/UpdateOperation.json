@@ -1,0 +1,282 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Pair",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "y",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "copy",
+                           "arguments": [
+                              {
+                                 "name": "from",
+                                 "variable_type": {
+                                    "name": "Pair",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "x",
+                                 "variable_type": {
+                                    "name": "Int",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "VARACCESS",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "from"
+                                       }
+                                    ],
+                                    "variable": "x"
+                                 }
+                              },
+                              {
+                                 "name": "y",
+                                 "variable_type": {
+                                    "name": "Int",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "VARACCESS",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "from"
+                                       }
+                                    ],
+                                    "variable": "y"
+                                 }
+                              }
+                           ],
+                           "expression": {
+                              "kind": "METHODCALL",
+                              "method": "Pair",
+                              "method_args": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "x"
+                                 },
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 }
+                              ]
+                           }
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "p",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "Point",
+                  "method_args": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "2"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "p1",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "Point"
+                     }
+                  ],
+                  "method": "Copy",
+                  "method_args": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "p"
+                     },
+                     {
+                        "kind": "ASSIGN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "x"
+                           },
+                           {
+                              "kind": "LITERAL",
+                              "literal": "2"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "p2",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "Point"
+                     }
+                  ],
+                  "method": "Copy",
+                  "method_args": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "p1"
+                     },
+                     {
+                        "kind": "ASSIGN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "y"
+                           },
+                           {
+                              "kind": "OP_SUB",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "1"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "p3",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "Point"
+                     }
+                  ],
+                  "method": "Copy",
+                  "method_args": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "p"
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
+

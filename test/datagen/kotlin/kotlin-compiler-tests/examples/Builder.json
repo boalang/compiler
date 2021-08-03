@@ -1,0 +1,456 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "AntBuilder",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "library",
+                     "arguments": [
+                        {
+                           "name": "initializer",
+                           "variable_type": {
+                              "name": "Library.() -> Library",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "lib",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "initializer": {
+                                                "kind": "METHODCALL",
+                                                "method": "Library"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "lib"
+                                          }
+                                       ],
+                                       "method": "initializer"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "RETURN",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "lib"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "classpath"
+                  },
+                  {
+                     "name": "module"
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "ClassPathEntry",
+                     "kind": "CLASS",
+                     "modifiers": [
+                        {
+                           "kind": "ABSTRACT"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Module",
+                     "kind": "CLASS",
+                     "parents": [
+                        {
+                           "name": "ClassPathEntry",
+                           "kind": "CLASS"
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "classpath",
+                           "arguments": [
+                              {
+                                 "name": "entries",
+                                 "variable_type": {
+                                    "name": "ClassPathEntry",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "src",
+                           "arguments": [
+                              {
+                                 "name": "src",
+                                 "variable_type": {
+                                    "name": "String",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              }
+                           ]
+                        }
+                     ],
+                     "fields": [
+                        {
+                           "name": "targetLevel",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Library",
+                     "kind": "CLASS",
+                     "parents": [
+                        {
+                           "name": "ClassPathEntry",
+                           "kind": "CLASS"
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "classpath",
+                           "arguments": [
+                              {
+                                 "name": "entries",
+                                 "variable_type": {
+                                    "name": "ClassPathEntry",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "foo",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "NEW",
+                        "new_type": {
+                           "name": "AntBuilder",
+                           "kind": "CLASS"
+                        },
+                        "anon_declaration": {
+                           "name": "",
+                           "kind": "SINGLETON",
+                           "parents": [
+                              {
+                                 "name": "AntBuilder",
+                                 "kind": "CLASS"
+                              }
+                           ],
+                           "fields": [
+                              {
+                                 "name": "groovy",
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    },
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "lazy"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "METHODCALL",
+                                    "method": "library",
+                                    "method_args": [
+                                       {
+                                          "kind": "LAMBDA",
+                                          "expressions": [
+                                             {
+                                                "kind": "METHODCALL",
+                                                "method": "classpath",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "TEMPLATE",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "TEMPLATE",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "libs"
+                                                               }
+                                                            ],
+                                                            "literal": "\"$libs\""
+                                                         },
+                                                         {
+                                                            "kind": "TEMPLATE",
+                                                            "literal": "\"/groovy-...\""
+                                                         }
+                                                      ],
+                                                      "literal": "\"$libs/groovy-...\""
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              },
+                              {
+                                 "name": "gant",
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    },
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "lazy"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "METHODCALL",
+                                    "method": "library",
+                                    "method_args": [
+                                       {
+                                          "kind": "LAMBDA",
+                                          "expressions": [
+                                             {
+                                                "kind": "METHODCALL",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "METHODCALL",
+                                                            "method": "File",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "TEMPLATE",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "TEMPLATE",
+                                                                        "expressions": [
+                                                                           {
+                                                                              "kind": "VARACCESS",
+                                                                              "variable": "gantHome"
+                                                                           }
+                                                                        ],
+                                                                        "literal": "\"$gantHome\""
+                                                                     },
+                                                                     {
+                                                                        "kind": "TEMPLATE",
+                                                                        "literal": "\"/lib\""
+                                                                     }
+                                                                  ],
+                                                                  "literal": "\"$gantHome/lib\""
+                                                               }
+                                                            ]
+                                                         }
+                                                      ],
+                                                      "variable": "files"
+                                                   }
+                                                ],
+                                                "method": "each",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "LAMBDA",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "METHODCALL",
+                                                            "method": "classpath",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "it"
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              },
+                              {
+                                 "name": "JPS",
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    },
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "lazy"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "METHODCALL",
+                                    "method": "module",
+                                    "method_args": [
+                                       {
+                                          "kind": "LAMBDA",
+                                          "expressions": [
+                                             {
+                                                "kind": "ASSIGN",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "targetLevel"
+                                                   },
+                                                   {
+                                                      "kind": "LITERAL",
+                                                      "literal": "\"1.5\""
+                                                   }
+                                                ]
+                                             },
+                                             {
+                                                "kind": "METHODCALL",
+                                                "method": "classpath",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "antLayout"
+                                                   },
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "gant"
+                                                   },
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "groovy"
+                                                   }
+                                                ]
+                                             },
+                                             {
+                                                "kind": "METHODCALL",
+                                                "method": "src",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "TEMPLATE",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "TEMPLATE",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "projectHome"
+                                                               }
+                                                            ],
+                                                            "literal": "\"$projectHome\""
+                                                         },
+                                                         {
+                                                            "kind": "TEMPLATE",
+                                                            "literal": "\"/antLayout/src\""
+                                                         }
+                                                      ],
+                                                      "literal": "\"$projectHome/antLayout/src\""
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              }
+                           ]
+                        }
+                     }
+                  ],
+                  "method": "build"
+               }
+            }
+         ]
+      }
+   ]
+}
+

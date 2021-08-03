@@ -1,0 +1,733 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "INumber",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IComparable<This>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "plus",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Operator"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "This",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "other",
+                           "variable_type": {
+                              "name": "This",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "shl",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Operator"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "This",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "bits",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "bits",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "oneBit",
+               "arguments": [
+                  {
+                     "name": "index",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "BIT_LSHIFT",
+                  "expressions": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     },
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "index"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "setBit",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "index",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "BIT_OR",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "x"
+                     },
+                     {
+                        "kind": "METHODCALL",
+                        "method": "oneBit",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "index"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "unsetBit",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "index",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "BIT_AND",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "x"
+                     },
+                     {
+                        "kind": "METHODCALL",
+                        "method": "not",
+                        "method_args": [
+                           {
+                              "kind": "METHODCALL",
+                              "method": "oneBit",
+                              "method_args": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "index"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "getBit",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "index",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "NEQ",
+                  "expressions": [
+                     {
+                        "kind": "BIT_AND",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "x"
+                           },
+                           {
+                              "kind": "METHODCALL",
+                              "method": "oneBit",
+                              "method_args": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "index"
+                                 }
+                              ]
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "0"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "getBit",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "index",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "NEQ",
+                  "expressions": [
+                     {
+                        "kind": "BIT_LSHIFT",
+                        "expressions": [
+                           {
+                              "kind": "PAREN",
+                              "expressions": [
+                                 {
+                                    "kind": "BIT_RSHIFT",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "x"
+                                       },
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "index"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "LITERAL",
+                              "literal": "31"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "0"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "countOnes",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "INumber",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "result",
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "0"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "WHILE",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "ASSIGN_ADD",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "result"
+                                                },
+                                                {
+                                                   "kind": "BIT_AND",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "x"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "ASSIGN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x"
+                                                },
+                                                {
+                                                   "kind": "BIT_UNSIGNEDRSHIFT",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "x"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "NEQ",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "result"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "mostSignificantBit",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "INumber",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "CAST",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "NEQ",
+                              "expressions": [
+                                 {
+                                    "kind": "BIT_AND",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "x"
+                                       },
+                                       {
+                                          "kind": "METHODCALL",
+                                          "method": "oneBit",
+                                          "method_args": [
+                                             {
+                                                "kind": "OP_SUB",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "VARACCESS",
+                                                            "variable": "x"
+                                                         }
+                                                      ],
+                                                      "variable": "bits"
+                                                   },
+                                                   {
+                                                      "kind": "LITERAL",
+                                                      "literal": "1"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 },
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "0"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ],
+                  "new_type": {
+                     "name": "Int",
+                     "kind": "OTHER"
+                  }
+               }
+            },
+            {
+               "name": "countOnes",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "INumber",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "IF",
+                        "statements": [
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "0"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "OP_ADD",
+                                    "expressions": [
+                                       {
+                                          "kind": "METHODCALL",
+                                          "method": "mostSignificantBit",
+                                          "method_args": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             }
+                                          ]
+                                       },
+                                       {
+                                          "kind": "METHODCALL",
+                                          "method": "countOnes",
+                                          "method_args": [
+                                             {
+                                                "kind": "BIT_LSHIFT",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "x"
+                                                   },
+                                                   {
+                                                      "kind": "LITERAL",
+                                                      "literal": "1"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "EQ",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "x"
+                                 },
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "0"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "matchMask",
+               "arguments": [
+                  {
+                     "name": "mask",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "EQ",
+                  "expressions": [
+                     {
+                        "kind": "BIT_AND",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "this"
+                           },
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "mask"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "mask"
+                     }
+                  ]
+               },
+               "reciever_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               }
+            }
+         ]
+      }
+   ]
+}
+

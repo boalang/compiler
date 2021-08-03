@@ -96,7 +96,13 @@
                      "name": "isEmpty.<get>",
                      "expression": {
                         "kind": "VARACCESS",
-                        "variable": "data.isEmpty"
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "data"
+                           }
+                        ],
+                        "variable": "isEmpty"
                      }
                   }
                ],
@@ -141,3 +147,4 @@
       }
    ]
 }
+
