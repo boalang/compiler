@@ -1007,6 +1007,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		for (final KtExpression e : expr.getStatements()) {
 			declarations.push(new ArrayList<Declaration>());
+			methods.push(new ArrayList<Method>());
 			statements.push(new ArrayList<Statement>());
 			expressions.push(new ArrayList<Expression>());
 			expectExpression.push(e instanceof KtProperty);
@@ -1020,6 +1021,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 						.addExpressions(ex)
 						.build());
 			sb.addAllStatements(statements.pop());
+			sb.addAllMethods(methods.pop());
 			sb.addAllTypeDeclarations(declarations.pop());
 		}
 
