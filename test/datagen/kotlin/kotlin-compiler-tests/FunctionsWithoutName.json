@@ -1,0 +1,307 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": ""
+            },
+            {
+               "name": "",
+               "reciever_type": {
+                  "name": "T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "reciever_type": {
+                  "name": "T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "T : (a) -> b",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "reciever_type": {
+                  "name": "T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": ""
+            },
+            {
+               "name": "",
+               "reciever_type": {
+                  "name": "T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "reciever_type": {
+                  "name": "T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "T : (a) -> b",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "reciever_type": {
+                  "name": "T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "",
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@[a] T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@[a] T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "T : (a) -> b",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@[a()] T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "T : @[a]  (a) -> b",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@[a()] T",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar?",
+                  "kind": "OTHER"
+               },
+               "reciever_type": {
+                  "name": "A?",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "",
+               "return_type": {
+                  "name": "bar?",
+                  "kind": "OTHER"
+               },
+               "reciever_type": {
+                  "name": "A?",
+                  "kind": "OTHER"
+               }
+            }
+         ]
+      }
+   ]
+}
+
