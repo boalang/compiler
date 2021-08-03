@@ -46,10 +46,8 @@ import boa.types.Ast.Declaration;
 import boa.types.Diff.ChangedFile;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaVisitor;
-import boa.datagen.util.ProtoMessageVisitor;
 import boa.test.compiler.BaseTest;
-import boa.test.datagen.ASTDumper;
-import boa.test.datagen.UglyMathCommentsExtractor;
+import boa.test.datagen.ProtoMessageVisitor;
 
 /*
  * @author rdyer
@@ -98,13 +96,13 @@ public class Java7BaseTest extends BaseTest {
 				sb.append(JsonFormat.printToString(ast.build()));
 			}
 		};
-		Map<String, String> fileContents = new HashMap<String, String>();
+		final Map<String, String> fileContents = new HashMap<String, String>();
 		fileContents.put("", content);
 		@SuppressWarnings("rawtypes")
-		Map options = JavaCore.getOptions();
+		final Map options = JavaCore.getOptions();
 		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
 		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
-		ASTParser parser = ASTParser.newParser(astLevel);
+		final ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setCompilerOptions(options);
 		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
 		parser.setResolveBindings(true);
@@ -167,20 +165,20 @@ public class Java7BaseTest extends BaseTest {
 		if (cf.getAst() && astpos > -1) {
 			try {
 				ar.seek(astpos);
-				Writable astkey = new LongWritable();
-				BytesWritable val = new BytesWritable();
+				final Writable astkey = new LongWritable();
+				final BytesWritable val = new BytesWritable();
 				ar.next(astkey, val);
-				byte[] bytes = val.getBytes();
-				ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-				ProtoMessageVisitor v = new ProtoMessageVisitor() {
+				final byte[] bytes = val.getBytes();
+				final ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+				final ProtoMessageVisitor v = new ProtoMessageVisitor() {
 					private boolean found = false;
 
 					@Override
-					public boolean preVisit(Message message) {
+					public boolean preVisit(final Message message) {
 						if (found)
 							return false;
 						if (message instanceof Declaration) {
-							Declaration temp = (Declaration) message;
+							final Declaration temp = (Declaration) message;
 							Declaration type = declarations.get(temp.getKey());
 							if (type == null) {
 								type = Declaration.newBuilder(temp).build();
@@ -195,7 +193,7 @@ public class Java7BaseTest extends BaseTest {
 					};
 				};
 				v.visit(root);
-			} catch (IOException e) {}
+			} catch (final IOException e) {}
 		}
 		return declarations.get(nodeId);
 	}
@@ -205,27 +203,27 @@ public class Java7BaseTest extends BaseTest {
 		if (cf.getAst() && astpos > -1) {
 			try {
 				ar.seek(astpos);
-				Writable astkey = new LongWritable();
-				BytesWritable val = new BytesWritable();
+				final Writable astkey = new LongWritable();
+				final BytesWritable val = new BytesWritable();
 				ar.next(astkey, val);
-				byte[] bytes = val.getBytes();
-				ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+				final byte[] bytes = val.getBytes();
+				final ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 				return getMessage(root, nodeId);
-			} catch (IOException e) {}
+			} catch (final IOException e) {}
 		}
 		return null;
 	}
 
 	protected static Message getMessage(final Message root, final int nodeId) {
 		final Message[] m = new Message[1];
-		ProtoMessageVisitor v = new ProtoMessageVisitor() {
+		final ProtoMessageVisitor v = new ProtoMessageVisitor() {
 			private boolean found = false;
 
 			@Override
-			public boolean preVisit(Message message) {
+			public boolean preVisit(final Message message) {
 				if (found)
 					return false;
-				Object v = getFieldValue(message, "key");
+				final Object v = getFieldValue(message, "key");
 				if (v != null && (Integer) v == nodeId) {
 					m[0] = message;
 					found = true;
@@ -238,9 +236,9 @@ public class Java7BaseTest extends BaseTest {
 		return m[0];
 	}
 
-	protected static Object getFieldValue(Message message, String name) {
-		for (Iterator<Map.Entry<FieldDescriptor, Object>> iter = message.getAllFields().entrySet().iterator(); iter.hasNext();) {
-			Map.Entry<FieldDescriptor, Object> field = iter.next();
+	protected static Object getFieldValue(final Message message, final String name) {
+		for (final Iterator<Map.Entry<FieldDescriptor, Object>> iter = message.getAllFields().entrySet().iterator(); iter.hasNext();) {
+			final Map.Entry<FieldDescriptor, Object> field = iter.next();
 			if (field.getKey().getName().equals(name)) {
 				return field.getValue();
 			}
@@ -249,43 +247,43 @@ public class Java7BaseTest extends BaseTest {
 	}
 
 	protected static HashMap<Integer, HashMap<Integer, Declaration>> collectDeclarations(final SequenceFile.Reader ar, List<ChangedFile> snapshot) throws IOException {
-		HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = new HashMap<Integer, HashMap<Integer, Declaration>>();
+		final HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = new HashMap<Integer, HashMap<Integer, Declaration>>();
 		for (int fileIndex = 0; fileIndex < snapshot.size(); fileIndex++) {
-			ChangedFile cf = snapshot.get(fileIndex);
+			final ChangedFile cf = snapshot.get(fileIndex);
 			long astpos = cf.getKey();
 			if (!cf.getAst())
 				continue;
 			if (astpos > -1) {
 				ar.seek(astpos);
-				Writable astkey = new LongWritable();
-				BytesWritable val = new BytesWritable();
+				final Writable astkey = new LongWritable();
+				final BytesWritable val = new BytesWritable();
 				ar.next(astkey, val);
-				byte[] bytes = val.getBytes();
-				ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-				HashMap<Integer, Declaration> nodeDeclaration = collectDeclarations(root);
+				final byte[] bytes = val.getBytes();
+				final ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+				final HashMap<Integer, Declaration> nodeDeclaration = collectDeclarations(root);
 				fileNodeDeclaration.put(fileIndex, nodeDeclaration);
 			}
 		}
 		return fileNodeDeclaration;
 	}
 
-	protected static HashMap<Integer, Declaration> collectDeclarations(Message message) {
-		HashMap<Integer, Declaration> nodeDeclaration = new HashMap<Integer, Declaration>();
+	protected static HashMap<Integer, Declaration> collectDeclarations(final Message message) {
+		final HashMap<Integer, Declaration> nodeDeclaration = new HashMap<Integer, Declaration>();
 		if (message instanceof Declaration) {
 			nodeDeclaration.put(((Declaration) message).getKey(), (Declaration) message);
 		}
-		for (Iterator<Map.Entry<FieldDescriptor, Object>> iter = message.getAllFields().entrySet().iterator(); iter.hasNext();) {
-			Map.Entry<FieldDescriptor, Object> field = iter.next();
+		for (final Iterator<Map.Entry<FieldDescriptor, Object>> iter = message.getAllFields().entrySet().iterator(); iter.hasNext();) {
+			final Map.Entry<FieldDescriptor, Object> field = iter.next();
 			nodeDeclaration.putAll(collectDeclarations(field.getKey(), field.getValue()));
 		}
 		return nodeDeclaration;
 	}
 
-	protected static HashMap<Integer, Declaration> collectDeclarations(FieldDescriptor field, Object value) {
-		HashMap<Integer, Declaration> nodeDeclaration = new HashMap<Integer, Declaration>();
+	protected static HashMap<Integer, Declaration> collectDeclarations(final FieldDescriptor field, final Object value) {
+		final HashMap<Integer, Declaration> nodeDeclaration = new HashMap<Integer, Declaration>();
 		if (field.isRepeated()) {
 			// Repeated field. Print each element.
-			for (Iterator<?> iter = ((List<?>) value).iterator(); iter.hasNext();)
+			for (final Iterator<?> iter = ((List<?>) value).iterator(); iter.hasNext();)
 				if (field.getType() == Type.MESSAGE)
 					nodeDeclaration.putAll(collectDeclarations((Message) iter.next()));
 		}
