@@ -1,0 +1,97 @@
+{
+   "namespaces": [
+      {
+         "name": "foo.bar.goo",
+         "declarations": [
+            {
+               "name": "Bar",
+               "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "ABSTRACT"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "override"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "ABSTRACT"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PROTECTED"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "INTERNAL"
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "foo<A, B>",
+                     "annotation_values": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "a"
+                        },
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "b"
+                        }
+                     ]
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "ina"
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "foo.bar.goo.doo<f>.foo<bar, goo>.foo"
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "df"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "in"
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "sdfsdf"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "out"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "abstract open @[sdfsdf(1+1) a] @[sdfsdf(1+1)] @[a() sdfsdf(1+1)] enum open annotation override open abstract @[sdfsd sdfsd a.b.f.c] private protected public internal in out T",
+                     "kind": "GENERIC"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
