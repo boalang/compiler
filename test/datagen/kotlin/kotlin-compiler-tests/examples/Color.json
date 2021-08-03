@@ -1,0 +1,223 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Color",
+               "kind": "ENUM",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "r",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "g",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "sb",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "r",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "g",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "sb",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "RED",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "255"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "new_type": {
+                              "name": "Color",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "GREEN",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "255"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "new_type": {
+                              "name": "Color",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "BLUE",
+                     "variable_type": {
+                        "name": "Color",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "255"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "new_type": {
+                              "name": "Color",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
