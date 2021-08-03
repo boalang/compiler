@@ -83,6 +83,7 @@ public class SeqCombiner {
 		});
 		long lastAstWriterKey = 0;
 		long lastCommitWriterKey = 0;
+		long projCount = 0;
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
@@ -115,6 +116,7 @@ public class SeqCombiner {
 						}
 					}
 					projectWriter.append(textKey, new BytesWritable(pb.build().toByteArray()));
+					projCount++;
 				}
 			} catch (Exception e) {
 				System.err.println(name);
@@ -130,6 +132,7 @@ public class SeqCombiner {
 		commitWriter.close();
 
 		fileSystem.close();
+		System.out.println("combined " + projCount + " projects!");
 	}
 
 	public static long readAndAppendCommit(Configuration conf, FileSystem fileSystem, MapFile.Writer writer, String fileName, long lastAstKey, long lastCommitKey) throws IOException {

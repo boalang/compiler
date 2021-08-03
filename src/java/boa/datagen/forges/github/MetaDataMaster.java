@@ -39,7 +39,7 @@ public class MetaDataMaster {
 		File dir = new File(outDir + "/jsons");
 		if (!dir.exists())
 			dir.mkdirs();
-		File[] files = dir.listFiles();
+		final File[] files = dir.listFiles();
 		Arrays.sort(files, new Comparator<File>() {
 			@Override
 			public int compare(File f1, File f2) {
@@ -113,11 +113,11 @@ public class MetaDataMaster {
 			System.out.println("Authentication failed!");
 		}
 
-		for (MetaDataWorker t : workers) {
+		for (final MetaDataWorker t : workers) {
 			while (!t.isAvailable()) {
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					if(debug)
 					e.printStackTrace();
 				}
@@ -126,7 +126,7 @@ public class MetaDataMaster {
 
 			try {
 				Thread.sleep(10);
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				if(debug)
 				e.printStackTrace();
 			}
@@ -143,8 +143,7 @@ public class MetaDataMaster {
 					assigned = true;
 					try {
 						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
+					} catch (final InterruptedException e) {
 						e.printStackTrace();
 					}
 					break;
@@ -152,8 +151,7 @@ public class MetaDataMaster {
 
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
@@ -173,7 +171,7 @@ public class MetaDataMaster {
 			try {
 				Integer.valueOf(s);
 				return s;
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				e.printStackTrace();
 			}
 		}

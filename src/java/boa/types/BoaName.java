@@ -20,7 +20,6 @@ package boa.types;
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.types.AbstractType;
-import boa.compiler.ast.types.TupleType;
 import boa.compiler.SymbolTable;
 
 /**

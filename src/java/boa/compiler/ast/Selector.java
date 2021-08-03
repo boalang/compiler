@@ -16,7 +16,6 @@
  */
 package boa.compiler.ast;
 
-import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;

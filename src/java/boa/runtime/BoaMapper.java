@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@
 package boa.runtime;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
@@ -30,14 +32,16 @@ import boa.io.EmitValue;
 
 /**
  * A {@link Mapper} that performs the brunt of all Boa work.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 public abstract class BoaMapper extends Mapper<Text, BytesWritable, EmitKey, EmitValue> implements Configurable {
 	protected static final Logger LOG = Logger.getLogger(BoaMapper.class);
 
 	private Configuration conf;
 	protected Context context;
+	protected Collection<String> excludeProjects;
 
 	/** {@inheritDoc} */
 	@Override
@@ -57,5 +61,10 @@ public abstract class BoaMapper extends Mapper<Text, BytesWritable, EmitKey, Emi
 		super.setup(context);
 
 		this.context = context;
+		this.excludeProjects = this.conf.getStringCollection("boa.exclude.projects");
+	}
+
+	protected boolean excludeProject(final String id) {
+		return this.excludeProjects.contains(id);
 	}
 }

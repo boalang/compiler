@@ -13,7 +13,7 @@
 //  is preserved, and any changes are properly documented.
 //
 
-package boa.test.datagen;
+package boa.test.datagen.java;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Comment;

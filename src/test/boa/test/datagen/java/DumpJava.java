@@ -1,6 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Farheen Sultana
- *                 Iowa State University of Science and Technology,
+ * Copyright 2017, Robert Dyer,
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,21 +16,15 @@
  */
 package boa.test.datagen.java;
 
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import org.junit.Test;
-
 /*
- * @author sfarheen
  * @author rdyer
  */
-public class TestDefaultMethods extends Java8BaseTest {
-	@Test
-	public void defaultMethod() throws IOException {
-		assertEquals(
-			load("test/datagen/boa/default-method.boa").trim(),
-			parseJava("test/datagen/java/default-method.java").trim()
-		);
+public class DumpJava extends Java15BaseTest {
+	public static void main(String[] args) {
+		for (final String s : args)
+			if (s.indexOf("class ") == -1)
+				dumpJavaWrapped(s);
+			else
+				dumpJava(s);
 	}
 }

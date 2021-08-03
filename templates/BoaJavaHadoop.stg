@@ -23,14 +23,6 @@ public class <name> extends boa.runtime.BoaRunner {
 		return job;
 	}
 
-	static {
-		getOptions().addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("splitsize")
-										.withDescription("split size in BYTES")
-										.hasArg()
-										.withArgName("BYTES")
-										.create("s"));
-	}
-
 	public static void main(String[] args) throws Exception {
 		<if(isLocal)>org.apache.hadoop.util.ToolRunner.run(new <name>(), args);
 		<else> System.exit(org.apache.hadoop.util.ToolRunner.run(new <name>(), args));
@@ -85,6 +77,10 @@ public class <name> extends boa.runtime.BoaRunner {
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
 
+		// pass any arguments to map/reduce classes via configuration
+		if (line.hasOption("excludelist"))
+			configuration.setStrings("boa.exclude.projects", line.getOptionValue("excludelist"));
+
 		jb.submit();
 
 
@@ -138,6 +134,11 @@ public class <name> extends boa.runtime.BoaRunner {
 		/** {@inheritDoc} */
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws java.io.IOException {
+			if (excludeProject(key.toString())) {
+				LOG.error("EXCLUDED PROJECT: " + key.toString());
+				return;
+			}
+
 			try {
 				boa.functions.BoaMathIntrinsics.random = new java.util.Random(<seed> + key.hashCode());
 				boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));

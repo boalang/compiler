@@ -33,7 +33,6 @@ public class CacheGithubIssues {
 		try {
 			fileSystem = FileSystem.get(conf);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		File output = new File(jsonCachePath);
@@ -107,5 +106,4 @@ public class CacheGithubIssues {
 			}
 		}
 	}
-
 }

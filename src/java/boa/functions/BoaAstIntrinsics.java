@@ -19,8 +19,6 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import com.google.protobuf.CodedInputStream;
@@ -34,13 +32,8 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper.Context;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
 
 import boa.datagen.DefaultProperties;
-import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.datagen.util.JavaVisitor;
 import boa.functions.langmode.JavaLangMode;
 import boa.functions.langmode.LangMode;
 import boa.types.Ast.ASTRoot;
@@ -52,7 +45,6 @@ import boa.types.Ast.Modifier;
 import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
-import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -688,26 +680,6 @@ public class BoaAstIntrinsics {
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is an integer literal.
 	 *
-	 * The test is a simplified grammar, based on the one from:
-	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
-	 *
-	 * DecimalNumeral:
-	 * 	[0-9] [lL]?
-	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
-	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
-	 *
-	 * HexNumeral:
-	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
-	 *
-	 * OctalNumeral:
-	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
-	 *
-	 * BinaryNumeral:
-	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
-	 *
-	 * If any of these match, it returns <code>true</code>.  Otherwise it
-	 * returns <code>false</code>.
-	 *
 	 * @param e the expression to test
 	 * @return true if the expression is an integer literal, otherwise false
 	 */
@@ -719,19 +691,6 @@ public class BoaAstIntrinsics {
 	/**
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is a float literal.
-	 *
-	 * The test is a simplified grammar, based on the one from:
-	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
-	 *
-	 * DecimalFloatingPointLiteral:
-	 *  [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]* [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
-	 *  \\. [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
-	 *  [0-9] ([0-9_]* [0-9])? [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
-	 *  [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]
-	 *
-	 * HexadecimalFloatingPointLiteral:
-	 *  0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
-	 *  0 [Xx] ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a char literal, otherwise false

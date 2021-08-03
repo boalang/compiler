@@ -33,14 +33,6 @@
         <!-- Checks that the outer type name and the file name match. For example, the class Foo must be in a file named Foo.java.
              See http://checkstyle.sourceforge.net/config_misc.html#OuterTypeFilename -->
         <module name="OuterTypeFilename"/>
-    </module>
-
-    <!--========
-    = WARNINGS =
-    =========-->
-
-    <module name="TreeWalker">
-        <property name="severity" value="warning"/>
 
         <!--====================================================
                               Annotations
@@ -241,5 +233,13 @@
             <!-- dont enforce on TYPECAST -->
             <property name="tokens" value="COMMA, SEMI"/>
         </module>
+    </module>
+
+    <!--========
+    = WARNINGS =
+    =========-->
+
+    <module name="TreeWalker">
+        <property name="severity" value="warning"/>
     </module>
 </module>
