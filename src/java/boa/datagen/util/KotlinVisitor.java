@@ -923,8 +923,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
-	@Override
-	public Void visitDotQualifiedExpression(final KtDotQualifiedExpression expr, final Void v) {
+	private Expression.Builder buildQualifiedExpr(final KtQualifiedExpression expr, final Void v) {
 		Expression.Builder eb = Expression.newBuilder();
 
 		final KtExpression rcvr = expr.getReceiverExpression();
@@ -940,7 +939,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(new ArrayList<Expression>());
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
-
 		} else if (sel instanceof KtLambdaExpression) {
 			final KtLambdaExpression lambda = (KtLambdaExpression)sel;
 
@@ -951,60 +949,26 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(new ArrayList<Expression>());
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
-
 		} else {
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
+			eb.setVariable(sel.getText());
+
 			expressions.push(new ArrayList<Expression>());
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
-			eb.setVariable(sel.getText());
 		}
+		return eb;
+	}
 
-		expressions.peek().add(eb.build());
+	@Override
+	public Void visitDotQualifiedExpression(final KtDotQualifiedExpression expr, final Void v) {
+		expressions.peek().add(buildQualifiedExpr(expr, v).build());
 		return null;
 	}
 
 	@Override
 	public Void visitSafeQualifiedExpression(final KtSafeQualifiedExpression expr, final Void v) {
-		Expression.Builder eb = Expression.newBuilder();
-
-		final KtExpression rcvr = expr.getReceiverExpression();
-		final KtExpression sel = expr.getSelectorExpression();
-
-		if (sel instanceof KtCallExpression) {
-			final KtCallExpression call = (KtCallExpression)sel;
-
-			expressions.push(new ArrayList<Expression>());
-			call.accept(this, v);
-			eb = Expression.newBuilder(expressions.pop().get(0));
-
-			expressions.push(new ArrayList<Expression>());
-			rcvr.accept(this, v);
-			eb.addAllExpressions(expressions.pop());
-			eb.setSafe(true);
-		} else if (sel instanceof KtLambdaExpression) {
-			final KtLambdaExpression lambda = (KtLambdaExpression)sel;
-
-			expressions.push(new ArrayList<Expression>());
-			lambda.accept(this, v);
-			eb = Expression.newBuilder(expressions.pop().get(0));
-
-			expressions.push(new ArrayList<Expression>());
-			rcvr.accept(this, v);
-			eb.addAllExpressions(expressions.pop());
-
-			eb.setSafe(true);
-
-		} else {
-			eb.setKind(Expression.ExpressionKind.VARACCESS);
-			expressions.push(new ArrayList<Expression>());
-			rcvr.accept(this, v);
-			eb.addAllExpressions(expressions.pop());
-			eb.setSafe(true);
-			eb.setVariable(sel.getText());
-		}
-
-		expressions.peek().add(eb.build());
+		expressions.peek().add(buildQualifiedExpr(expr, v).setSafe(true).build());
 		return null;
 	}
 
