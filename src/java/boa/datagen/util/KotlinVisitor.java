@@ -974,7 +974,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		eb.setAnonDeclaration(objLiteral);
 
 		if (objLiteral.getParentsCount() > 0)
-			eb.setNewType(objLiteral.getParents(0));
+			eb.setNewType(Type.newBuilder(objLiteral.getParents(0)).build());
 
 		expressions.peek().add(eb.build());
 		return null;
