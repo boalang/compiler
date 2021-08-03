@@ -21,9 +21,11 @@ import java.util.List;
 import java.util.Stack;
 
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
+import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiWhiteSpace;
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken;
+import org.jetbrains.kotlin.lexer.KtTokens;
 import org.jetbrains.kotlin.psi.*;
 
 import boa.types.Ast.Declaration;
@@ -867,6 +869,18 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		return null;
 	}
 
+	protected int getQuestionsCount(final KtCallableReferenceExpression expr) {
+		int count = 0;
+		ASTNode child = expr.getNode().getFirstChildNode();
+		while (child != null) {
+			if (KtTokens.QUEST == child.getElementType())
+				count++;
+			child = child.getTreeNext();
+		}
+		return count;
+	}
+
+
 	@Override
 	public Void visitCallableReferenceExpression(final KtCallableReferenceExpression expr, final Void v) {
 		final Expression.Builder eb = Expression.newBuilder();
@@ -878,16 +892,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			expressions.push(new ArrayList<Expression>());
 			expr.getReceiverExpression().accept(this, v);
 			if (expr.getHasQuestionMarks()) {
+				String questions = "";
+				for (int i = 0; i < getQuestionsCount(expr); i++)
+					questions += "?";
+
 				final Expression.Builder eb2 = Expression.newBuilder(expressions.peek().get(0));
-				if((eb2.getKind() == Expression.ExpressionKind.METHODCALL) || (eb2.getKind() == Expression.ExpressionKind.METHOD_REFERENCE)) {
-					eb2.setMethod(eb2.getMethod() + "?");
-				} else {
-					eb2.setVariable(eb2.getVariable() + "?");
-				}
+
+				if ((eb2.getKind() == Expression.ExpressionKind.METHODCALL) || (eb2.getKind() == Expression.ExpressionKind.METHOD_REFERENCE))
+					eb2.setMethod(eb2.getMethod() + questions);
+				else
+					eb2.setVariable(eb2.getVariable() + questions);
 				eb.addExpressions(eb2.build());
 				expressions.pop();
-			} else
+			} else {
 				eb.addAllExpressions(expressions.pop());
+			}
 		}
 
 		expressions.peek().add(eb.build());
