@@ -1,5 +1,13 @@
-class foo<T : S>
+class foo<T>
+    where T : R {
+}
+
+class foo<T : R> {
+}
+
+class foo<T : S, P>
     where T : R,
+          P : M,
           T : Q {
     val b = fun <T: A> ()
         where T: B,

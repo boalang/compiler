@@ -62,7 +62,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public static final int KLS13 = 13;
 	public static final int KLS14 = 14;
 	public static final int KLS15 = 15;
-	protected int astLevel = KLS10;
+	protected int astLevel = KLS15;
 
 	protected void reset() {
 		b = Namespace.newBuilder();
@@ -2073,12 +2073,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	private Type buildGenericParam(final KtTypeParameter p, final List<KtTypeConstraint> tcList) {
-		String genericName = p.getName() + " : " + p.getExtendsBound().getText();
+		String genericName = p.getName() + " : ";
+		boolean first = true;
+
+		if (p.getExtendsBound() != null) {
+			genericName += p.getExtendsBound().getText();
+			first = false;
+		}
 
 		if (tcList != null)
 			for (final KtTypeConstraint tc : tcList)
-				if (tc.getSubjectTypeParameterName().getReferencedName() == p.getName())
-					genericName += " & " + tc.getBoundTypeReference().getText();
+				if (tc.getSubjectTypeParameterName().getReferencedName() == p.getName()) {
+					if (!first)
+						genericName += " & ";
+					genericName += tc.getBoundTypeReference().getText();
+				}
 
 		return Type.newBuilder()
 				.setName(genericName)
