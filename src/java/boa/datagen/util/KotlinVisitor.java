@@ -2069,24 +2069,33 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	private Type buildGenericParam(final KtTypeParameter p, final List<KtTypeConstraint> tcList) {
-		String genericName = p.getName() + " : ";
+		final StringBuilder sb = new StringBuilder();
+
+		sb.append(p.getVariance());
+		sb.append(p.getName());
+
 		boolean first = true;
 
 		if (p.getExtendsBound() != null) {
-			genericName += p.getExtendsBound().getText();
+			sb.append(" : ");
+			sb.append(p.getExtendsBound().getText());
 			first = false;
 		}
 
 		if (tcList != null)
 			for (final KtTypeConstraint tc : tcList)
 				if (tc.getSubjectTypeParameterName().getReferencedName() == p.getName()) {
-					if (!first)
-						genericName += " & ";
-					genericName += tc.getBoundTypeReference().getText();
+					if (first) {
+						sb.append(" : ");
+						first = false;
+					} else {
+						sb.append(" & ");
+					}
+					sb.append(tc.getBoundTypeReference().getText());
 				}
 
 		return Type.newBuilder()
-				.setName(genericName)
+				.setName(sb.toString())
 				.setKind(TypeKind.GENERIC)
 				.build();
 	}

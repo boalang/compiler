@@ -1,4 +1,6 @@
 class foo<T>
+
+class foo<T>
     where T : R {
 }
 
