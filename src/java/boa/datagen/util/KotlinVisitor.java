@@ -2039,6 +2039,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	private Type buildGenericParam(final KtTypeParameter p, final List<KtTypeConstraint> tcList) {
 		final StringBuilder sb = new StringBuilder();
+		if (p.getModifierList() != null)
+			// FIXME normalize the whitespace so there arent \n and lots of space in the name
+			sb.append(p.getModifierList().getText() + " ");
 
 		sb.append(p.getVariance());
 		if (sb.length() > 0)
