@@ -929,21 +929,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final KtExpression rcvr = expr.getReceiverExpression();
 		final KtExpression sel = expr.getSelectorExpression();
 
-		if (sel instanceof KtCallExpression) {
-			final KtCallExpression call = (KtCallExpression)sel;
-
+		if (sel instanceof KtCallExpression || sel instanceof KtLambdaExpression) {
 			expressions.push(new ArrayList<Expression>());
-			call.accept(this, v);
-			eb = Expression.newBuilder(expressions.pop().get(0));
-
-			expressions.push(new ArrayList<Expression>());
-			rcvr.accept(this, v);
-			eb.addAllExpressions(expressions.pop());
-		} else if (sel instanceof KtLambdaExpression) {
-			final KtLambdaExpression lambda = (KtLambdaExpression)sel;
-
-			expressions.push(new ArrayList<Expression>());
-			lambda.accept(this, v);
+			sel.accept(this, v);
 			eb = Expression.newBuilder(expressions.pop().get(0));
 
 			expressions.push(new ArrayList<Expression>());
