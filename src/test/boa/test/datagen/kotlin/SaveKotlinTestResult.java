@@ -14,21 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.test.datagen;
+package boa.test.datagen.kotlin;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import boa.datagen.util.FileIO;
 import boa.datagen.util.KotlinErrorCheckVisitor;
 import boa.functions.langmode.KotlinLangMode;
 
@@ -69,14 +67,17 @@ public class SaveKotlinTestResult extends KotlinBaseTest {
 	private final KotlinErrorCheckVisitor errorCheck = new KotlinErrorCheckVisitor();
 
 	@Test
-	public void savekotlinresult() throws IOException {
+	public void saveKotlinResult() throws IOException {
 		final String src = load(kotlinFileName);
 		final String content = parseKotlin(src).trim();
 		if (errorCheck.hasError(KotlinLangMode.tryparse("test.kt", src, false))) {
 			boa.datagen.util.FileIO.writeFileContents(new File(jsonFileName + ".error"), content, false);
 		} else {
+			FileIO.delete(new File(jsonFileName));
 			if (!content.equals(load(actualJsonFileName).trim()))
 				boa.datagen.util.FileIO.writeFileContents(new File(jsonFileName), content, false);
+			else
+				System.err.println("DELETE: " + jsonFileName);
 		}
 	}
 }

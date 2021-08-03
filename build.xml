@@ -176,6 +176,7 @@
 	</target>
 
 
+	<!-- test targets -->
 	<target name="test" depends="test-compiler,test-functions,test-datagen" description="Run all unit tests.">
 		<delete file="SecurityAuth.audit" />
 		<fail message="Test failure detected." if="test.failed" />
@@ -207,7 +208,8 @@
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-					<include name="boa/test/datagen/TestKotlin.class" />
+					<include name="boa/test/datagen/kotlin/Test*.class" />
+					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
 		</junit>
@@ -398,6 +400,8 @@
 		<delete dir="build/tests" />
 	</target>
 
+
+	<!-- debug targets -->
 	<target name="java-to-boa" depends="-compile-tests" description="Convert Java code to Boa AST (set -Djava.code).">
 		<java classname="boa.test.datagen.java.JavaToBoa" fork="true" failonerror="true">
 			<classpath refid="test.class.path" />
@@ -413,7 +417,7 @@
 	</target>
 
 	<target name="kotlin-to-boa" depends="-compile-tests" description="Convert Kotlin code to Boa AST (set -Dkotlin.code, -Dkotlin.name for filename optional).">
-		<java classname="boa.test.datagen.KotlinToBoa" fork="true" failonerror="true">
+		<java classname="boa.test.datagen.kotlin.KotlinToBoa" fork="true" failonerror="true">
 			<classpath refid="test.class.path" />
 			<arg value="${kotlin.code}" />
 			<arg value="${kotlin.name}" />
@@ -421,7 +425,7 @@
 	</target>
 
 	<target name="dump-kotlin" depends="-compile-tests" description="Parse and dump Kotlin AST (set -Dkotlin.code, -Dkotlin.name for filename optional).">
-		<java classname="boa.test.datagen.DumpKotlin" fork="true" failonerror="true">
+		<java classname="boa.test.datagen.kotlin.DumpKotlin" fork="true" failonerror="true">
 			<classpath refid="test.class.path" />
 			<arg value="${kotlin.code}" />
 			<arg value="${kotlin.name}" />

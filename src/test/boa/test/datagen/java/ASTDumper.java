@@ -13,7 +13,7 @@
 //  is preserved, and any changes are properly documented.
 //
 
-package boa.test.datagen;
+package boa.test.datagen.java;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +23,8 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.ChildPropertyDescriptor;
 import org.eclipse.jdt.core.dom.SimplePropertyDescriptor;
+
+import boa.test.datagen.java.ICommentsExtractor.CommentItem;
 
 /**
  * Dumps the AST to a supplied "printer".

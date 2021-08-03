@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, Robert Dyer, Samuel W. Flint,
+ * Copyright 2021, Robert Dyer
  *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,18 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.test.datagen;
+package boa.test.datagen.kotlin;
 
 
 /*
  * @author rdyer
- * @author swflint
  */
-public class KotlinToBoa extends KotlinBaseTest {
+public class DumpKotlin extends KotlinBaseTest {
 	public static void main(String[] args) {
 		if (args[1].equals("${kotlin.name}"))
-			System.out.println(parseKotlin(args[0], "test.kt", true));
+			dumpKotlin(args[0], "test.kt", true);
 		else
-			System.out.println(parseKotlin(args[0], args[1], true));
+			dumpKotlin(args[0], args[1], true);
 	}
 }
