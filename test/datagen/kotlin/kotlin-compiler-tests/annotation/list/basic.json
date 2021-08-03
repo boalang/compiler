@@ -1,0 +1,112 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "abc",
+                     "annotation_values": [
+                        {
+                           "kind": "TEMPLATE",
+                           "literal": "\"\""
+                        }
+                     ]
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "cde"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "foo",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "abc"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "cde"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "private"
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "PAREN",
+                                       "expressions": [
+                                          {
+                                             "kind": "OP_ADD",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "3",
+                                                   "modifiers": [
+                                                      {
+                                                         "kind": "ANNOTATION",
+                                                         "annotation_name": "abc"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "suppress",
+                                             "annotation_values": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "\"a\""
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "type_declarations": [
+                              {
+                                 "name": "Local",
+                                 "kind": "CLASS",
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "data"
+                                    },
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "inline"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
