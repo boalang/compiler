@@ -2072,6 +2072,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		final StringBuilder sb = new StringBuilder();
 
 		sb.append(p.getVariance());
+		if (sb.length() > 0)
+			sb.append(" ");
 		sb.append(p.getName());
 
 		boolean first = true;
