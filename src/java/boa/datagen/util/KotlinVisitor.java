@@ -1199,9 +1199,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			break;
 		case "as?":
 		default:
-			// FIXME maybe different kind?
 			eb.setKind(Expression.ExpressionKind.CAST);
-			eb.setLiteral(expr.getOperationReference().getText());
+			eb.setSafe(true);
 			break;
 		}
 
