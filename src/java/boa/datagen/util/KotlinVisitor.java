@@ -945,6 +945,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
 		}
+
 		return eb;
 	}
 

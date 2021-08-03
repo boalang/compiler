@@ -416,7 +416,7 @@
 		<java classname="boa.test.datagen.KotlinToBoa" fork="true" failonerror="true">
 			<classpath refid="test.class.path" />
 			<arg value="${kotlin.code}" />
-                        <arg value="${kotlin.name}" />
+			<arg value="${kotlin.name}" />
 		</java>
 	</target>
 
@@ -424,7 +424,7 @@
 		<java classname="boa.test.datagen.DumpKotlin" fork="true" failonerror="true">
 			<classpath refid="test.class.path" />
 			<arg value="${kotlin.code}" />
-                        <arg value="${kotlin.name}" />
+			<arg value="${kotlin.name}" />
 		</java>
 	</target>
 
