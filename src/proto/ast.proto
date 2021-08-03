@@ -416,6 +416,7 @@ message Expression {
 	optional bool is_static = 27;
 	optional bool has_from = 28;
 	optional Method trait = 29;
+	optional bool safe = 30;
 }
 
 /** A single modifier */

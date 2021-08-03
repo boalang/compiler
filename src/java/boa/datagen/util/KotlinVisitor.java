@@ -955,7 +955,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitSafeQualifiedExpression(final KtSafeQualifiedExpression expr, final Void v) {
-		final Expression.Builder eb = Expression.newBuilder();
+		Expression.Builder eb = Expression.newBuilder();
 
 		final KtExpression rcvr = expr.getReceiverExpression();
 		final KtExpression sel = expr.getSelectorExpression();
@@ -963,27 +963,21 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (sel instanceof KtCallExpression) {
 			final KtCallExpression call = (KtCallExpression)sel;
 
-			eb.setKind(Expression.ExpressionKind.METHODCALL);
+			expressions.push(new ArrayList<Expression>());
+			call.accept(this, v);
+			eb = Expression.newBuilder(expressions.pop().get(0));
 
 			expressions.push(new ArrayList<Expression>());
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
-			// eb.addExpressions(Expression.newBuilder()
-			// 		.setKind(Expression.ExpressionKind.VARACCESS)
-			// 		.setVariable(rcvr.getText() + "?")
-			// 		.build());
-			// FIXME need to add the '?' into this somehow
-
-			eb.setMethod(call.getCalleeExpression().getText());
-
-			if (call.getValueArgumentList() != null) {
-				expressions.push(new ArrayList<Expression>());
-				call.getValueArgumentList().accept(this, v);
-				eb.addAllMethodArgs(expressions.pop());
-			}
+			eb.setSafe(true);
 		} else {
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
-			eb.setVariable(expr.getText());
+			expressions.push(new ArrayList<Expression>());
+			rcvr.accept(this, v);
+			eb.addAllExpressions(expressions.pop());
+			eb.setSafe(true);
+			eb.setVariable(sel.getText());
 		}
 
 		expressions.peek().add(eb.build());
