@@ -1128,14 +1128,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	}
 
 	@Override
-	public Void visitScriptInitializer(final KtScriptInitializer n, final Void v) {
-		// FIXME Just check to make sure this holds
-		// Script initializers are statements within an existing block, thus we can simply visit their children
-		n.acceptChildren(this, v);
-		return null;
-	}
-
-	@Override
 	public Void visitClassInitializer(final KtClassInitializer n, final Void v) {
 		final Method.Builder mb = Method.newBuilder();
 
