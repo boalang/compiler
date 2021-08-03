@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2016, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *
@@ -21,7 +21,7 @@ package boa.test.datagen.java;
  * @author rdyer
  */
 public class JavaToBoa extends Java8BaseTest {
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 		for (final String s : args)
 			if (s.indexOf("class ") == -1)
 				System.out.println(parseWrapped(s));
