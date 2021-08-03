@@ -43,7 +43,7 @@
                      "name": "String",
                      "kind": "OTHER"
                   },
-                  "literal": "as?"
+                  "safe": true
                }
             },
             {
