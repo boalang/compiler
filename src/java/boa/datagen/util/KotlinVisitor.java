@@ -943,7 +943,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		} else {
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
-			eb.setVariable(expr.getText());
+			expressions.push(new ArrayList<Expression>());
+			rcvr.accept(this, v);
+			eb.addAllExpressions(expressions.pop());
+			eb.setVariable(sel.getText());
 		}
 
 		expressions.peek().add(eb.build());
