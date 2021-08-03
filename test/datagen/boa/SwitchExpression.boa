@@ -1,1 +1,64 @@
-This is a test for Switch Expression 
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "season",
+               "variable_type": {
+                  "name": "int",
+                  "kind": "PRIMITIVE"
+               },
+               "initializer": {
+                  "kind": "SWITCH",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "month"
+                     }
+                  ],
+                  "statements": [
+                     {
+                        "kind": "CASE",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "JAN"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "YIELD",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "1"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "CASE",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "APRIL"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "YIELD",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "2"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}

@@ -119,7 +119,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit node) {
-		System.out.println("This is from CompilationUnit and length is: " + node.getClass().toString());
+		System.out.println("============= This is from CompilationUnit ");
 //		for(int i = 0; i < node.getLength(); i ++) {
 //			System.out.println("This is length: " + i + "----------" + node.getNodeType());
 //		}
@@ -148,10 +148,8 @@ public class JavaVisitor extends ASTVisitor {
 		
 		System.out.println("types size is: " + node.types().size());
 		
-		for(int i = 0; i < node.types().size(); i ++) {
-			System.out.println("This type is: " + ((AbstractTypeDeclaration)node.types().get(i)).getName().toString());	
-		}
 		for (Object t : node.types()) {
+			System.out.println("************** Body from method declaration and the statements size is: " + (TypeDeclaration)t);
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 			((AbstractTypeDeclaration)t).accept(this);
 			for (boa.types.Ast.Declaration d : declarations.pop())
@@ -305,6 +303,7 @@ public class JavaVisitor extends ASTVisitor {
 				for (boa.types.Ast.Variable v : fields.pop())
 					b.addFields(v);
 			} else if (d instanceof MethodDeclaration) {
+				System.out.println("||||||||||||||||||||||||||||This is from TypeDeclaration and statements size is: " + ((MethodDeclaration) d));
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((MethodDeclaration) d).accept(this);
 				for (boa.types.Ast.Method m : methods.pop()){
@@ -1039,13 +1038,16 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(Block node) {
 		System.out.println("======================================================================");
-		System.out.println("************This is a single statement from block size is: " + node.statements().size());
+		System.out.println("************The statements size block is: " + node.statements().size());
 		System.out.println("======================================================================");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.statements()) {
+			if(s instanceof VariableDeclarationStatement) {
+				System.out.println("========================== Statement pass block ============================================");
+			}
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
 		}
 		for (boa.types.Ast.Statement st : statements.pop())
@@ -2286,7 +2288,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(YieldStatement node) {
 		setAstLevel(JLS13);
 		System.out.println("=============================================================");
-		System.out.println("Yield is visible: " + node.isImplicit());
+		System.out.println("Yield is implicit: " + node.isImplicit());
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.YIELD);
@@ -2302,7 +2304,7 @@ public class JavaVisitor extends ASTVisitor {
 		setAstLevel(JLS15);
 		
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.TEXTBLOCK);
 		eb.setLiteral(node.getEscapedValue());
 		expressions.push(eb.build());
 		

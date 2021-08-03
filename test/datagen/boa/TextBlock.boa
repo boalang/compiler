@@ -1,3 +1,22 @@
 {
-This is a test
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "jason",
+               "variable_type": {
+                  "name": "String",
+                  "fully_qualified_name": "java.lang.String",
+                  "kind": "CLASS"
+               },
+               "initializer": {
+                  "kind": "TEXTBLOCK",
+                  "literal": "\"\"\"\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"web\",\n\t\t\t\t\t\t\t\"version\": \"1.0.0\",\n\t\t\t\t\t\t\t\"dependencies\": \"AppA\"\n\t\t\t\t\t\t}\n\t\t\t\t\"\"\""
+               }
+            }
+         ]
+      }
+   ]
 }
