@@ -941,6 +941,17 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
 
+		} else if (sel instanceof KtLambdaExpression) {
+			final KtLambdaExpression lambda = (KtLambdaExpression)sel;
+
+			expressions.push(new ArrayList<Expression>());
+			lambda.accept(this, v);
+			eb = Expression.newBuilder(expressions.pop().get(0));
+
+			expressions.push(new ArrayList<Expression>());
+			rcvr.accept(this, v);
+			eb.addAllExpressions(expressions.pop());
+
 		} else {
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
 			expressions.push(new ArrayList<Expression>());
@@ -971,6 +982,19 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			rcvr.accept(this, v);
 			eb.addAllExpressions(expressions.pop());
 			eb.setSafe(true);
+		} else if (sel instanceof KtLambdaExpression) {
+			final KtLambdaExpression lambda = (KtLambdaExpression)sel;
+
+			expressions.push(new ArrayList<Expression>());
+			lambda.accept(this, v);
+			eb = Expression.newBuilder(expressions.pop().get(0));
+
+			expressions.push(new ArrayList<Expression>());
+			rcvr.accept(this, v);
+			eb.addAllExpressions(expressions.pop());
+
+			eb.setSafe(true);
+
 		} else {
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
 			expressions.push(new ArrayList<Expression>());
