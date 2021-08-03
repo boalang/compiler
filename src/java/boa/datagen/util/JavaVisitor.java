@@ -119,7 +119,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit node) {
-		System.out.println("============= This is from CompilationUnit ");
+//		System.out.println("============= This is from CompilationUnit ");
 //		for(int i = 0; i < node.getLength(); i ++) {
 //			System.out.println("This is length: " + i + "----------" + node.getNodeType());
 //		}
@@ -146,10 +146,10 @@ public class JavaVisitor extends ASTVisitor {
 			b.addImports(imp);
 		}
 		
-		System.out.println("types size is: " + node.types().size());
+//		System.out.println("types size is: " + node.types().size());
 		
 		for (Object t : node.types()) {
-			System.out.println("************** Body from method declaration and the statements size is: " + (TypeDeclaration)t);
+//			System.out.println("************** Body from method declaration and the statements size is: " + (TypeDeclaration)t);
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 			((AbstractTypeDeclaration)t).accept(this);
 			for (boa.types.Ast.Declaration d : declarations.pop())
@@ -303,7 +303,7 @@ public class JavaVisitor extends ASTVisitor {
 				for (boa.types.Ast.Variable v : fields.pop())
 					b.addFields(v);
 			} else if (d instanceof MethodDeclaration) {
-				System.out.println("||||||||||||||||||||||||||||This is from TypeDeclaration and statements size is: " + ((MethodDeclaration) d));
+//				System.out.println("||||||||||||||||||||||||||||This is from TypeDeclaration and statements size is: " + ((MethodDeclaration) d));
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((MethodDeclaration) d).accept(this);
 				for (boa.types.Ast.Method m : methods.pop()){
@@ -371,7 +371,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getIdentifier());
-		System.out.println("+++++++++++++++++++++++++ enum name is: " + node.getName().toString()+ "+++++++++++++++++++++++++");
+//		System.out.println("+++++++++++++++++++++++++ enum name is: " + node.getName().toString()+ "+++++++++++++++++++++++++");
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
@@ -1037,16 +1037,16 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Block node) {
-		System.out.println("======================================================================");
-		System.out.println("************The statements size block is: " + node.statements().size());
-		System.out.println("======================================================================");
+//		System.out.println("======================================================================");
+//		System.out.println("************The statements size block is: " + node.statements().size());
+//		System.out.println("======================================================================");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.statements()) {
 			if(s instanceof VariableDeclarationStatement) {
-				System.out.println("========================== Statement pass block ============================================");
+//				System.out.println("========================== Statement pass block ============================================");
 			}
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
 		}
@@ -2192,7 +2192,7 @@ public class JavaVisitor extends ASTVisitor {
 	//begin Java 9 ()
 	@Override
 	public boolean visit(ModuleDeclaration node) {
-		System.out.println("This is ModuleDeclaration node: " + node.getLength());
+//		System.out.println("This is ModuleDeclaration node: " + node.getLength());
 		setAstLevel(JLS9);
 		
 		b.setName(node.getName().getFullyQualifiedName());
@@ -2239,7 +2239,7 @@ public class JavaVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.SWITCH);
 		node.getExpression().accept(this);
-		System.out.println("++++++++++++Expression is: " + node.getExpression().toString() + "+++++++++++");
+//		System.out.println("++++++++++++Expression is: " + node.getExpression().toString() + "+++++++++++");
 		eb.addExpressions(expressions.pop());
 		
 
@@ -2287,8 +2287,8 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(YieldStatement node) {
 		setAstLevel(JLS13);
-		System.out.println("=============================================================");
-		System.out.println("Yield is implicit: " + node.isImplicit());
+//		System.out.println("=============================================================");
+//		System.out.println("Yield is implicit: " + node.isImplicit());
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.YIELD);
@@ -2318,7 +2318,7 @@ public class JavaVisitor extends ASTVisitor {
 		
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getIdentifier());
-		System.out.println("+++++++++++++++++++++++++ record name is: " + node.getName().toString()+ "+++++++++++++++++++++++++");
+//		System.out.println("+++++++++++++++++++++++++ record name is: " + node.getName().toString()+ "+++++++++++++++++++++++++");
 		b.setKind(boa.types.Ast.TypeKind.IMMUTABLE);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
