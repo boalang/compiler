@@ -10,3 +10,6 @@ val foo.foo: Int
 
 val foo.bad: String
   get
+
+val <S> foo<S>.bar
+  get() = 3

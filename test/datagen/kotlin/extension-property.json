@@ -133,63 +133,15 @@
                   "name": "String",
                   "kind": "OTHER"
                }
-            }
-         ],
-         "variables": [
-            {
-               "name": "foo.baz",
-               "variable_type": {
-                  "name": "Int",
-                  "kind": "OTHER"
-               },
-               "modifiers": [
-                  {
-                     "kind": "FINAL"
-                  }
-               ]
             },
             {
-               "name": "foo.bar",
-               "variable_type": {
-                  "name": "Int",
-                  "kind": "OTHER"
-               },
-               "modifiers": [
-                  {
-                     "kind": "FINAL"
-                  },
-                  {
-                     "kind": "VISIBILITY",
-                     "visibility": "PUBLIC"
-                  }
-               ]
-            },
-            {
-               "name": "foo.foo",
-               "variable_type": {
-                  "name": "Int",
-                  "kind": "OTHER"
-               },
-               "modifiers": [
-                  {
-                     "kind": "FINAL"
-                  }
-               ]
-            },
-            {
-               "name": "foo.bad",
-               "variable_type": {
-                  "name": "String",
-                  "kind": "OTHER"
-               },
-               "modifiers": [
-                  {
-                     "kind": "FINAL"
-                  }
-               ]
+               "name": "foo<S>.bar.<get>",
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "3"
+               }
             }
          ]
       }
    ]
 }
-

@@ -1689,11 +1689,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		final KtTypeReference typeRef = prop.getTypeReference();
 		final KtPropertyDelegate propDelegate = prop.getDelegate();
-		if ((typeRef != null) && (propDelegate != null)) {
+		if (propDelegate != null) {
 			final Type.Builder tb = Type.newBuilder();
 
 			tb.setKind(TypeKind.DELEGATED);
-			tb.setName(typeRef.getText());
+			if (typeRef != null)
+				tb.setName(typeRef.getText());
 
 			if (propDelegate.getExpression() != null) {
 				expressions.push(new ArrayList<Expression>());
@@ -1704,19 +1705,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			vb.setVariableType(tb.build());
 		} else if (typeRef != null) {
 			vb.setVariableType(typeFromTypeRef(typeRef));
-		} else if (propDelegate != null) {
-			final Type.Builder tb = Type.newBuilder();
-
-			tb.setKind(TypeKind.DELEGATED);
-			// tb.setName(typeRef.getText());
-
-			if (propDelegate.getExpression() != null) {
-				expressions.push(new ArrayList<Expression>());
-				propDelegate.getExpression().accept(this, v);
-				tb.setDelegate(expressions.pop().get(0));
-			}
-
-			vb.setVariableType(tb.build());
 		}
 
 		modifiers.push(new ArrayList<Modifier>());
