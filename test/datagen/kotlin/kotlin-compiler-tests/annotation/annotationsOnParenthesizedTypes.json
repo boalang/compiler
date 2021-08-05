@@ -1,0 +1,173 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "receiverArgument",
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "B<(@A C)>",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "parameter",
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "(@A C)",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "parameterArgument",
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "B<(@A C)>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "returnValue",
+               "return_type": {
+                  "name": "(@A C)",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "returnTypeParameterValue",
+               "return_type": {
+                  "name": "(@A T)",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ]
+            },
+            {
+               "name": "returnArgument",
+               "return_type": {
+                  "name": "B<(@A C)>",
+                  "kind": "OTHER"
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "lambdaType",
+               "variable_type": {
+                  "name": "(@A() (() -> C))",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "lambdaParameter",
+               "variable_type": {
+                  "name": "((@A C)) -> C",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "lambdaParameterNP",
+               "variable_type": {
+                  "name": "(@A C) -> C",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "lambdaReturnValue",
+               "variable_type": {
+                  "name": "() -> (@A C)",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "lambdaReceiver",
+               "variable_type": {
+                  "name": "(@A C).() -> C",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "lambdaParameterNP",
+               "variable_type": {
+                  "name": "(@A C) -> C",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -1,0 +1,234 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "i",
+                     "variable_type": {
+                        "name": "@a Int?",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "l",
+                     "variable_type": {
+                        "name": "List<@a Int?>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "bar",
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@a Int?",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo1",
+               "arguments": [
+                  {
+                     "name": "i",
+                     "variable_type": {
+                        "name": "@b(1) Int?",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo1",
+               "arguments": [
+                  {
+                     "name": "l",
+                     "variable_type": {
+                        "name": "List<@b(1) Int?>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "bar1",
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@b(1) Int?",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo2",
+               "arguments": [
+                  {
+                     "name": "i",
+                     "variable_type": {
+                        "name": "@[a b(1)] Int?",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo2",
+               "arguments": [
+                  {
+                     "name": "l",
+                     "variable_type": {
+                        "name": "List<@[a b(1)] Int?>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "bar2",
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@[a b(1)] Int?",
+                  "kind": "OTHER"
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "baz",
+               "variable_type": {
+                  "name": "@a Int?",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "baz1",
+               "variable_type": {
+                  "name": "@b(1) Int?",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "baz2",
+               "variable_type": {
+                  "name": "@[a b(1)] Int?",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
