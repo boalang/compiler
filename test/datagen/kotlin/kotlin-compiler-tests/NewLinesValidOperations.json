@@ -1,0 +1,164 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "test",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "str",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "TEMPLATE",
+                                          "literal": "\"\""
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "str"
+                                    }
+                                 ],
+                                 "variable": "length"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "str"
+                                    }
+                                 ],
+                                 "variable": "length",
+                                 "safe": true
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "CAST",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "str"
+                                    }
+                                 ],
+                                 "new_type": {
+                                    "name": "String",
+                                    "kind": "OTHER"
+                                 }
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "CAST",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "str"
+                                    }
+                                 ],
+                                 "new_type": {
+                                    "name": "String",
+                                    "kind": "OTHER"
+                                 },
+                                 "safe": true
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ELVIS",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "str"
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "foo"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LOGICAL_OR",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "true"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "false"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LOGICAL_AND",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "false"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "true"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
