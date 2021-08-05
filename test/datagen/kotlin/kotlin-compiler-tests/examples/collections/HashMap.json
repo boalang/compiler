@@ -1,0 +1,870 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "IEquality",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "equals",
+                     "return_type": {
+                        "name": "Boolean",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "other",
+                           "variable_type": {
+                              "name": "Any",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "PAREN",
+                              "expressions": [
+                                 {
+                                    "kind": "CAST",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "this"
+                                       }
+                                    ],
+                                    "new_type": {
+                                       "name": "java.lang.Object",
+                                       "kind": "OTHER"
+                                    }
+                                 }
+                              ]
+                           }
+                        ],
+                        "method": "equals",
+                        "method_args": [
+                           {
+                              "kind": "CAST",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "other"
+                                 }
+                              ],
+                              "new_type": {
+                                 "name": "java.lang.Object",
+                                 "kind": "OTHER"
+                              }
+                           }
+                        ]
+                     }
+                  }
+               ]
+            },
+            {
+               "name": "IHashable",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IEquality",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "hashCode.<get>",
+                     "return_type": {
+                        "name": "Integer",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "PAREN",
+                              "expressions": [
+                                 {
+                                    "kind": "CAST",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "this"
+                                       }
+                                    ],
+                                    "new_type": {
+                                       "name": "java.lang.Object",
+                                       "kind": "OTHER"
+                                    }
+                                 }
+                              ]
+                           }
+                        ],
+                        "method": "hashCode"
+                     }
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "hashCode",
+                     "variable_type": {
+                        "name": "Integer",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "IMap",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "K",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "V",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "get",
+                     "return_type": {
+                        "name": "V",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "key",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "set",
+                     "return_type": {
+                        "name": "V",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "key",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "value",
+                           "variable_type": {
+                              "name": "V",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "remove",
+                     "return_type": {
+                        "name": "V",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "key",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "containsKey",
+                     "return_type": {
+                        "name": "Boolean",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "key",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "HashableWrapper",
+               "kind": "CLASS",
+               "parents": [
+                  {
+                     "name": "IHashable",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "obj",
+                           "variable_type": {
+                              "name": "Any",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "obj",
+                     "variable_type": {
+                        "name": "Any",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "IHashingStrategy",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "K",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "equals",
+                     "return_type": {
+                        "name": "Boolean",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "b",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "hashCode",
+                     "return_type": {
+                        "name": "Integer",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "DefaultHashingStrategy",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "in K : IHashable",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IHashingStrategy<K>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "equals",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Boolean",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "b",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           }
+                        ],
+                        "method": "equals",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "b"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "hashCode",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Integer",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "a"
+                           }
+                        ],
+                        "variable": "hashCode"
+                     }
+                  }
+               ]
+            },
+            {
+               "name": "JavaObjectHashingStrategy",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "K",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IHashingStrategy<K>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "equals",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Boolean",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "b",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "METHODCALL",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "a"
+                                 }
+                              ],
+                              "method": "hashable"
+                           }
+                        ],
+                        "method": "equals",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "b"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "hashCode",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Integer",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "METHODCALL",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "a"
+                                 }
+                              ],
+                              "method": "hashable"
+                           }
+                        ],
+                        "variable": "hashCode"
+                     }
+                  }
+               ]
+            },
+            {
+               "name": "HashMap",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "K",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "V",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IMap<K, V>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "hashCode",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "inline"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "METHODCALL",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "a"
+                                 }
+                              ],
+                              "method": "hashable"
+                           }
+                        ],
+                        "variable": "hashCode"
+                     }
+                  },
+                  {
+                     "name": "equals",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "inline"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "b",
+                           "variable_type": {
+                              "name": "K",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "EQ",
+                        "expressions": [
+                           {
+                              "kind": "METHODCALL",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "a"
+                                 }
+                              ],
+                              "method": "hashable"
+                           },
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "b"
+                           }
+                        ]
+                     }
+                  }
+               ]
+            },
+            {
+               "name": "StrategyHashMap",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "K",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "V",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IMap<K, V>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "hashingStrategy",
+                           "variable_type": {
+                              "name": "IHashingStrategy<K>",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "hashable",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "inline"
+                  }
+               ],
+               "return_type": {
+                  "name": "HashableWrapper",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "METHODCALL",
+                  "method": "HashableWrapper",
+                  "method_args": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "this"
+                     }
+                  ]
+               },
+               "reciever_type": {
+                  "name": "Any",
+                  "kind": "OTHER"
+               }
+            }
+         ]
+      }
+   ]
+}
+
