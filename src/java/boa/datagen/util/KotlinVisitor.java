@@ -1742,7 +1742,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 					.setKind(Expression.ExpressionKind.VARDECL)
 					.addVariableDecls(vb.build())
 					.build());
-		else
+		else if (prop.getReceiverTypeReference() == null)
 			fields.peek().add(vb.build());
 
 		return null;

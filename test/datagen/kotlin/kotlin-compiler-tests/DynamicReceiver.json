@@ -48,30 +48,6 @@
          ],
          "variables": [
             {
-               "name": "dynamic.foo",
-               "variable_type": {
-                  "name": "Int",
-                  "kind": "OTHER"
-               },
-               "modifiers": [
-                  {
-                     "kind": "FINAL"
-                  }
-               ]
-            },
-            {
-               "name": "dynamic?.foo",
-               "variable_type": {
-                  "name": "Int",
-                  "kind": "OTHER"
-               },
-               "modifiers": [
-                  {
-                     "kind": "FINAL"
-                  }
-               ]
-            },
-            {
                "name": "foo",
                "variable_type": {
                   "name": "dynamic.() -> Unit",

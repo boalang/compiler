@@ -503,22 +503,7 @@
                   ]
                }
             }
-         ],
-         "variables": [
-            {
-               "name": "Int.isOdd",
-               "variable_type": {
-                  "name": "Boolean",
-                  "kind": "OTHER"
-               },
-               "modifiers": [
-                  {
-                     "kind": "FINAL"
-                  }
-               ]
-            }
          ]
       }
    ]
 }
-
