@@ -11,7 +11,7 @@
                   "generic_parameters": [
                      {
                         "name": "K",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -30,7 +30,7 @@
                   "generic_parameters": [
                      {
                         "name": "T",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -45,4 +45,3 @@
       }
    ]
 }
-

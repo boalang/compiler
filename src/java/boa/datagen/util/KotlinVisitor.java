@@ -385,8 +385,8 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			ta.getModifierList().accept(this, v);
 
 		types.push(new ArrayList<Type>());
-		for (final KtTypeParameter param : ta.getTypeParameters())
-			types.peek().add(typeFromTypeParameter(param));
+		for (final KtTypeParameter p : ta.getTypeParameters())
+			types.peek().add(buildGenericParam(p, ta.getTypeConstraints()));
 
 		sb.setTypeDeclaration(Declaration.newBuilder()
 				.setKind(TypeKind.ALIAS)
@@ -395,10 +395,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 				.addAllModifiers(modifiers.pop())
 				.addAllGenericParameters(types.pop())
 				.build());
-
-		// TODO type constraints
-		if (ta.getTypeConstraintList() != null)
-			ta.getTypeConstraintList().accept(this, v);
 
 		statements.peek().add(sb.build());
 		return null;
@@ -2033,17 +2029,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			tb.setKind(TypeKind.DYNAMIC);
 		else
 			tb.setKind(kind);
-		return tb.build();
-	}
-
-	private Type typeFromTypeParameter(final KtTypeParameter type) {
-		return typeFromTypeParameter(type, TypeKind.OTHER);
-	}
-
-	private Type typeFromTypeParameter(final KtTypeParameter type, TypeKind kind) {
-		final Type.Builder tb = Type.newBuilder();
-		tb.setName(type.getText());
-		tb.setKind(kind);
 		return tb.build();
 	}
 
