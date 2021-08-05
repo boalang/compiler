@@ -1,0 +1,77 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "main",
+               "arguments": [
+                  {
+                     "name": "args",
+                     "variable_type": {
+                        "name": "Array<String>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "NEW",
+                                       "new_type": {
+                                          "name": "Thread",
+                                          "kind": "CLASS"
+                                       },
+                                       "anon_declaration": {
+                                          "name": "",
+                                          "kind": "SINGLETON",
+                                          "parents": [
+                                             {
+                                                "name": "Thread",
+                                                "kind": "CLASS"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ],
+                                 "method": "run"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "NEW",
+                                 "anon_declaration": {
+                                    "name": "",
+                                    "kind": "SINGLETON"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

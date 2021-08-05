@@ -1,0 +1,875 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "a",
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "variable": "Unit"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "10"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "0x10"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "'1'"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "\"dsf\""
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "\"dsf\""
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "10.0"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "10"
+                           }
+                        ],
+                        "variable": "dbl"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "10"
+                           }
+                        ],
+                        "variable": "flt"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "10.0"
+                           }
+                        ],
+                        "variable": "dbl"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "10"
+                           }
+                        ],
+                        "variable": "lng"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "true"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "false"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "null"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "variable": "this"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "variable": "super<sdf>"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "10"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "method": "Triple",
+                        "method_args": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "10"
+                           },
+                           {
+                              "kind": "LITERAL",
+                              "literal": "\"A\""
+                           },
+                           {
+                              "kind": "LITERAL",
+                              "literal": "0xf"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "method": "Foo",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "bar"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "generic_parameters": [
+                           {
+                              "name": "A",
+                              "kind": "GENERIC"
+                           }
+                        ],
+                        "method": "Foo",
+                        "method_args": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "bar"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "method": "Foo"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "generic_parameters": [
+                           {
+                              "name": "bar",
+                              "kind": "GENERIC"
+                           }
+                        ],
+                        "method": "Foo"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "NEW",
+                        "new_type": {
+                           "name": "Foo",
+                           "kind": "CLASS"
+                        },
+                        "anon_declaration": {
+                           "name": "",
+                           "kind": "SINGLETON",
+                           "parents": [
+                              {
+                                 "name": "Foo",
+                                 "kind": "CLASS"
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "THROW",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "Foo"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "RETURN",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "10"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "BREAK"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "BREAK",
+                              "expressions": [
+                                 {
+                                    "kind": "LABEL",
+                                    "literal": "la"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "CONTINUE"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "STATEMENT",
+                        "statements": [
+                           {
+                              "kind": "CONTINUE",
+                              "expressions": [
+                                 {
+                                    "kind": "LABEL",
+                                    "literal": "la"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "10"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "10"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "10"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "10"
+                     }
+                  },
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "0xffffffff"
+                           }
+                        ],
+                        "variable": "lng"
+                     }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "10"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "RETURN"
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "10"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "BREAK"
+                        },
+                        {
+                           "kind": "LABEL",
+                           "expressions": [
+                              {
+                                 "kind": "LABEL",
+                                 "literal": "la"
+                              },
+                              {
+                                 "kind": "STATEMENT",
+                                 "statements": [
+                                    {
+                                       "kind": "BREAK",
+                                       "expressions": [
+                                          {
+                                             "kind": "LABEL",
+                                             "literal": "la"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "CONTINUE"
+                        },
+                        {
+                           "kind": "LABEL",
+                           "expressions": [
+                              {
+                                 "kind": "LABEL",
+                                 "literal": "la"
+                              },
+                              {
+                                 "kind": "STATEMENT",
+                                 "statements": [
+                                    {
+                                       "kind": "CONTINUE",
+                                       "expressions": [
+                                          {
+                                             "kind": "LABEL",
+                                             "literal": "la"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
