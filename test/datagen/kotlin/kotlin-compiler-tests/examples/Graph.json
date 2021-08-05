@@ -355,23 +355,33 @@
                               "method_args": [
                                  {
                                     "kind": "LAMBDA",
-                                    "expressions": [
+                                    "statements": [
                                        {
-                                          "kind": "EQ",
-                                          "expressions": [
+                                          "kind": "BLOCK",
+                                          "statements": [
                                              {
-                                                "kind": "VARACCESS",
+                                                "kind": "EXPRESSION",
                                                 "expressions": [
                                                    {
-                                                      "kind": "VARACCESS",
-                                                      "variable": "it"
+                                                      "kind": "EQ",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "VARACCESS",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "it"
+                                                               }
+                                                            ],
+                                                            "variable": "from"
+                                                         },
+                                                         {
+                                                            "kind": "VARACCESS",
+                                                            "variable": "v"
+                                                         }
+                                                      ]
                                                    }
-                                                ],
-                                                "variable": "from"
-                                             },
-                                             {
-                                                "kind": "VARACCESS",
-                                                "variable": "v"
+                                                ]
                                              }
                                           ]
                                        }
@@ -384,170 +394,31 @@
                         "method_args": [
                            {
                               "kind": "LAMBDA",
-                              "expressions": [
+                              "statements": [
                                  {
-                                    "kind": "VARACCESS",
-                                    "expressions": [
+                                    "kind": "BLOCK",
+                                    "statements": [
                                        {
-                                          "kind": "VARACCESS",
-                                          "variable": "it"
+                                          "kind": "EXPRESSION",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "it"
+                                                   }
+                                                ],
+                                                "variable": "to"
+                                             }
+                                          ]
                                        }
-                                    ],
-                                    "variable": "to"
+                                    ]
                                  }
                               ]
                            }
                         ]
                      }
-                  },
-                  {
-                     "name": "dfs",
-                     "arguments": [
-                        {
-                           "name": "current",
-                           "variable_type": {
-                              "name": "Vertex<V>",
-                              "kind": "OTHER"
-                           },
-                           "modifiers": [
-                              {
-                                 "kind": "IMPLICIT"
-                              },
-                              {
-                                 "kind": "FINAL"
-                              }
-                           ]
-                        },
-                        {
-                           "name": "visited",
-                           "variable_type": {
-                              "name": "ISet<Vertex<V>>",
-                              "kind": "OTHER"
-                           },
-                           "modifiers": [
-                              {
-                                 "kind": "IMPLICIT"
-                              },
-                              {
-                                 "kind": "FINAL"
-                              }
-                           ]
-                        },
-                        {
-                           "name": "handler",
-                           "variable_type": {
-                              "name": "(V) -> Unit",
-                              "kind": "OTHER"
-                           },
-                           "modifiers": [
-                              {
-                                 "kind": "IMPLICIT"
-                              },
-                              {
-                                 "kind": "FINAL"
-                              }
-                           ]
-                        }
-                     ],
-                     "statements": [
-                        {
-                           "kind": "BLOCK",
-                           "statements": [
-                              {
-                                 "kind": "IF",
-                                 "statements": [
-                                    {
-                                       "kind": "RETURN"
-                                    }
-                                 ],
-                                 "conditions": [
-                                    {
-                                       "kind": "LOGICAL_NOT",
-                                       "expressions": [
-                                          {
-                                             "kind": "METHODCALL",
-                                             "expressions": [
-                                                {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "visited"
-                                                }
-                                             ],
-                                             "method": "add",
-                                             "method_args": [
-                                                {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "current"
-                                                }
-                                             ]
-                                          }
-                                       ]
-                                    }
-                                 ]
-                              },
-                              {
-                                 "kind": "EXPRESSION",
-                                 "expressions": [
-                                    {
-                                       "kind": "METHODCALL",
-                                       "method": "handler",
-                                       "method_args": [
-                                          {
-                                             "kind": "VARACCESS",
-                                             "variable": "current"
-                                          }
-                                       ]
-                                    }
-                                 ]
-                              },
-                              {
-                                 "kind": "EXPRESSION",
-                                 "expressions": [
-                                    {
-                                       "kind": "METHODCALL",
-                                       "expressions": [
-                                          {
-                                             "kind": "METHODCALL",
-                                             "method": "neighbours",
-                                             "method_args": [
-                                                {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "current"
-                                                }
-                                             ]
-                                          }
-                                       ],
-                                       "method": "foreach",
-                                       "method_args": [
-                                          {
-                                             "kind": "LAMBDA",
-                                             "expressions": [
-                                                {
-                                                   "kind": "METHODCALL",
-                                                   "method": "dfs",
-                                                   "method_args": [
-                                                      {
-                                                         "kind": "VARACCESS",
-                                                         "variable": "it"
-                                                      },
-                                                      {
-                                                         "kind": "VARACCESS",
-                                                         "variable": "visited"
-                                                      },
-                                                      {
-                                                         "kind": "VARACCESS",
-                                                         "variable": "handler"
-                                                      }
-                                                   ]
-                                                }
-                                             ]
-                                          }
-                                       ]
-                                    }
-                                 ]
-                              }
-                           ]
-                        }
-                     ]
                   },
                   {
                      "name": "dfs",
@@ -615,22 +486,193 @@
                                        "method_args": [
                                           {
                                              "kind": "LAMBDA",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "METHODCALL",
+                                                               "method": "dfs",
+                                                               "method_args": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "it"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "visited"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "handler"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "methods": [
+                              {
+                                 "name": "dfs",
+                                 "arguments": [
+                                    {
+                                       "name": "current",
+                                       "variable_type": {
+                                          "name": "Vertex<V>",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "visited",
+                                       "variable_type": {
+                                          "name": "ISet<Vertex<V>>",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "handler",
+                                       "variable_type": {
+                                          "name": "(V) -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "IF",
+                                             "statements": [
+                                                {
+                                                   "kind": "RETURN"
+                                                }
+                                             ],
+                                             "conditions": [
+                                                {
+                                                   "kind": "LOGICAL_NOT",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "visited"
+                                                            }
+                                                         ],
+                                                         "method": "add",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "current"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
                                              "expressions": [
                                                 {
                                                    "kind": "METHODCALL",
-                                                   "method": "dfs",
+                                                   "method": "handler",
                                                    "method_args": [
                                                       {
                                                          "kind": "VARACCESS",
-                                                         "variable": "it"
-                                                      },
+                                                         "variable": "current"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "expressions": [
                                                       {
-                                                         "kind": "VARACCESS",
-                                                         "variable": "visited"
-                                                      },
+                                                         "kind": "METHODCALL",
+                                                         "method": "neighbours",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "current"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "method": "foreach",
+                                                   "method_args": [
                                                       {
-                                                         "kind": "VARACCESS",
-                                                         "variable": "handler"
+                                                         "kind": "LAMBDA",
+                                                         "statements": [
+                                                            {
+                                                               "kind": "BLOCK",
+                                                               "statements": [
+                                                                  {
+                                                                     "kind": "EXPRESSION",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "METHODCALL",
+                                                                           "method": "dfs",
+                                                                           "method_args": [
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "it"
+                                                                              },
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "visited"
+                                                                              },
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "handler"
+                                                                              }
+                                                                           ]
+                                                                        }
+                                                                     ]
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
                                                       }
                                                    ]
                                                 }
@@ -718,25 +760,15 @@
                                        "method_args": [
                                           {
                                              "kind": "LAMBDA",
-                                             "expressions": [
+                                             "statements": [
                                                 {
-                                                   "kind": "STATEMENT",
+                                                   "kind": "BLOCK",
                                                    "statements": [
                                                       {
                                                          "kind": "IF",
                                                          "statements": [
                                                             {
-                                                               "kind": "EXPRESSION",
-                                                               "expressions": [
-                                                                  {
-                                                                     "kind": "STATEMENT",
-                                                                     "statements": [
-                                                                        {
-                                                                           "kind": "CONTINUE"
-                                                                        }
-                                                                     ]
-                                                                  }
-                                                               ]
+                                                               "kind": "CONTINUE"
                                                             }
                                                          ],
                                                          "conditions": [
@@ -762,28 +794,28 @@
                                                                ]
                                                             }
                                                          ]
-                                                      }
-                                                   ]
-                                                },
-                                                {
-                                                   "kind": "METHODCALL",
-                                                   "expressions": [
+                                                      },
                                                       {
-                                                         "kind": "VARACCESS",
-                                                         "variable": "pending"
-                                                      }
-                                                   ],
-                                                   "method": "push",
-                                                   "method_args": [
-                                                      {
-                                                         "kind": "VARACCESS",
-                                                         "variable": "it"
-                                                      }
-                                                   ]
-                                                },
-                                                {
-                                                   "kind": "STATEMENT",
-                                                   "statements": [
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "METHODCALL",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "pending"
+                                                                  }
+                                                               ],
+                                                               "method": "push",
+                                                               "method_args": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "it"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      },
                                                       {
                                                          "kind": "WHILE",
                                                          "statements": [
@@ -854,9 +886,22 @@
                                                                            "method_args": [
                                                                               {
                                                                                  "kind": "LAMBDA",
-                                                                                 "expressions": [
+                                                                                 "variable_decls": [
                                                                                     {
-                                                                                       "kind": "STATEMENT",
+                                                                                       "name": "n",
+                                                                                       "modifiers": [
+                                                                                          {
+                                                                                             "kind": "IMPLICIT"
+                                                                                          },
+                                                                                          {
+                                                                                             "kind": "FINAL"
+                                                                                          }
+                                                                                       ]
+                                                                                    }
+                                                                                 ],
+                                                                                 "statements": [
+                                                                                    {
+                                                                                       "kind": "BLOCK",
                                                                                        "statements": [
                                                                                           {
                                                                                              "kind": "IF",
@@ -906,19 +951,6 @@
                                                                                                    ]
                                                                                                 }
                                                                                              ]
-                                                                                          }
-                                                                                       ]
-                                                                                    }
-                                                                                 ],
-                                                                                 "variable_decls": [
-                                                                                    {
-                                                                                       "name": "n",
-                                                                                       "modifiers": [
-                                                                                          {
-                                                                                             "kind": "IMPLICIT"
-                                                                                          },
-                                                                                          {
-                                                                                             "kind": "FINAL"
                                                                                           }
                                                                                        ]
                                                                                     }

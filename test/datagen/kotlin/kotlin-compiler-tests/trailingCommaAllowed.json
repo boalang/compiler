@@ -1,0 +1,1316 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "y",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<init>",
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "Comparable<Comparable<Number>>",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "y",
+                           "variable_type": {
+                              "name": "Iterable<Iterable<Number>>",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "x.<get>",
+                     "return_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "LITERAL",
+                        "literal": "10"
+                     }
+                  },
+                  {
+                     "name": "x.<set>",
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "value",
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "x.<get>",
+                     "return_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "LITERAL",
+                        "literal": "10"
+                     }
+                  },
+                  {
+                     "name": "x.<set>",
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "value",
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "x.<get>",
+                     "return_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "LITERAL",
+                        "literal": "10"
+                     }
+                  },
+                  {
+                     "name": "x.<set>",
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "value",
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "y",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     }
+                  }
+               ]
+            },
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "T1 : Number",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "T2 : Iterable<Iterable<Iterable<Number>>>",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "T3 : Comparable<Comparable<Comparable<Number>>>",
+                     "kind": "GENERIC"
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "y",
+                     "variable_type": {
+                        "name": "Number",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "expression": {
+                  "kind": "METHODCALL",
+                  "method": "listOf",
+                  "method_args": [
+                     {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "foo"
+                                 }
+                              ],
+                              "variable": "bar"
+                           }
+                        ],
+                        "method": "something"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "\"foo bar something\""
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "ARRAYACCESS",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             },
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "1"
+                                             },
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "3"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "y",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "ARRAYACCESS",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             },
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "1"
+                                             },
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "3"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "main",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LAMBDA",
+                                          "variable_decls": [
+                                             {
+                                                "name": "x",
+                                                "variable_type": {
+                                                   "name": "Comparable<Comparable<Number>>",
+                                                   "kind": "OTHER"
+                                                },
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "IMPLICIT"
+                                                   },
+                                                   {
+                                                      "kind": "FINAL"
+                                                   }
+                                                ]
+                                             },
+                                             {
+                                                "name": "y",
+                                                "variable_type": {
+                                                   "name": "Iterable<Iterable<Number>>",
+                                                   "kind": "OTHER"
+                                                },
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "IMPLICIT"
+                                                   },
+                                                   {
+                                                      "kind": "FINAL"
+                                                   }
+                                                ]
+                                             }
+                                          ],
+                                          "statements": [
+                                             {
+                                                "kind": "BLOCK",
+                                                "statements": [
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "METHODCALL",
+                                                            "method": "println",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "LITERAL",
+                                                                  "literal": "\"1\""
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "y",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LAMBDA",
+                                          "variable_decls": [
+                                             {
+                                                "name": "x",
+                                                "variable_type": {
+                                                   "name": "Comparable<Comparable<Number>>",
+                                                   "kind": "OTHER"
+                                                },
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "IMPLICIT"
+                                                   },
+                                                   {
+                                                      "kind": "FINAL"
+                                                   }
+                                                ]
+                                             },
+                                             {
+                                                "name": "y",
+                                                "variable_type": {
+                                                   "name": "Iterable<Iterable<Number>>",
+                                                   "kind": "OTHER"
+                                                },
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "IMPLICIT"
+                                                   },
+                                                   {
+                                                      "kind": "FINAL"
+                                                   }
+                                                ]
+                                             }
+                                          ],
+                                          "statements": [
+                                             {
+                                                "kind": "BLOCK",
+                                                "statements": [
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "METHODCALL",
+                                                            "method": "println",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "LITERAL",
+                                                                  "literal": "\"1\""
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "z",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LAMBDA",
+                                          "variable_decls": [
+                                             {
+                                                "name": "x",
+                                                "variable_type": {
+                                                   "name": "Comparable<Comparable<Number>>",
+                                                   "kind": "OTHER"
+                                                },
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "IMPLICIT"
+                                                   },
+                                                   {
+                                                      "kind": "FINAL"
+                                                   }
+                                                ]
+                                             },
+                                             {
+                                                "name": "y",
+                                                "variable_type": {
+                                                   "name": "Iterable<Iterable<Number>>",
+                                                   "kind": "OTHER"
+                                                },
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "IMPLICIT"
+                                                   },
+                                                   {
+                                                      "kind": "FINAL"
+                                                   }
+                                                ]
+                                             }
+                                          ],
+                                          "statements": [
+                                             {
+                                                "kind": "BLOCK",
+                                                "statements": [
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "METHODCALL",
+                                                            "method": "println",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "LITERAL",
+                                                                  "literal": "\"1\""
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Any",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "SWITCH",
+                        "statements": [
+                           {
+                              "kind": "CASE",
+                              "expressions": [
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "Comparable"
+                                       }
+                                    ],
+                                    "method": "Comparable::class"
+                                 },
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "Iterable"
+                                       }
+                                    ],
+                                    "method": "Iterable::class"
+                                 },
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "String"
+                                       }
+                                    ],
+                                    "method": "String::class"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "println",
+                                    "method_args": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "1"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "DEFAULT"
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "println",
+                                    "method_args": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "3"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "x"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Any",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "SWITCH",
+                        "statements": [
+                           {
+                              "kind": "CASE",
+                              "expressions": [
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "Comparable"
+                                       }
+                                    ],
+                                    "method": "Comparable::class"
+                                 },
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "Iterable"
+                                       }
+                                    ],
+                                    "method": "Iterable::class"
+                                 },
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "String"
+                                       }
+                                    ],
+                                    "method": "String::class"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "println",
+                                    "method_args": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "1"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "DEFAULT"
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "println",
+                                    "method_args": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "3"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "x"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Any",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "SWITCH",
+                        "statements": [
+                           {
+                              "kind": "CASE",
+                              "expressions": [
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "Comparable"
+                                       }
+                                    ],
+                                    "method": "Comparable::class"
+                                 },
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "Iterable"
+                                       }
+                                    ],
+                                    "method": "Iterable::class"
+                                 },
+                                 {
+                                    "kind": "METHOD_REFERENCE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "String"
+                                       }
+                                    ],
+                                    "method": "String::class"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "println",
+                                    "method_args": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "1"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "DEFAULT"
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "println",
+                                    "method_args": [
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "3"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "x"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "foo",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Anno",
+                     "annotation_values": [
+                        {
+                           "kind": "ARRAYINIT",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              },
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "2"
+                              },
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "3"
+                              },
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "4"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "main",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "Pair",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "Pair",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "generic_parameters": [
+                  {
+                     "name": "T1 : Comparable<Comparable<Number>>",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "T2 : Iterable<Iterable<Number>>",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "main",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "generic_parameters": [
+                                    {
+                                       "name": "Comparable<Comparable<Number>>",
+                                       "kind": "GENERIC"
+                                    },
+                                    {
+                                       "name": "Iterable<Iterable<Number>>",
+                                       "kind": "GENERIC"
+                                    }
+                                 ],
+                                 "method": "foo"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "main",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "variable_type": {
+                                          "name": "(\n        y: Comparable<Comparable<Number>>,\n        z: Iterable<Iterable<Number>>,\n        ) -> Int",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LAMBDA",
+                                          "statements": [
+                                             {
+                                                "kind": "BLOCK",
+                                                "statements": [
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "LITERAL",
+                                                            "literal": "10"
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "y",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "METHODCALL",
+                                          "method": "foo",
+                                          "method_args": [
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "1"
+                                             },
+                                             {
+                                                "kind": "LAMBDA",
+                                                "statements": [
+                                                   {
+                                                      "kind": "BLOCK"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "TRY",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "println",
+                                             "method_args": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CATCH",
+                                 "variable_declarations": [
+                                    {
+                                       "name": "e",
+                                       "variable_type": {
+                                          "name": "Exception",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "foo",
+               "variable_type": {
+                  "name": "(Int, Int) -> Int",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "VARDECL",
+                  "variable_decls": [
+                     {
+                        "name": "x",
+                        "modifiers": [
+                           {
+                              "kind": "IMPLICIT"
+                           },
+                           {
+                              "kind": "FINAL"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "foo",
+               "variable_type": {
+                  "name": "(Int, Int, Int) -> Int",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "VARDECL",
+                  "variable_decls": [
+                     {
+                        "name": "x",
+                        "modifiers": [
+                           {
+                              "kind": "IMPLICIT"
+                           },
+                           {
+                              "kind": "FINAL"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "y",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "z",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "y",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "z",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
