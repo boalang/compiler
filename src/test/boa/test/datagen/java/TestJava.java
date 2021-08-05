@@ -47,12 +47,14 @@ public class TestJava extends Java8BaseTest {
 	@Parameters(name = "{0}")
 	public static List<String[]> data() {
 		final String filename = System.getProperty("test.args");
-		final File f = new File(filename);
-		if (f.exists() && !f.isDirectory()) {
-			final List<String[]> data = new ArrayList<String[]>();
-			final boolean isWrapped = filename.startsWith(rootDirWrapped);
-			data.add(new String[] { f.getPath(), new File(f.getPath().replace(".java", ".json")).getPath(), isWrapped ? null : "" });
-			return data;
+		if (filename != null) {
+			final File f = new File(filename);
+			if (f.exists() && !f.isDirectory()) {
+				final List<String[]> data = new ArrayList<String[]>();
+				final boolean isWrapped = filename.startsWith(rootDirWrapped);
+				data.add(new String[] { f.getPath(), new File(f.getPath().replace(".java", ".json")).getPath(), isWrapped ? null : "" });
+				return data;
+			}
 		}
 
 		final List<String[]> data = getData(new File(rootDir), false);
