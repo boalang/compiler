@@ -45,6 +45,14 @@ public class TestKotlin extends KotlinBaseTest {
 
 	@Parameters(name = "{0}")
 	public static List<String[]> data() {
+		final String filename = System.getProperty("test.args");
+		final File f = new File(filename);
+		if (f.exists() && !f.isDirectory()) {
+			final List<String[]> data = new ArrayList<String[]>();
+			data.add(new String[] { f.getPath(), new File(f.getPath().replace(".kt", ".json")).getPath() });
+			return data;
+		}
+
 		final List<String[]> data = getData(new File(rootDir));
 		Collections.sort(data, new FileTestCaseComparator());
 		return data;
