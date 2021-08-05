@@ -76,8 +76,6 @@ public class SaveKotlinTestResult extends KotlinBaseTest {
 			FileIO.delete(new File(jsonFileName));
 			if (!content.equals(load(actualJsonFileName).trim()))
 				boa.datagen.util.FileIO.writeFileContents(new File(jsonFileName), content, false);
-			else
-				System.err.println("DELETE: " + jsonFileName);
 		}
 	}
 }
