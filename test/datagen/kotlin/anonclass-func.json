@@ -16,14 +16,24 @@
                   "method_args": [
                      {
                         "kind": "LAMBDA",
-                        "expressions": [
+                        "statements": [
                            {
-                              "kind": "METHODCALL",
-                              "method": "println",
-                              "method_args": [
+                              "kind": "BLOCK",
+                              "statements": [
                                  {
-                                    "kind": "LITERAL",
-                                    "literal": "\"clicked\""
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "METHODCALL",
+                                          "method": "println",
+                                          "method_args": [
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "\"clicked\""
+                                             }
+                                          ]
+                                       }
+                                    ]
                                  }
                               ]
                            }
@@ -36,3 +46,4 @@
       }
    ]
 }
+

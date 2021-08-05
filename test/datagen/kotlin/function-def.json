@@ -33,9 +33,9 @@
                "name": "f3",
                "expression": {
                   "kind": "LAMBDA",
-                  "expressions": [
+                  "statements": [
                      {
-                        "kind": "STATEMENT",
+                        "kind": "BLOCK",
                         "statements": [
                            {
                               "kind": "RETURN",
@@ -55,3 +55,4 @@
       }
    ]
 }
+

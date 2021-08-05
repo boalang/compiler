@@ -48,18 +48,6 @@
                ],
                "initializer": {
                   "kind": "LAMBDA",
-                  "expressions": [
-                     {
-                        "kind": "METHODCALL",
-                        "method": "something",
-                        "method_args": [
-                           {
-                              "kind": "VARACCESS",
-                              "variable": "t"
-                           }
-                        ]
-                     }
-                  ],
                   "variable_decls": [
                      {
                         "name": "t",
@@ -76,6 +64,28 @@
                            }
                         ]
                      }
+                  ],
+                  "statements": [
+                     {
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "something",
+                                    "method_args": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "t"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
                   ]
                }
             },
@@ -88,18 +98,6 @@
                ],
                "initializer": {
                   "kind": "LAMBDA",
-                  "expressions": [
-                     {
-                        "kind": "METHODCALL",
-                        "method": "something",
-                        "method_args": [
-                           {
-                              "kind": "VARACCESS",
-                              "variable": "t"
-                           }
-                        ]
-                     }
-                  ],
                   "variable_decls": [
                      {
                         "name": "t",
@@ -112,6 +110,28 @@
                            }
                         ]
                      }
+                  ],
+                  "statements": [
+                     {
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "something",
+                                    "method_args": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "t"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
                   ]
                }
             },
@@ -124,14 +144,24 @@
                ],
                "initializer": {
                   "kind": "LAMBDA",
-                  "expressions": [
+                  "statements": [
                      {
-                        "kind": "METHODCALL",
-                        "method": "something",
-                        "method_args": [
+                        "kind": "BLOCK",
+                        "statements": [
                            {
-                              "kind": "VARACCESS",
-                              "variable": "it"
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "something",
+                                    "method_args": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "it"
+                                       }
+                                    ]
+                                 }
+                              ]
                            }
                         ]
                      }
@@ -151,10 +181,20 @@
                ],
                "initializer": {
                   "kind": "LAMBDA",
-                  "expressions": [
+                  "statements": [
                      {
-                        "kind": "METHODCALL",
-                        "method": "X"
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "X"
+                                 }
+                              ]
+                           }
+                        ]
                      }
                   ]
                }
@@ -163,3 +203,4 @@
       }
    ]
 }
+

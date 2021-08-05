@@ -15,13 +15,28 @@
                   "method": "f",
                   "method_args": [
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      }
                   ]
                }
@@ -38,13 +53,28 @@
                   "method": "f",
                   "method_args": [
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      }
                   ]
                }
@@ -61,7 +91,12 @@
                   "method": "f",
                   "method_args": [
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      }
                   ]
                }
@@ -78,7 +113,12 @@
                   "method": "f",
                   "method_args": [
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      }
                   ]
                }
@@ -95,13 +135,28 @@
                   "method": "(f)",
                   "method_args": [
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      }
                   ]
                }
@@ -118,13 +173,28 @@
                   "method": "(f)",
                   "method_args": [
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      }
                   ]
                }
@@ -147,13 +217,28 @@
                   "method": "(f)",
                   "method_args": [
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      },
                      {
-                        "kind": "LAMBDA"
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
                      }
                   ]
                }
@@ -162,3 +247,4 @@
       }
    ]
 }
+

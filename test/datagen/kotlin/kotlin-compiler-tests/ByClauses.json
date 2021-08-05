@@ -119,7 +119,12 @@
                               "method": "a",
                               "method_args": [
                                  {
-                                    "kind": "LAMBDA"
+                                    "kind": "LAMBDA",
+                                    "statements": [
+                                       {
+                                          "kind": "BLOCK"
+                                       }
+                                    ]
                                  }
                               ]
                            }
@@ -159,7 +164,12 @@
                               "method": "a",
                               "method_args": [
                                  {
-                                    "kind": "LAMBDA"
+                                    "kind": "LAMBDA",
+                                    "statements": [
+                                       {
+                                          "kind": "BLOCK"
+                                       }
+                                    ]
                                  }
                               ]
                            }
@@ -196,7 +206,12 @@
                               "method": "a",
                               "method_args": [
                                  {
-                                    "kind": "LAMBDA"
+                                    "kind": "LAMBDA",
+                                    "statements": [
+                                       {
+                                          "kind": "BLOCK"
+                                       }
+                                    ]
                                  }
                               ]
                            }
@@ -237,7 +252,12 @@
                                     "method": "a",
                                     "method_args": [
                                        {
-                                          "kind": "LAMBDA"
+                                          "kind": "LAMBDA",
+                                          "statements": [
+                                             {
+                                                "kind": "BLOCK"
+                                             }
+                                          ]
                                        }
                                     ]
                                  }

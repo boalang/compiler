@@ -252,30 +252,40 @@
                                     "method_args": [
                                        {
                                           "kind": "LAMBDA",
-                                          "expressions": [
+                                          "statements": [
                                              {
-                                                "kind": "METHODCALL",
-                                                "method": "classpath",
-                                                "method_args": [
+                                                "kind": "BLOCK",
+                                                "statements": [
                                                    {
-                                                      "kind": "TEMPLATE",
+                                                      "kind": "EXPRESSION",
                                                       "expressions": [
                                                          {
-                                                            "kind": "TEMPLATE",
-                                                            "expressions": [
+                                                            "kind": "METHODCALL",
+                                                            "method": "classpath",
+                                                            "method_args": [
                                                                {
-                                                                  "kind": "VARACCESS",
-                                                                  "variable": "libs"
+                                                                  "kind": "TEMPLATE",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "TEMPLATE",
+                                                                        "expressions": [
+                                                                           {
+                                                                              "kind": "VARACCESS",
+                                                                              "variable": "libs"
+                                                                           }
+                                                                        ],
+                                                                        "literal": "\"$libs\""
+                                                                     },
+                                                                     {
+                                                                        "kind": "TEMPLATE",
+                                                                        "literal": "\"/groovy-...\""
+                                                                     }
+                                                                  ],
+                                                                  "literal": "\"$libs/groovy-...\""
                                                                }
-                                                            ],
-                                                            "literal": "\"$libs\""
-                                                         },
-                                                         {
-                                                            "kind": "TEMPLATE",
-                                                            "literal": "\"/groovy-...\""
+                                                            ]
                                                          }
-                                                      ],
-                                                      "literal": "\"$libs/groovy-...\""
+                                                      ]
                                                    }
                                                 ]
                                              }
@@ -301,55 +311,75 @@
                                     "method_args": [
                                        {
                                           "kind": "LAMBDA",
-                                          "expressions": [
+                                          "statements": [
                                              {
-                                                "kind": "METHODCALL",
-                                                "expressions": [
+                                                "kind": "BLOCK",
+                                                "statements": [
                                                    {
-                                                      "kind": "VARACCESS",
+                                                      "kind": "EXPRESSION",
                                                       "expressions": [
                                                          {
                                                             "kind": "METHODCALL",
-                                                            "method": "File",
-                                                            "method_args": [
-                                                               {
-                                                                  "kind": "TEMPLATE",
-                                                                  "expressions": [
-                                                                     {
-                                                                        "kind": "TEMPLATE",
-                                                                        "expressions": [
-                                                                           {
-                                                                              "kind": "VARACCESS",
-                                                                              "variable": "gantHome"
-                                                                           }
-                                                                        ],
-                                                                        "literal": "\"$gantHome\""
-                                                                     },
-                                                                     {
-                                                                        "kind": "TEMPLATE",
-                                                                        "literal": "\"/lib\""
-                                                                     }
-                                                                  ],
-                                                                  "literal": "\"$gantHome/lib\""
-                                                               }
-                                                            ]
-                                                         }
-                                                      ],
-                                                      "variable": "files"
-                                                   }
-                                                ],
-                                                "method": "each",
-                                                "method_args": [
-                                                   {
-                                                      "kind": "LAMBDA",
-                                                      "expressions": [
-                                                         {
-                                                            "kind": "METHODCALL",
-                                                            "method": "classpath",
-                                                            "method_args": [
+                                                            "expressions": [
                                                                {
                                                                   "kind": "VARACCESS",
-                                                                  "variable": "it"
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "METHODCALL",
+                                                                        "method": "File",
+                                                                        "method_args": [
+                                                                           {
+                                                                              "kind": "TEMPLATE",
+                                                                              "expressions": [
+                                                                                 {
+                                                                                    "kind": "TEMPLATE",
+                                                                                    "expressions": [
+                                                                                       {
+                                                                                          "kind": "VARACCESS",
+                                                                                          "variable": "gantHome"
+                                                                                       }
+                                                                                    ],
+                                                                                    "literal": "\"$gantHome\""
+                                                                                 },
+                                                                                 {
+                                                                                    "kind": "TEMPLATE",
+                                                                                    "literal": "\"/lib\""
+                                                                                 }
+                                                                              ],
+                                                                              "literal": "\"$gantHome/lib\""
+                                                                           }
+                                                                        ]
+                                                                     }
+                                                                  ],
+                                                                  "variable": "files"
+                                                               }
+                                                            ],
+                                                            "method": "each",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "LAMBDA",
+                                                                  "statements": [
+                                                                     {
+                                                                        "kind": "BLOCK",
+                                                                        "statements": [
+                                                                           {
+                                                                              "kind": "EXPRESSION",
+                                                                              "expressions": [
+                                                                                 {
+                                                                                    "kind": "METHODCALL",
+                                                                                    "method": "classpath",
+                                                                                    "method_args": [
+                                                                                       {
+                                                                                          "kind": "VARACCESS",
+                                                                                          "variable": "it"
+                                                                                       }
+                                                                                    ]
+                                                                                 }
+                                                                              ]
+                                                                           }
+                                                                        ]
+                                                                     }
+                                                                  ]
                                                                }
                                                             ]
                                                          }
@@ -379,61 +409,81 @@
                                     "method_args": [
                                        {
                                           "kind": "LAMBDA",
-                                          "expressions": [
+                                          "statements": [
                                              {
-                                                "kind": "ASSIGN",
-                                                "expressions": [
+                                                "kind": "BLOCK",
+                                                "statements": [
                                                    {
-                                                      "kind": "VARACCESS",
-                                                      "variable": "targetLevel"
-                                                   },
-                                                   {
-                                                      "kind": "LITERAL",
-                                                      "literal": "\"1.5\""
-                                                   }
-                                                ]
-                                             },
-                                             {
-                                                "kind": "METHODCALL",
-                                                "method": "classpath",
-                                                "method_args": [
-                                                   {
-                                                      "kind": "VARACCESS",
-                                                      "variable": "antLayout"
-                                                   },
-                                                   {
-                                                      "kind": "VARACCESS",
-                                                      "variable": "gant"
-                                                   },
-                                                   {
-                                                      "kind": "VARACCESS",
-                                                      "variable": "groovy"
-                                                   }
-                                                ]
-                                             },
-                                             {
-                                                "kind": "METHODCALL",
-                                                "method": "src",
-                                                "method_args": [
-                                                   {
-                                                      "kind": "TEMPLATE",
+                                                      "kind": "EXPRESSION",
                                                       "expressions": [
                                                          {
-                                                            "kind": "TEMPLATE",
+                                                            "kind": "ASSIGN",
                                                             "expressions": [
                                                                {
                                                                   "kind": "VARACCESS",
-                                                                  "variable": "projectHome"
+                                                                  "variable": "targetLevel"
+                                                               },
+                                                               {
+                                                                  "kind": "LITERAL",
+                                                                  "literal": "\"1.5\""
                                                                }
-                                                            ],
-                                                            "literal": "\"$projectHome\""
-                                                         },
-                                                         {
-                                                            "kind": "TEMPLATE",
-                                                            "literal": "\"/antLayout/src\""
+                                                            ]
                                                          }
-                                                      ],
-                                                      "literal": "\"$projectHome/antLayout/src\""
+                                                      ]
+                                                   },
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "METHODCALL",
+                                                            "method": "classpath",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "antLayout"
+                                                               },
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "gant"
+                                                               },
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "groovy"
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   },
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "METHODCALL",
+                                                            "method": "src",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "TEMPLATE",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "TEMPLATE",
+                                                                        "expressions": [
+                                                                           {
+                                                                              "kind": "VARACCESS",
+                                                                              "variable": "projectHome"
+                                                                           }
+                                                                        ],
+                                                                        "literal": "\"$projectHome\""
+                                                                     },
+                                                                     {
+                                                                        "kind": "TEMPLATE",
+                                                                        "literal": "\"/antLayout/src\""
+                                                                     }
+                                                                  ],
+                                                                  "literal": "\"$projectHome/antLayout/src\""
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
                                                    }
                                                 ]
                                              }

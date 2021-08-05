@@ -59,52 +59,91 @@
                                        "literal": "1"
                                     },
                                     {
-                                       "kind": "LAMBDA"
-                                    },
-                                    {
                                        "kind": "LAMBDA",
-                                       "expressions": [
+                                       "statements": [
                                           {
-                                             "kind": "LITERAL",
-                                             "literal": "1"
+                                             "kind": "BLOCK"
                                           }
                                        ]
                                     },
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
+                                       "statements": [
                                           {
-                                             "kind": "LITERAL",
-                                             "literal": "1"
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
                                           }
                                        ]
                                     },
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
+                                       "statements": [
                                           {
-                                             "kind": "VARACCESS",
-                                             "variable": "x"
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
                                           }
                                        ]
                                     },
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
+                                       "statements": [
                                           {
-                                             "kind": "LITERAL",
-                                             "literal": "1"
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "x"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
                                           }
                                        ]
                                     },
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
+                                       "statements": [
                                           {
-                                             "kind": "LITERAL",
-                                             "literal": "1"
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
                                           }
-                                       ],
+                                       ]
+                                    },
+                                    {
+                                       "kind": "LAMBDA",
                                        "variable_decls": [
                                           {
                                              "name": "x",
@@ -117,16 +156,26 @@
                                                 }
                                              ]
                                           }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
                                        ]
                                     },
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
-                                          {
-                                             "kind": "LITERAL",
-                                             "literal": "1"
-                                          }
-                                       ],
                                        "variable_decls": [
                                           {
                                              "name": "x",
@@ -150,16 +199,26 @@
                                                 }
                                              ]
                                           }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
                                        ]
                                     },
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
-                                          {
-                                             "kind": "LITERAL",
-                                             "literal": "1"
-                                          }
-                                       ],
                                        "variable_decls": [
                                           {
                                              "name": "x",
@@ -172,17 +231,43 @@
                                                 }
                                              ]
                                           }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
                                        ]
                                     },
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
+                                       "statements": [
                                           {
-                                             "kind": "PAREN",
-                                             "expressions": [
+                                             "kind": "BLOCK",
+                                             "statements": [
                                                 {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "x"
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "PAREN",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "x"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
                                                 }
                                              ]
                                           }

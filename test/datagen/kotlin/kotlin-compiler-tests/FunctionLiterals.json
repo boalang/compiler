@@ -13,19 +13,10 @@
                            "kind": "EXPRESSION",
                            "expressions": [
                               {
-                                 "kind": "LAMBDA"
-                              }
-                           ]
-                        },
-                        {
-                           "kind": "EXPRESSION",
-                           "expressions": [
-                              {
                                  "kind": "LAMBDA",
-                                 "expressions": [
+                                 "statements": [
                                     {
-                                       "kind": "VARACCESS",
-                                       "variable": "foo"
+                                       "kind": "BLOCK"
                                     }
                                  ]
                               }
@@ -36,21 +27,18 @@
                            "expressions": [
                               {
                                  "kind": "LAMBDA",
-                                 "expressions": [
+                                 "statements": [
                                     {
-                                       "kind": "VARACCESS",
-                                       "variable": "a"
-                                    }
-                                 ],
-                                 "variable_decls": [
-                                    {
-                                       "name": "a",
-                                       "modifiers": [
+                                       "kind": "BLOCK",
+                                       "statements": [
                                           {
-                                             "kind": "IMPLICIT"
-                                          },
-                                          {
-                                             "kind": "FINAL"
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "foo"
+                                                }
+                                             ]
                                           }
                                        ]
                                     }
@@ -63,12 +51,43 @@
                            "expressions": [
                               {
                                  "kind": "LAMBDA",
-                                 "expressions": [
+                                 "variable_decls": [
                                     {
-                                       "kind": "LITERAL",
-                                       "literal": "1"
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
                                     }
                                  ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
                                  "variable_decls": [
                                     {
                                        "name": "x",
@@ -92,6 +111,22 @@
                                           }
                                        ]
                                     }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
                                  ]
                               }
                            ]
@@ -101,12 +136,6 @@
                            "expressions": [
                               {
                                  "kind": "LAMBDA",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "f"
-                                    }
-                                 ],
                                  "variable_decls": [
                                     {
                                        "name": "a",
@@ -123,6 +152,22 @@
                                           }
                                        ]
                                     }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "f"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
                                  ]
                               }
                            ]
@@ -132,12 +177,6 @@
                            "expressions": [
                               {
                                  "kind": "LAMBDA",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "f"
-                                    }
-                                 ],
                                  "variable_decls": [
                                     {
                                        "name": "a",
@@ -165,6 +204,22 @@
                                           }
                                        ]
                                     }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "f"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
                                  ]
                               }
                            ]
@@ -174,12 +229,6 @@
                            "expressions": [
                               {
                                  "kind": "LAMBDA",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "f"
-                                    }
-                                 ],
                                  "variable_decls": [
                                     {
                                        "name": "a",
@@ -211,6 +260,22 @@
                                           }
                                        ]
                                     }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "f"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
                                  ]
                               }
                            ]
@@ -220,12 +285,6 @@
                            "expressions": [
                               {
                                  "kind": "LAMBDA",
-                                 "expressions": [
-                                    {
-                                       "kind": "VARACCESS",
-                                       "variable": "f"
-                                    }
-                                 ],
                                  "variable_decls": [
                                     {
                                        "name": "a",
@@ -254,6 +313,22 @@
                                           },
                                           {
                                              "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "f"
+                                                }
+                                             ]
                                           }
                                        ]
                                     }

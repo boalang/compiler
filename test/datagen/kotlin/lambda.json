@@ -72,21 +72,6 @@
                                     },
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
-                                          {
-                                             "kind": "OP_ADD",
-                                             "expressions": [
-                                                {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "acc"
-                                                },
-                                                {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "i"
-                                                }
-                                             ]
-                                          }
-                                       ],
                                        "variable_decls": [
                                           {
                                              "name": "acc",
@@ -118,6 +103,31 @@
                                                 }
                                              ]
                                           }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "OP_ADD",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "acc"
+                                                            },
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "i"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
                                        ]
                                     }
                                  ]
@@ -139,14 +149,24 @@
                                        ],
                                        "initializer": {
                                           "kind": "LAMBDA",
-                                          "expressions": [
+                                          "statements": [
                                              {
-                                                "kind": "METHODCALL",
-                                                "method": "print",
-                                                "method_args": [
+                                                "kind": "BLOCK",
+                                                "statements": [
                                                    {
-                                                      "kind": "LITERAL",
-                                                      "literal": "\"hi\""
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "METHODCALL",
+                                                            "method": "print",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "LITERAL",
+                                                                  "literal": "\"hi\""
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
                                                    }
                                                 ]
                                              }
@@ -181,17 +201,27 @@
                                  "method_args": [
                                     {
                                        "kind": "LAMBDA",
-                                       "expressions": [
+                                       "statements": [
                                           {
-                                             "kind": "OP_MOD",
-                                             "expressions": [
+                                             "kind": "BLOCK",
+                                             "statements": [
                                                 {
-                                                   "kind": "VARACCESS",
-                                                   "variable": "it"
-                                                },
-                                                {
-                                                   "kind": "LITERAL",
-                                                   "literal": "2"
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "OP_MOD",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "it"
+                                                            },
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "2"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
                                                 }
                                              ]
                                           }

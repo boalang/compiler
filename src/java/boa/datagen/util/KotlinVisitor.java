@@ -801,8 +801,9 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (expr.getBodyExpression() != null) {
 			expectExpression.push(true);
 			expressions.push(new ArrayList<Expression>());
-			for (final KtExpression e : expr.getBodyExpression().getStatements())
-				e.accept(this, v);
+			statements.push(new ArrayList<Statement>());
+			expr.getBodyExpression().accept(this, v);
+			eb.addAllStatements(statements.pop());
 			eb.addAllExpressions(expressions.pop());
 			expectExpression.pop();
 		}
