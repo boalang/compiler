@@ -1,0 +1,265 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "addMouseListener",
+                                 "method_args": [
+                                    {
+                                       "kind": "NEW",
+                                       "new_type": {
+                                          "name": "MouseAdapter",
+                                          "kind": "CLASS"
+                                       },
+                                       "anon_declaration": {
+                                          "name": "",
+                                          "kind": "SINGLETON",
+                                          "parents": [
+                                             {
+                                                "name": "MouseAdapter",
+                                                "kind": "CLASS"
+                                             }
+                                          ],
+                                          "methods": [
+                                             {
+                                                "name": "mouseClicked",
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "OTHER",
+                                                      "other": "override"
+                                                   }
+                                                ],
+                                                "arguments": [
+                                                   {
+                                                      "name": "e",
+                                                      "variable_type": {
+                                                         "name": "MouseEvent",
+                                                         "kind": "OTHER"
+                                                      },
+                                                      "modifiers": [
+                                                         {
+                                                            "kind": "IMPLICIT"
+                                                         },
+                                                         {
+                                                            "kind": "FINAL"
+                                                         }
+                                                      ]
+                                                   }
+                                                ],
+                                                "statements": [
+                                                   {
+                                                      "kind": "BLOCK",
+                                                      "statements": [
+                                                         {
+                                                            "kind": "EXPRESSION",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "OP_INC",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "variable": "clickCount"
+                                                                     }
+                                                                  ],
+                                                                  "is_postfix": true
+                                                               }
+                                                            ]
+                                                         },
+                                                         {
+                                                            "kind": "IF",
+                                                            "statements": [
+                                                               {
+                                                                  "kind": "EXPRESSION",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "METHODCALL",
+                                                                        "expressions": [
+                                                                           {
+                                                                              "kind": "VARACCESS",
+                                                                              "variable": "GOD"
+                                                                           }
+                                                                        ],
+                                                                        "method": "sendMessage",
+                                                                        "method_args": [
+                                                                           {
+                                                                              "kind": "VARACCESS",
+                                                                              "expressions": [
+                                                                                 {
+                                                                                    "kind": "VARACCESS",
+                                                                                    "variable": "GodMEssages"
+                                                                                 }
+                                                                              ],
+                                                                              "variable": "TOO_MANY_CLICKS"
+                                                                           }
+                                                                        ]
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ],
+                                                            "conditions": [
+                                                               {
+                                                                  "kind": "GT",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "variable": "clickCount"
+                                                                     },
+                                                                     {
+                                                                        "kind": "LITERAL",
+                                                                        "literal": "3"
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ],
+                                          "fields": [
+                                             {
+                                                "name": "clickCount",
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "VISIBILITY",
+                                                      "visibility": "PRIVATE"
+                                                   }
+                                                ],
+                                                "initializer": {
+                                                   "kind": "LITERAL",
+                                                   "literal": "0"
+                                                }
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "GOD",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "NEW",
+                                          "anon_declaration": {
+                                             "name": "",
+                                             "kind": "SINGLETON",
+                                             "methods": [
+                                                {
+                                                   "name": "sendMessage",
+                                                   "arguments": [
+                                                      {
+                                                         "name": "message",
+                                                         "variable_type": {
+                                                            "name": "GodMEssage",
+                                                            "kind": "OTHER"
+                                                         },
+                                                         "modifiers": [
+                                                            {
+                                                               "kind": "IMPLICIT"
+                                                            },
+                                                            {
+                                                               "kind": "FINAL"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "expression": {
+                                                      "kind": "STATEMENT",
+                                                      "statements": [
+                                                         {
+                                                            "kind": "THROW",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "METHODCALL",
+                                                                  "method": "RuntimeException",
+                                                                  "method_args": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "expressions": [
+                                                                           {
+                                                                              "kind": "VARACCESS",
+                                                                              "variable": "message"
+                                                                           }
+                                                                        ],
+                                                                        "variable": "name"
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ],
+                     "type_declarations": [
+                        {
+                           "name": "GodMessages",
+                           "kind": "ENUM",
+                           "fields": [
+                              {
+                                 "name": "TOO_MANY_CLICKS",
+                                 "variable_type": {
+                                    "name": "GodMessages",
+                                    "kind": "ENUM"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "ONE_MORE_MESSAGE",
+                                 "variable_type": {
+                                    "name": "GodMessages",
+                                    "kind": "ENUM"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
