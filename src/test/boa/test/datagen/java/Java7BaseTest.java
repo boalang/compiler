@@ -82,6 +82,7 @@ public class Java7BaseTest extends BaseTest {
 	}
 
 	public static String parseJava(final String path) {
+//		System.out.println("File path is (parseJava): " + path);
 		final StringBuilder sb = new StringBuilder();
 		final FileASTRequestor r = new FileASTRequestor() {
 			@Override
@@ -100,7 +101,7 @@ public class Java7BaseTest extends BaseTest {
 		final Map<String, String> fileContents = new HashMap<String, String>();
 //		fileContents.put("", filecontent);
 		@SuppressWarnings("rawtypes")
-		final Map options = JavaCore.getOptions();
+		final Map<String, String> options = JavaCore.getOptions();
 		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
 		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
 		final ASTParser parser = ASTParser.newParser(astLevel);
@@ -111,7 +112,10 @@ public class Java7BaseTest extends BaseTest {
 		paths[0] = path;
 		parser.createASTs(paths, null, new String[0], r, null);
 
-//		System.out.println("This is from parseJava: \n" + FileIO.normalizeEOL(sb.toString()));
+//		if(path.contains("YieldStatement")) {
+//			System.out.println("This is from parseJava: \n" + FileIO.normalizeEOL(sb.toString()));
+//		}
+		
 		return FileIO.normalizeEOL(sb.toString());
 	}
 	

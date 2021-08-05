@@ -1,1 +1,68 @@
-This is a test for Yield Statement in Boa
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "num",
+               "variable_type": {
+                  "name": "int",
+                  "kind": "PRIMITIVE"
+               },
+               "initializer": {
+                  "kind": "SWITCH",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "d"
+                     }
+                  ],
+                  "statements": [
+                     {
+                        "kind": "CASE",
+                        "expressions": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "\"MONDA\""
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "YIELD",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "6"
+                                 }
+                              ]
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "DEFAULT"
+                     },
+                     {
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "YIELD",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "2"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}

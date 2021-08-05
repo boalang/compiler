@@ -96,6 +96,8 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	public Namespace getNamespaces(CompilationUnit node) {
+//		System.out.println("++++++++++++++++++ This is CompilationUnit from getNamescpace in JavaVisitor");
+//		System.out.println(node.getLength());
 		root = node;
 		node.accept(this);
 		return b.build();
