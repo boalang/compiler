@@ -312,7 +312,6 @@ public class KotlinLangMode implements LangMode {
 
 		if (primaryMethod != null) {
 			s += "(";
-			boolean first = true;
 			for (int i = 0 ; i < primaryMethod.getArgumentsCount(); i++) {
 				if (i > 0) s += ", ";
 				s += prettyprint(primaryMethod.getArguments(i));

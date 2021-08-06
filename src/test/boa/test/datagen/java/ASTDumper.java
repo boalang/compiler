@@ -24,8 +24,6 @@ import org.eclipse.jdt.core.dom.ChildListPropertyDescriptor;
 import org.eclipse.jdt.core.dom.ChildPropertyDescriptor;
 import org.eclipse.jdt.core.dom.SimplePropertyDescriptor;
 
-import boa.test.datagen.java.ICommentsExtractor.CommentItem;
-
 /**
  * Dumps the AST to a supplied "printer".
  */
