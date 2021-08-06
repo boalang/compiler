@@ -2,44 +2,38 @@
    "namespaces": [
       {
          "name": "",
-         "statements": [
+         "declarations": [
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "FileTable",
-                  "kind": "ALIAS",
-                  "generic_parameters": [
-                     {
-                        "name": "K",
-                        "kind": "GENERIC"
-                     }
-                  ],
-                  "parents": [
-                     {
-                        "name": "MutableMap<K, MutableList<File>>",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "FileTable",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "K",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "MutableMap<K, MutableList<File>>",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "Predicate",
-                  "kind": "ALIAS",
-                  "generic_parameters": [
-                     {
-                        "name": "T",
-                        "kind": "GENERIC"
-                     }
-                  ],
-                  "parents": [
-                     {
-                        "name": "(T) -> Boolean",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "Predicate",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "(T) -> Boolean",
+                     "kind": "OTHER"
+                  }
+               ]
             }
          ]
       }

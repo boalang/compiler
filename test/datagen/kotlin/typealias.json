@@ -2,38 +2,32 @@
    "namespaces": [
       {
          "name": "",
-         "statements": [
+         "declarations": [
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "foo",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "Int",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "foo",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "Int",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "bar",
-                  "kind": "ALIAS",
-                  "modifiers": [
-                     {
-                        "kind": "VISIBILITY",
-                        "visibility": "PRIVATE"
-                     }
-                  ],
-                  "parents": [
-                     {
-                        "name": "Int",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "bar",
+               "kind": "ALIAS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "Int",
+                     "kind": "OTHER"
+                  }
+               ]
             }
          ],
          "variables": [

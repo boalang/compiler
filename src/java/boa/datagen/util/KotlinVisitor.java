@@ -373,10 +373,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitTypeAlias(final KtTypeAlias ta, final Void v) {
-		final Statement.Builder sb = Statement.newBuilder();
-
-		sb.setKind(Statement.StatementKind.TYPEDECL);
-
 		modifiers.push(new ArrayList<Modifier>());
 		if (ta.getModifierList() != null)
 			ta.getModifierList().accept(this, v);
@@ -385,15 +381,13 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		for (final KtTypeParameter p : ta.getTypeParameters())
 			types.peek().add(buildGenericParam(p, ta.getTypeConstraints()));
 
-		sb.setTypeDeclaration(Declaration.newBuilder()
+		declarations.peek().add(Declaration.newBuilder()
 				.setKind(TypeKind.ALIAS)
 				.setName(ta.getName())
 				.addParents(typeFromTypeRef(ta.getTypeReference()))
 				.addAllModifiers(modifiers.pop())
 				.addAllGenericParameters(types.pop())
 				.build());
-
-		statements.peek().add(sb.build());
 		return null;
 	}
 
