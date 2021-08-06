@@ -24,7 +24,7 @@
                   "generic_parameters": [
                      {
                         "name": "T",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -43,7 +43,7 @@
                   "generic_parameters": [
                      {
                         "name": "T : foo",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -62,11 +62,11 @@
                   "generic_parameters": [
                      {
                         "name": "A",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      },
                      {
                         "name": "B",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -85,11 +85,11 @@
                   "generic_parameters": [
                      {
                         "name": "A",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      },
                      {
                         "name": "B : A",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -121,7 +121,7 @@
                   "generic_parameters": [
                      {
                         "name": "T",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -140,7 +140,7 @@
                   "generic_parameters": [
                      {
                         "name": "T : foo",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -159,11 +159,11 @@
                   "generic_parameters": [
                      {
                         "name": "A",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      },
                      {
                         "name": "B",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
@@ -182,11 +182,11 @@
                   "generic_parameters": [
                      {
                         "name": "A",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      },
                      {
                         "name": "B : A",
-                        "kind": "OTHER"
+                        "kind": "GENERIC"
                      }
                   ],
                   "parents": [
