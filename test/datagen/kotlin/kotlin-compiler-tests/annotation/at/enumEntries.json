@@ -6,6 +6,12 @@
             {
                "name": "A",
                "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
                "methods": [
                   {
                      "name": "foo",
@@ -179,4 +185,3 @@
       }
    ]
 }
-
