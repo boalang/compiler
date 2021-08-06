@@ -2,256 +2,198 @@
    "namespaces": [
       {
          "name": "",
-         "statements": [
+         "declarations": [
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(@[a] a) -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(@[a] a) -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(a) -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(a) -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "() -> @[x] b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "() -> @[x] b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "() -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "() -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(a : @[a] a) -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(a : @[a] a) -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(a : a) -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(a : a) -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "() -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "() -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "() -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "() -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(a : @[a] a, foo, x : bar) -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(a : @[a] a, foo, x : bar) -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(foo, a : a) -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(foo, a : a) -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(foo, a :  (a) -> b) -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(foo, a :  (a) -> b) -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(foo, a :  (a) -> b) ->  () -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(foo, a :  (a) -> b) ->  () -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "T.() -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "T.() -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "T.T.() -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "T.T.() -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "T<A, B>.T<x>.() -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "T<A, B>.T<x>.() -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "@[a]  T.() -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "@[a]  T.() -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "@[a]  T.T.() -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "@[a]  T.T.() -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "@[a]  T<A, B>.T<x>.() -> Unit",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "@[a]  T<A, B>.T<x>.() -> Unit",
+                     "kind": "OTHER"
+                  }
+               ]
             },
             {
-               "kind": "TYPEDECL",
-               "type_declaration": {
-                  "name": "f",
-                  "kind": "ALIAS",
-                  "parents": [
-                     {
-                        "name": "(a, ) -> b",
-                        "kind": "OTHER"
-                     }
-                  ]
-               }
+               "name": "f",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "(a, ) -> b",
+                     "kind": "OTHER"
+                  }
+               ]
             }
          ]
       }
    ]
 }
-
