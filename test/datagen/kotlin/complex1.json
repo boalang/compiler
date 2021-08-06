@@ -61,6 +61,12 @@
                   {
                      "name": "File",
                      "kind": "IMMUTABLE",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "data"
+                        }
+                     ],
                      "parents": [
                         {
                            "name": "AstSource",
@@ -170,6 +176,12 @@
                   {
                      "name": "String",
                      "kind": "IMMUTABLE",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "data"
+                        }
+                     ],
                      "parents": [
                         {
                            "name": "AstSource",
@@ -290,4 +302,3 @@
       }
    ]
 }
-
