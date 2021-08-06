@@ -2003,6 +2003,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if ((call.getParent() instanceof KtCallableReferenceExpression) && (call.getValueArgumentList() == null) && (call.getLambdaArguments().size() == 0)) {
 			eb.setKind(Expression.ExpressionKind.VARACCESS);
 			eb.setVariable(call.getCalleeExpression().getText());
+		} else if (call.getCalleeExpression() instanceof KtLambdaExpression) {
+			eb.setMethod("");
+			expressions.push(new ArrayList<Expression>());
+			call.getCalleeExpression().accept(this, v);
+			eb.addAllExpressions(expressions.pop());
 		} else {
 			eb.setMethod(call.getCalleeExpression().getText());
 		}
