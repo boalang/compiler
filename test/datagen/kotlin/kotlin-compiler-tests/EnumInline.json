@@ -6,6 +6,12 @@
             {
                "name": "My",
                "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
                "fields": [
                   {
                      "name": "inline",
