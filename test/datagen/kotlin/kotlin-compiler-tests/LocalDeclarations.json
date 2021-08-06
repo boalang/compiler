@@ -75,19 +75,6 @@
                                  ]
                               }
                            ]
-                        },
-                        {
-                           "kind": "TYPEDECL",
-                           "type_declaration": {
-                              "name": "f",
-                              "kind": "ALIAS",
-                              "parents": [
-                                 {
-                                    "name": "T.() -> Unit",
-                                    "kind": "OTHER"
-                                 }
-                              ]
-                           }
                         }
                      ],
                      "type_declarations": [
@@ -116,6 +103,16 @@
                                  "annotation_name": "a"
                               }
                            ]
+                        },
+                        {
+                           "name": "f",
+                           "kind": "ALIAS",
+                           "parents": [
+                              {
+                                 "name": "T.() -> Unit",
+                                 "kind": "OTHER"
+                              }
+                           ]
                         }
                      ]
                   }
@@ -125,4 +122,3 @@
       }
    ]
 }
-
