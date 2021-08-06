@@ -5,7 +5,13 @@
          "declarations": [
             {
                "name": "ann",
-               "kind": "ANNOTATION"
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  }
+               ]
             }
          ],
          "methods": [
