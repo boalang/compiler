@@ -1,0 +1,602 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "OP_ADD",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "a"
+                                             },
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "b"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "OP_ADD",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "a"
+                                             },
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "b"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "VARACCESS",
+                                          "variable": "a"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ADD",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "b"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "PAREN",
+                                          "expressions": [
+                                             {
+                                                "kind": "OP_ADD",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "a"
+                                                   },
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "b"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "PAREN",
+                                          "expressions": [
+                                             {
+                                                "kind": "LAMBDA",
+                                                "statements": [
+                                                   {
+                                                      "kind": "BLOCK",
+                                                      "statements": [
+                                                         {
+                                                            "kind": "EXPRESSION",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "a"
+                                                               }
+                                                            ]
+                                                         },
+                                                         {
+                                                            "kind": "EXPRESSION",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "OP_ADD",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "variable": "b"
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "PAREN",
+                                          "expressions": [
+                                             {
+                                                "kind": "OP_ADD",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "LAMBDA",
+                                                      "statements": [
+                                                         {
+                                                            "kind": "BLOCK",
+                                                            "statements": [
+                                                               {
+                                                                  "kind": "EXPRESSION",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "variable": "a"
+                                                                     }
+                                                                  ]
+                                                               },
+                                                               {
+                                                                  "kind": "EXPRESSION",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "OP_ADD",
+                                                                        "expressions": [
+                                                                           {
+                                                                              "kind": "VARACCESS",
+                                                                              "variable": "b"
+                                                                           }
+                                                                        ]
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   },
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "b"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "ARRAYACCESS",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "b"
+                                             },
+                                             {
+                                                "kind": "OP_ADD",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "c"
+                                                   },
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "d"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "ARRAYACCESS",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "b"
+                                             },
+                                             {
+                                                "kind": "LAMBDA",
+                                                "statements": [
+                                                   {
+                                                      "kind": "BLOCK",
+                                                      "statements": [
+                                                         {
+                                                            "kind": "EXPRESSION",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "c"
+                                                               }
+                                                            ]
+                                                         },
+                                                         {
+                                                            "kind": "EXPRESSION",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "OP_ADD",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "variable": "d"
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "ARRAYACCESS",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "b"
+                                             },
+                                             {
+                                                "kind": "OP_ADD",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "LAMBDA",
+                                                      "statements": [
+                                                         {
+                                                            "kind": "BLOCK",
+                                                            "statements": [
+                                                               {
+                                                                  "kind": "EXPRESSION",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "variable": "c"
+                                                                     }
+                                                                  ]
+                                                               },
+                                                               {
+                                                                  "kind": "EXPRESSION",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "OP_ADD",
+                                                                        "expressions": [
+                                                                           {
+                                                                              "kind": "VARACCESS",
+                                                                              "variable": "d"
+                                                                           }
+                                                                        ]
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   },
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "d"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "statements": [
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "TYPECOMPARE",
+                                       "new_type": {
+                                          "name": "T\n    <X>",
+                                          "kind": "OTHER"
+                                       }
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "IN",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "f"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LOGICAL_NOT",
+                                       "expressions": [
+                                          {
+                                             "kind": "TYPECOMPARE",
+                                             "new_type": {
+                                                "name": "T\n    <X>",
+                                                "kind": "OTHER"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LOGICAL_NOT",
+                                       "expressions": [
+                                          {
+                                             "kind": "IN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "f"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "f"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "e"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "f",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "TYPECOMPARE",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "a"
+                                             }
+                                          ],
+                                          "new_type": {
+                                             "name": "T\n  <X>",
+                                             "kind": "OTHER"
+                                          }
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -88,7 +88,7 @@
                      "kind": "GENERIC"
                   },
                   {
-                     "name": "public protected private internal abstract\n    open\n    enum\n    open\n    annotation\n    override\n    open\n    abstract\n    private\n    protected\n    public\n    internal open",
+                     "name": "public protected private internal abstract open enum open annotation override open abstract private protected public internal open",
                      "kind": "GENERIC"
                   }
                ],
