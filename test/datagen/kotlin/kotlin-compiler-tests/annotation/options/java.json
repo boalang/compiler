@@ -8,6 +8,10 @@
                "kind": "ANNOTATION",
                "modifiers": [
                   {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  },
+                  {
                      "kind": "ANNOTATION",
                      "annotation_name": "java.lang.annotation.Retention",
                      "annotation_values": [
@@ -29,6 +33,10 @@
                "name": "my1",
                "kind": "ANNOTATION",
                "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  },
                   {
                      "kind": "ANNOTATION",
                      "annotation_name": "Retention",
@@ -80,4 +88,3 @@
       }
    ]
 }
-
