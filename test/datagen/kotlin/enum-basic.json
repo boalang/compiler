@@ -10,6 +10,10 @@
                   {
                      "kind": "VISIBILITY",
                      "visibility": "PRIVATE"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
                   }
                ],
                "fields": [
@@ -59,4 +63,3 @@
       }
    ]
 }
-
