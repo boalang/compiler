@@ -16,7 +16,15 @@
                   },
                   {
                      "kind": "OTHER",
+                     "other": "enum"
+                  },
+                  {
+                     "kind": "OTHER",
                      "other": "open"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
                   },
                   {
                      "kind": "OTHER",
