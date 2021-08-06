@@ -1,0 +1,76 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "reciever_type": {
+                  "name": "(@[a] T<T>.(A<B>) -> Unit)",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo",
+               "reciever_type": {
+                  "name": "(@[a] T<T>.(A<B>) ->  C<D, E>)",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@[a] (@[a] T<T>.(A<B>) -> R)",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo",
+               "generic_parameters": [
+                  {
+                     "name": "A",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "B",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@[a] (() -> Unit)",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "a"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "A",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "B",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "reciever_type": {
+                  "name": "@[a] ((A, B) -> Unit)",
+                  "kind": "OTHER"
+               }
+            }
+         ]
+      }
+   ]
+}
+

@@ -1,0 +1,127 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "statements": [
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "(((S).() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "((T.() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "((T.T.() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "((T<A, B>.T<x>.() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "(((S).() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "@[a] (@[a] ((S).() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "@[a] (@[a] (T.() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "@[a] (@[a] (T<A, B>.() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "f",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "@[a] (@[a] ((S).() -> S).() -> S)",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
+
