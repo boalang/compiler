@@ -1,0 +1,528 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "IMMUTABLE",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "data"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "inline"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "x.<get>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "noinline"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "x.<set>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "inline"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "data"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "y.<get>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "inline"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     }
+                  },
+                  {
+                     "name": "y.<set>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "data"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "q",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "LITERAL",
+                        "literal": "2"
+                     }
+                  },
+                  {
+                     "name": "z.<get>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "inline"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Double",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "z.<set>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "noinline"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "z0.<get>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "inline"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Double",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "z0.<set>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "noinline"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     }
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "y",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "z",
+                     "variable_type": {
+                        "name": "Double",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "z0",
+                     "variable_type": {
+                        "name": "Double",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "3.0"
+                     }
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "bar",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "data"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "tailrec"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "external"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "noinline"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "data"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x1",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          },
+                                          {
+                                             "kind": "OTHER",
+                                             "other": "noinline"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "1"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "data"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x2",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "2"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "data"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x3",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "3"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x4",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          },
+                                          {
+                                             "kind": "OTHER",
+                                             "other": "inline"
+                                          },
+                                          {
+                                             "kind": "VISIBILITY",
+                                             "visibility": "PRIVATE"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "4"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "foo",
+                           "modifiers": [
+                              {
+                                 "kind": "OTHER",
+                                 "other": "inline"
+                              }
+                           ],
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              }
+                           ]
+                        }
+                     ],
+                     "type_declarations": [
+                        {
+                           "name": "A",
+                           "kind": "IMMUTABLE",
+                           "modifiers": [
+                              {
+                                 "kind": "OTHER",
+                                 "other": "data"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "inline"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "noinline"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "Q",
+                           "kind": "IMMUTABLE",
+                           "modifiers": [
+                              {
+                                 "kind": "ABSTRACT"
+                              },
+                              {
+                                 "kind": "OTHER",
+                                 "other": "data"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo1",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "data"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OTHER",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "inline"
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "annotation"
+                                    }
+                                 ],
+                                 "literal": "data"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo2",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "data",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "inline",
+                                 "method_args": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "data"
+                                    },
+                                    {
+                                       "kind": "LAMBDA",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
