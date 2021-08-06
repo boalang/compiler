@@ -1233,16 +1233,61 @@
                   }
                ],
                "initializer": {
-                  "kind": "VARDECL",
-                  "variable_decls": [
+                  "kind": "METHODDECL",
+                  "methods": [
                      {
-                        "name": "x",
-                        "modifiers": [
+                        "name": "",
+                        "return_type": {
+                           "name": "Int",
+                           "kind": "OTHER"
+                        },
+                        "arguments": [
                            {
-                              "kind": "IMPLICIT"
+                              "name": "x",
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
                            },
                            {
-                              "kind": "FINAL"
+                              "name": "y",
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "statements": [
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "RETURN",
+                                    "expressions": [
+                                       {
+                                          "kind": "OP_ADD",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             },
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "y"
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
                            }
                         ]
                      }
@@ -1261,16 +1306,76 @@
                   }
                ],
                "initializer": {
-                  "kind": "VARDECL",
-                  "variable_decls": [
+                  "kind": "METHODDECL",
+                  "methods": [
                      {
-                        "name": "x",
-                        "modifiers": [
+                        "name": "",
+                        "return_type": {
+                           "name": "Int",
+                           "kind": "OTHER"
+                        },
+                        "arguments": [
                            {
-                              "kind": "IMPLICIT"
+                              "name": "x",
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
                            },
                            {
-                              "kind": "FINAL"
+                              "name": "y",
+                              "variable_type": {
+                                 "name": "Int",
+                                 "kind": "OTHER"
+                              },
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           },
+                           {
+                              "name": "z",
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "statements": [
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "RETURN",
+                                    "expressions": [
+                                       {
+                                          "kind": "OP_ADD",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "x"
+                                             },
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "y"
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
                            }
                         ]
                      }
