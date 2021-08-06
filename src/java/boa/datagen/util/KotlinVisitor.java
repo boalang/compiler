@@ -1898,10 +1898,12 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		if (function.getReceiverTypeReference() != null)
 			mb.setRecieverType(typeFromTypeRef(function.getReceiverTypeReference()));
 
+		expectExpression.push(false);
 		fields.push(new ArrayList<Variable>());
 		for (final KtParameter p : function.getValueParameters())
 			p.accept(this, v);
 		mb.addAllArguments(fields.pop());
+		expectExpression.pop();
 
 		if (function.getBodyBlockExpression() != null) {
 			expectExpression.push(false);
