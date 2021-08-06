@@ -6,6 +6,12 @@
             {
                "name": "Color",
                "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
                "fields": [
                   {
                      "name": "NORTH",
