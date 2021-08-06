@@ -55,13 +55,11 @@ import boa.types.Ast.Variable;
  */
 public class KotlinLangMode implements LangMode {
 	public String type_name(final String s) {
-		// FIXME convert to Kotlin
 		// first, normalize the string
 		final String t = s.replaceAll("<\\s+", "<")
 			.replaceAll(",\\s+", ", ")
 			.replaceAll("\\s*>\\s*", ">")
-			.replaceAll("\\s*&\\s*", " & ")
-			.replaceAll("\\s*\\|\\s*", " | ");
+			.replaceAll("\\s*&\\s*", " & ");
 
 		if (!t.contains("."))
 			return t;
@@ -77,11 +75,10 @@ public class KotlinLangMode implements LangMode {
 		 * SomeType<foo.bar.T, S>                 =>  SomeType<T, S>
 		 * SomeType<T, foo.bar.S>                 =>  SomeType<T, S>
 		 * foo.bar.SomeType<T, foo.bar.S<bar.Q>>  =>  SomeType<T, S<Q>>
-		 * SomeType|foo.Bar                       =>  SomeType|Bar
 		 * SomeType&foo.Bar                       =>  SomeType&Bar
 		 * foo<T>.bar<T>                          =>  foo<T>.bar<T>
 		 */
-		return t.replaceAll("[^\\s,<>|&]+\\.([^\\s\\[.,><|&]+)", "$1");
+		return t.replaceAll("[^\\s,<>&]+\\.([^\\s\\[.,><&]+)", "$1");
 	}
 
 	///////////////////////////////
