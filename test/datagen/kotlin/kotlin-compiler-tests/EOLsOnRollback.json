@@ -10,19 +10,6 @@
                      "kind": "BLOCK",
                      "statements": [
                         {
-                           "kind": "TYPEDECL",
-                           "type_declaration": {
-                              "name": "x",
-                              "kind": "ALIAS",
-                              "parents": [
-                                 {
-                                    "name": "t",
-                                    "kind": "OTHER"
-                                 }
-                              ]
-                           }
-                        },
-                        {
                            "kind": "EXPRESSION",
                            "expressions": [
                               {
@@ -103,6 +90,16 @@
                         {
                            "name": "foo",
                            "kind": "CLASS"
+                        },
+                        {
+                           "name": "x",
+                           "kind": "ALIAS",
+                           "parents": [
+                              {
+                                 "name": "t",
+                                 "kind": "OTHER"
+                              }
+                           ]
                         }
                      ]
                   }
