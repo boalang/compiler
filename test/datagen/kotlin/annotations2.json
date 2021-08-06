@@ -26,6 +26,10 @@
                   {
                      "kind": "ANNOTATION",
                      "annotation_name": "Repeatable"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
                   }
                ]
             }
@@ -400,4 +404,3 @@
       }
    ]
 }
-

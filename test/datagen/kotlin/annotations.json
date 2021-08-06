@@ -6,6 +6,12 @@
             {
                "name": "Example",
                "kind": "IMMUTABLE",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "data"
+                  }
+               ],
                "methods": [
                   {
                      "name": "<init>",
