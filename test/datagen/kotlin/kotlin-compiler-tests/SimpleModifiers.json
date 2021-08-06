@@ -20,6 +20,10 @@
                   },
                   {
                      "kind": "OTHER",
+                     "other": "annotation"
+                  },
+                  {
+                     "kind": "OTHER",
                      "other": "override"
                   },
                   {
