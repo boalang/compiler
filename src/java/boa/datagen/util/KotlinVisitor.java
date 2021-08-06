@@ -1931,6 +1931,11 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 	@Override
 	public Void visitParameter(final KtParameter param, final Void v) {
+		if (param.getDestructuringDeclaration() != null) {
+			param.getDestructuringDeclaration().accept(this, v);
+			return null;
+		}
+
 		final Variable.Builder vb = Variable.newBuilder();
 
 		expectExpression.push(true);

@@ -1,0 +1,470 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a1"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "y",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a2"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a3"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "z",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "y",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a4"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "y",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "z",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a5"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "q",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "y",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "z",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a6"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "y",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "z",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "w",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a7"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "y",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "z",
+                                             "variable_type": {
+                                                "name": "Type",
+                                                "kind": "OTHER"
+                                             },
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "w",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "u",
+                                             "variable_type": {
+                                                "name": "T",
+                                                "kind": "OTHER"
+                                             },
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "foo7"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
