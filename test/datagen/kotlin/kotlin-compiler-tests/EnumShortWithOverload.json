@@ -6,6 +6,12 @@
             {
                "name": "Color",
                "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
                "methods": [
                   {
                      "name": "<init>",
@@ -275,4 +281,3 @@
       }
    ]
 }
-
