@@ -6,6 +6,12 @@
             {
                "name": "My",
                "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
                "fields": [
                   {
                      "name": "public",
@@ -48,6 +54,10 @@
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
                         }
                      ]
                   }
