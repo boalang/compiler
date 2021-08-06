@@ -1345,21 +1345,23 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	public Void visitStringTemplateExpression(final KtStringTemplateExpression expr, final Void v) {
 		final KtStringTemplateEntry[] entries = expr.getEntries();
 
-		if (entries.length == 1 && entries[0] instanceof KtLiteralStringTemplateEntry) {
+		boolean allLiterals = true;
+		for (int i = 0; i < entries.length; i++)
+			if (!(entries[i] instanceof KtLiteralStringTemplateEntry))
+				allLiterals = false;
+
+		if (allLiterals) {
 			expressions.peek().add(Expression.newBuilder()
 					.setKind(Expression.ExpressionKind.LITERAL)
-					.setLiteral("\"" + entries[0].getText() + "\"")
+					.setLiteral(expr.getText())
 					.build());
 		} else {
-			expressions.push(new ArrayList<Expression>());
-
 			final StringBuilder sb = new StringBuilder();
-			sb.append("\"");
-			for (final KtStringTemplateEntry e : entries) {
+			sb.append(expr.getText());
+
+			expressions.push(new ArrayList<Expression>());
+			for (final KtStringTemplateEntry e : entries)
 				e.accept(this, v);
-				sb.append(e.getText());
-			}
-			sb.append("\"");
 			final List<Expression> exprs = expressions.pop();
 
 			expressions.peek().add(Expression.newBuilder()

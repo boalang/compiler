@@ -117,7 +117,7 @@
                      ],
                      "initializer": {
                         "kind": "LITERAL",
-                        "literal": "\"dsf\""
+                        "literal": "\"\"\"dsf\"\"\""
                      }
                   },
                   {
@@ -872,4 +872,3 @@
       }
    ]
 }
-

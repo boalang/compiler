@@ -12,7 +12,7 @@
                      "annotation_name": "abc",
                      "annotation_values": [
                         {
-                           "kind": "TEMPLATE",
+                           "kind": "LITERAL",
                            "literal": "\"\""
                         }
                      ]

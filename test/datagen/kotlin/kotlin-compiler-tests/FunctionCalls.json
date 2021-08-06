@@ -653,7 +653,7 @@
                                        ]
                                     },
                                     {
-                                       "kind": "TEMPLATE",
+                                       "kind": "LITERAL",
                                        "literal": "\"\""
                                     },
                                     {
@@ -776,4 +776,3 @@
       }
    ]
 }
-

@@ -23,7 +23,7 @@
                                           }
                                        ],
                                        "initializer": {
-                                          "kind": "TEMPLATE",
+                                          "kind": "LITERAL",
                                           "literal": "\"\""
                                        }
                                     }
@@ -161,4 +161,3 @@
       }
    ]
 }
-
