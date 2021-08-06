@@ -1,0 +1,44 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "p",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "LT",
+                  "expressions": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     },
+                     {
+                        "kind": "OTHER",
+                        "anon_declaration": {
+                           "name": "I",
+                           "kind": "INTERFACE",
+                           "methods": [
+                              {
+                                 "name": "f",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
+
