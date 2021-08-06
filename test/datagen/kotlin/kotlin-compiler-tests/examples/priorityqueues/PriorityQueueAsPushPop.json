@@ -110,7 +110,13 @@
                      "name": "isEmpty.<get>",
                      "expression": {
                         "kind": "VARACCESS",
-                        "variable": "wrapped.isEmpty"
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "wrapped"
+                           }
+                        ],
+                        "variable": "isEmpty"
                      }
                   }
                ],
@@ -133,3 +139,4 @@
       }
    ]
 }
+
