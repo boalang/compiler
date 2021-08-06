@@ -6,6 +6,12 @@
             {
                "name": "ProtocolState",
                "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
                "methods": [
                   {
                      "name": "signal",
@@ -95,4 +101,3 @@
       }
    ]
 }
-
