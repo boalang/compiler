@@ -227,6 +227,12 @@
                         {
                            "name": "GodMessages",
                            "kind": "ENUM",
+                           "modifiers": [
+                              {
+                                 "kind": "OTHER",
+                                 "other": "enum"
+                              }
+                           ],
                            "fields": [
                               {
                                  "name": "TOO_MANY_CLICKS",
@@ -262,4 +268,3 @@
       }
    ]
 }
-
