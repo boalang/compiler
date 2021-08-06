@@ -24,6 +24,10 @@
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
                         }
                      ]
                   }
@@ -68,6 +72,10 @@
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
                         }
                      ]
                   }
@@ -99,6 +107,10 @@
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
                         }
                      ]
                   }
@@ -140,6 +152,10 @@
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
                         }
                      ]
                   }
@@ -185,6 +201,10 @@
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
                         }
                      ]
                   }
@@ -227,6 +247,10 @@
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
                         }
                      ]
                   }
@@ -275,6 +299,10 @@
                         {
                            "kind": "OTHER",
                            "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
                         }
                      ]
                   }
@@ -284,4 +312,3 @@
       }
    ]
 }
-
