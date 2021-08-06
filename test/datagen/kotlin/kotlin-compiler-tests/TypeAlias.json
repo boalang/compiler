@@ -1,0 +1,203 @@
+{
+   "namespaces": [
+      {
+         "name": "foo.bar.goo",
+         "statements": [
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "generic_parameters": [
+                     {
+                        "name": "T",
+                        "kind": "OTHER"
+                     }
+                  ],
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "generic_parameters": [
+                     {
+                        "name": "T : foo",
+                        "kind": "OTHER"
+                     }
+                  ],
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "generic_parameters": [
+                     {
+                        "name": "A",
+                        "kind": "OTHER"
+                     },
+                     {
+                        "name": "B",
+                        "kind": "OTHER"
+                     }
+                  ],
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "generic_parameters": [
+                     {
+                        "name": "A",
+                        "kind": "OTHER"
+                     },
+                     {
+                        "name": "B : A",
+                        "kind": "OTHER"
+                     }
+                  ],
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "generic_parameters": [
+                     {
+                        "name": "T",
+                        "kind": "OTHER"
+                     }
+                  ],
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "generic_parameters": [
+                     {
+                        "name": "T : foo",
+                        "kind": "OTHER"
+                     }
+                  ],
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "generic_parameters": [
+                     {
+                        "name": "A",
+                        "kind": "OTHER"
+                     },
+                     {
+                        "name": "B",
+                        "kind": "OTHER"
+                     }
+                  ],
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            },
+            {
+               "kind": "TYPEDECL",
+               "type_declaration": {
+                  "name": "foo",
+                  "kind": "ALIAS",
+                  "generic_parameters": [
+                     {
+                        "name": "A",
+                        "kind": "OTHER"
+                     },
+                     {
+                        "name": "B : A",
+                        "kind": "OTHER"
+                     }
+                  ],
+                  "parents": [
+                     {
+                        "name": "bar",
+                        "kind": "OTHER"
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
