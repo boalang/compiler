@@ -6,6 +6,12 @@
             {
                "name": "ComparisonResult",
                "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
                "fields": [
                   {
                      "name": "LS",
@@ -371,4 +377,3 @@
       }
    ]
 }
-
