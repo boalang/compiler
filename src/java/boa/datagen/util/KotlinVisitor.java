@@ -1765,6 +1765,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		else
 			db.setKind(TypeKind.CLASS);
 
+		expectExpression.push(false);
 		for (final KtTypeParameter p : klass.getTypeParameters())
 			db.addGenericParameters(buildGenericParam(p, klass.getTypeConstraints()));
 
@@ -1794,7 +1795,16 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		db.addAllMethods(methods.pop());
 		db.addAllFields(fields.pop());
 
-		declarations.peek().add(db.build());
+		expectExpression.pop();
+
+		if (expectExpression.peek()) {
+			expressions.peek().add(Expression.newBuilder()
+					.setKind(Expression.ExpressionKind.OTHER)
+					.setAnonDeclaration(db.build())
+					.build());
+		} else {
+			declarations.peek().add(db.build());
+		}
 
 		superClassInitExprs.clear();
 		return null;
