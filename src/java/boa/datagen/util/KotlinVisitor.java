@@ -144,6 +144,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		case "infix":
 		case "crossinline":
 		case "lateinit":
+		case "data":
+		case "enum":
+		case "companion":
+		case "annotation":
 			mb.setKind(Modifier.ModifierKind.OTHER);
 			mb.setOther(m.getValue());
 			break;
@@ -167,13 +171,6 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.setKind(Modifier.ModifierKind.VISIBILITY);
 			mb.setVisibility(Modifier.Visibility.INTERNAL);
 			break;
-
-		case "data":
-		case "enum":
-		case "companion":
-		case "annotation":
-			// do nothing because these are already handled by the class
-			return;
 
 		default:
 			System.err.println("===> UNKNOWN MODIFIER: " + m.getValue());
