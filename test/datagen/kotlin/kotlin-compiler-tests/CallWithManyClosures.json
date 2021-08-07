@@ -132,7 +132,18 @@
                ],
                "initializer": {
                   "kind": "METHODCALL",
-                  "method": "(f)",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "f"
+                           }
+                        ]
+                     }
+                  ],
+                  "method": "",
                   "method_args": [
                      {
                         "kind": "LAMBDA",
@@ -170,7 +181,18 @@
                ],
                "initializer": {
                   "kind": "METHODCALL",
-                  "method": "(f)",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "f"
+                           }
+                        ]
+                     }
+                  ],
+                  "method": "",
                   "method_args": [
                      {
                         "kind": "LAMBDA",
@@ -208,13 +230,24 @@
                ],
                "initializer": {
                   "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "f"
+                           }
+                        ]
+                     }
+                  ],
                   "generic_parameters": [
                      {
                         "name": "A",
                         "kind": "GENERIC"
                      }
                   ],
-                  "method": "(f)",
+                  "method": "",
                   "method_args": [
                      {
                         "kind": "LAMBDA",
