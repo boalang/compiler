@@ -82,7 +82,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 
 		superClassInitExprs.clear();
 
-		astLevel = KLS10;
+		astLevel = KLS15;
 	}
 
 	public int getAstLevel() {
