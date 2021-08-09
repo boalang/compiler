@@ -1710,6 +1710,10 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 		vb.addAllModifiers(modifiers.pop());
 
 		if (prop.hasInitializer()) {
+			if (prop.getReceiverTypeReference() != null) {
+				throw new RuntimeException("visted extension property with initializer");
+			}
+
 			expressions.push(new ArrayList<Expression>());
 			expectExpression.push(true);
 

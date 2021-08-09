@@ -230,54 +230,6 @@
                                  "kind": "VARDECL",
                                  "variable_decls": [
                                     {
-                                       "name": "T.x5",
-                                       "modifiers": [
-                                          {
-                                             "kind": "FINAL"
-                                          }
-                                       ],
-                                       "initializer": {
-                                          "kind": "VARACCESS",
-                                          "variable": "foo"
-                                       }
-                                    }
-                                 ]
-                              }
-                           ]
-                        },
-                        {
-                           "kind": "SWITCH",
-                           "conditions": [
-                              {
-                                 "kind": "VARDECL",
-                                 "variable_decls": [
-                                    {
-                                       "name": "T1.x5t",
-                                       "variable_type": {
-                                          "name": "T2",
-                                          "kind": "OTHER"
-                                       },
-                                       "modifiers": [
-                                          {
-                                             "kind": "FINAL"
-                                          }
-                                       ],
-                                       "initializer": {
-                                          "kind": "VARACCESS",
-                                          "variable": "foo"
-                                       }
-                                    }
-                                 ]
-                              }
-                           ]
-                        },
-                        {
-                           "kind": "SWITCH",
-                           "conditions": [
-                              {
-                                 "kind": "VARDECL",
-                                 "variable_decls": [
-                                    {
                                        "name": "x6a",
                                        "modifiers": [
                                           {

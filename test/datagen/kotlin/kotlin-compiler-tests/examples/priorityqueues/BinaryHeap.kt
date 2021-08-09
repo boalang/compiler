@@ -76,7 +76,7 @@ class BinaryHeap<T> : IPriorityQueue<T> {
     get() = this * 2 + 2
 
 
-  val Int.value : T = foo.bar()
+  val Int.value : T
     get() = data[this]
     set(it) {
       field = it

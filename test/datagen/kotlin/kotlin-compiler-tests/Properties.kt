@@ -33,14 +33,6 @@ var foo = 5
   get
   private set
 
-val foo.bar = 5
-   get() {}
-   set
-
-val foo.bar = 5
-   get
-   set(sad) = foo
-
 fun foo() {
   val foo = 5
   get() = 5
