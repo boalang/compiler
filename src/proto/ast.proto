@@ -229,6 +229,11 @@ message Statement {
 		TRAIT_PRECEDENCE = 37;
 		TRAIT_USE = 38;
 		YIELD = 39;
+		REQUIRES_DIRECTIVE = 40;
+		EXPORTS_DIRECTIVE = 41;
+		OPENS_DIRECTIVE = 42;
+		USES_DIRECTIVE = 43;
+		PROVIDES_DIRECTIVE = 44;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
