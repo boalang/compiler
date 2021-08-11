@@ -144,15 +144,30 @@ public class BoaCompiler extends BoaMain {
 					LOG.info(inputFile.getName() + ": task complexity: " + (isSimple ? "simple" : "complex"));
 
 					new VariableDeclRenameTransformer().start(p);
-					if (cl.hasOption("ppall")) { System.out.println("==> AFTER VariableDeclRenameTransformer") ; new PrettyPrintVisitor().start(p); }
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER VariableDeclRenameTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 					new InheritedAttributeTransformer().start(p);
-					if (cl.hasOption("ppall")) { System.out.println("==> AFTER InheritedAttributeTransformer") ; new PrettyPrintVisitor().start(p); }
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER InheritedAttributeTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 					new LocalAggregationTransformer().start(p);
-					if (cl.hasOption("ppall")) { System.out.println("==> AFTER LocalAggregationTransformer") ; new PrettyPrintVisitor().start(p); }
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER LocalAggregationTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 					new RecursiveFunctionTransformer().start(p);
-					if (cl.hasOption("ppall")) { System.out.println("==> AFTER RecursiveFunctionTransformer") ; new PrettyPrintVisitor().start(p); }
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER RecursiveFunctionTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 					new VisitorOptimizingTransformer().start(p);
-					if (cl.hasOption("ppall")) { System.out.println("==> AFTER VisitorOptimizingTransformer") ; new PrettyPrintVisitor().start(p); }
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER VisitorOptimizingTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 
 					if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 					if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
