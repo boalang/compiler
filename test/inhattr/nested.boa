@@ -8,4 +8,9 @@ visit(input, visitor {
 					if (current(Method).name != "foo")
 						o << 1;
 			});
+		else
+			visit(input, visitor {
+				after Method ->
+					o << 1;
+			});
 });

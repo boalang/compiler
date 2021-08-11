@@ -1,7 +1,8 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Neha Bhide
+ * Copyright 2016-2021, Hridesh Rajan, Robert Dyer, Neha Bhide
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,23 +44,28 @@ import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaTuple;
 import boa.types.BoaStack;
 
+// FIXME rdyer - if a visitor calls visit() on a node, it uses the current tree's stacks
+// probably we should check if that node is the current node (or one of its direct children)
+// and if it isnt, generate/use different stacks?
+
 /**
  * Converts use of current(T) inherited attributes in visitors into stack variables.
  *
- * General algorithm:
+ * <p>General algorithm:
  *
- * 1) Find each instance of VisitorExpression, then for each:
- *    a) Find all instances of "current(T)" in the visitor
- *    b) Collect set of all unique types T found in 1a
- *    c) For each type T in the set from 1b:
- *       i)   Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
- *       ii)  Where-ever we encounter 'current(T)', replace with code for 's_T_#.peek()'
- *       iii) Add/Update the before clause for T in the visitor
- *            a) If the visitor has a 'before T' clause, add 's_t_#.push(node)' as the first statement
- *            b) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
- *       iv)  Add/Update the after clause for T in the visitor
- *            a) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
- *            b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
+ * <p>1) Find each instance of VisitorExpression, then for each:
+ *       a) Find all instances of "current(T)" in the visitor
+ *       b) Collect set of all unique types T found in 1a
+ *    2) For each type T in the set from 1b:
+ *       a) Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
+ *       b) Where-ever we encounter 'current(T)', replace with code for 's_T_#.peek()'
+ *       c) For each instance of VisitorExpression:
+ *          ii)  Add/Update the before clause for T in the visitor
+ *               1) If the visitor has a 'before T' clause, add 's_t_#.push(node)' as the first statement
+ *               2) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
+ *          iii) Add/Update the after clause for T in the visitor
+ *               1) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
+ *               2) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
  *
  * @author rdyer
  * @author nbhide
@@ -100,28 +106,21 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	 */
 	private class FindCurrentForVisitors extends AbstractVisitorNoArg {
 		protected final Set<BoaTuple> currents = new HashSet<BoaTuple>();
-		protected final Map<BoaTuple,List<Factor>> factorMap = new HashMap<BoaTuple,List<Factor>>();
+		protected final Map<BoaTuple, List<Factor>> factorMap = new HashMap<BoaTuple, List<Factor>>();
 
 		/** @{inheritDoc} */
 		@Override
 		protected void initialize() {
 			currents.clear();
 			factorMap.clear();
-			super.initialize();
 		}
 
 		public Set<BoaTuple> getCurrentTypes() {
 			return currents;
 		}
 
-		public Map<BoaTuple,List<Factor>> getFactorList() {
+		public Map<BoaTuple, List<Factor>> getFactorList() {
 			return factorMap;
-		}
-
-		/** @{inheritDoc} */
-		@Override
-		public void visit(final VisitorExpression n) {
-			//don't nest
 		}
 
 		/** @{inheritDoc} */
@@ -186,41 +185,40 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		// 1) Find each instance of VisitorExpression, then for each:
 		final FindVisitorExpressions visitorsList = new FindVisitorExpressions();
 		visitorsList.start(n);
+		final List<VisitorExpression> visitors = visitorsList.getVisitors();
 
-		for (final VisitorExpression e: visitorsList.getVisitors()) {
-			//    a) Find all instances of "current(T)" in the visitor
-			//    b) Collect set of all unique types T found in 1a
-			final FindCurrentForVisitors currentSet = new FindCurrentForVisitors();
-			currentSet.start(e.getBody());
+		final FindCurrentForVisitors currentSet = new FindCurrentForVisitors();
+		//        a) Find all instances of "current(T)" in the visitor
+		//        b) Collect set of all unique types T found in 1a
+		currentSet.start(n);
 
-			//    c) For each type T in the set from 1b:
-			for (final BoaTuple b: currentSet.getCurrentTypes()) {
-				env = e.env;
+		// 2) For each type T in the set from 1b:
+		for (final BoaTuple b: currentSet.getCurrentTypes()) {
+			//    a) Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
+			final StackType st = new StackType(new Component(ASTFactory.createIdentifier(getTypeName(b), env)));
+			st.type = new BoaStack(b);
+			final VarDeclStatement v = ASTFactory.createVarDecl(stackPrefix + stackCounter++, st, new BoaStack(b), env);
+			v.env = v.getType().env = ((StackType)v.getType()).getValue().getType().env = n.env;
+			v.env.set(v.getId().getToken(), v.type);
+			n.getStatements().add(0, v);
+			//    b) Where-ever we encounter 'current(T)', replace with code for 's_T_#.peek()'
+			for (final Factor f: currentSet.getFactorList().get(b))
+				replaceCurrentCall(f, v);
 
-				//       i)   Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
-				final StackType st = new StackType(new Component(ASTFactory.createIdentifier(getTypeName(b), env)));
-				st.type = new BoaStack(b);
-				final VarDeclStatement v = ASTFactory.createVarDecl(stackPrefix + stackCounter++, st, new BoaStack(b), env);
-				v.env = v.getType().env = ((StackType)v.getType()).getValue().getType().env = n.env;
-				v.env.set(v.getId().getToken(), v.type);
-				n.getStatements().add(0, v);
-
-				//       ii)  Where-ever we encounter 'current(T)', replace with code for 's_T_#.peek()'
-				for (final Factor f: currentSet.getFactorList().get(b))
-					replaceCurrentCall(f, v);
-
+			//    c) For each instance of VisitorExpression:
+			for (final VisitorExpression e: visitors) {
 				final VisitClassifier getVS = new VisitClassifier();
 				getVS.start(e.getBody());
 				final String typeToFind = getTypeName(b);
 
-				//       iii) Add/Update the before clause for T in the visitor
-				//            a) If the visitor has a 'before T' clause, add 's_t_#.push(node)' as the first statement
+				//   ii)  Add/Update the before clause for T in the visitor
+				//        1) If the visitor has a 'before T' clause, add 's_t_#.push(node)' as the first statement
 				if (getVS.getBeforeMap().containsKey(typeToFind)) {
 					final VisitStatement vs = getVS.getBeforeMap().get(typeToFind);
 					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e);
 					vs.getBody().getStatements().add(0, pushToStack);
 				} else {
-				//            b) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
+					//    2) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
 					final Block blk;
 					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
 
@@ -238,16 +236,16 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					e.getBody().getStatements().add(vs);
 				}
 
-				//       iv)  Add/Update the after clause for T in the visitor
-				//            a) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
+				//   iii) Add/Update the after clause for T in the visitor
+				//        1) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
 				if (getVS.getAfterMap().containsKey(typeToFind)) {
 					final VisitStatement vs = getVS.getAfterMap().get(typeToFind);
-					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
+					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
 					vs.getBody().getStatements().add(popFromStack);
 				} else {
-				//            b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
+					//    2) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
 					final Block blk;
-					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
+					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
 
 					if (getVS.getAfterMap().containsKey("_")) {
 						blk = getVS.getAfterMap().get("_").getBody().clone();
