@@ -459,6 +459,13 @@
 					<exclude name="**/boa/types/Boa*" />
 				</patternset>
 			</fileset>
+			<zipfileset excludes="META-INF/" src="lib/datagen-kotlin/annotations-21.0.1.jar" />
+			<zipfileset excludes="META-INF/" src="lib/datagen-kotlin/kotlin-reflect-1.5.20.jar" />
+			<zipfileset excludes="META-INF/" src="lib/datagen-kotlin/kotlin-stdlib-1.5.20.jar" />
+			<zipfileset excludes="META-INF/" src="lib/datagen-kotlin/trove4j-1.0.20200330.jar" />
+			<zipfileset excludes="META-INF/" src="lib/datagen-kotlin/kotlin-compiler-1.5.20.jar" />
+			<zipfileset excludes="META-INF/" src="lib/datagen-kotlin/kotlin-script-runtime-1.5.20.jar" />
+			<zipfileset excludes="META-INF/" src="lib/datagen-kotlin/openapi-7.0.3.jar" />
 		</jar>
 	</target>
 
