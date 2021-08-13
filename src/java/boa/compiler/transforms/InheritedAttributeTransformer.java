@@ -227,7 +227,10 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		if (visitMap.containsKey(typeToFind)) {
 			vs = visitMap.get(typeToFind);
 
-			vs.getBody().getStatements().add(0, generatePushExpStatement(b, token, vs.getComponent().getIdentifier().getToken(), e));
+			if (isBefore)
+				vs.getBody().getStatements().add(0, generatePushExpStatement(b, token, vs.getComponent().getIdentifier().getToken(), e));
+			else
+				vs.getBody().getStatements().add(0, generatePopExpStatement(b, token, e));
 		} else {
 			//    2) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
 			final Block blk;
@@ -236,7 +239,10 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			else
 				blk = new Block();
 
-			blk.getStatements().add(0, generatePushExpStatement(b, token, "_n", e));
+			if (isBefore)
+				blk.getStatements().add(0, generatePushExpStatement(b, token, "_n", e));
+			else
+				blk.getStatements().add(0, generatePopExpStatement(b, token, e));
 
 			vs = new VisitStatement(isBefore, new Component(ASTFactory.createIdentifier("_n", env), ASTFactory.createIdentifier(typeToFind, env)), blk);
 			TypeCheckingVisitor.instance.start(vs, e.env);
