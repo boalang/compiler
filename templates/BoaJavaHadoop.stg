@@ -142,7 +142,7 @@ public class <name> extends boa.runtime.BoaRunner {
 			}
 
 			if (context.getConfiguration().getBoolean("boa.debug.timings", false))
-				LOG.error(DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()) + " - " + key.toString());
+				LOG.error(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss").format(java.time.LocalDateTime.now()) + " - " + key.toString());
 
 			try {
 				boa.functions.BoaMathIntrinsics.random = new java.util.Random(<seed> + key.hashCode());
@@ -155,7 +155,7 @@ public class <name> extends boa.runtime.BoaRunner {
 			}
 
 			if (context.getConfiguration().getBoolean("boa.debug.timings", false))
-				LOG.error(DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()) + " - " + key.toString());
+				LOG.error(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss").format(java.time.LocalDateTime.now()) + " - " + key.toString());
 		}
 
 		/** {@inheritDoc} */
