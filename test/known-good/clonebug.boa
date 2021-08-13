@@ -1,0 +1,17 @@
+o: output sum of int;
+o << 1;
+
+visit(input, visitor {
+    before _ -> {
+        y := 3;
+        o << y;
+    }
+    after _ -> {
+        z := 2;
+        o << z;
+    }
+    before Project, CodeRepository -> {
+        x := 5;
+        o << int(current(Revision).commit_date);
+    }
+});

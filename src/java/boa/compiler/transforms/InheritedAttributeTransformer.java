@@ -40,6 +40,7 @@ import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.ast.types.StackType;
 import boa.compiler.SymbolTable;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaTuple;
 import boa.types.BoaStack;
@@ -72,9 +73,7 @@ import boa.types.BoaStack;
  */
 public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	private final static String stackPrefix = "_inhattr_";
-	private static int stackCounter = 0;
-
-	private SymbolTable env;
+	private int stackCounter = 0;
 
 	/**
 	 * Creates a list of all the {@link VisitorExpression}s in the Boa AST.
@@ -104,7 +103,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	 * Generates a set of all distinct types T in calls current(T) and also a
 	 * mapping from each type T found to a list of all uses in current(T).
 	 */
-	private class FindCurrentForVisitors extends AbstractVisitorNoArg {
+	private class FindCurrentInVisitors extends AbstractVisitorNoArg {
 		protected final Set<BoaTuple> currents = new HashSet<BoaTuple>();
 		protected final Map<BoaTuple, List<Factor>> factorMap = new HashMap<BoaTuple, List<Factor>>();
 
@@ -157,11 +156,6 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		c.getArg(0).type = v.type;
 	}
 
-	private String getTypeName(final BoaTuple b) {
-		// FIXME this is a bit of a hack
-		return b.toJavaType().substring(b.toJavaType().lastIndexOf('.') + 1);
-	}
-
 	// generate the push call
 	private ExprStatement generatePushExpStatement(final BoaTuple b, final String stackName, final String nodeName, final VisitorExpression e) {
 		final Expression e1 = ASTFactory.createIdentifierExpr(stackName, e.env, new BoaStack(b));
@@ -180,14 +174,12 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	/** @{inheritDoc} */
 	@Override
 	public void visit(final Program n) {
-		env = n.env;
-
 		// 1) Find each instance of VisitorExpression, then for each:
 		final FindVisitorExpressions visitorsList = new FindVisitorExpressions();
 		visitorsList.start(n);
 		final List<VisitorExpression> visitors = visitorsList.getVisitors();
 
-		final FindCurrentForVisitors currentSet = new FindCurrentForVisitors();
+		final FindCurrentInVisitors currentSet = new FindCurrentInVisitors();
 		//        a) Find all instances of "current(T)" in the visitor
 		//        b) Collect set of all unique types T found in 1a
 		currentSet.start(n);
@@ -195,12 +187,15 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		// 2) For each type T in the set from 1b:
 		for (final BoaTuple b: currentSet.getCurrentTypes()) {
 			//    a) Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
-			final StackType st = new StackType(new Component(ASTFactory.createIdentifier(getTypeName(b), env)));
+			final String typeToFind = b.toJavaType().substring(b.toJavaType().lastIndexOf('.') + 1); // FIXME this is a bit of a hack
+
+			final StackType st = new StackType(new Component(ASTFactory.createIdentifier(typeToFind, n.env)));
 			st.type = new BoaStack(b);
-			final VarDeclStatement v = ASTFactory.createVarDecl(stackPrefix + stackCounter++, st, new BoaStack(b), env);
-			v.env = v.getType().env = ((StackType)v.getType()).getValue().getType().env = n.env;
-			v.env.set(v.getId().getToken(), v.type);
+
+			final VarDeclStatement v = ASTFactory.createVarDecl(stackPrefix + stackCounter++, st, st.type, n.env);
+			TypeCheckingVisitor.instance.start(v, n.env);
 			n.getStatements().add(0, v);
+
 			//    b) Where-ever we encounter 'current(T)', replace with code for 's_T_#.peek()'
 			for (final Factor f: currentSet.getFactorList().get(b))
 				replaceCurrentCall(f, v);
@@ -209,58 +204,47 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			for (final VisitorExpression e: visitors) {
 				final VisitClassifier getVS = new VisitClassifier();
 				getVS.start(e.getBody());
-				final String typeToFind = getTypeName(b);
+
+				final String token = v.getId().getToken();
+
+				e.env.set(token, st.type);
 
 				//   ii)  Add/Update the before clause for T in the visitor
-				//        1) If the visitor has a 'before T' clause, add 's_t_#.push(node)' as the first statement
-				if (getVS.getBeforeMap().containsKey(typeToFind)) {
-					final VisitStatement vs = getVS.getBeforeMap().get(typeToFind);
-					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e);
-					vs.getBody().getStatements().add(0, pushToStack);
-				} else {
-					//    2) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
-					final Block blk;
-					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
-
-					if (getVS.getBeforeMap().containsKey("_")) {
-						blk = getVS.getBeforeMap().get("_").getBody().clone();
-						blk.getStatements().add(0, pushToStack);
-					} else {
-						blk = new Block().addStatement(pushToStack);
-					}
-
-					final VisitStatement vs = new VisitStatement(true, new Component(ASTFactory.createIdentifier("node", env), ASTFactory.createIdentifier(typeToFind, env)), blk);
-					vs.getComponent().getType().type = b;
-					vs.env = e.env;
-
-					e.getBody().getStatements().add(vs);
-				}
+				updateVisitClause(true, n.env, getVS.getBeforeMap(), typeToFind, b, e, token, st);
 
 				//   iii) Add/Update the after clause for T in the visitor
-				//        1) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
-				if (getVS.getAfterMap().containsKey(typeToFind)) {
-					final VisitStatement vs = getVS.getAfterMap().get(typeToFind);
-					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
-					vs.getBody().getStatements().add(popFromStack);
-				} else {
-					//    2) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
-					final Block blk;
-					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
-
-					if (getVS.getAfterMap().containsKey("_")) {
-						blk = getVS.getAfterMap().get("_").getBody().clone();
-						blk.getStatements().add(popFromStack);
-					} else {
-						blk = new Block().addStatement(popFromStack);
-					}
-
-					final VisitStatement vs = new VisitStatement(false, new Component(ASTFactory.createIdentifier("node", env), ASTFactory.createIdentifier(typeToFind, env)), blk);
-					vs.getComponent().getType().type = b;
-					vs.env = e.env;
-
-					e.getBody().getStatements().add(vs);
-				}
+				updateVisitClause(false, n.env, getVS.getAfterMap(), typeToFind, b, e, token, st);
 			}
 		}
+	}
+
+	//   ii)  Add/Update the before clause for T in the visitor
+	//   iii) Add/Update the after clause for T in the visitor
+	private void updateVisitClause(final boolean isBefore, final SymbolTable env, final Map<String, VisitStatement> visitMap, final String typeToFind, final BoaTuple b, final VisitorExpression e, final String token, final StackType st) {
+		final VisitStatement vs;
+
+		//        1) If the visitor has a 'before T' clause, add 's_t_#.push(node)' as the first statement
+		if (visitMap.containsKey(typeToFind)) {
+			vs = visitMap.get(typeToFind);
+
+			vs.getBody().getStatements().add(0, generatePushExpStatement(b, token, vs.getComponent().getIdentifier().getToken(), e));
+		} else {
+			//    2) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
+			final Block blk;
+			if (visitMap.containsKey("_"))
+				blk = visitMap.get("_").getBody().clone();
+			else
+				blk = new Block();
+
+			blk.getStatements().add(0, generatePushExpStatement(b, token, "_n", e));
+
+			vs = new VisitStatement(isBefore, new Component(ASTFactory.createIdentifier("_n", env), ASTFactory.createIdentifier(typeToFind, env)), blk);
+			TypeCheckingVisitor.instance.start(vs, e.env);
+
+			e.getBody().getStatements().add(vs);
+			new VariableDeclRenameTransformer().start(vs);
+		}
+
+		vs.getBody().env.set(token, st.type);
 	}
 }
