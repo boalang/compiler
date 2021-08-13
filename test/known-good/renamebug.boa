@@ -1,0 +1,12 @@
+o: output sum[string] of int;
+
+visit(input, visitor {
+    before cf: ChangedFile -> {
+        x := 5;
+        o[current(ChangedFile).name] << x;
+    }
+    after cf2: ChangedFile -> {
+        x := 3;
+        o[cf2.name] << x;
+    }
+});

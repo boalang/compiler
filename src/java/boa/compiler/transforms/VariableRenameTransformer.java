@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,26 +27,14 @@ import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 
 /**
- * Finds and renames all variables in the tree, including their declarations
- * and uses.  Renames are done by adding a specified prefix to the front of
- * the names.
- * 
+ * Finds and renames visitor statements that name their argument.
+ * This allows merging two visit statements from different programs together,
+ * ensuring they use the same arg name.
+ *
  * @author rdyer
  */
 public class VariableRenameTransformer extends AbstractVisitorNoArgNoRet {
-	protected String prefix = "_";
 	protected final String visitArgName = "_n";
-
-	/**
-	 * Starts a variable renaming transformation with a given prefix.
-	 * 
-	 * @param n the node to start transform at
-	 * @param prefix the prefix to add to the start of names
-	 */
-	public void start(Node n, String prefix) {
-		this.prefix = prefix + "_";
-		start(n);
-	}
 
 	protected String oldVisitArgName;
 	protected final Stack<String> oldVisitArgNames = new Stack<String>();
@@ -59,15 +48,14 @@ public class VariableRenameTransformer extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(VisitStatement n) {
-		// special case variable renaming for visit statements that name
-		// their argument - this allows merging two visit statements from
-		// different programs together, ensuring they use the same arg name
+	public void visit(final VisitStatement n) {
 		if (n.hasComponent()) {
 			oldVisitArgNames.push(oldVisitArgName);
 			oldVisitArgName = n.getComponent().getIdentifier().getToken();
 			n.getComponent().accept(this);
 			n.getBody().accept(this);
+			n.getBody().env.set(visitArgName, n.getBody().env.get(oldVisitArgName));
+			n.getBody().env.removeLocal(oldVisitArgName);
 			oldVisitArgName = oldVisitArgNames.pop();
 			return;
 		}
@@ -76,30 +64,28 @@ public class VariableRenameTransformer extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(VarDeclStatement n) {
+	public void visit(final VarDeclStatement n) {
 		final String oldId = n.getId().getToken();
 
-		final String newId;
-		if (n.getId().getToken().equals(oldVisitArgName))
-			newId = visitArgName;
-		else
-			newId = prefix + oldId;
-		n.env.set(newId, n.env.get(oldId));
+		if (n.getId().getToken().equals(oldVisitArgName)) {
+			n.env.set(visitArgName, n.env.get(oldId));
+			n.env.removeLocal(oldId);
 
-		n.getId().accept(this);
-		if (n.hasInitializer())
-			n.getInitializer().accept(this);
+			n.getId().accept(this);
+			if (n.hasInitializer())
+				n.getInitializer().accept(this);
+		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(Selector n) {
+	public void visit(final Selector n) {
 		// do nothing, we dont want to rename the selector's identifier
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(Identifier n) {
+	public void visit(final Identifier n) {
 		final String oldId = n.getToken();
 
 		if (n.env.hasType(oldId) || n.env.hasGlobal(oldId) || n.env.hasGlobalFunction(oldId))
@@ -107,7 +93,5 @@ public class VariableRenameTransformer extends AbstractVisitorNoArgNoRet {
 
 		if (oldId.equals(oldVisitArgName))
 			n.setToken(visitArgName);
-		else
-			n.setToken(prefix + oldId);
 	}
 }
