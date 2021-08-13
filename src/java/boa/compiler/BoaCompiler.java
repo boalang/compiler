@@ -135,7 +135,7 @@ public class BoaCompiler extends BoaMain {
 
 			try {
 				if (!parserErrorListener.hasError) {
-					new TypeCheckingVisitor().start(p, new SymbolTable());
+					TypeCheckingVisitor.instance.start(p, new SymbolTable());
 
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);
@@ -205,7 +205,7 @@ public class BoaCompiler extends BoaMain {
 
 			try {
 				if (!parserErrorListener.hasError) {
-					new TypeCheckingVisitor().start(p, new SymbolTable());
+					TypeCheckingVisitor.instance.start(p, new SymbolTable());
 
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);

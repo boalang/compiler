@@ -42,6 +42,8 @@ import boa.types.*;
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
 
+	public static final TypeCheckingVisitor instance = new TypeCheckingVisitor();
+
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
 	 *
