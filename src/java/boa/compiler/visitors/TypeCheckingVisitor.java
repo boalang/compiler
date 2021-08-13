@@ -1195,14 +1195,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final VisitorExpression n, final SymbolTable env) {
 		n.env = env;
 		n.getType().accept(this, env);
+		n.type = n.getType().type;
 		for (final Statement s : n.getBody().getStatements())
 			if (!(s instanceof VisitStatement))
 				throw new TypeCheckException(s, "only 'before' or 'after' visit statements are allowed inside visitor bodies");
 		visitorChecker.start(n);
+		new VisitorDesugar().start(n);
 		n.getBody().accept(this, env);
-		n.type = n.getType().type;
-		final VisitorDesugar desugar = new VisitorDesugar();
-		desugar.start(n);
 	}
 
 	/** {@inheritDoc} */
