@@ -1,0 +1,3 @@
+o: output sum[int][int] of int;
+
+o[3][3] = 3;
