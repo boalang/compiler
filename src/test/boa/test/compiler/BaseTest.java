@@ -221,6 +221,7 @@ public abstract class BaseTest {
 		final StartContext ctx = parse(input);
 
 		try {
+			TypeCheckingVisitor.warn = false;
 			TypeCheckingVisitor.instance.start(ctx.ast, new SymbolTable());
 			if (error != null)
 				fail("expected error: " + error);
