@@ -412,6 +412,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							warn(node, "directly indexing maps can lead to runtime crashes - replace with lookup(" + n.getOperand() + ", " + new PrettyPrintVisitor().startAndReturn(((Index)node).getStart()) + ", <defaultValue>)");
 						type = ((BoaMap) type).getType();
 					} else {
+						if (n.getOperand().type instanceof BoaTable)
+							throw new TypeCheckException(n.getOperand(), "can not assign to output variable '" + n.getOperand() + "' - did you mean to use <<?");
 						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
 					}
 				} else {
@@ -580,6 +582,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		n.getRhs().accept(this, env);
+
+		if (n.getLhs().type instanceof BoaTable)
+			throw new TypeCheckException(n.getLhs(), "can not assign to output variable '" + n.getLhs().getOperand() + "' - did you mean to use <<?");
 
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
 			if (!n.getLhs().type.assigns(n.getRhs().type))
