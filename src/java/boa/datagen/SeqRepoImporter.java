@@ -49,6 +49,7 @@ import boa.types.Toplevel.Project;
 public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
+	private final static long skips = Long.parseLong(Properties.getProperty("skip", DefaultProperties.SKIPS)) + 1;
 
 	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
@@ -130,25 +131,30 @@ public class SeqRepoImporter {
 			try {
 				final JsonObject rp = repoArray.get(i).getAsJsonObject();
 				final RepoMetadata repo = new RepoMetadata(rp);
-				if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
-					final Project project = repo.toBoaMetaDataProtobuf(); // current project instance only contains metadata
+				if (counter % skips == 0) {
+					if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
+						final Project project = repo.toBoaMetaDataProtobuf(); // current project instance only contains metadata
 
-					// System.out.println(jRepo.toString());
-					boolean assigned = false;
-					while (!getDone() && !assigned) {
-						for (int j = 0; !getDone() && j < POOL_SIZE; j++) {
-							if (workers[j].isReady() && !workers[j].isAssigned()) {
-								workers[j].setProject(project);
-								workers[j].setAssigned(true);
-								assigned = true;
-								break;
+						// System.out.println(jRepo.toString());
+						boolean assigned = false;
+						while (!getDone() && !assigned) {
+							for (int j = 0; !getDone() && j < POOL_SIZE; j++) {
+								if (workers[j].isReady() && !workers[j].isAssigned()) {
+									workers[j].setProject(project);
+									workers[j].setAssigned(true);
+									assigned = true;
+									break;
+								}
 							}
+							// Thread.sleep(100);
 						}
-						// Thread.sleep(100);
+						if (assigned)
+							System.out.println("Assigned the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id
+									+ " from the " + i + "th object of the json file: " + file.getPath());
 					}
-					if (assigned)
-						System.out.println("Assigned the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id
-								+ " from the " + i + "th object of the json file: " + file.getPath());
+				} else {
+					System.out.println("Skipped the " + (++counter) + "th project: " + repo.name + " with id: " + repo.id
+							+ " from the " + i + "th object of the json file: " + file.getPath());
 				}
 			} catch (final Exception e) {
 				System.err.println("Error proccessing item " + i + " of page " + file.getPath());

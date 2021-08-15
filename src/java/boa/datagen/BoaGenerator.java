@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2015-2021, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +33,7 @@ import boa.datagen.forges.github.MetaDataMaster;
  * The main entry point for Boa tools for generating datasets.
  *
  * @author hridesh
- * 
+ * @author rdyer
  */
 public class BoaGenerator {
 	private static boolean jsonAvailable = true;
@@ -56,8 +57,8 @@ public class BoaGenerator {
 			SeqCombiner.main(new String[0]);
 		} else {
 			/*
-			 * 1. if user provides local json files 
-			 * 2. if user provides username and password 
+			 * 1. if user provides local json files
+			 * 2. if user provides username and password
 			 * in both the cases json files are going to be available
 			 */
 
@@ -117,6 +118,7 @@ public class BoaGenerator {
 		options.addOption("targetUser", true, "username of target repository");
 		options.addOption("targetRepo", true, "name of the target repository");
 		options.addOption("cache", false, "enable if you want to use already cloned repositories");
+		options.addOption("skip", true, "skip every Nth project (useful for sampling)");
 		options.addOption("recover", false, "enable to recover partially built dataset - this will only combine generated data");
 		options.addOption("debug", false, "enable for debug mode");
 		options.addOption("debugparse", false, "enable for debug mode when parsing source files");
@@ -192,6 +194,9 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("cache")) {
 			DefaultProperties.CACHE = true;
+		}
+		if (cl.hasOption("skip")) {
+			DefaultProperties.SKIPS = cl.getOptionValue("skip");
 		}
 		if (cl.hasOption("libs")) {
 			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
