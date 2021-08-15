@@ -28,7 +28,8 @@ public class DefaultProperties {
 	public static String TOTAL_MAX_PROJECTS = "" + Long.MAX_VALUE;
 	public static String MAX_COMMITS = "10000";
 	public static String MAX_SIZE_FOR_PROJECT_WITH_COMMITS = String.valueOf(1 << 26); // Integer.MAX_VALUE / 3
-	
+	public static String SKIPS = "1";
+
 	public static boolean DEBUG = false;
 	public static boolean DEBUGPARSE = false;
 	public static boolean CACHE = false;
@@ -62,22 +63,22 @@ public class DefaultProperties {
 	public static final String SF_JSON_CACHE_PATH = "json_cache";
 	public static final String SF_SVN_PATH = "svn";
 	public static final String SF_TICKETS_PATH = "tickets";
-	
+
 	// GitHub paths
 	public static  String GH_JSON_PATH = "repos-metadata-Boa-upto1213";
 	public static String GH_GIT_PATH = "";
 	public static String GH_ISSUE_PATH = "";
 	public static final String GH_TICKETS_PATH = "tickets";
 	public static  String TOKEN = null;
-	
+
 	public static String CLASSPATH_ROOT = getClasspathRoot();
 	public static  String OUTPUT = "output";
-	
+
 	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true;
 	public static boolean STORE_COMMITS = true;
 
 	public static String localDataPath = null;
-	
+
 	@SuppressWarnings("unused")
 	private static String getRoot() {
 		File dir = new File(System.getProperty("user.dir"));
