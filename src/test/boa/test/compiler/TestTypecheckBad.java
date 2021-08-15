@@ -125,4 +125,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void stopInAfter() throws IOException {
 		typecheck(load(badDir + "stop-in-after.boa"), "Stop statement not allowed inside 'after' visits");
 	}
+
+	@Test
+	public void assignOutput() throws IOException {
+		typecheck(load(badDir + "assignoutput.boa"), "can not assign to output variable 'o' - did you mean to use <<?");
+	}
 }

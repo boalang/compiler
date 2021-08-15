@@ -1,7 +1,8 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +45,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
 
 	public static final TypeCheckingVisitor instance = new TypeCheckingVisitor();
+	public static boolean warn = true;
 
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
@@ -410,13 +412,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							warn(node, "directly indexing maps can lead to runtime crashes - replace with lookup(" + n.getOperand() + ", " + new PrettyPrintVisitor().startAndReturn(((Index)node).getStart()) + ", <defaultValue>)");
 						type = ((BoaMap) type).getType();
 					} else {
+						if (n.getOperand().type instanceof BoaTable)
+							throw new TypeCheckException(n.getOperand(), "can not assign to output variable '" + n.getOperand() + "' - did you mean to use <<?");
 						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
 					}
 				} else {
 					node.accept(this, env);
 					n.getOperand().env = env;
 
+					boolean oldwarn = warn;
+					warn = false;
 					final List<BoaType> formalParameters = this.check((Call) node, env);
+					warn = oldwarn;
 
 					try {
 						type = env.getFunction(((Identifier)n.getOperand()).getToken(), formalParameters).erase(formalParameters);
@@ -566,15 +573,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = env;
 
 		try {
-            n.env.setIsLhs(true);
+			n.env.setIsLhs(true);
 			n.getLhs().accept(this, env);
-            n.env.setIsLhs(false);
+			n.env.setIsLhs(false);
 		} catch (final TypeCheckException e) {
 			if (!e.getMessage().startsWith("expected a call to function"))
 				throw e;
 		}
 
 		n.getRhs().accept(this, env);
+
+		if (n.getLhs().type instanceof BoaTable)
+			throw new TypeCheckException(n.getLhs(), "can not assign to output variable '" + n.getLhs().getOperand() + "' - did you mean to use <<?");
 
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
 			if (!n.getLhs().type.assigns(n.getRhs().type))
@@ -1566,6 +1576,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	}
 
 	protected void warn(final Node node, final String msg) {
-		System.err.println("WARNING at line " + node.beginLine + ", columns " + node.beginColumn + "-" + node.endColumn + ": " + msg);
+		if (warn)
+			System.err.println("WARNING at line " + node.beginLine + ", columns " + node.beginColumn + "-" + node.endColumn + ": " + msg);
 	}
 }
