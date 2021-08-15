@@ -52,37 +52,41 @@ public class BoaGenerator {
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
 
-		/*
-		 * 1. if user provides local json files 
-		 * 2. if user provides username and password 
-		 * in both the cases json files are going to be available
-		 */
-
-		if (jsonAvailable) {
-			try {
-				SeqRepoImporter.main(new String[0]);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		if (cl.hasOption("recover")) {
 			SeqCombiner.main(new String[0]);
-		} else if (tokenAvailable) { // when user provides local repo and doesn't have json files
-			MetaDataMaster mdm = new MetaDataMaster();
-			mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
+		} else {
+			/*
+			 * 1. if user provides local json files 
+			 * 2. if user provides username and password 
+			 * in both the cases json files are going to be available
+			 */
 
-			SeqCombiner.main(new String[0]);
-		} else { // when user provides local repo and does not have json files
-			File output = new File(DefaultProperties.OUTPUT);
-			if (!output.exists())
-				output.mkdirs();
-			LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH, DefaultProperties.OUTPUT);
-			try {
-				MapFileGen.main(new String[0]);
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (jsonAvailable) {
+				try {
+					SeqRepoImporter.main(new String[0]);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				SeqCombiner.main(new String[0]);
+			} else if (tokenAvailable) { // when user provides local repo and doesn't have json files
+				MetaDataMaster mdm = new MetaDataMaster();
+				mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
+
+				SeqCombiner.main(new String[0]);
+			} else { // when user provides local repo and does not have json files
+				File output = new File(DefaultProperties.OUTPUT);
+				if (!output.exists())
+					output.mkdirs();
+				LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH, DefaultProperties.OUTPUT);
+				try {
+					MapFileGen.main(new String[0]);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
+
+			clear();
 		}
-
-		clear();
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -113,6 +117,7 @@ public class BoaGenerator {
 		options.addOption("targetUser", true, "username of target repository");
 		options.addOption("targetRepo", true, "name of the target repository");
 		options.addOption("cache", false, "enable if you want to use already cloned repositories");
+		options.addOption("recover", false, "enable to recover partially built dataset - this will only combine generated data");
 		options.addOption("debug", false, "enable for debug mode");
 		options.addOption("debugparse", false, "enable for debug mode when parsing source files");
 		options.addOption("help", false, "shows this help");
