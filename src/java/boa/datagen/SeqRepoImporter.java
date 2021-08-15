@@ -368,6 +368,8 @@ public class SeqRepoImporter {
 
 			// clone repository
 			if (!gitDir.exists()) {
+				if (cache)
+					return null; // return null to skip non-cached project
 				final String[] args = { repo.getUrl(), gitDir.getAbsolutePath() };
 				try {
 					RepositoryCloner.clone(args);
@@ -449,7 +451,10 @@ public class SeqRepoImporter {
 				return false;
 			final String lang = project.getMainLanguage();
 			if (lang != null
-					&& (lang.equals("Java") || lang.equals("Kotlin") || lang.equals("JavaScript") || lang.equals("PHP")))
+					&& (lang.equals("Java")
+						|| lang.equals("Kotlin")
+						|| lang.equals("JavaScript")
+						|| lang.equals("PHP")))
 				return false;
 			return true;
 		}
