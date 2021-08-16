@@ -143,19 +143,6 @@ public class BoaStringIntrinsics {
 	 * 
 	 * @param str the string to split
 	 * @param regex the regular expression to use for splitting
-	 * 
-	 * @return the substrings of <em>str</em>, split once by <em>regex</em>
-	 */
-	@FunctionSpec(name = "split", returnType = "array of string", formalParameters = { "string", "string"})
-	public static String[] split(final String str, final String regex) {
-		return str.split(regex, 1);
-	}
-
-	/**
-	 * Splits a string into an array of strings using the given regex.
-	 * 
-	 * @param str the string to split
-	 * @param regex the regular expression to use for splitting
 	 * @param n at most how many times to split
 	 * 
 	 * @return the substrings of <em>str</em>, split at most <em>n</em> times by <em>regex</em>
@@ -173,8 +160,8 @@ public class BoaStringIntrinsics {
 	 * 
 	 * @return the substrings of <em>str</em>, split entirely by <em>regex</em>
 	 */
-	@FunctionSpec(name = "splitall", returnType = "array of string", formalParameters = { "string", "string"})
-	public static String[] splitall(final String str, final String regex) {
+	@FunctionSpec(name = "split", returnType = "array of string", formalParameters = { "string", "string"})
+	public static String[] split(final String str, final String regex) {
 		return str.split(regex);
 	}
 
