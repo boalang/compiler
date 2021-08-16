@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Stack;
 
 /**
  * String Manipulation
@@ -174,6 +176,32 @@ public class BoaStringIntrinsics {
 	@FunctionSpec(name = "splitall", returnType = "array of string", formalParameters = { "string", "string"})
 	public static String[] splitall(final String str, final String regex) {
 		return str.split(regex);
+	}
+
+	/**
+	 * Joins an array of strings into a single string using the given join string.
+	 * 
+	 * @param joinStr the string to use to join
+	 * @param strs the strings to be joined
+	 * 
+	 * @return the strings in the array with joinStr in between each
+	 */
+	@FunctionSpec(name = "join", returnType = "string", formalParameters = { "string", "array of string"})
+	public static String join(final String joinStr, final String[] strs) {
+		return String.join(joinStr, strs);
+	}
+
+	/**
+	 * Joins a stack of strings into a single string using the given join string.
+	 * 
+	 * @param joinStr the string to use to join
+	 * @param strs the strings to be joined
+	 * 
+	 * @return the strings in the stack with joinStr in between each
+	 */
+	@FunctionSpec(name = "join", returnType = "string", formalParameters = { "string", "stack of string"})
+	public static String join(final String joinStr, final Stack<String> strs) {
+		return String.join(joinStr, strs);
 	}
 
 	/**
