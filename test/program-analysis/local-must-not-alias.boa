@@ -60,14 +60,14 @@ alias := traversal(node: CFGNode) : T1 {
 	cur_val.out = clone(cur_val.in);
 	genkill := getvalue(node, init);
 	if(genkill.gen!="") {
-		str_array:=splitall(genkill.gen,"@");
+		str_array:=split(genkill.gen,"@");
 		if(str_array[1]!="var")
 			add(cur_val.out, genkill.gen);
 		else {
 			tmp_out:=values(cur_val.out);
 			foreach(i:int;def(tmp_out[i])) {
 				tmp1:=clone(tmp_out[i]);
-				str_array1:=splitall(tmp1,"@");
+				str_array1:=split(tmp1,"@");
 				if(str_array1[0] == str_array[2]) {
 					add(cur_val.out, str_array[0]+"@"+str_array1[1]);
 				}
