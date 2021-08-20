@@ -2427,9 +2427,7 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 
-		// element type: SingleVariableDeclaration
-		// how to set variable declaration
-		// Boa book: fields are array
+	
 		for (Object o : node.recordComponents()) {
 			fields.push(new ArrayList<boa.types.Ast.Variable>());
 			((SingleVariableDeclaration) o).accept(this);
