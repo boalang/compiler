@@ -229,11 +229,6 @@ message Statement {
 		TRAIT_PRECEDENCE = 37;
 		TRAIT_USE = 38;
 		YIELD = 39;
-		REQUIRES_DIRECTIVE = 40;
-		EXPORTS_DIRECTIVE = 41;
-		OPENS_DIRECTIVE = 42;
-		USES_DIRECTIVE = 43;
-		PROVIDES_DIRECTIVE = 44;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -370,6 +365,13 @@ message Expression {
 		NAMESPACENAME = 100;
 		SWITCH = 101;
 		TEXTBLOCK = 102;
+		REQUIRES = 103;
+		EXPORTS = 104;
+		OPENS = 105;
+		USES = 106;
+		PROVIDES = 107;
+		PACKAGE_NAME = 108;
+		MODULE_NAME = 109;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -442,6 +444,10 @@ message Modifier {
 		TRANSIENT = 12;
 		/** A volatile modifier */
 		VOLATILE = 13;
+		/** A module modifier */
+		MODULE = 14;
+		/** A transitive modifier */
+		TRANSITIVE = 15;
 	}
 	/** A visibility modifier */
 	enum Visibility {
