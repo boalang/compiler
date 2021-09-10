@@ -40,7 +40,7 @@ cfg_reach_def := traversal(n: CFGNode): T {
 		tmp_out:=values(cur_val.out);
 		foreach(i:int;def(tmp_out[i])) {
 			tmp1:=clone(tmp_out[i]);
-			str_array:=splitall(tmp1,"@");
+			str_array:=split(tmp1,"@");
 			if(str_array[0] == genkill.kill) {
 				remove(cur_val.out, tmp1);
 			}
@@ -87,7 +87,7 @@ loop_invariant := traversal(node: CFGNode) {
 				foreach(j:int;def(uv[j])) {
 					cout := values(cur_val.out);
 					foreach(k:int;def(cout[k])) {
-						str_array:=splitall(cout[k],"@");
+						str_array:=split(cout[k],"@");
 						if(str_array[0]==uv[j]) {
 							if(int(str_array[1]) > loop[i].start) {
 								flag = true;
