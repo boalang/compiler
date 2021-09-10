@@ -293,7 +293,7 @@ public class SymbolTable {
 		// hashing functions
 		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.hashCode())"));
 		for (final BoaType t : dslTupleTypes)
-			globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { t }, "((long)${0}.hashCode())"));
+			globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { t }, "java.util.Arrays.hashCode(${0}.toByteArray())"));
 		for (final BoaType t : dslMapTypes)
 			globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { t }, "((long)${0}.hashCode())"));
 
