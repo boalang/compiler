@@ -92,8 +92,8 @@ public abstract class AbstractCommit {
 			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	static Map<String, ASTNode> previousAst = new HashMap<>();
-	static Map<String,Integer> previousFileRev = new HashedMap();
-	static Map<String,Set<String>> fileRevMap = new HashedMap();
+	static Map<String, Integer> previousFileRev = new HashedMap();
+	static Map<String, Set<String>> fileRevMap = new HashedMap();
 
 	boolean lastRevision = false;
 
@@ -220,35 +220,41 @@ public abstract class AbstractCommit {
 //				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processPythonChangeFile(cfb); // Only process the Python files and ignore other files e.g., .java, .js
-				//processChangeFile(cfb);
+			// processChangeFile(cfb);
 			revision.addFiles(cfb.build());
 		}
 
 		return revision.build();
 	}
 
-	//	String[] badpaths = { "spacy/lang/ca/lemmatizer.py", "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
-	//	"spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py", "spacy/lang/hu/lemmatizer.py",
-	//	"spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py", "spacy/lang/pt/lemmatizer.py",
-	//	"spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py", "spacy/lang/tr/lemmatizer.py",
-	//	"spacy/lang/ur/lemmatizer.py" };
-	//Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
+	// String[] badpaths = { "spacy/lang/ca/lemmatizer.py",
+	// "spacy/lang/da/lemmatizer.py", "spacy/lang/de/lemmatizer.py",
+	// "spacy/lang/es/lemmatizer.py", "spacy/lang/fr/lemmatizer/lookup.py",
+	// "spacy/lang/hu/lemmatizer.py",
+	// "spacy/lang/id/lemmatizer.py", "spacy/lang/it/lemmatizer.py",
+	// "spacy/lang/pt/lemmatizer.py",
+	// "spacy/lang/ro/lemmatizer.py", "spacy/lang/sv/lemmatizer/lookup.py",
+	// "spacy/lang/tr/lemmatizer.py",
+	// "spacy/lang/ur/lemmatizer.py" };
+	// Set<String> badp = new HashSet<String>(Arrays.asList(badpaths));
 	String largeFiles1 = "spacy/lang/";
 	String largeFiles2 = "/mlxtend/data/mnist.py";
-	String[] excludeProjects = {"ryfeus/lambda-packs", "sorenlind/lemmy", // excluded in the 1st version of the evolution datagen
-								"MycroftAI/mycroft-core", "balcilar/3D-CNN-Emotion-Recognition", // excluded in the 2nd version (large) of the evolution datagen
-								"roclark/sportsreference", "CODEJIN/HNet_on_Tensorflow"}; // Possibly single large files
-								//"rasbt/mlxtend"}; //excluded for ML-Verse-with-Diff
+	String[] excludeProjects = { "ryfeus/lambda-packs", "sorenlind/lemmy", // excluded in the 1st version of the
+																			// evolution datagen
+			"MycroftAI/mycroft-core", "balcilar/3D-CNN-Emotion-Recognition", // excluded in the 2nd version (large) of
+																				// the evolution datagen
+			"roclark/sportsreference", "CODEJIN/HNet_on_Tensorflow" }; // Possibly single large files
+	// "rasbt/mlxtend"}; //excluded for ML-Verse-with-Diff
 	Set<String> badProjects = new HashSet<String>(Arrays.asList(excludeProjects));
-	boolean pythonParsingError=false;
-	boolean enableDiff = true;
-	boolean include_notebooks = false;
+	boolean pythonParsingError = false;
+	boolean enableDiff = false;
+	boolean include_notebooks = true;
 
 	Builder processPythonChangeFile(final ChangedFile.Builder fb) {
 		long len = connector.astWriterLen;
 		String path = fb.getName();
 
-		//System.out.println("Revision ID: "+this.id+", Processing: "+path);
+		// System.out.println("Revision ID: "+this.id+", Processing: "+path);
 
 //		collectDataEvolutionaryInfo(path, fb);
 
@@ -271,10 +277,9 @@ public abstract class AbstractCommit {
 					parsePythonFile(path, fb, content, false);
 				}
 			}
-		}
-		else if (lowerPath.endsWith(".ipynb")) {
-			if(include_notebooks)
-				if(!path.startsWith(".ipynb_checkpoints/") && !path.contains("/.ipynb_checkpoints/")) {
+		} else if (lowerPath.endsWith(".ipynb")) {
+			if (include_notebooks)
+				if (!path.startsWith(".ipynb_checkpoints/") && !path.contains("/.ipynb_checkpoints/")) {
 					final String content = getFileContents(path);
 					fb.setKind(FileKind.SOURCE_PY_ERROR);
 					System.out.println(projectName + ": " + path);
@@ -289,7 +294,6 @@ public abstract class AbstractCommit {
 
 		return fb;
 	}
-
 
 	Builder processChangeFile(final ChangedFile.Builder fb) {
 		final long len = connector.astWriterLen;
@@ -421,51 +425,41 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		}/* else if (lowerPath.endsWith(".html") && parse) {
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.Source_HTML);
-			if (!parseHTML(path, fb, content, false, astWriter)) {
-				if (debugparse)
-					System.err.println("Found an HTML parse error in : revision " + id + ": file " + path);
-				fb.setKind(FileKind.SOURCE_HTML_ERROR);
-
-			} else if (debugparse)
-				System.err.println("Accepted HTML: revisison " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".xml") && parse) {
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.Source_XML);
-			if (!parseXML(path, fb, content, false, astWriter)) {
-				if (debugparse)
-					System.err.println("Found an XML parse error in : revision " + id + ": file " + path);
-				fb.setKind(FileKind.SOURCE_XML_ERROR);
-			}else if (debugparse)
-				System.err.println("Accepted XML: revisison " + id + ": file " + path);
-		} else if (lowerPath.endsWith(".css") && parse) {
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.Source_CSS);
-			if (!parseCSS(path, fb, content, false, astWriter)) {
-				if (debugparse)
-					System.err.println("Found an CSS parse error in : revision " + id + ": file " + path);
-				fb.setKind(FileKind.SOURCE_CSS_ERROR);
-			}else if (debugparse)
-				System.err.println("Accepted CSS: revisison " + id + ": file " + path);
-		}*/
-		/*else {
-			final String content = getFileContents(path);
-			if (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
-				try {
-					fb.setKey(connector.contentWriterLen);
-					BytesWritable bw = new BytesWritable(content.getBytes());
-					connector.contentWriter.append(new LongWritable(connector.contentWriterLen), bw);
-					connector.contentWriterLen += bw.getLength();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}*/
+		} /*
+			 * else if (lowerPath.endsWith(".html") && parse) { final String content =
+			 * getFileContents(path);
+			 * 
+			 * fb.setKind(FileKind.Source_HTML); if (!parseHTML(path, fb, content, false,
+			 * astWriter)) { if (debugparse)
+			 * System.err.println("Found an HTML parse error in : revision " + id +
+			 * ": file " + path); fb.setKind(FileKind.SOURCE_HTML_ERROR);
+			 * 
+			 * } else if (debugparse) System.err.println("Accepted HTML: revisison " + id +
+			 * ": file " + path); } else if (lowerPath.endsWith(".xml") && parse) { final
+			 * String content = getFileContents(path);
+			 * 
+			 * fb.setKind(FileKind.Source_XML); if (!parseXML(path, fb, content, false,
+			 * astWriter)) { if (debugparse)
+			 * System.err.println("Found an XML parse error in : revision " + id + ": file "
+			 * + path); fb.setKind(FileKind.SOURCE_XML_ERROR); }else if (debugparse)
+			 * System.err.println("Accepted XML: revisison " + id + ": file " + path); }
+			 * else if (lowerPath.endsWith(".css") && parse) { final String content =
+			 * getFileContents(path);
+			 * 
+			 * fb.setKind(FileKind.Source_CSS); if (!parseCSS(path, fb, content, false,
+			 * astWriter)) { if (debugparse)
+			 * System.err.println("Found an CSS parse error in : revision " + id + ": file "
+			 * + path); fb.setKind(FileKind.SOURCE_CSS_ERROR); }else if (debugparse)
+			 * System.err.println("Accepted CSS: revisison " + id + ": file " + path); }
+			 */
+		/*
+		 * else { final String content = getFileContents(path); if
+		 * (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
+		 * try { fb.setKey(connector.contentWriterLen); BytesWritable bw = new
+		 * BytesWritable(content.getBytes()); connector.contentWriter.append(new
+		 * LongWritable(connector.contentWriterLen), bw); connector.contentWriterLen +=
+		 * bw.getLength(); } catch (IOException e) { e.printStackTrace(); } } }
+		 */
 
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
@@ -476,7 +470,8 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseHTML(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
+	private boolean parseHTML(final String path, final Builder fb, final String content, final boolean b,
+			final Writer astWriter) {
 		final Document doc;
 		final HtmlVisitor visitor = new HtmlVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -515,7 +510,8 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseXML(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
+	private boolean parseXML(final String path, final Builder fb, final String content, final boolean b,
+			final Writer astWriter) {
 		final org.dom4j.Document doc;
 		final XMLVisitor visitor = new XMLVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -556,7 +552,8 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseCSS(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
+	private boolean parseCSS(final String path, final Builder fb, final String content, final boolean b,
+			final Writer astWriter) {
 		com.steadystate.css.dom.CSSStyleSheetImpl sSheet = null;
 		final CssVisitor visitor = new CssVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -642,10 +639,8 @@ public abstract class AbstractCommit {
 		return !errorCheck.hasError;
 	}
 
-
-	boolean collectDataEvolutionaryInfo(final String path,final ChangedFile.Builder fb)
-	{
-		if(this.id==null || fb.getChange()==ChangeKind.ADDED || fb.getChange()==ChangeKind.DELETED)
+	boolean collectDataEvolutionaryInfo(final String path, final ChangedFile.Builder fb) {
+		if (this.id == null || fb.getChange() == ChangeKind.ADDED || fb.getChange() == ChangeKind.DELETED)
 			return false;
 
 //		String prevPath ="";
@@ -654,17 +649,15 @@ public abstract class AbstractCommit {
 //		else
 //			prevPath+=path;
 //
-		String key=path.substring(path.lastIndexOf('.')+1);
-		if(key.equals(".pkl") || key.equals(".pth") || key.equals(".onnx")
-				|| key.equals(".pt") || key.equals(".pb")
+		String key = path.substring(path.lastIndexOf('.') + 1);
+		if (key.equals(".pkl") || key.equals(".pth") || key.equals(".onnx") || key.equals(".pt") || key.equals(".pb")
 				|| key.equals(".ckpt"))
-			key="h5";
+			key = "h5";
 
-		if (key.equals("py") || key.equals("csv")|| key.equals("h5"))
-		{
-			if(!fileRevMap.containsKey(key))
-				fileRevMap.put(key,new HashSet<String>());
-			Set<String> tmpSet=fileRevMap.get(key);
+		if (key.equals("py") || key.equals("csv") || key.equals("h5")) {
+			if (!fileRevMap.containsKey(key))
+				fileRevMap.put(key, new HashSet<String>());
+			Set<String> tmpSet = fileRevMap.get(key);
 			tmpSet.add(this.id);
 
 			fileRevMap.put(key, tmpSet);
@@ -683,17 +676,16 @@ public abstract class AbstractCommit {
 		return true;
 	}
 
-
 	private boolean parsePythonFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
 		pythonParsingError = false;
 
 		String fullPath = this.projectName + "/";
-		if(fb.hasChange()&&fb.getChange()==ChangeKind.RENAMED)
-			fullPath+=fb.getPreviousNames(0);
+		if (fb.hasChange() && fb.getChange() == ChangeKind.RENAMED)
+			fullPath += fb.getPreviousNames(0);
 		else
-			fullPath+=path;
-		String curPath = fullPath+path;
+			fullPath += path;
+		String curPath = fullPath + path;
 
 //		if(this.id.equals("070246304a02d133a2c64710f617c41c2ca76c11"))
 //			System.out.println("commit " + this.id);
@@ -709,20 +701,19 @@ public abstract class AbstractCommit {
 		};
 
 		// System.out.println("actual source: " + content);
-		PythonModuleDeclaration module, prevModule=null;
+		PythonModuleDeclaration module, prevModule = null;
 
 		try {
 			module = (PythonModuleDeclaration) parser.parse(input, reporter);
 
-			if(this.enableDiff)
-			{
+			if (this.enableDiff) {
 				if (previousAst.containsKey(fullPath)) {
 					boa.datagen.treed.python.TreedMapper tm = new boa.datagen.treed.python.TreedMapper(
 							previousAst.get(fullPath), module);
 
 					try {
 						tm.map();
-						prevModule=(PythonModuleDeclaration)previousAst.get(fullPath);
+						prevModule = (PythonModuleDeclaration) previousAst.get(fullPath);
 					} catch (Exception e) {
 						if (debug) {
 							System.err.println("Tree mapping error" + path + " from: " + projectName + "\n");
@@ -732,13 +723,12 @@ public abstract class AbstractCommit {
 					}
 
 					tm.clear();
-					tm=null;
+					tm = null;
 				}
 
-				if (!this.lastRevision)
-				{
+				if (!this.lastRevision) {
 					previousAst.put(curPath, module);
-					if(!curPath.equals(fullPath))
+					if (!curPath.equals(fullPath))
 						previousAst.remove(fullPath);
 				}
 			}
@@ -760,8 +750,7 @@ public abstract class AbstractCommit {
 			try {
 				ast.addNamespaces(visitor.getNamespace(module, path));
 
-				if(prevModule!=null)
-				{
+				if (prevModule != null) {
 					PythonVisitor visitorPrev = new PythonVisitor();
 					visitorPrev.enableDiff = this.enableDiff;
 					ast.addNamespaces(visitorPrev.getNamespace(prevModule, fullPath));
@@ -769,7 +758,8 @@ public abstract class AbstractCommit {
 
 			} catch (final UnsupportedOperationException e) {
 				if (debug) {
-					System.err.println("Unsupported operation Error visiting Python file: " + path + " from: " + projectName + "\n");
+					System.err.println("Unsupported operation Error visiting Python file: " + path + " from: "
+							+ projectName + "\n");
 					writeToCsv(projectName, path, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 				}
 				return false;
@@ -811,9 +801,9 @@ public abstract class AbstractCommit {
 			}
 
 		}
-		if(debug) {
-			if(this.id != null) {
-				if(pythonParsingError)
+		if (debug) {
+			if (this.id != null) {
+				if (pythonParsingError)
 					writeErrorLog(projectName, path, this.id);
 				else
 					writeSuccessLog(projectName, path, this.id);
@@ -828,7 +818,7 @@ public abstract class AbstractCommit {
 	private boolean parseNotebookFile(final String path, final ChangedFile.Builder fb, final String content,
 			final boolean storeOnError) {
 		// System.out.println("commit " + this.id);
-		// System.out.println("@@@@@@@@ " + path);
+		System.out.println("@@@@@@@@ " + path);
 
 		notebookParseError = false;
 		cellParseError = false;
@@ -851,26 +841,43 @@ public abstract class AbstractCommit {
 
 			if (c.get("cell_type").getAsString().equals("markdown") && c.has("source")) {
 				cellCount += 1;
-
-
-				JsonArray lines = c.getAsJsonArray("source");
-				Iterator<JsonElement> iterator = lines.iterator();
-
 				String codeCell = "";
 
-				while (iterator.hasNext()) {
+				if (c.get("source").isJsonPrimitive()) {
 					String line = "";
 					try {
-						line = iterator.next().getAsString();
+						line = c.getAsJsonPrimitive("source").getAsString();
 					} catch (Exception e) {
 						e.printStackTrace();
 						line = "";
 						if (debug) {
-							System.err.println("Error parsing one line in a markdown cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
-							writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+							System.err.println("Error parsing one line in a markdown cell: " + path + ", Cell:"
+									+ cellCount + " from: " + projectName + "\n");
+							writeToCsv(projectName, path + ", Cell:" + cellCount,
+									ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 						}
 					}
 					codeCell += line;
+				} else if (!c.get("source").isJsonNull()) {
+					JsonArray lines = c.getAsJsonArray("source");
+					Iterator<JsonElement> iterator = lines.iterator();
+
+					while (iterator.hasNext()) {
+						String line = "";
+						try {
+							line = iterator.next().getAsString();
+						} catch (Exception e) {
+							e.printStackTrace();
+							line = "";
+							if (debug) {
+								System.err.println("Error parsing one line in a markdown cell: " + path + ", Cell:"
+										+ cellCount + " from: " + projectName + "\n");
+								writeToCsv(projectName, path + ", Cell:" + cellCount,
+										ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+							}
+						}
+						codeCell += line;
+					}
 				}
 
 				Cell.Builder cb = Cell.newBuilder();
@@ -889,27 +896,50 @@ public abstract class AbstractCommit {
 					exec_count = -1;
 				}
 
-				JsonArray lines = c.getAsJsonArray("source");
-				Iterator<JsonElement> iterator = lines.iterator();
-
 				String codeCell = "";
 
-				while (iterator.hasNext()) {
+				if (c.get("source").isJsonPrimitive()) {
 					String line = "";
 					try {
-						line = iterator.next().getAsString();
+						line = c.getAsJsonPrimitive("source").getAsString();
 					} catch (Exception e) {
 						e.printStackTrace();
 						line = "";
 						if (debug) {
-							System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
-							writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+							System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + cellCount
+									+ " from: " + projectName + "\n");
+							writeToCsv(projectName, path + ", Cell:" + cellCount,
+									ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 						}
 					}
 					if (NoNotebookErrors(line))
 						codeCell += line;
 					else
 						codeCell += "#" + line;
+				} else if (!c.get("source").isJsonNull()) {
+					JsonArray lines = c.getAsJsonArray("source");
+
+					Iterator<JsonElement> iterator = lines.iterator();
+
+					while (iterator.hasNext()) {
+						String line = "";
+						try {
+							line = iterator.next().getAsString();
+						} catch (Exception e) {
+							e.printStackTrace();
+							line = "";
+							if (debug) {
+								System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + cellCount
+										+ " from: " + projectName + "\n");
+								writeToCsv(projectName, path + ", Cell:" + cellCount,
+										ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+							}
+						}
+						if (NoNotebookErrors(line))
+							codeCell += line;
+						else
+							codeCell += "#" + line;
+					}
 				}
 
 				Cell.Builder cb = Cell.newBuilder();
@@ -937,7 +967,8 @@ public abstract class AbstractCommit {
 				} catch (Exception e) {
 					if (debug) {
 						System.err.println("Error parsing notebook cell: " + path + " from: " + projectName + "\n");
-						writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+						writeToCsv(projectName, path + ", Cell:" + cellCount,
+								ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 					}
 					e.printStackTrace();
 					cellParseError = true;
@@ -953,15 +984,19 @@ public abstract class AbstractCommit {
 					cb.addNamespaces(visitor.getCellAsNamespace(module, "code_cell:" + cellCount));
 				} catch (final UnsupportedOperationException e) {
 					if (debug) {
-						System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
-						writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+						System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount
+								+ " from: " + projectName + "\n");
+						writeToCsv(projectName, path + ", Cell:" + cellCount,
+								ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 					}
 					e.printStackTrace();
 					cellParseError = true;
 				} catch (final Throwable e) {
 					if (debug) {
-						System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
-						writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+						System.err.println("Error getting AST for a notebook cell: " + path + ", Cell:" + cellCount
+								+ " from: " + projectName + "\n");
+						writeToCsv(projectName, path + ", Cell:" + cellCount,
+								ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 					}
 					e.printStackTrace();
 					cellParseError = true;
@@ -973,29 +1008,28 @@ public abstract class AbstractCommit {
 
 				if (c.has("outputs")) {
 
+					JsonArray jarray = c.get("outputs").getAsJsonArray();
+					JsonObject jobject = null;
 
-				    JsonArray jarray = c.get("outputs").getAsJsonArray();
-				    JsonObject jobject = null;
+					if (jarray.size() > 0) {
 
-				    if(jarray.size() > 0) {
+						jobject = jarray.get(0).getAsJsonObject();
 
-				    	jobject = jarray.get(0).getAsJsonObject();
+						if (jobject != null) {
+							if (jobject.has("ename") && jobject.has("evalue")) {
+								String ename, evalue, output_type, traceback;
+								ename = jobject.get("ename").getAsString();
+								evalue = jobject.get("evalue").getAsString();
+								cb.setErrorName(ename);
+								cb.setErrorValue(evalue);
+								if (jobject.has("output_type")) {
+									output_type = jobject.get("output_type").getAsString();
+									cb.setOutputType(output_type);
+								}
 
-					    if(jobject != null) {
-					    	if(jobject.has("ename") && jobject.has("evalue")) {
-					    		String ename, evalue, output_type, traceback;
-					    		ename = jobject.get("ename").getAsString();
-					    		evalue = jobject.get("evalue").getAsString();
-					    		cb.setErrorName(ename);
-					    		cb.setErrorValue(evalue);
-					    		if(jobject.has("output_type")) {
-					    			output_type = jobject.get("output_type").getAsString();
-					    			cb.setOutputType(output_type);
-					    		}
+								if (jobject.has("traceback")) {
 
-					    		if(jobject.has("traceback")) {
-
-					    			JsonArray tr = jobject.get("traceback").getAsJsonArray();
+									JsonArray tr = jobject.get("traceback").getAsJsonArray();
 									Iterator<JsonElement> it = tr.iterator();
 
 									String trace = "";
@@ -1008,24 +1042,24 @@ public abstract class AbstractCommit {
 											e.printStackTrace();
 											line = "";
 											if (debug) {
-												System.err.println("Error parsing one line in a cell: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
-												writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+												System.err.println("Error parsing one line in a cell: " + path
+														+ ", Cell:" + cellCount + " from: " + projectName + "\n");
+												writeToCsv(projectName, path + ", Cell:" + cellCount,
+														ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 											}
 										}
 										trace += line;
 
 									}
 
-					    			cb.setTraceback(trace);
-					    		}
+									cb.setTraceback(trace);
+								}
 
-					    	}
+							}
 
-					    }
+						}
 
-				    }
-
-
+					}
 
 				}
 
@@ -1033,13 +1067,10 @@ public abstract class AbstractCommit {
 
 			}
 
-
-
-
 		}
 		////////// Cell loop ends for all cells
 
-		if(cellCount > 0)
+		if (cellCount > 0)
 			fb.setKind(FileKind.SOURCE_PY_3);
 
 		try {
@@ -1048,8 +1079,10 @@ public abstract class AbstractCommit {
 			connector.astWriterLen += bw.getLength();
 		} catch (IOException e) {
 			if (debug) {
-				System.err.println("Error writing AST of a notebook file: " + path + ", Cell:" + cellCount + " from: " + projectName + "\n");
-				writeToCsv(projectName, path + ", Cell:" + cellCount, ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
+				System.err.println("Error writing AST of a notebook file: " + path + ", Cell:" + cellCount + " from: "
+						+ projectName + "\n");
+				writeToCsv(projectName, path + ", Cell:" + cellCount,
+						ExceptionUtils.getStackTrace(e).replace("\n", " ## "));
 			}
 			e.printStackTrace();
 		}
@@ -1069,27 +1102,25 @@ public abstract class AbstractCommit {
 			System.out.println("Notebook JSON does not follow nbformat library requirements.");
 			return null;
 		}
-		if(nbformat >= 4) {
+		if (nbformat >= 4) {
 			try {
 				jarray = jobject.getAsJsonArray("cells");
 			} catch (Exception e) {
 				System.out.println("Notebook JSON cells are not present.");
 			}
-		}
-		else {
+		} else {
 			System.out.println("Notebook JSON does not follow nbformat library version requirement.");
 		}
 		return jarray;
 	}
 
 	boolean NoNotebookErrors(String line) {
-		if (line.startsWith("%") || line.startsWith("!") ||
-			line.startsWith("?") || line.endsWith("?"))
+		if (line.startsWith("%") || line.startsWith("!") || line.startsWith("?") || line.endsWith("?"))
 			return false;
 		return true;
 	}
 
-	static void writeToFile(String file_name, String []header, String []data) {
+	static void writeToFile(String file_name, String[] header, String[] data) {
 		try {
 			File f = new File(file_name);
 			if (!f.exists()) {
@@ -1114,6 +1145,7 @@ public abstract class AbstractCommit {
 			ioe.printStackTrace();
 		}
 	}
+
 	private void writeToCsv(String project, String file, String error) {
 		String file_name = "error-log.csv";
 		try {
@@ -1219,8 +1251,7 @@ public abstract class AbstractCommit {
 					// for (final String s : visitor.getImports())
 					// ast.addImports(s);
 					/*
-					 * for (final Comment c : visitor.getComments())
-					 * comments.addComments(c);
+					 * for (final Comment c : visitor.getComments()) comments.addComments(c);
 					 */
 				} catch (final UnsupportedOperationException e) {
 					return false;
@@ -1259,7 +1290,8 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,
+			final boolean storeOnError) {
 		try {
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);

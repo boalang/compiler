@@ -28,6 +28,7 @@ import boa.graphs.slicers.python.InitialSliceCriteriaMode;
 import boa.graphs.slicers.python.SliceOutputLevel;
 import boa.graphs.slicers.python.Status;
 import boa.types.Ast.ASTRoot;
+import boa.types.Ast.Namespace;
 import boa.types.Ast.Statement;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -259,6 +260,25 @@ public class BoaSlicerIntrinsics {
 
 		Set<String> result=new HashSet<String>();
 		for (String imp : ast.getNamespaces(0).getImportsList()) {
+			if (imp.matches("^\\..*") || imp.equals("")) // ignore relative imports
+				continue;
+
+			for (String lib : moduleFilter) {
+				if (imp.matches("^" + lib + ".*") || imp.matches("^from " + lib + ".*")) {
+					result.add(lib);
+					break;
+				}
+			}
+		}
+		return result.toArray(new String[0]);
+	}
+	
+	@FunctionSpec(name = "getpythonimportmodules", returnType = "array of string", formalParameters = { "Namespace",  "array of string" })
+	public static String[] getpythonimportmodules(final Namespace ast, String[] moduleFilter) {
+		if(ast==null) return new String[0];
+
+		Set<String> result=new HashSet<String>();
+		for (String imp : ast.getImportsList()) {
 			if (imp.matches("^\\..*") || imp.equals("")) // ignore relative imports
 				continue;
 
