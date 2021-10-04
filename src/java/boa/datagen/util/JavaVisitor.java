@@ -1398,7 +1398,7 @@ public class JavaVisitor extends ASTVisitor {
 			setAstLevel(JLS4);
 
 		for (Object v : node.resources()) {
-			((VariableDeclarationExpression) v).accept(this);
+			((Expression) v).accept(this);
 			b.addInitializations(expressions.pop());
 		}
 		list.add(b.build());

@@ -1,0 +1,92 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "t",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "whenVarInitWithString_thenGetStringTypeVar",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Test"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PUBLIC"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "void",
+                        "kind": "PRIMITIVE"
+                     },
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "message",
+                                             "variable_type": {
+                                                "name": "var",
+                                                "fully_qualified_name": "java.lang.String",
+                                                "kind": "CLASS"
+                                             },
+                                             "initializer": {
+                                                "kind": "LITERAL",
+                                                "literal": "\"Hello, Java 10\""
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "assertTrue",
+                                       "method_args": [
+                                          {
+                                             "kind": "TYPECOMPARE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "message",
+                                                   "return_type": {
+                                                      "name": "String",
+                                                      "fully_qualified_name": "java.lang.String",
+                                                      "kind": "CLASS"
+                                                   }
+                                                }
+                                             ],
+                                             "new_type": {
+                                                "name": "String",
+                                                "fully_qualified_name": "java.lang.String",
+                                                "kind": "CLASS"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fully_qualified_name": "t"
+            }
+         ]
+      }
+   ]
+}

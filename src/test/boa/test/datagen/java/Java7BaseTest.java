@@ -113,6 +113,13 @@ public class Java7BaseTest extends BaseTest {
 		paths[0] = path;
 		parser.createASTs(paths, null, new String[0], r, null);
 		
+		
+		if(paths[0].contains("local-var-lambda")) {
+			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			System.out.println(sb.toString());
+			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+		}
+		
 		return FileIO.normalizeEOL(sb.toString());
 	}
 	
@@ -252,6 +259,7 @@ public class Java7BaseTest extends BaseTest {
 		}
 		return null;
 	}
+	
 
 	protected static HashMap<Integer, HashMap<Integer, Declaration>> collectDeclarations(final SequenceFile.Reader ar, List<ChangedFile> snapshot) throws IOException {
 		final HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = new HashMap<Integer, HashMap<Integer, Declaration>>();

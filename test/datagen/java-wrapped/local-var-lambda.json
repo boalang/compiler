@@ -1,0 +1,63 @@
+{
+                                  "kind": "EXPRESSION",
+                                  "expressions": [
+                                     {
+                                        "kind": "VARDECL",
+                                        "variable_decls": [
+                                           {
+                                              "name": "n",
+                                              "variable_type": {
+                                                 "name": "int",
+                                                 "kind": "PRIMITIVE"
+                                              },
+                                              "initializer": {
+                                                 "kind": "LAMBDA",
+                                                 "expressions": [
+    [junit]                                                    {
+    [junit]                                                       "kind": "OP_ADD",
+    [junit]                                                       "expressions": [
+    [junit]                                                          {
+    [junit]                                                             "kind": "VARACCESS",
+    [junit]                                                             "variable": "s1"
+    [junit]                                                          },
+    [junit]                                                          {
+    [junit]                                                             "kind": "VARACCESS",
+    [junit]                                                             "variable": "s2"
+    [junit]                                                          }
+    [junit]                                                       ]
+    [junit]                                                    }
+    [junit]                                                 ],
+    [junit]                                                 "variable_decls": [
+    [junit]                                                    {
+    [junit]                                                       "name": "s1",
+    [junit]                                                       "variable_type": {
+    [junit]                                                          "name": "var",
+    [junit]                                                          "kind": "OTHER"
+    [junit]                                                       },
+    [junit]                                                       "modifiers": [
+    [junit]                                                          {
+    [junit]                                                             "kind": "ANNOTATION",
+    [junit]                                                             "annotation_name": "Nonnull"
+    [junit]                                                          }
+    [junit]                                                       ]
+    [junit]                                                    },
+    [junit]                                                    {
+    [junit]                                                       "name": "s2",
+    [junit]                                                       "variable_type": {
+    [junit]                                                          "name": "var",
+    [junit]                                                          "kind": "OTHER"
+    [junit]                                                       },
+    [junit]                                                       "modifiers": [
+    [junit]                                                          {
+    [junit]                                                             "kind": "ANNOTATION",
+    [junit]                                                             "annotation_name": "Nullable"
+    [junit]                                                          }
+    [junit]                                                       ]
+    [junit]                                                    }
+    [junit]                                                 ]
+    [junit]                                              }
+    [junit]                                           }
+    [junit]                                        ]
+    [junit]                                     }
+    [junit]                                  ]
+    [junit]                               }

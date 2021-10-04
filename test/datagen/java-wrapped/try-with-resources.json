@@ -1,3 +1,46 @@
-class t {
-   This is a test
+{
+   "kind": "TRY",
+   "statements": [
+      {
+         "kind": "BLOCK"
+      },
+      {
+         "kind": "CATCH",
+         "variable_declaration": {
+            "name": "ex",
+            "variable_type": {
+               "name": "Exception",
+               "fully_qualified_name": "java.lang.Exception",
+               "kind": "CLASS"
+            }
+         }
+      }
+   ],
+   "initializations": [
+      {
+         "kind": "VARACCESS",
+         "expressions": [
+            {
+               "kind": "VARACCESS",
+               "expressions": [
+                  {
+                     "kind": "NEW",
+                     "new_type": {
+                        "name": "MyAutoCloseable",
+                        "kind": "CLASS"
+                     },
+                     "anon_declaration": {
+                        "name": "",
+                        "kind": "ANONYMOUS"
+                     }
+                  }
+               ],
+               "variable": "finalWrapper",
+               "is_member_access": true
+            }
+         ],
+         "variable": "finalCloseable",
+         "is_member_access": true
+      }
+   ]
 }
