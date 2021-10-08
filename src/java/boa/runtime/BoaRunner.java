@@ -105,6 +105,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 	static {
 		options.addOption("p", "profile", false, "if true, profiles the execution of 1 map task");
 		options.addOption("b", "block", false, "if true, wait for job to finish and show status");
+		options.addOption("t", "time", false, "if true, dump debug timings for each project");
 		options.addOption(OptionBuilder.withLongOpt("job")
 										.withDescription("sets the MySql ID to update with this job's status")
 										.hasArg()

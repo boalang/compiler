@@ -1,0 +1,17 @@
+o: output collection of string;
+
+strs := {
+    "one",
+    "two",
+    "3"
+};
+
+o << join(".", strs);
+o << join("blah", strs);
+
+stk: stack of string;
+foreach (i: int; strs[i])
+    push(stk, strs[i]);
+
+o << join(".", stk);
+o << join("blah", stk);

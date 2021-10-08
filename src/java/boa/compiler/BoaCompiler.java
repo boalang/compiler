@@ -136,7 +136,9 @@ public class BoaCompiler extends BoaMain {
 
 			try {
 				if (!parserErrorListener.hasError) {
+					TypeCheckingVisitor.warn = true;
 					TypeCheckingVisitor.instance.start(p, new SymbolTable());
+					TypeCheckingVisitor.warn = false;
 
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);

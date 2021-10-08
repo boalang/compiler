@@ -80,6 +80,8 @@ public class <name> extends boa.runtime.BoaRunner {
 		// pass any arguments to map/reduce classes via configuration
 		if (line.hasOption("excludelist"))
 			configuration.setStrings("boa.exclude.projects", line.getOptionValue("excludelist"));
+		if (line.hasOption("time"))
+			configuration.setBoolean("boa.debug.timings", true);
 
 		jb.submit();
 
@@ -135,9 +137,12 @@ public class <name> extends boa.runtime.BoaRunner {
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws java.io.IOException {
 			if (excludeProject(key.toString())) {
-				LOG.error("EXCLUDED PROJECT: " + key.toString());
+				LOG.info("EXCLUDED PROJECT: " + key.toString());
 				return;
 			}
+
+			if (context.getConfiguration().getBoolean("boa.debug.timings", false))
+				LOG.info(key.toString());
 
 			try {
 				boa.functions.BoaMathIntrinsics.random = new java.util.Random(<seed> + key.hashCode());
@@ -148,6 +153,9 @@ public class <name> extends boa.runtime.BoaRunner {
 				boa.io.BoaOutputCommitter.lastSeenEx = e;
 				throw new java.io.IOException("map failure for key '" + key.toString() + "'", e);
 			}
+
+			if (context.getConfiguration().getBoolean("boa.debug.timings", false))
+				LOG.info(key.toString());
 		}
 
 		/** {@inheritDoc} */
