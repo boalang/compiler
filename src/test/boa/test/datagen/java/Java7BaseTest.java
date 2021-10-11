@@ -114,11 +114,11 @@ public class Java7BaseTest extends BaseTest {
 		parser.createASTs(paths, null, new String[0], r, null);
 		
 		
-		if(paths[0].contains("local-var-lambda")) {
-			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-			System.out.println(sb.toString());
-			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-		}
+//		if(paths[0].contains("module-info")) {
+//			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+//			System.out.println(sb.toString());
+//			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+//		}
 		
 		return FileIO.normalizeEOL(sb.toString());
 	}
