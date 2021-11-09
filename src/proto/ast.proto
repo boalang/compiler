@@ -364,14 +364,13 @@ message Expression {
 		TRAIT_PRECEDENCE = 99;
 		NAMESPACENAME = 100;
 		STATEMENT = 101;
-		TEXTBLOCK = 102;
-		REQUIRES = 103;
-		EXPORTS = 104;
-		OPENS = 105;
-		USES = 106;
-		PROVIDES = 107;
-		PACKAGE_NAME = 108;
-		MODULE_NAME = 109;
+		REQUIRES = 102;
+		EXPORTS = 103;
+		OPENS = 104;
+		USES = 105;
+		PROVIDES = 106;
+		PACKAGE_NAME = 107;
+		MODULE_NAME = 108;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

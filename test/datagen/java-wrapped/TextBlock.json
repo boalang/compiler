@@ -12,7 +12,7 @@
                   "kind": "CLASS"
                },
                "initializer": {
-                  "kind": "TEXTBLOCK",
+                  "kind": "LITERAL",
                   "literal": "\"\"\"\n\t\t\t\t\t\t{\n\t\t\t\t\t\t\t\"name\": \"web\",\n\t\t\t\t\t\t\t\"version\": \"1.0.0\",\n\t\t\t\t\t\t\t\"dependencies\": \"AppA\"\n\t\t\t\t\t\t}\n\t\t\t\t\"\"\""
                }
             }

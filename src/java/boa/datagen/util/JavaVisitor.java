@@ -2393,7 +2393,7 @@ public class JavaVisitor extends ASTVisitor {
 		setAstLevel(JLS15);
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.TEXTBLOCK);
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(node.getEscapedValue());
 		expressions.push(eb.build());
 
