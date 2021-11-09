@@ -2353,18 +2353,19 @@ public class JavaVisitor extends ASTVisitor {
 //		System.out.println("SwitchExpression ----------------------------------------------------------");
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.SWITCH);
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.STATEMENT);
+
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		node.getExpression().accept(this);
-		eb.addExpressions(expressions.pop());
-
+		b.addExpressions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
-		for (Object s : node.statements()) {
+		for (Object s : node.statements())
 			((org.eclipse.jdt.core.dom.Statement) s).accept(this);
-		}
-		for (boa.types.Ast.Statement st : statements.pop()) {
-			eb.addStatements(st);
-		}
+		for (boa.types.Ast.Statement s : statements.pop())
+			b.addStatements(s);
 
+		eb.addStatements(b.build());
 		expressions.push(eb.build());
 		return false;
 	}
