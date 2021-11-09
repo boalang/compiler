@@ -613,7 +613,7 @@ public abstract class AbstractCommit {
 			parser.setSource(content.toCharArray());
 
 			Map<String, String> options = (Map<String, String>)JavaCore.getOptions();
-			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+			JavaCore.setComplianceOptions(JavaCore.VERSION_15, options);
 			parser.setCompilerOptions(options);
 
 			final CompilationUnit cu;
@@ -655,6 +655,27 @@ public abstract class AbstractCommit {
 					break;
 				case JavaVisitor.JLS8:
 					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+					break;
+				case JavaVisitor.JLS9:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS9);
+					break;
+				case JavaVisitor.JLS10:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS10);
+					break;
+				case JavaVisitor.JLS11:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS11);
+					break;
+				case JavaVisitor.JLS12:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS12);
+					break;
+				case JavaVisitor.JLS13:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS13);
+					break;
+				case JavaVisitor.JLS14:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS14);
+					break;
+				case JavaVisitor.JLS15:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS15);
 					break;
 				default:
 					fb.setKind(FileKind.SOURCE_JAVA_ERROR);

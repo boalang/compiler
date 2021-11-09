@@ -75,6 +75,34 @@ public class JavaASTUtil {
 			astLevel = AST.JLS8;
 			compliance = JavaCore.VERSION_1_8;
 			break;
+		case SOURCE_JAVA_JLS9:
+			astLevel = AST.JLS9;
+			compliance = JavaCore.VERSION_9;
+			break;
+		case SOURCE_JAVA_JLS10:
+			astLevel = AST.JLS10;
+			compliance = JavaCore.VERSION_10;
+			break;
+		case SOURCE_JAVA_JLS11:
+			astLevel = AST.JLS11;
+			compliance = JavaCore.VERSION_11;
+			break;
+		case SOURCE_JAVA_JLS12:
+			astLevel = AST.JLS12;
+			compliance = JavaCore.VERSION_12;
+			break;
+		case SOURCE_JAVA_JLS13:
+			astLevel = AST.JLS13;
+			compliance = JavaCore.VERSION_13;
+			break;
+		case SOURCE_JAVA_JLS14:
+			astLevel = AST.JLS14;
+			compliance = JavaCore.VERSION_14;
+			break;
+		case SOURCE_JAVA_JLS15:
+			astLevel = AST.JLS15;
+			compliance = JavaCore.VERSION_15;
+			break;
 		default:
 			break;
 		}

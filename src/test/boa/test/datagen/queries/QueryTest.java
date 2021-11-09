@@ -144,7 +144,7 @@ public abstract class QueryTest {
 		parser.setSource(content.toCharArray());
 
 		final Map<String, String> options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		JavaCore.setComplianceOptions(JavaCore.VERSION_15, options);
 		parser.setCompilerOptions(options);
 
 		try {

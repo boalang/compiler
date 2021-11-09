@@ -32,6 +32,20 @@ message ChangedFile {
 		SOURCE_JAVA_JLS4 = 104;
 		/** The file represents a Java source file that parsed without error as JLS8 */
 		SOURCE_JAVA_JLS8 = 108;
+		/** The file represents a Java source file that parsed without error as JLS9 */
+		SOURCE_JAVA_JLS9 = 109;
+		/** The file represents a Java source file that parsed without error as JLS10 */
+		SOURCE_JAVA_JLS10 = 110;
+		/** The file represents a Java source file that parsed without error as JLS11 */
+		SOURCE_JAVA_JLS11 = 111;
+		/** The file represents a Java source file that parsed without error as JLS12 */
+		SOURCE_JAVA_JLS12 = 112;
+		/** The file represents a Java source file that parsed without error as JLS13 */
+		SOURCE_JAVA_JLS13 = 113;
+		/** The file represents a Java source file that parsed without error as JLS14 */
+		SOURCE_JAVA_JLS14 = 114;
+		/** The file represents a Java source file that parsed without error as JLS15 */
+		SOURCE_JAVA_JLS15 = 115;
 		/** @exclude */
 		JAVA_ERROR = 100;
 		/** @exclude */
@@ -42,6 +56,20 @@ message ChangedFile {
 		JLS4 = 104;
 		/** @exclude */
 		JLS8 = 108;
+		/** @exclude */
+		JLS9 = 109;
+		/** @exclude */
+		JLS10 = 110;
+		/** @exclude */
+		JLS11 = 111;
+		/** @exclude */
+		JLS12 = 112;
+		/** @exclude */
+		JLS13 = 113;
+		/** @exclude */
+		JLS14 = 114;
+		/** @exclude */
+		JLS15 = 115;
 
 		/** @exclude TODO */
 		SOURCE_CS_ERROR = 200;

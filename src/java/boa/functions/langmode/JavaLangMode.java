@@ -871,7 +871,7 @@ public class JavaLangMode implements LangMode {
 
 		@SuppressWarnings("rawtypes")
 		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		JavaCore.setComplianceOptions(JavaCore.VERSION_15, options);
 		parser.setCompilerOptions(options);
 
 		try {
@@ -901,7 +901,7 @@ public class JavaLangMode implements LangMode {
 
 		@SuppressWarnings("rawtypes")
 		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		JavaCore.setComplianceOptions(JavaCore.VERSION_15, options);
 		parser.setCompilerOptions(options);
 
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();

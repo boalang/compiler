@@ -53,11 +53,13 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS8 = 8;
 	public static final int JLS9 = 9;
 	public static final int JLS10 = 10;
+	public static final int JLS11 = 11;
 	public static final int JLS12 = 12;
 	public static final int JLS13 = 13;
 	public static final int JLS14 = 14;
 	public static final int JLS15 = 15;
 	public static final int JLS16 = 16;
+	
 
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
@@ -1031,6 +1033,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Block node) {
+		System.out.println("Block ----------------------------------------------------------");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
@@ -2347,6 +2350,7 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchExpression node) {
 		setAstLevel(JLS12);
+		System.out.println("SwitchExpression ----------------------------------------------------------");
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.SWITCH);

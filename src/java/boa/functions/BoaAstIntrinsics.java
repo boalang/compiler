@@ -209,7 +209,14 @@ public class BoaAstIntrinsics {
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS9
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS10
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS11
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS12
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS13
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS14
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS15)
 			return emptyComments;
 
 		final String rowName = f.getKey() + "!!" + f.getName();
@@ -646,11 +653,12 @@ public class BoaAstIntrinsics {
 
 	private static final LangMode javaLang = new JavaLangMode();
 
-	private static ChangedFile.FileKind curLang = ChangedFile.FileKind.SOURCE_JAVA_JLS8;
+	private static ChangedFile.FileKind curLang = ChangedFile.FileKind.SOURCE_JAVA_JLS15;
 	private static LangMode lang = javaLang;
 
 	@FunctionSpec(name = "getlang", returnType = "FileKind", formalParameters = {})
 	public static ChangedFile.FileKind getlang() {
+		System.out.println("BoaAstinIn -------------------------------------------");
 		return curLang;
 	}
 
