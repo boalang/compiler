@@ -1033,7 +1033,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Block node) {
-		System.out.println("Block ----------------------------------------------------------");
+//		System.out.println("Block ----------------------------------------------------------");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
@@ -2350,7 +2350,7 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchExpression node) {
 		setAstLevel(JLS12);
-		System.out.println("SwitchExpression ----------------------------------------------------------");
+//		System.out.println("SwitchExpression ----------------------------------------------------------");
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.SWITCH);
