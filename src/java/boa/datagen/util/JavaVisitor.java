@@ -941,9 +941,10 @@ public class JavaVisitor extends ASTVisitor {
 		setAstLevel(JLS3);
 
 		String name = node.getTypeName().getFullyQualifiedName();
-		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
+		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings")){
+//			System.out.println("SafeVar ---------------");
 			setAstLevel(JLS4);
-
+		}
 		boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		for (Object v : node.values()) {
 			MemberValuePair pair = (MemberValuePair) v;
@@ -2186,6 +2187,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(ModuleDeclaration node) {
 		setAstLevel(JLS9);
 
+		System.out.println("ModuleDeclaration ----------------------------------------------------------");
 		b.setName(node.getName().getFullyQualifiedName());
 		boa.types.Ast.Modifier.Builder m = boa.types.Ast.Modifier.newBuilder();
 		m.setKind(boa.types.Ast.Modifier.ModifierKind.MODULE);
@@ -2303,7 +2305,8 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(UsesDirective node) {
 		setAstLevel(JLS9);
-
+		
+//		System.out.println("UsesDirective --------------------------------------------");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.USES);
 
@@ -2375,10 +2378,10 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(YieldStatement node) {
 		setAstLevel(JLS13);
 
+//		System.out.println("YieldStatement --------------------------------------");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.YIELD);
-
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
 
@@ -2392,6 +2395,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(TextBlock node) {
 		setAstLevel(JLS15);
 
+//		System.out.print("TextBlock ---------------------------------");
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(node.getEscapedValue());
