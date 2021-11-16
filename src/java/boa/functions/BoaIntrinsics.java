@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,21 +57,22 @@ public class BoaIntrinsics {
 
 	private static int getRevisionIndex(final CodeRepository cr, final long timestamp) {
 		int low = 0;
-        int high = getRevisionsCount(cr) - 1;
+		int high = getRevisionsCount(cr) - 1;
 
-        while (low <= high) {
-            int mid = (low + high) >>> 1;
-            Revision midRev = getRevision(cr, mid);
-            long cmp = midRev.getCommitDate() - timestamp;
+		while (low < high) {
+			final int mid = low + (high - low) / 2;
+			final Revision midRev = getRevision(cr, mid);
+			final long cmp = midRev.getCommitDate() - timestamp;
 
-            if (cmp < 0)
-                low = mid + 1;
-            else if (cmp > 0)
-                high = mid - 1;
-            else
-                return mid; // key found: return index
-        }
-        return low;  // key not found: return low index
+			if (cmp == 0)
+				return mid; // key found: return index
+
+			if (cmp < 0)
+				low = mid + 1;
+			else if (cmp > 0)
+				high = mid - 1;
+		}
+		return low; // key not found: return low index
 	}
 
 	private static int getRevisionIndex(final CodeRepository cr, final String id) {
@@ -416,7 +418,7 @@ public class BoaIntrinsics {
 	 */
 	@FunctionSpec(name = "hasfiletype", returnType = "bool", formalParameters = { "ChangedFile", "string" })
 	public static boolean hasfile(final ChangedFile cf, final String ext) {
-        return cf.getName().toLowerCase().endsWith("." + ext.toLowerCase());
+		return cf.getName().toLowerCase().endsWith("." + ext.toLowerCase());
 	}
 
 	/**
