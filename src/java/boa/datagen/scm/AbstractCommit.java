@@ -608,7 +608,7 @@ public abstract class AbstractCommit {
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
-//			parser.setUnitName(FileIO.getFileName(path));
+			parser.setUnitName(FileIO.getFileName(path));
 //			parser.setEnvironment(null, null, null, true);
 			parser.setSource(content.toCharArray());
 
