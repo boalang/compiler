@@ -409,6 +409,13 @@
 		</java>
 	</target>
 
+	<target name="python-token-map" depends="-compile-tests" description="Convert Python code to token mapping.">
+		<java classname="boa.test.datagen.PythonToTokenMap" fork="true" failonerror="true">
+			<classpath refid="test.class.path" />
+			<arg value="${python.code}" />
+		</java>
+	</target>
+
 
 	<!-- style checking -->
 	<target name="checkstyle">
