@@ -1,5 +1,5 @@
 /*
- * Copyright 2021, Robert Dyer, 
+ * Copyright 2021, Robert Dyer,
  *                 University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,68 +38,69 @@ import org.eclipse.dltk.compiler.problem.IProblem;
  */
 public class PythonToTokenMap {
 	public static void main(final String[] args) {
+		System.out.println("Token, Source, LineStart, LineEnd, ColStart, ColEnd");
 		for (final String s : args)
 			parsePython(s);
 	}
 
-    public static class PythonVisitor extends ASTVisitor {
-        private final String input;
-        private final Map<Integer, Integer> lineMap;
-        private final Map<Integer, Integer> colMap;
+	public static class PythonVisitor extends ASTVisitor {
+		private final String input;
+		private final Map<Integer, Integer> lineMap;
+		private final Map<Integer, Integer> colMap;
 
-        public PythonVisitor(final String input, final Map<Integer, Integer> lineMap, final Map<Integer, Integer> colMap) {
-            this.input = input;
-            this.lineMap = lineMap;
-            this.colMap = colMap;
-        }
+		public PythonVisitor(final String input, final Map<Integer, Integer> lineMap, final Map<Integer, Integer> colMap) {
+			this.input = input;
+			this.lineMap = lineMap;
+			this.colMap = colMap;
+		}
 
-        private String escape(final String s) {
-            return "\"" + s.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t").replaceAll("\"", "\"\"") + "\"";
-        }
+		private String escape(final String s) {
+			return "\"" + s.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t").replaceAll("\"", "\"\"") + "\"";
+		}
 
-        @Override
-        public boolean visitGeneral(final ASTNode n) throws Exception {
-            if (n.getClass() == PythonModuleDeclaration.class)
-                return true;
-            if (n.getClass() == Block.class)
-                return true;
-            if (n.getClass() == ASTListNode.class)
-                return true;
-            if (n.getClass() == ExpressionList.class)
-                return true;
-            if (n.getClass() == EmptyExpression.class)
-                return true;
+		@Override
+		public boolean visitGeneral(final ASTNode n) throws Exception {
+			if (n.getClass() == PythonModuleDeclaration.class)
+				return true;
+			if (n.getClass() == Block.class)
+				return true;
+			if (n.getClass() == ASTListNode.class)
+				return true;
+			if (n.getClass() == ExpressionList.class)
+				return true;
+			if (n.getClass() == EmptyExpression.class)
+				return true;
 
-            System.err.print(escape(n.debugString().substring(0, n.debugString().indexOf("@"))));
-            System.err.print(", " + escape(input.substring(n.start(), n.end())));
-            System.err.print(", " + lineMap.get(n.start()));
-            System.err.print(", " + lineMap.get(n.end() - 1));
-            System.err.print(", " + colMap.get(n.start()));
-            System.err.println(", " + colMap.get(n.end() - 1));
+			System.out.print(escape(n.debugString().substring(0, n.debugString().indexOf("@"))));
+			System.out.print(", " + escape(input.substring(n.start(), n.end())));
+			System.out.print(", " + lineMap.get(n.start()));
+			System.out.print(", " + lineMap.get(n.end() - 1));
+			System.out.print(", " + colMap.get(n.start()));
+			System.out.println(", " + colMap.get(n.end() - 1));
 
-            return true;
-        }
-    }
+			return true;
+		}
+	}
 
-    private static boolean pythonParsingError = false;
+	private static boolean pythonParsingError = false;
 
 	protected static void parsePython(final String content) {
-        final Map<Integer, Integer> lineMap = new HashMap<Integer, Integer>();
-        final Map<Integer, Integer> colMap = new HashMap<Integer, Integer>();
-        lineMap.put(-1, -1);
-        colMap.put(-1, -1);
+		final Map<Integer, Integer> lineMap = new HashMap<Integer, Integer>();
+		final Map<Integer, Integer> colMap = new HashMap<Integer, Integer>();
+		lineMap.put(-1, -1);
+		colMap.put(-1, -1);
 
-        int line = 1;
-        int col = 1;
-        for (int i = 0; i < content.length(); i++) {
-            if (content.charAt(i) == '\n') {
-                line++;
-                col = 0;
-            }
-            lineMap.put(i, line);
-            colMap.put(i, col);
-            col++;
-        }
+		int line = 1;
+		int col = 1;
+		for (int i = 0; i < content.length(); i++) {
+			if (content.charAt(i) == '\n') {
+				line++;
+				col = 0;
+			}
+			lineMap.put(i, line);
+			colMap.put(i, col);
+			col++;
+		}
 
 		final StringBuilder sb = new StringBuilder();
 
@@ -115,9 +116,9 @@ public class PythonToTokenMap {
 			}
 		};
 
-        try {
-            final PythonModuleDeclaration module = (PythonModuleDeclaration)parser.parse(input, reporter);
-            module.traverse(new PythonVisitor(content, lineMap, colMap));
-        } catch (final Throwable e) { }
+		try {
+			final PythonModuleDeclaration module = (PythonModuleDeclaration)parser.parse(input, reporter);
+			module.traverse(new PythonVisitor(content, lineMap, colMap));
+		} catch (final Throwable e) { }
 	}
 }
