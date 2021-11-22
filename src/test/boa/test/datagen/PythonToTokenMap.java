@@ -38,7 +38,7 @@ import org.eclipse.dltk.compiler.problem.IProblem;
  */
 public class PythonToTokenMap {
 	public static void main(final String[] args) {
-		System.out.println("Token, Source, LineStart, LineEnd, ColStart, ColEnd");
+		System.out.println("Token,Source,LineStart,LineEnd,ColStart,ColEnd");
 		for (final String s : args)
 			parsePython(s);
 	}
@@ -72,11 +72,11 @@ public class PythonToTokenMap {
 				return true;
 
 			System.out.print(escape(n.debugString().substring(0, n.debugString().indexOf("@"))));
-			System.out.print(", " + escape(input.substring(n.start(), n.end())));
-			System.out.print(", " + lineMap.get(n.start()));
-			System.out.print(", " + lineMap.get(n.end() - 1));
-			System.out.print(", " + colMap.get(n.start()));
-			System.out.println(", " + colMap.get(n.end() - 1));
+			System.out.print("," + escape(input.substring(n.start(), n.end())));
+			System.out.print("," + lineMap.get(n.start()));
+			System.out.print("," + lineMap.get(n.end() - 1));
+			System.out.print("," + colMap.get(n.start()));
+			System.out.println("," + colMap.get(n.end() - 1));
 
 			return true;
 		}
