@@ -463,8 +463,10 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasAnonDeclaration())
 				visit(node.getAnonDeclaration());
 
-			if (node.hasAnnotation())
-				visit(node.getAnnotation());
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0 ; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
 
 			if (node.hasDeclaringType())
 				visit(node.getDeclaringType());
