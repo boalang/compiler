@@ -416,7 +416,7 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasTypeDeclaration())
 				visit(node.getTypeDeclaration());
 
-			final List<Method> expressionsList = node.getExpressionsList();
+			final List<Expression> expressionsList = node.getExpressionsList();
 			final int expressionsSize = expressionsList.size();
 			for (int i = 0; i < expressionsSize; i++)
 				visit(expressionsList.get(i));
