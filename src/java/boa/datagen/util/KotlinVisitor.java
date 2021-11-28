@@ -1903,7 +1903,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 			mb.addGenericParameters(buildGenericParam(p, function.getTypeConstraints()));
 
 		if (function.getReceiverTypeReference() != null)
-			mb.setRecieverType(typeFromTypeRef(function.getReceiverTypeReference()));
+			mb.setReceiverType(typeFromTypeRef(function.getReceiverTypeReference()));
 
 		expectExpression.push(false);
 		fields.push(new ArrayList<Variable>());
