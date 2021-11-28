@@ -118,7 +118,8 @@ public class BoaGenerator {
 		options.addOption("targetUser", true, "username of target repository");
 		options.addOption("targetRepo", true, "name of the target repository");
 		options.addOption("cache", false, "enable if you want to use already cloned repositories");
-		options.addOption("skip", true, "skip every Nth project (useful for sampling)");
+		options.addOption("skip", true, "skip N projects after each processed project (useful for sampling)");
+		options.addOption("offset", true, "the offset for the first project to process");
 		options.addOption("recover", false, "enable to recover partially built dataset - this will only combine generated data");
 		options.addOption("debug", false, "enable for debug mode");
 		options.addOption("debugparse", false, "enable for debug mode when parsing source files");
@@ -197,6 +198,9 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("skip")) {
 			DefaultProperties.SKIPS = cl.getOptionValue("skip");
+		}
+		if (cl.hasOption("offset")) {
+			DefaultProperties.OFFSET = cl.getOptionValue("offset");
 		}
 		if (cl.hasOption("libs")) {
 			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
