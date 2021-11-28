@@ -367,8 +367,8 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasExpression())
 				visit(node.getExpression());
 
-			if (node.hasReceiverType())
-				visit(node.getReceiverType());
+			if (node.hasRecieverType())
+				visit(node.getRecieverType());
 
 			postVisit(node);
 		}
