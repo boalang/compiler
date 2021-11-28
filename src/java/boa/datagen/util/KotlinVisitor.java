@@ -2072,7 +2072,7 @@ public class KotlinVisitor extends KtVisitor<Void, Void> {
 	private Type buildGenericParam(final KtTypeParameter p, final List<KtTypeConstraint> tcList) {
 		final StringBuilder sb = new StringBuilder();
 		if (p.getModifierList() != null)
-			sb.append(p.getModifierList().getText().replaceAll("\\\\n", "").replaceAll("\\s+" ," ") + " ");
+			sb.append(p.getModifierList().getText().replaceAll("\\\\n", "").replaceAll("\\s+", " ") + " ");
 
 		sb.append(p.getName());
 

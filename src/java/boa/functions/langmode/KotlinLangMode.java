@@ -89,19 +89,19 @@ public class KotlinLangMode implements LangMode {
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is an integer literal.
 	 *
-	 * The test is a simplified grammar, based on the one from:
+	 * <p>The test is a simplified grammar, based on the one from:
 	 * https://github.com/Kotlin/kotlin-spec/blob/648afef3b9a7fccec7fdaa4aabde6d114bcf9d69/grammar/src/main/antlr/KotlinLexer.g4
 	 *
-	 * IntegerLiteral
+	 * <p>IntegerLiteral
 	 *  ([1..9] [0..9_]*)? [0..9] [uU]? [lL]?
 	 *
-	 * HexLiteral
+	 * <p>HexLiteral
 	 *  '0' [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [uU]? [lL]?
 	 *
-	 * BinLiteral
+	 * <p>BinLiteral
 	 *  '0' [bB] [01] ([01_]* [01])? [uU]? [lL]?
 	 *
-	 * If any of these match, it returns <code>true</code>.  Otherwise it
+	 * <p>If any of these match, it returns <code>true</code>.  Otherwise it
 	 * returns <code>false</code>.
 	 *
 	 * @param e the expression to test
@@ -121,19 +121,19 @@ public class KotlinLangMode implements LangMode {
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is a float literal.
 	 *
-	 * The test is a simplified grammar, based on the one from:
+	 * <p>The test is a simplified grammar, based on the one from:
 	 * https://github.com/Kotlin/kotlin-spec/blob/648afef3b9a7fccec7fdaa4aabde6d114bcf9d69/grammar/src/main/antlr/KotlinLexer.g4
 	 *
-	 * FloatLiteral
+	 * <p>FloatLiteral
 	 *  ([0..9] ([0..9_]* [0..9])?)? '.' [0..9] ([0..9_]* [0..9])? ([eE] [+-]? [0..9] ([0..9_]* [0..9])?)? [fF]
 	 *  [0..9] ([0..9_]* [0..9])? [eE] [+-]? [0..9] ([0..9_]* [0..9])? [fF]
 	 *  [0..9] ([0..9_]* [0..9])? [fF]
 	 *
-	 * DoubleLiteral
+	 * <p>DoubleLiteral
 	 *  ([0..9] ([0..9_]* [0..9])?)? '.' [0..9] ([0..9_]* [0..9])? ([eE] [+-]? [0..9] ([0..9_]* [0..9])?)?
 	 *  [0..9] ([0..9_]* [0..9])? [eE] [+-]? [0..9] ([0..9_]* [0..9])?
 	 *
-	 * If any of these match, it returns <code>true</code>.  Otherwise it
+	 * <p>If any of these match, it returns <code>true</code>.  Otherwise it
 	 * returns <code>false</code>.
 	 *
 	 * @param e the expression to test
@@ -877,6 +877,7 @@ public class KotlinLangMode implements LangMode {
 			case STATEMENT:
 				for (int i = 0 ; i < e.getStatementsCount() ; i++)
 					s += prettyprint(e.getStatements(i));
+				return s;
 
 			case TEMPLATE:
 				s += e.getLiteral();
