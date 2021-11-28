@@ -330,12 +330,13 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final Method node) throws Exception {
 		if (preVisit(node)) {
-			visit(node.getReturnType());
-
 			final List<Modifier> modifiersList = node.getModifiersList();
 			final int modifiersSize = modifiersList.size();
 			for (int i = 0; i < modifiersSize; i++)
 				visit(modifiersList.get(i));
+
+			if (node.hasReturnType())
+				visit(node.getReturnType());
 
 			final List<Type> genericParametersList = node.getGenericParametersList();
 			final int genericParametersSize = genericParametersList.size();
@@ -365,7 +366,8 @@ public abstract class BoaAbstractVisitor {
 	}
 	public final void visit(final Variable node) throws Exception {
 		if (preVisit(node)) {
-			visit(node.getVariableType());
+			if (node.hasVariableType())
+				visit(node.getVariableType());
 
 			final List<Modifier> modifiersList = node.getModifiersList();
 			final int modifiersSize = modifiersList.size();
@@ -414,8 +416,10 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasTypeDeclaration())
 				visit(node.getTypeDeclaration());
 
-			if (node.getExpressionsCount() > 0)
-				visit(node.getExpressions(0));
+			final List<Method> expressionsList = node.getExpressionsList();
+			final int expressionsSize = expressionsList.size();
+			for (int i = 0; i < expressionsSize; i++)
+				visit(expressionsList.get(i));
 
 			final List<Method> methodsList = node.getMethodsList();
 			final int methodsSize = methodsList.size();
