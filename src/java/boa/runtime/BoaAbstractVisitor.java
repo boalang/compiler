@@ -325,6 +325,9 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasComputedName())
 				visit(node.getComputedName());
 
+			if (node.hasDelegate())
+				visit(node.getDelegate());
+
 			postVisit(node);
 		}
 	}
@@ -359,6 +362,12 @@ public abstract class BoaAbstractVisitor {
 
 			if (node.hasComputedName())
 				visit(node.getComputedName());
+
+			if (node.hasExpression())
+				visit(node.getExpression());
+
+			if (node.hasReceiverType())
+				visit(node.getReceiverType());
 
 			postVisit(node);
 		}
