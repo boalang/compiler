@@ -312,7 +312,7 @@ public class AcrossInVisitor extends BoaAbstractVisitor {
 	private static String resolveMethodNameForJump(String methodName) {
 
 		String scope = Status.getProperCurrentScope();
-		String[] tarr = BoaStringIntrinsics.splitall(methodName, "\\.");
+		String[] tarr = BoaStringIntrinsics.split(methodName, "\\.");
 		if (tarr.length == 0)
 			return "";
 		for (int i = 0; i <= tarr.length; i++) {

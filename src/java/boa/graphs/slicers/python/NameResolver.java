@@ -72,7 +72,7 @@ public class NameResolver {
 	}
 
 	private static String resolveImportInternal(String usedIdentifierName,Integer defAstLocation, Integer useAstLocation) {
-		String[] tarr = BoaStringIntrinsics.splitall(usedIdentifierName, "\\.");
+		String[] tarr = BoaStringIntrinsics.split(usedIdentifierName, "\\.");
 		if (tarr.length == 0)
 			return "";
 
@@ -100,7 +100,7 @@ public class NameResolver {
 	}
 
 	static String constuctAliasNameFromBaseImport(String str) {
-		String[] narr = BoaStringIntrinsics.splitall(str, "\\.");
+		String[] narr = BoaStringIntrinsics.split(str, "\\.");
 		str = "";
 		String ret = "";
 		int pos = 0;
@@ -143,7 +143,7 @@ public class NameResolver {
 	}
 
 	private static String resolveObjectNameInternal(String usedIdentifierName,Integer defAstLocation, Integer useAstLocation) {
-		String[] tarr = BoaStringIntrinsics.splitall(usedIdentifierName, "\\.");
+		String[] tarr = BoaStringIntrinsics.split(usedIdentifierName, "\\.");
 		if (tarr.length == 0)
 			return "";
 

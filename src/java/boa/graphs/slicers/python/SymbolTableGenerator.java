@@ -71,7 +71,7 @@ public class SymbolTableGenerator extends BoaAbstractVisitor {
 
 				long v = BoaStringIntrinsics.indexOf(" as ", imp);
 				if (v == -1) {
-					String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+					String[] p2 = BoaStringIntrinsics.split(imp, " ");
 					if(p2.length<2)
 					{
 						p2=new String[2];

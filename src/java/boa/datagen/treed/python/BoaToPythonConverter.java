@@ -115,7 +115,7 @@ public class BoaToPythonConverter {
 
 				long v = BoaStringIntrinsics.indexOf(" as ", imp);
 				if (v == -1) {
-					String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+					String[] p2 = BoaStringIntrinsics.split(imp, " ");
 					if(p2.length<2)
 					{
 						p2=new String[2];
@@ -128,7 +128,7 @@ public class BoaToPythonConverter {
 							new PythonImportFromStatement(new DLTKToken(), new VariableReference(0, 0, p2[0]), ptl));
 
 				} else {
-					String[] p2 = BoaStringIntrinsics.splitall(imp, " ");
+					String[] p2 = BoaStringIntrinsics.split(imp, " ");
 					PythonTestListExpression ptl = new PythonTestListExpression();
 					ptl.addExpression(
 							(org.eclipse.dltk.ast.expressions.Expression) this.makeImportASExpression(p2[1], p2[3]));
