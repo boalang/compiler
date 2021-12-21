@@ -213,7 +213,6 @@ public class BoaEvaluator extends BoaMain {
 		compilationDir.mkdirs();
 
 		// set localData path in Defaultproperties
-		System.out.print("Data Path is ---------------------------: " + this.DATA_PATH);
 		DefaultProperties.localDataPath = this.DATA_PATH;
 	}
 }

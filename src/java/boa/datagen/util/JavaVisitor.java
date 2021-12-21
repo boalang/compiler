@@ -59,7 +59,6 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS14 = 14;
 	public static final int JLS15 = 15;
 	public static final int JLS16 = 16;
-	
 
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
@@ -333,7 +332,7 @@ public class JavaVisitor extends ASTVisitor {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName("");
 		b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
-//		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		// b.setFullyQualifiedName(getFullyQualifiedName(node));
 		for (Object d : node.bodyDeclarations()) {
 			if (d instanceof FieldDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());
@@ -670,7 +669,7 @@ public class JavaVisitor extends ASTVisitor {
 	private void visitTypeAnnotations(AnnotatableType t) {
 		if (!t.annotations().isEmpty())
 			setAstLevel(JLS8);
-//		visitAnnotationsList(node.annotations());
+		// visitAnnotationsList(node.annotations());
 	}
 
 	private List<Modifier> visitAnnotationsList(List<?> annotations) {
@@ -941,8 +940,8 @@ public class JavaVisitor extends ASTVisitor {
 		setAstLevel(JLS3);
 
 		String name = node.getTypeName().getFullyQualifiedName();
-		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings")){
-//			System.out.println("SafeVar ---------------");
+		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings")) {
+			// System.out.println("SafeVar ---------------");
 			setAstLevel(JLS4);
 		}
 		boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
@@ -1034,7 +1033,8 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Block node) {
-//		System.out.println("Block ----------------------------------------------------------");
+		// System.out.println("Block
+		// ----------------------------------------------------------");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
@@ -2187,7 +2187,15 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(ModuleDeclaration node) {
 		setAstLevel(JLS9);
 
-		System.out.println("ModuleDeclaration ----------------------------------------------------------");
+		// System.out.println("ModuleDeclaration
+		// ----------------------------------------------------------");
+		if (node.isOpen()) {
+			boa.types.Ast.Modifier.Builder ob = boa.types.Ast.Modifier.newBuilder();
+			ob.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
+			ob.setOther("open");
+			b.addModifiers(ob.build());
+		}
+
 		b.setName(node.getName().getFullyQualifiedName());
 		boa.types.Ast.Modifier.Builder m = boa.types.Ast.Modifier.newBuilder();
 		m.setKind(boa.types.Ast.Modifier.ModifierKind.MODULE);
@@ -2197,13 +2205,6 @@ public class JavaVisitor extends ASTVisitor {
 			b.addAllModifiers(visitAnnotationsList(node.annotations()));
 		}
 
-		if (node.isOpen()) {
-			boa.types.Ast.Modifier.Builder ob = boa.types.Ast.Modifier.newBuilder();
-			ob.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
-			ob.setOther("open");
-			b.addModifiers(ob.build());
-		}
-
 		for (Object s : node.moduleStatements()) {
 			((org.eclipse.jdt.core.dom.ModuleDirective) s).accept(this);
 			b.addExpressions(expressions.pop());
@@ -2211,17 +2212,17 @@ public class JavaVisitor extends ASTVisitor {
 
 		return false;
 	}
-	
+
 	@Override
 	public boolean visit(ModuleModifier node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
-		
-		if(node.isStatic()) {
+
+		if (node.isStatic()) {
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.STATIC);
-		}else if(node.isTransitive()) {
+		} else if (node.isTransitive()) {
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.TRANSITIVE);
 		}
-		
+
 		modifiers.push(b.build());
 		return false;
 	}
@@ -2230,15 +2231,17 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(RequiresDirective node) {
 		setAstLevel(JLS9);
 
+		// System.out.println("RequiresDirective
+		// --------------------------------------------------- ");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.REQUIRES);
-		
+
 		if (node.modifiers() != null) {
-			for(Object o: node.modifiers()) {
+			for (Object o : node.modifiers()) {
 				((ModuleModifier) o).accept(this);
 				b.setAnnotation(modifiers.pop());
-			}	
-		}	
+			}
+		}
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setVariable(node.getName().getFullyQualifiedName());
@@ -2246,7 +2249,7 @@ public class JavaVisitor extends ASTVisitor {
 		b.addExpressions(eb.build());
 
 		expressions.push(b.build());
-		
+
 		return false;
 	}
 
@@ -2254,6 +2257,8 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(ExportsDirective node) {
 		setAstLevel(JLS9);
 
+		// System.out.println("ExportsDirective
+		// --------------------------------------------------- ");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.EXPORTS);
 
@@ -2261,9 +2266,9 @@ public class JavaVisitor extends ASTVisitor {
 		eb.setVariable(node.getName().getFullyQualifiedName());
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.PACKAGE_NAME);
 		b.addExpressions(eb.build());
-		
-		if(node.modules() != null) {
-			for(Object o: node.modules()) {
+
+		if (node.modules() != null) {
+			for (Object o : node.modules()) {
 				boa.types.Ast.Expression.Builder mb = boa.types.Ast.Expression.newBuilder();
 				mb.setVariable(((Name) o).getFullyQualifiedName());
 				mb.setKind(boa.types.Ast.Expression.ExpressionKind.MODULE_NAME);
@@ -2272,7 +2277,7 @@ public class JavaVisitor extends ASTVisitor {
 		}
 
 		expressions.push(b.build());
-		
+
 		return false;
 	}
 
@@ -2280,6 +2285,8 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(OpensDirective node) {
 		setAstLevel(JLS9);
 
+		// System.out.println("OpensDirective
+		// --------------------------------------------------- ");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.OPENS);
 
@@ -2287,9 +2294,9 @@ public class JavaVisitor extends ASTVisitor {
 		eb.setVariable(node.getName().getFullyQualifiedName());
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.PACKAGE_NAME);
 		b.addExpressions(eb.build());
-		
-		if(node.modules() != null) {
-			for(Object o: node.modules()) {
+
+		if (node.modules() != null) {
+			for (Object o : node.modules()) {
 				boa.types.Ast.Expression.Builder mb = boa.types.Ast.Expression.newBuilder();
 				mb.setVariable(((Name) o).getFullyQualifiedName());
 				mb.setKind(boa.types.Ast.Expression.ExpressionKind.MODULE_NAME);
@@ -2298,15 +2305,16 @@ public class JavaVisitor extends ASTVisitor {
 		}
 
 		expressions.push(b.build());
-		
+
 		return false;
 	}
 
 	@Override
 	public boolean visit(UsesDirective node) {
 		setAstLevel(JLS9);
-		
-//		System.out.println("UsesDirective --------------------------------------------");
+
+		// System.out.println("UsesDirective
+		// --------------------------------------------");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.USES);
 
@@ -2317,7 +2325,7 @@ public class JavaVisitor extends ASTVisitor {
 		b.addExpressions(eb.build());
 
 		expressions.push(b.build());
-		
+
 		return false;
 	}
 
@@ -2325,6 +2333,8 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(ProvidesDirective node) {
 		setAstLevel(JLS9);
 
+		// System.out.println("ProvidesDirective
+		// --------------------------------------------------- ");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.PROVIDES);
 
@@ -2353,7 +2363,8 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchExpression node) {
 		setAstLevel(JLS12);
-//		System.out.println("SwitchExpression ----------------------------------------------------------");
+		// System.out.println("SwitchExpression
+		// ----------------------------------------------------------");
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.STATEMENT);
@@ -2378,7 +2389,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(YieldStatement node) {
 		setAstLevel(JLS13);
 
-//		System.out.println("YieldStatement --------------------------------------");
+		// System.out.println("YieldStatement --------------------------------------");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.YIELD);
@@ -2395,7 +2406,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(TextBlock node) {
 		setAstLevel(JLS15);
 
-//		System.out.print("TextBlock ---------------------------------");
+		// System.out.print("TextBlock ---------------------------------");
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(node.getEscapedValue());
@@ -2436,7 +2447,6 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 
-	
 		for (Object o : node.recordComponents()) {
 			fields.push(new ArrayList<boa.types.Ast.Variable>());
 			((SingleVariableDeclaration) o).accept(this);
@@ -2462,12 +2472,12 @@ public class JavaVisitor extends ASTVisitor {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((MethodDeclaration) d).accept(this);
 				for (boa.types.Ast.Method m : methods.pop()) {
-//					if (b.getKind().equals(boa.types.Ast.TypeKind.INTERFACE)) {
-//						for (Modifier mod: m.getModifiersList()) {
-//							if (mod.getKind().equals(boa.types.Ast.Modifier.ModifierKind.STATIC))
-//								setAstLevel(JLS8);
-//						}
-//					}
+					// if (b.getKind().equals(boa.types.Ast.TypeKind.INTERFACE)) {
+					// for (Modifier mod: m.getModifiersList()) {
+					// if (mod.getKind().equals(boa.types.Ast.Modifier.ModifierKind.STATIC))
+					// setAstLevel(JLS8);
+					// }
+					// }
 
 					b.addMethods(m);
 				}

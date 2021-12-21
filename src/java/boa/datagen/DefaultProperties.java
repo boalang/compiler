@@ -68,14 +68,14 @@ public class DefaultProperties {
 	public static final String SF_TICKETS_PATH = "tickets";
 
 	// GitHub paths
-	public static  String GH_JSON_PATH = "repos-metadata-Boa-upto1213";
+	public static String GH_JSON_PATH = "repos-metadata-Boa-upto1213";
 	public static String GH_GIT_PATH = "";
 	public static String GH_ISSUE_PATH = "";
 	public static final String GH_TICKETS_PATH = "tickets";
-	public static  String TOKEN = null;
+	public static String TOKEN = null;
 
 	public static String CLASSPATH_ROOT = getClasspathRoot();
-	public static  String OUTPUT = "output";
+	public static String OUTPUT = "output";
 
 	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true;
 	public static boolean STORE_COMMITS = true;
@@ -84,6 +84,7 @@ public class DefaultProperties {
 
 	// default AST version
 	public static int DEFAULT_JAVA_ASTLEVEL = AST.JLS15;
+	public static String DEFAULT_JAVA_CORE = "15";
 
 	@SuppressWarnings("unused")
 	private static String getRoot() {

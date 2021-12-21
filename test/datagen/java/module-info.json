@@ -3,12 +3,12 @@
       {
          "name": "com.bytestree.calculator",
          "modifiers": [
-            {
-               "kind": "MODULE"
-            },
-            {
+         	{
                "kind": "OTHER",
                "other": "open"
+            },
+            {
+               "kind": "MODULE"
             }
          ],
          "expressions": [

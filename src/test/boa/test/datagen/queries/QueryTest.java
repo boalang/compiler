@@ -36,13 +36,12 @@ import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
 import boa.evaluator.BoaEvaluator;
 
-
 public abstract class QueryTest {
 	static Map<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 	private static Repository repository;
 	private static RevWalk revwalk;
-	
+
 	@Before
 	public void prep() {
 		final File outputDir = new File("test/datagen/temp_output");
@@ -76,9 +75,9 @@ public abstract class QueryTest {
 		}
 		assertEquals(expected, actual);
 	}
-	
+
 	protected static String getFileContents(final ObjectId fileid) {
-		//ObjectId fileid = filePathGitObjectIds.get(path);
+		// ObjectId fileid = filePathGitObjectIds.get(path);
 		try {
 			buffer.reset();
 			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
@@ -86,7 +85,7 @@ public abstract class QueryTest {
 		}
 		return buffer.toString();
 	}
-	
+
 	public List<String> setPaths() throws IOException {
 		final File gitDir = new File("test/datagen/boalang/repos/boalang/test-datagen");
 		if (!gitDir.exists()) {
@@ -134,17 +133,18 @@ public abstract class QueryTest {
 		}
 		return snapshot2;
 	}
-	
+
 	protected void visitPath(final String path, final org.eclipse.jdt.core.dom.ASTVisitor visitor) {
 		ObjectId oi = filePathGitObjectIds.get(path);
-		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
+		final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser
+				.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
 		parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 		final String content = getFileContents(oi);
 
 		parser.setSource(content.toCharArray());
 
 		final Map<String, String> options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_15, options);
+		JavaCore.setComplianceOptions(DefaultProperties.DEFAULT_JAVA_CORE, options);
 		parser.setCompilerOptions(options);
 
 		try {
@@ -153,7 +153,7 @@ public abstract class QueryTest {
 		} catch (final Throwable e) {
 		}
 	}
-	
+
 	private static Set<RevCommit> getHeads() {
 		final Git git = new Git(repository);
 		final Set<RevCommit> heads = new HashSet<RevCommit>();
