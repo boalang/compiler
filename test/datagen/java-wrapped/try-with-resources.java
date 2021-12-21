@@ -1,10 +1,10 @@
 class t {
 	void m() {
-		try (fFileOutputStream fileStream = new FileOutputStream("javatpoint.txt");) {
+		FileOutputStream fileStream = new FileOutputStream("javatpoint.txt");
+		try (fileStream) {
 			System.out.println("File written");
 		} catch (Exception e) {
 		
 		}
-
 	}
 }
