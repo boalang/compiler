@@ -3,7 +3,7 @@
       {
          "name": "com.bytestree.calculator",
          "modifiers": [
-         	{
+            {
                "kind": "OTHER",
                "other": "open"
             },

@@ -113,7 +113,7 @@ public class Java7BaseTest extends BaseTest {
 		paths[0] = path;
 		parser.createASTs(paths, null, new String[0], r, null);
 		
-//		if(paths[0].contains("try-with-resources")) {
+//		if(paths[0].contains("module-info")) {
 //			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
 //			System.out.println(sb.toString());
 //			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
