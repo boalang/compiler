@@ -877,11 +877,10 @@ public class JavaLangMode implements LangMode {
 					s += prettyprint(e.getExpressions(0));
 				return s;
 				
-			case 
 
-			// TODO
-			case METHOD_REFERENCE:
-				return s;
+//			 TODO
+//			case METHOD_REFERENCE:
+//				return s;
 
 			default:
 				return s;
