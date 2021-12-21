@@ -82,25 +82,25 @@ public class JavaLangMode implements LangMode {
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is an integer literal.
 	 *
-	 * <p>
-	 * The test is a simplified grammar, based on the one from:
+	 * <p>The test is a simplified grammar, based on the one from:
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
 	 *
-	 * <p>
-	 * DecimalNumeral: [0-9] [lL]? [1-9] [0-9] ([0-9_]* [0-9])? [lL]? [1-9] [_]+
-	 * [0-9] ([0-9_]* [0-9])? [lL]?
+	 * <p>DecimalNumeral:
+	 * 	[0-9] [lL]?
+	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
+	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
 	 *
-	 * <p>
-	 * HexNumeral: 0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
+	 * <p>HexNumeral:
+	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
 	 *
-	 * <p>
-	 * OctalNumeral: 0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
+	 * <p>OctalNumeral:
+	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
+	 * 
+	 * <p>BinaryNumeral:
+	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
 	 *
-	 * <p>
-	 * BinaryNumeral: 0 [bB] [01] ([01_]* [01])? [lL]?
-	 *
-	 * <p>
-	 * If any of these match, it returns <code>true</code>. Otherwise it returns
+	 * <p>If any of these match, it returns <code>true</code>.  Otherwise it
+	 * returns <code>false</code>.
 	 * <code>false</code>.
 	 *
 	 * @param e the expression to test
@@ -131,22 +131,18 @@ public class JavaLangMode implements LangMode {
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is a float literal.
 	 *
-	 * <p>
-	 * The test is a simplified grammar, based on the one from:
+	 * <p>The test is a simplified grammar, based on the one from:
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
 	 *
-	 * <p>
-	 * DecimalFloatingPointLiteral: [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]*
-	 * [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]? \\. [0-9] ([0-9_]*
-	 * [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]? [0-9] ([0-9_]* [0-9])?
-	 * [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]? [0-9] ([0-9_]* [0-9])? ([eE] [+-]?
-	 * [0-9] ([0-9_]* [0-9])?)? [fFdD]
+	 * <p>DecimalFloatingPointLiteral:
+	 *  [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]* [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
+	 *  \\. [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
+	 *  [0-9] ([0-9_]* [0-9])? [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 *  [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]
 	 *
-	 * <p>
-	 * HexadecimalFloatingPointLiteral: 0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]*
-	 * [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]? 0 [Xx]
-	 * ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]*
-	 * [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 * <p>HexadecimalFloatingPointLiteral:
+	 *  0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 *  0 [Xx] ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a char literal, otherwise false
