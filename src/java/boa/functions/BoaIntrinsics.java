@@ -59,7 +59,7 @@ public class BoaIntrinsics {
 		int low = 0;
 		int high = getRevisionsCount(cr) - 1;
 
-		while (low < high) {
+		while (low <= high) {
 			final int mid = low + (high - low) / 2;
 			final Revision midRev = getRevision(cr, mid);
 			final long cmp = midRev.getCommitDate() - timestamp;
@@ -69,10 +69,10 @@ public class BoaIntrinsics {
 
 			if (cmp < 0)
 				low = mid + 1;
-			else if (cmp > 0)
+			else
 				high = mid - 1;
 		}
-		return low; // key not found: return low index
+		return high; // key not found
 	}
 
 	private static int getRevisionIndex(final CodeRepository cr, final String id) {
@@ -101,9 +101,9 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
 //		snapshot.initialize(timestamp, kinds).visit(cr);
 //		return snapshot.map.values().toArray(new ChangedFile[0]);
-		if (getRevisionsCount(cr) == 0)
-			return new ChangedFile[0];
 		int revisionOffset = getRevisionIndex(cr, timestamp);
+		if (revisionOffset < 0)
+			return new ChangedFile[0];
 		return getSnapshotByIndex(cr, revisionOffset, kinds);
 	}
 
@@ -260,8 +260,6 @@ public class BoaIntrinsics {
 
 	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final String... kinds) {
-		if (getRevisionsCount(cr) == 0)
-			return new ChangedFile[0];
 		int revisionOffset = getRevisionIndex(cr, id);
 		if (revisionOffset < 0)
 			return new ChangedFile[0];
