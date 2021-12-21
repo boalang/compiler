@@ -658,7 +658,7 @@ public class JavaLangMode implements LangMode {
 			return "throw " + prettyprint(stmt.getExpressions(0)) + ";";
 
 		case YIELD:
-			s += "yield " + prettyprint(stmt.getExpressions(0)) + ";";
+			return s += "yield " + prettyprint(stmt.getExpressions(0)) + ";";
 
 		default:
 			return s;
