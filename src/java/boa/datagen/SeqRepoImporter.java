@@ -132,7 +132,7 @@ public class SeqRepoImporter {
 			try {
 				final JsonObject rp = repoArray.get(i).getAsJsonObject();
 				final RepoMetadata repo = new RepoMetadata(rp);
-				if (counter >= offset && (skips <= 0 || counter % skips == 0)) {
+				if (counter >= offset && (skips <= 0 || (counter - offset) % skips == 0)) {
 					if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
 						final Project project = repo.toBoaMetaDataProtobuf(); // current project instance only contains metadata
 
