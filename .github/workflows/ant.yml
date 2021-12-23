@@ -23,7 +23,7 @@ jobs:
         java-version: '12'
         distribution: 'adopt'
     - name: Compiler source
-      run: ant -noinput -buildfile build.xml package
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true package
 
   test-compiler:
     needs: compile
