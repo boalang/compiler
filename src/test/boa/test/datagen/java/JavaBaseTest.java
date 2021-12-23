@@ -141,6 +141,11 @@ public class JavaBaseTest extends BaseTest {
 		parser.setResolveBindings(true);
 		parser.createASTs(new String[] { path }, null, new String[0], r, null);
 
+//		if(path.contains("local-var-lambda")) {
+//			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+//			System.out.println(sb.toString());
+//			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+//		}
 		return FileIO.normalizeEOL(sb.toString());
 	}
 

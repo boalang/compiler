@@ -106,6 +106,8 @@ enum TypeKind {
 	ARRAY = 11;
 	/** Immutable data type */
 	IMMUTABLE = 12;
+	/** Local variable type inference*/
+	INFERRED =13;
 }
 
 /** A type in an AST */

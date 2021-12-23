@@ -501,7 +501,9 @@ public class JavaVisitor extends ASTVisitor {
 		if (tb != null) {
 			if (tb.getTypeDeclaration() != null)
 				tb = tb.getTypeDeclaration();
-			if (tb.isClass())
+			if(type.isVar()) 
+				b.setKind(boa.types.Ast.TypeKind.INFERRED);
+			else if (tb.isClass()) 
 				b.setKind(boa.types.Ast.TypeKind.CLASS);
 			else if (tb.isInterface())
 				b.setKind(boa.types.Ast.TypeKind.INTERFACE);
@@ -595,7 +597,9 @@ public class JavaVisitor extends ASTVisitor {
 			e.printStackTrace();
 		}
 		tb.setName(name); // itb.getName());
-		if (itb.isClass())
+		if(name.equals("var")) {
+			tb.setKind(boa.types.Ast.TypeKind.INFERRED);
+		}else if (itb.isClass())
 			tb.setKind(boa.types.Ast.TypeKind.CLASS);
 		else if (itb.isInterface())
 			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
@@ -707,7 +711,11 @@ public class JavaVisitor extends ASTVisitor {
 		if (svd.isVarargs())
 			name += "...";
 		tp.setName(name);
-		tp.setKind(kind);
+		if(name.equals("var")) {
+			tp.setKind(TypeKind.INFERRED);
+		} else {
+			tp.setKind(kind);
+		}
 		setTypeBinding(tp, svd.getType());
 		vb.setVariableType(tp.build());
 		if (svd.getInitializer() != null) {
@@ -738,7 +746,11 @@ public class JavaVisitor extends ASTVisitor {
 				for (int i = 0; i < node.getExtraDimensions(); i++)
 					name += "[]";
 				tb.setName(name);
-				tb.setKind(boa.types.Ast.TypeKind.OTHER);
+				if(name.equals("var")) {
+					tb.setKind(boa.types.Ast.TypeKind.INFERRED);
+				} else {
+					tb.setKind(boa.types.Ast.TypeKind.OTHER);
+				}
 				setTypeBinding(tb, node.getReturnType2());
 			} else {
 				tb.setName("void");
@@ -858,7 +870,11 @@ public class JavaVisitor extends ASTVisitor {
 		for (int i = 0; i < f.getExtraDimensions(); i++)
 			name += "[]";
 		tb.setName(name);
-		tb.setKind(kind);
+		if(type.isVar()) {
+			tb.setKind(TypeKind.INFERRED);
+		}else {
+			tb.setKind(kind);
+		}
 		setTypeBinding(tb, type);
 		b.setVariableType(tb.build());
 		if (f.getInitializer() != null) {
