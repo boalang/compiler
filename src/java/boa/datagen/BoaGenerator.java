@@ -52,6 +52,8 @@ public class BoaGenerator {
 			return;
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
+		if (cl.hasOption("help"))
+			return;
 
 		if (cl.hasOption("recover")) {
 			SeqCombiner.main(new String[0]);
