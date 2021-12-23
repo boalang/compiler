@@ -28,7 +28,7 @@ import boa.datagen.BoaGenerator;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
 import boa.functions.BoaIntrinsics;
-import boa.test.datagen.java.Java8BaseTest;
+import boa.test.datagen.java.JavaBaseTest;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Code.CodeRepository;
@@ -37,7 +37,7 @@ import boa.types.Diff.ChangedFile;
 import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
-public class TestSequenceFile extends Java8BaseTest {
+public class TestSequenceFile extends JavaBaseTest {
 	private Configuration conf = new Configuration();
 	private FileSystem fileSystem;
 	private SequenceFile.Reader pr;

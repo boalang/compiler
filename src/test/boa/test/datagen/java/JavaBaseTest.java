@@ -1,7 +1,8 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer,
+ * Copyright 2016-2021, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology,
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,17 +54,24 @@ import boa.types.Diff.ChangedFile;
 /*
  * @author rdyer
  */
-public class Java7BaseTest extends BaseTest {
+public class JavaBaseTest extends BaseTest {
 	protected static int astLevel = DefaultProperties.DEFAULT_JAVA_ASTLEVEL;
-	protected static String javaVersion = JavaCore.VERSION_1_8;
+	protected static String javaVersion = JavaCore.VERSION_15;
 	protected static JavaVisitor visitor = new JavaVisitor("");
 
+	protected static void setJavaVersion() {
+		astLevel = DefaultProperties.DEFAULT_JAVA_ASTLEVEL;
+		javaVersion = JavaCore.VERSION_15;
+		visitor = new JavaVisitor("");
+	}
+
 	protected static void dumpJavaWrapped(final String content) {
+		setJavaVersion();
 		dumpJava(getWrapped(content));
 	}
 
 	protected static void dumpJava(final String content) {
-//		String content = "record R(String s, int x) { public R{}}"
+		setJavaVersion();
 		final ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(content.toCharArray());
@@ -82,8 +90,31 @@ public class Java7BaseTest extends BaseTest {
 		} catch (final Exception e) {}
 	}
 
-	public static String parseJava(final String path) {
-//		System.out.println("File path is (parseJava): " + path);
+	public static String parseJava(final String content) {
+		setJavaVersion();
+		@SuppressWarnings("rawtypes")
+		final Map<String, String> options = JavaCore.getOptions();
+		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
+		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
+		final ASTParser parser = ASTParser.newParser(astLevel);
+		parser.setCompilerOptions(options);
+		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
+		parser.setResolveBindings(true);
+		parser.setSource(content.toCharArray());
+		final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		try {
+			ast.addNamespaces(visitor.getNamespaces(cu));
+		} catch (final Exception e) {
+			System.err.println(e);
+			e.printStackTrace();
+		}
+
+		return FileIO.normalizeEOL(JsonFormat.printToString(ast.build()));
+	}
+
+	public static String parseJavaFile(final String path) {
+		setJavaVersion();
 		final StringBuilder sb = new StringBuilder();
 		final FileASTRequestor r = new FileASTRequestor() {
 			@Override
@@ -100,7 +131,6 @@ public class Java7BaseTest extends BaseTest {
 			}
 		};
 		final Map<String, String> fileContents = new HashMap<String, String>();
-//		fileContents.put("", filecontent);
 		@SuppressWarnings("rawtypes")
 		final Map<String, String> options = JavaCore.getOptions();
 		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
@@ -109,20 +139,10 @@ public class Java7BaseTest extends BaseTest {
 		parser.setCompilerOptions(options);
 		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
 		parser.setResolveBindings(true);
-		String [] paths =  new String[1];
-		paths[0] = path;
-		parser.createASTs(paths, null, new String[0], r, null);
-		
-//		if(paths[0].contains("module-info")) {
-//			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-//			System.out.println(sb.toString());
-//			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-//		}
-		
+		parser.createASTs(new String[] { path }, null, new String[0], r, null);
+
 		return FileIO.normalizeEOL(sb.toString());
 	}
-	
-	
 
 	protected static String getWrapped(final String content) {
 		String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ");
@@ -132,11 +152,18 @@ public class Java7BaseTest extends BaseTest {
 		return s;
 	}
 
-	protected static String parseWrapped(final String path) {
-		return parseJava(path);
+	protected static String parseWrapped(final String content) {
+		setJavaVersion();
+		return parseJava(getWrapped(content));
+	}
+
+	protected static String parseWrappedFile(final String path) {
+		setJavaVersion();
+		return parseJavaFile(path);
 	}
 
 	public static void testWrapped(final String java, final String expected) {
+		setJavaVersion();
 		assertEquals(
 				"{\n"
 						+ "   \"namespaces\": [\n"
@@ -170,6 +197,44 @@ public class Java7BaseTest extends BaseTest {
 						+ "   ]\n"
 						+ "}",
 						parseWrapped(java).trim()
+				);
+	}
+
+	public static void testWrappedFile(final String path, final String expected) {
+		setJavaVersion();
+		assertEquals(
+				"{\n"
+						+ "   \"namespaces\": [\n"
+						+ "      {\n"
+						+ "         \"name\": \"\",\n"
+						+ "         \"declarations\": [\n"
+						+ "            {\n"
+						+ "               \"name\": \"t\",\n"
+						+ "               \"kind\": \"CLASS\",\n"
+						+ "               \"methods\": [\n"
+						+ "                  {\n"
+						+ "                     \"name\": \"m\",\n"
+						+ "                     \"return_type\": {\n"
+						+ "                        \"name\": \"void\",\n"
+						+ "                        \"kind\": \"PRIMITIVE\"\n"
+						+ "                     },\n"
+						+ "                     \"statements\": [\n"
+						+ "                        {\n"
+						+ "                           \"kind\": \"BLOCK\",\n"
+						+ "                           \"statements\": [\n"
+						+ "                              " + expected.replaceAll("\n", "\n                              ") + "\n"
+						+ "                           ]\n"
+						+ "                        }\n"
+						+ "                     ]\n"
+						+ "                  }\n"
+						+ "               ],\n"
+						+ "               \"fully_qualified_name\": \"t\"\n"
+						+ "            }\n"
+						+ "         ]\n"
+						+ "      }\n"
+						+ "   ]\n"
+						+ "}",
+						parseWrappedFile(path).trim()
 				);
 	}
 
@@ -258,7 +323,6 @@ public class Java7BaseTest extends BaseTest {
 		}
 		return null;
 	}
-	
 
 	protected static HashMap<Integer, HashMap<Integer, Declaration>> collectDeclarations(final SequenceFile.Reader ar, List<ChangedFile> snapshot) throws IOException {
 		final HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = new HashMap<Integer, HashMap<Integer, Declaration>>();

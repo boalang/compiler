@@ -19,7 +19,7 @@ package boa.test.datagen.java;
 /*
  * @author rdyer
  */
-public class DumpJava extends Java15BaseTest {
+public class DumpJava extends JavaBaseTest {
 	public static void main(String[] args) {
 		for (final String s : args)
 			if (s.indexOf("class ") == -1)

@@ -33,7 +33,7 @@ import org.junit.runners.Parameterized.Parameters;
  * @author rdyer
  */
 @RunWith(Parameterized.class)
-public class TestJava extends Java15BaseTest {
+public class TestJava extends JavaBaseTest {
 	final private static String rootDir = "test/datagen/java";
 	final private static String rootDirWrapped = "test/datagen/java-wrapped";
 
@@ -91,14 +91,14 @@ public class TestJava extends Java15BaseTest {
 	@Test
 	public void java() throws IOException {
 		if (isWrapped)
-			testWrapped(
-				(javaFileName).trim(),
+			testWrappedFile(
+				javaFileName,
 				load(jsonFileName).trim()
 			);
 		else
 			assertEquals(
 				load(jsonFileName).trim(),
-				parseJava(javaFileName).trim()
+				parseJavaFile(javaFileName).trim()
 			);
 	}
 }
