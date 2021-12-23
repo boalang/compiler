@@ -205,6 +205,7 @@ public class SeqRepoImporter {
 	}
 
 	public static class ImportTask implements Runnable {
+		private long procid;
 		private int id;
 		private int counter = 0;
 		private int allCounter = 0;
@@ -222,11 +223,11 @@ public class SeqRepoImporter {
 
 		public ImportTask(int id) {
 			setId(id);
+			this.procid = ProcessHandle.current().pid();
 		}
 
 		public synchronized void openWriters() {
-			long time = System.currentTimeMillis();
-			suffix = getId() + "-" + time + ".seq";
+			suffix = procid + "-" + getId() + "-" + System.currentTimeMillis() + ".seq";
 
 			while (true) {
 				try {
