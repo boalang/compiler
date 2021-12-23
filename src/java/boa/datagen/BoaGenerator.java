@@ -57,31 +57,34 @@ public class BoaGenerator {
 			SeqCombiner.main(new String[0]);
 		} else {
 			/*
-			 * 1. if user provides local json files
+			 * 1. if user provides local JSON files
 			 * 2. if user provides username and password
-			 * in both the cases json files are going to be available
+			 *
+			 * in both cases, JSON files are going to be available
 			 */
 
 			if (jsonAvailable) {
 				try {
 					SeqRepoImporter.main(new String[0]);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
-				SeqCombiner.main(new String[0]);
+				if (!cl.hasOption("nocombine"))
+					SeqCombiner.main(new String[0]);
 			} else if (tokenAvailable) { // when user provides local repo and doesn't have json files
-				MetaDataMaster mdm = new MetaDataMaster();
+				final MetaDataMaster mdm = new MetaDataMaster();
 				mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
 
-				SeqCombiner.main(new String[0]);
+				if (!cl.hasOption("nocombine"))
+					SeqCombiner.main(new String[0]);
 			} else { // when user provides local repo and does not have json files
-				File output = new File(DefaultProperties.OUTPUT);
+				final File output = new File(DefaultProperties.OUTPUT);
 				if (!output.exists())
 					output.mkdirs();
 				LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH, DefaultProperties.OUTPUT);
 				try {
 					MapFileGen.main(new String[0]);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -90,18 +93,18 @@ public class BoaGenerator {
 		}
 	}
 
-	private static final void printHelp(Options options, String message) {
-		String header = "Boa dataset generation options:";
-		String footer = "\nPlease report issues at https://github.com/boalang/compiler/";
+	private static final void printHelp(final Options options, final String message) {
+		final String header = "Boa dataset generation options:";
+		final String footer = "\nPlease report issues at https://github.com/boalang/compiler/";
 		if (message != null) System.err.println(message);
 		new HelpFormatter().printHelp("boa -g [options]", header, options, footer);
 	}
 
-	private static final void printHelp(Options options) {
+	private static final void printHelp(final Options options) {
 		printHelp(options, null);
 	}
 
-	private static void addOptions(Options options) {
+	private static void addOptions(final Options options) {
 		options.addOption("inputJson", true, ".json files for metadata");
 		options.addOption("inputToken", true, "token file");
 		options.addOption("inputRepo", true, "cloned repo path");
@@ -121,12 +124,13 @@ public class BoaGenerator {
 		options.addOption("skip", true, "skip N projects after each processed project (useful for sampling)");
 		options.addOption("offset", true, "the offset for the first project to process");
 		options.addOption("recover", false, "enable to recover partially built dataset - this will only combine generated data");
+		options.addOption("nocombine", false, "do not combine generated seq files into final form");
 		options.addOption("debug", false, "enable for debug mode");
 		options.addOption("debugparse", false, "enable for debug mode when parsing source files");
 		options.addOption("help", false, "shows this help");
 	}
 
-	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
+	private static void handleCmdOptions(final CommandLine cl, final Options options, final String[] args) {
 		if (cl.hasOption("inputJson") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
 			DefaultProperties.OUTPUT = cl.getOptionValue("output");
@@ -152,7 +156,7 @@ public class BoaGenerator {
 			try {
 				// because there is no input directory in this case, we need to
 				// create one
-				String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
+				final String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
 				DefaultProperties.GH_JSON_PATH = GH_JSON_PATH + "/input";
 				getGithubMetadata(DefaultProperties.GH_JSON_PATH, cl.getOptionValue("user"),
 						cl.getOptionValue("password"), cl.getOptionValue("targetUser"),
@@ -166,8 +170,7 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 		} else if (cl.hasOption("help")) {
-			String message = cl.getOptionValue("help");
-			printHelp(options, message);
+			printHelp(options, cl.getOptionValue("help"));
 		} else {
 			System.err.println("Must specify the output, and the local input paths (JSON and repository) or remote login information.");
 			printHelp(options);
@@ -211,14 +214,14 @@ public class BoaGenerator {
 
 	//
 	private static void clear() {
-		File inputDirectory = new File(DefaultProperties.OUTPUT + "/buf-map");
+		final File inputDirectory = new File(DefaultProperties.OUTPUT + "/buf-map");
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
 	}
 
-	private static void getGithubMetadata(String inputPath, String username, String password, String targetUser,
-			String targetRepo) {
-		String[] args = { inputPath, username, password, targetUser, targetRepo };
+	private static void getGithubMetadata(final String inputPath, final String username, final String password, final String targetUser,
+			final String targetRepo) {
+		final String[] args = { inputPath, username, password, targetUser, targetRepo };
 		GetGithubRepoByUser.main(args);
 	}
 }
