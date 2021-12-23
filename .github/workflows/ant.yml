@@ -22,7 +22,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '12'
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Compiler source
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true package
 
@@ -35,7 +35,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '12'
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Run unit tests - compiler
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-compiler
 
@@ -48,7 +48,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '12'
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Run unit tests - functions
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-functions
 
@@ -61,7 +61,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '12'
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Run unit tests - datagen - Java
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-java
 
@@ -74,7 +74,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '12'
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Run unit tests - datagen - JavaScript
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-js
 
@@ -87,7 +87,7 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '12'
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Run unit tests - datagen - PHP
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-php
 
@@ -100,6 +100,6 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '12'
-        distribution: 'adopt'
+        distribution: 'temurin'
     - name: Run style checker
       run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true checkstyle
