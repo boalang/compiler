@@ -501,8 +501,9 @@ public class JavaVisitor extends ASTVisitor {
 		if (tb != null) {
 			if (tb.getTypeDeclaration() != null)
 				tb = tb.getTypeDeclaration();
-			if(type.isVar()) 
-				b.setKind(boa.types.Ast.TypeKind.INFERRED);
+			if(type.isVar()) { 
+				setAstLevel(JLS10);
+				b.setKind(boa.types.Ast.TypeKind.INFERRED);}
 			else if (tb.isClass()) 
 				b.setKind(boa.types.Ast.TypeKind.CLASS);
 			else if (tb.isInterface())
@@ -597,9 +598,7 @@ public class JavaVisitor extends ASTVisitor {
 			e.printStackTrace();
 		}
 		tb.setName(name); // itb.getName());
-		if(name.equals("var")) {
-			tb.setKind(boa.types.Ast.TypeKind.INFERRED);
-		}else if (itb.isClass())
+		if (itb.isClass())
 			tb.setKind(boa.types.Ast.TypeKind.CLASS);
 		else if (itb.isInterface())
 			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
@@ -617,6 +616,7 @@ public class JavaVisitor extends ASTVisitor {
 			tb.setKind(boa.types.Ast.TypeKind.IMMUTABLE);
 		else
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		
 		if (!itb.isPrimitive()) {
 			name = "";
 			try {
@@ -635,6 +635,22 @@ public class JavaVisitor extends ASTVisitor {
 				}
 			}
 		}
+		
+		// Example scenario
+		// var t1 = new var();
+		// var t2 = t1;
+		try {
+			name = "";
+			name = itb.getQualifiedName();
+			if(itb.getName().equals("var") && !name.equals("java.lang.var")) {
+				setAstLevel(JLS10);
+				tb.setKind(boa.types.Ast.TypeKind.INFERRED);
+			}
+		} catch (java.lang.NullPointerException e) {
+				System.err.println("Error getting qualified type name while visiting java file");
+				e.printStackTrace();
+		}
+		
 		return tb.build();
 	}
 
@@ -704,6 +720,12 @@ public class JavaVisitor extends ASTVisitor {
 		vb.addAllModifiers(buildModifiers(svd.modifiers()));
 		boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 		String name = typeName(svd.getType());
+			
+		if (svd.getInitializer() != null) {
+			svd.getInitializer().accept(this);
+			vb.setInitializer(expressions.pop());
+		}
+		
 		// FIXME process extra dimensions in JLS 8
 		visitDimensions(svd.extraDimensions());
 		for (int i = 0; i < svd.extraDimensions().size(); i++)
@@ -711,17 +733,20 @@ public class JavaVisitor extends ASTVisitor {
 		if (svd.isVarargs())
 			name += "...";
 		tp.setName(name);
+		
 		if(name.equals("var")) {
-			tp.setKind(TypeKind.INFERRED);
+			if(vb.hasInitializer() && !vb.getInitializer().getNewType().getName().equals("var")) {
+				setAstLevel(JLS10);
+				tp.setKind(TypeKind.INFERRED);
+			}else {
+				tp.setKind(kind);
+			}		
 		} else {
 			tp.setKind(kind);
 		}
 		setTypeBinding(tp, svd.getType());
 		vb.setVariableType(tp.build());
-		if (svd.getInitializer() != null) {
-			svd.getInitializer().accept(this);
-			vb.setInitializer(expressions.pop());
-		}
+		
 
 		return vb;
 	}
@@ -746,11 +771,7 @@ public class JavaVisitor extends ASTVisitor {
 				for (int i = 0; i < node.getExtraDimensions(); i++)
 					name += "[]";
 				tb.setName(name);
-				if(name.equals("var")) {
-					tb.setKind(boa.types.Ast.TypeKind.INFERRED);
-				} else {
-					tb.setKind(boa.types.Ast.TypeKind.OTHER);
-				}
+				tb.setKind(boa.types.Ast.TypeKind.OTHER);
 				setTypeBinding(tb, node.getReturnType2());
 			} else {
 				tb.setName("void");
@@ -871,6 +892,7 @@ public class JavaVisitor extends ASTVisitor {
 			name += "[]";
 		tb.setName(name);
 		if(type.isVar()) {
+			setAstLevel(JLS10);
 			tb.setKind(TypeKind.INFERRED);
 		}else {
 			tb.setKind(kind);
