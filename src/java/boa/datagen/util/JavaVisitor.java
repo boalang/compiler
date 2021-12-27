@@ -501,27 +501,29 @@ public class JavaVisitor extends ASTVisitor {
 		if (tb != null) {
 			if (tb.getTypeDeclaration() != null)
 				tb = tb.getTypeDeclaration();
+			
 			if(type.isVar()) { 
 				setAstLevel(JLS10);
-				b.setKind(boa.types.Ast.TypeKind.INFERRED);}
-			else if (tb.isClass()) 
+				b.setKind(boa.types.Ast.TypeKind.INFERRED); 
+			} else if (tb.isClass()) {
 				b.setKind(boa.types.Ast.TypeKind.CLASS);
-			else if (tb.isInterface())
+			} else if (tb.isInterface()) {
 				b.setKind(boa.types.Ast.TypeKind.INTERFACE);
-			else if (tb.isEnum())
+			} else if (tb.isEnum()) {
 				b.setKind(boa.types.Ast.TypeKind.ENUM);
-			else if (tb.isAnnotation())
+			} else if (tb.isAnnotation()) {
 				b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
-			else if (tb.isAnonymous())
+			} else if (tb.isAnonymous()) {
 				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
-			else if (tb.isPrimitive())
+			} else if (tb.isPrimitive()) {
 				b.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
-			else if (tb.isArray())
+			} else if (tb.isArray()) {
 				b.setKind(boa.types.Ast.TypeKind.ARRAY);
-			else if (tb.isRecord())
+			} else if (tb.isRecord()) {
 				b.setKind(boa.types.Ast.TypeKind.IMMUTABLE);
-			else
+			} else {
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
+			}
 			if (!tb.isPrimitive()) {
 				String name = "";
 				try {
