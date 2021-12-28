@@ -736,16 +736,13 @@ public class JavaVisitor extends ASTVisitor {
 			name += "...";
 		tp.setName(name);
 		
-		if(name.equals("var")) {
-			if(vb.hasInitializer() && !vb.getInitializer().getNewType().getName().equals("var")) {
-				setAstLevel(JLS10);
-				tp.setKind(TypeKind.INFERRED);
-			}else {
-				tp.setKind(kind);
-			}		
+		if(svd.getType().isVar()) {
+			setAstLevel(JLS10);
+			tp.setKind(TypeKind.INFERRED);	
 		} else {
 			tp.setKind(kind);
 		}
+		
 		setTypeBinding(tp, svd.getType());
 		vb.setVariableType(tp.build());
 		
