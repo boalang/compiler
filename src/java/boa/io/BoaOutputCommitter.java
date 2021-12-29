@@ -1,7 +1,8 @@
 /*
- * Copyright 2019, Hridesh Rajan, Robert Dyer, Che Shian Hung
+ * Copyright 2019-2021, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 Bowling Green State University
- *                 and Iowa State University of Science and Technology
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,17 +69,26 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		final JobClient jobClient = new JobClient(new JobConf(context.getConfiguration()));
 		final RunningJob job = jobClient.getJob((org.apache.hadoop.mapred.JobID) JobID.forName(context.getConfiguration().get("mapred.job.id")));
 		String diag = "";
-		for (final TaskCompletionEvent event : job.getTaskCompletionEvents(0))
-			switch (event.getTaskStatus()) {
-				case SUCCEEDED:
-					break;
-				default:
-					diag += "Diagnostics for: " + event.getTaskTrackerHttp() + "\n";
-					for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
-						diag += s + "\n";
-					diag += "\n";
-					break;
-			}
+		int start = 0;
+		while (true) {
+			final TaskCompletionEvent[] events = job.getTaskCompletionEvents(start);
+			if (events == null || events.length == 0)
+				break;
+			start += events.length;
+			for (final TaskCompletionEvent event : events)
+				switch (event.getTaskStatus()) {
+					case KILLED:
+						break;
+					case SUCCEEDED:
+						break;
+					default:
+						diag += "Diagnostics for: " + event.getTaskAttemptId() + "\n";
+						for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
+							diag += s + "\n";
+						diag += "\n";
+						break;
+				}
+		}
 		updateStatus(diag, context.getConfiguration().getInt("boa.hadoop.jobid", 0));
 	}
 
