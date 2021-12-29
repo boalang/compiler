@@ -59,7 +59,6 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS14 = 14;
 	public static final int JLS15 = 15;
 	public static final int JLS16 = 16;
-	int count = 0;
 
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
@@ -506,7 +505,6 @@ public class JavaVisitor extends ASTVisitor {
 			if(type.isVar() && !tb.getQualifiedName().equals("java.lang.var")) { 
 				setAstLevel(JLS10);
 				b.setKind(boa.types.Ast.TypeKind.INFERRED); 
-//				System.out.println("-------------------- test 4 ------------------- " + tb.getQualifiedName());
 			} else if (tb.isClass()) {
 				b.setKind(boa.types.Ast.TypeKind.CLASS);
 			} else if (tb.isInterface()) {
@@ -649,7 +647,6 @@ public class JavaVisitor extends ASTVisitor {
 			if(itb.getName().equals("var") && !name.equals("java.lang.var")) {
 				setAstLevel(JLS10);
 				tb.setKind(boa.types.Ast.TypeKind.INFERRED);
-//				System.out.println("test 1 ------------------- " + name);
 			}
 		} catch (java.lang.NullPointerException e) {
 				System.err.println("Error getting qualified type name while visiting java file");
@@ -734,11 +731,9 @@ public class JavaVisitor extends ASTVisitor {
 			if(svd.getType().isVar() && !svd.getInitializer().getClass().getName().equals("var")) {
 				setAstLevel(JLS10);
 				tp.setKind(TypeKind.INFERRED);
-//				System.out.println("---------------------- test 2.1 ------------------- " + svd.getInitializer().getClass().getName());
 			}
 		} else {
 			if(svd.getType().isVar()){
-//				System.out.println("----------------------- test 2.2 ------------------- " );
 				setAstLevel(JLS10);
 				tp.setKind(TypeKind.INFERRED);
 			}
@@ -902,7 +897,6 @@ public class JavaVisitor extends ASTVisitor {
 		if (f.getInitializer() != null) {
 			f.getInitializer().accept(this);
 			b.setInitializer(expressions.pop());
-//			System.out.println("----------------------- test 3 ------------------- ");
 		}
 		
 		// FIXME process extra dimensions in JLS 8
@@ -910,7 +904,6 @@ public class JavaVisitor extends ASTVisitor {
 		for (int i = 0; i < f.getExtraDimensions(); i++)
 			name += "[]";
 		tb.setName(name);
-//		System.out.println("------------------- test 3 -------------------  " + name);
 		setTypeBinding(tb, type);
 		b.setVariableType(tb.build());
 		
@@ -1502,25 +1495,11 @@ public class JavaVisitor extends ASTVisitor {
 		
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment) o;
-			
-//			System.out.println(" ********************************************* ");
-//			System.out.println("fragments: " + node.fragments().toString());
-//			System.out.println("------------- VARDECL 2 --------------");
-//			System.out.println(" ********************************************* ");
-			
-			if(node.getType().isVar() && !node.fragments().toString().contains("new var()")){
-				
+			if(node.getType().isVar() && !node.fragments().toString().contains("new var()")){			
 				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.INFERRED));
 			}else {
 				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
 			}
-			
-//			System.out.println(" ********************************************* ");
-//			System.out.println(f.getInitializer().toString());
-//			System.out.println("node type is: " + node.getType().toString());
-//			System.out.println("count is: " + count);
-//			System.out.println(" ********************************************* ");
-//			count ++;
 		}
 		b.addExpressions(eb.build());
 		list.add(b.build());
@@ -2077,7 +2056,6 @@ public class JavaVisitor extends ASTVisitor {
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment) o;
 			if(node.getType().isVar() && !node.fragments().toString().contains("new var()")){
-//				System.out.println("------------- VARDECL 1 --------------");
 				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.INFERRED));
 			}else {
 				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
