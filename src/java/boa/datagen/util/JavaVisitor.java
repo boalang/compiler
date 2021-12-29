@@ -59,6 +59,7 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS14 = 14;
 	public static final int JLS15 = 15;
 	public static final int JLS16 = 16;
+	int count = 0;
 
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
@@ -502,9 +503,10 @@ public class JavaVisitor extends ASTVisitor {
 			if (tb.getTypeDeclaration() != null)
 				tb = tb.getTypeDeclaration();
 			
-			if(type.isVar()) { 
+			if(type.isVar() && !tb.getQualifiedName().equals("java.lang.var")) { 
 				setAstLevel(JLS10);
 				b.setKind(boa.types.Ast.TypeKind.INFERRED); 
+//				System.out.println("-------------------- test 4 ------------------- " + tb.getQualifiedName());
 			} else if (tb.isClass()) {
 				b.setKind(boa.types.Ast.TypeKind.CLASS);
 			} else if (tb.isInterface()) {
@@ -647,6 +649,7 @@ public class JavaVisitor extends ASTVisitor {
 			if(itb.getName().equals("var") && !name.equals("java.lang.var")) {
 				setAstLevel(JLS10);
 				tb.setKind(boa.types.Ast.TypeKind.INFERRED);
+//				System.out.println("test 1 ------------------- " + name);
 			}
 		} catch (java.lang.NullPointerException e) {
 				System.err.println("Error getting qualified type name while visiting java file");
@@ -722,10 +725,23 @@ public class JavaVisitor extends ASTVisitor {
 		vb.addAllModifiers(buildModifiers(svd.modifiers()));
 		boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 		String name = typeName(svd.getType());
-			
+		tp.setKind(kind);
+		
 		if (svd.getInitializer() != null) {
 			svd.getInitializer().accept(this);
 			vb.setInitializer(expressions.pop());
+			
+			if(svd.getType().isVar() && !svd.getInitializer().getClass().getName().equals("var")) {
+				setAstLevel(JLS10);
+				tp.setKind(TypeKind.INFERRED);
+//				System.out.println("---------------------- test 2.1 ------------------- " + svd.getInitializer().getClass().getName());
+			}
+		} else {
+			if(svd.getType().isVar()){
+//				System.out.println("----------------------- test 2.2 ------------------- " );
+				setAstLevel(JLS10);
+				tp.setKind(TypeKind.INFERRED);
+			}
 		}
 		
 		// FIXME process extra dimensions in JLS 8
@@ -735,13 +751,6 @@ public class JavaVisitor extends ASTVisitor {
 		if (svd.isVarargs())
 			name += "...";
 		tp.setName(name);
-		
-		if(svd.getType().isVar()) {
-			setAstLevel(JLS10);
-			tp.setKind(TypeKind.INFERRED);	
-		} else {
-			tp.setKind(kind);
-		}
 		
 		setTypeBinding(tp, svd.getType());
 		vb.setVariableType(tp.build());
@@ -885,23 +894,28 @@ public class JavaVisitor extends ASTVisitor {
 		b.addAllModifiers(buildModifiers(modifiers));
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		String name = typeName(type);
+		tb.setKind(kind);
+		if(kind.equals(TypeKind.INFERRED)) {
+			setAstLevel(JLS10);
+		}
+		
+		if (f.getInitializer() != null) {
+			f.getInitializer().accept(this);
+			b.setInitializer(expressions.pop());
+//			System.out.println("----------------------- test 3 ------------------- ");
+		}
+		
 		// FIXME process extra dimensions in JLS 8
 		visitDimensions(f.extraDimensions());
 		for (int i = 0; i < f.getExtraDimensions(); i++)
 			name += "[]";
 		tb.setName(name);
-		if(type.isVar()) {
-			setAstLevel(JLS10);
-			tb.setKind(TypeKind.INFERRED);
-		}else {
-			tb.setKind(kind);
-		}
+//		System.out.println("------------------- test 3 -------------------  " + name);
 		setTypeBinding(tb, type);
 		b.setVariableType(tb.build());
-		if (f.getInitializer() != null) {
-			f.getInitializer().accept(this);
-			b.setInitializer(expressions.pop());
-		}
+		
+		
+		
 		setDeclaringClass(b, f.resolveBinding());
 		return b;
 	}
@@ -1474,14 +1488,39 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
+		
+		
+		
+		
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
+		
+		
+		
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment) o;
-			eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
+			
+//			System.out.println(" ********************************************* ");
+//			System.out.println("fragments: " + node.fragments().toString());
+//			System.out.println("------------- VARDECL 2 --------------");
+//			System.out.println(" ********************************************* ");
+			
+			if(node.getType().isVar() && !node.fragments().toString().contains("new var()")){
+				
+				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.INFERRED));
+			}else {
+				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
+			}
+			
+//			System.out.println(" ********************************************* ");
+//			System.out.println(f.getInitializer().toString());
+//			System.out.println("node type is: " + node.getType().toString());
+//			System.out.println("count is: " + count);
+//			System.out.println(" ********************************************* ");
+//			count ++;
 		}
 		b.addExpressions(eb.build());
 		list.add(b.build());
@@ -2034,9 +2073,15 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(VariableDeclarationExpression node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
+		
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment) o;
-			eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
+			if(node.getType().isVar() && !node.fragments().toString().contains("new var()")){
+//				System.out.println("------------- VARDECL 1 --------------");
+				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.INFERRED));
+			}else {
+				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
+			}
 		}
 		expressions.push(eb.build());
 		return false;
@@ -2224,8 +2269,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(ModuleDeclaration node) {
 		setAstLevel(JLS9);
 
-		// System.out.println("ModuleDeclaration
-		// ----------------------------------------------------------");
+		// System.out.println("ModuleDeclaration ----------------------------------------------------------");
 		if (node.isOpen()) {
 			boa.types.Ast.Modifier.Builder ob = boa.types.Ast.Modifier.newBuilder();
 			ob.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
@@ -2268,8 +2312,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(RequiresDirective node) {
 		setAstLevel(JLS9);
 
-		// System.out.println("RequiresDirective
-		// --------------------------------------------------- ");
+		// System.out.println("RequiresDirective --------------------------------------------------- ");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.REQUIRES);
 
@@ -2294,8 +2337,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(ExportsDirective node) {
 		setAstLevel(JLS9);
 
-		// System.out.println("ExportsDirective
-		// --------------------------------------------------- ");
+		// System.out.println("ExportsDirective --------------------------------------------------- ");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.EXPORTS);
 
@@ -2322,8 +2364,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(OpensDirective node) {
 		setAstLevel(JLS9);
 
-		// System.out.println("OpensDirective
-		// --------------------------------------------------- ");
+		// System.out.println("OpensDirective --------------------------------------------------- ");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.OPENS);
 
@@ -2350,8 +2391,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(UsesDirective node) {
 		setAstLevel(JLS9);
 
-		// System.out.println("UsesDirective
-		// --------------------------------------------");
+		// System.out.println("UsesDirective --------------------------------------------");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.USES);
 
@@ -2370,8 +2410,7 @@ public class JavaVisitor extends ASTVisitor {
 	public boolean visit(ProvidesDirective node) {
 		setAstLevel(JLS9);
 
-		// System.out.println("ProvidesDirective
-		// --------------------------------------------------- ");
+		// System.out.println("ProvidesDirective --------------------------------------------------- ");
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.PROVIDES);
 
@@ -2400,8 +2439,7 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchExpression node) {
 		setAstLevel(JLS12);
-		// System.out.println("SwitchExpression
-		// ----------------------------------------------------------");
+		// System.out.println("SwitchExpression ----------------------------------------------------------");
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.STATEMENT);
