@@ -971,10 +971,10 @@ public class BoaAstIntrinsics {
 	}
 
 	public static String prettyprintstmt(final Statement stmt) {
-        if (stmt.getKind() == Statement.StatementKind.BLOCK)
-            return "finally " + prettyprint(stmt);
-        return prettyprint(stmt);
-    }
+		if (stmt.getKind() == Statement.StatementKind.BLOCK)
+			return "finally " + prettyprint(stmt);
+		return prettyprint(stmt);
+	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Statement" })
 	public static String prettyprint(final Statement stmt) {
@@ -1071,8 +1071,8 @@ public class BoaAstIntrinsics {
 				}
 				s += " ";
 				for (int i = 0; i < stmt.getStatementsCount(); i++) {
-                    if (i > 0 && i == stmt.getStatementsCount() - 1 && stmt.getStatements(i).getKind() == Statement.StatementKind.BLOCK)
-                        s += "finally ";
+					if (i > 0 && i == stmt.getStatementsCount() - 1 && stmt.getStatements(i).getKind() == Statement.StatementKind.BLOCK)
+						s += "finally ";
 					s += prettyprint(stmt.getStatements(i)) + "\n";
 				}
 				return s;
@@ -1421,13 +1421,18 @@ public class BoaAstIntrinsics {
 			if (!errorCheck.hasError) {
 				final JavaVisitor visitor = new JavaVisitor(s);
 				ast.addNamespaces(visitor.getNamespaces(cu));
-                for (final String i : visitor.getImports())
-                    ast.addImports(i);
+				for (final String i : visitor.getImports())
+					ast.addImports(i);
 			}
 		} catch (final Exception e) {
 			// do nothing
 		}
 
 		return ast.build();
+	}
+
+	@FunctionSpec(name = "debug", returnType = "any", formalParameters = { "string" })
+	public static void debug(final String s) {
+		System.err.println(s);
 	}
 }
