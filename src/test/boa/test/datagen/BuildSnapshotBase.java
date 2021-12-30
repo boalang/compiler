@@ -1,14 +1,12 @@
-package boa.test.datagen.java;
+package boa.test.datagen;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -23,12 +21,6 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.eclipse.jgit.lib.Constants;
-import org.hamcrest.Matchers;
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-import org.junit.Test;
 
 import boa.datagen.DefaultProperties;
 import boa.datagen.forges.github.RepositoryCloner;
@@ -41,68 +33,21 @@ import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 
-//FIXME autoboxing
+public class BuildSnapshotBase {
+	protected final Configuration conf = new Configuration();
+	protected FileSystem fileSystem = null;
 
-@Ignore
-@RunWith(Parameterized.class)
-public class TestJLSVersionOfChangedFile {
-	@Parameters(name = "{index}: {0}")
-	public static List<Object[]> data() throws Exception {
-		final List<Object[]> data = new ArrayList<Object[]>();
-		final CodeRepository cr = buildCodeRepository("boalang/compiler");
-		final String[][] commits = new String[][] {
-			{"3a1e352cc63f94058ddb38341531d347f121c29a", "58"},
-			{"b82810e725dbf8c7fde6e7fdc034c5676d270313", "1"},
-		};
+	protected SequenceFile.Writer projectWriter;
+	protected SequenceFile.Writer astWriter;
+	protected SequenceFile.Writer commitWriter;
+	protected SequenceFile.Writer contentWriter;
+	protected long astWriterLen = 1;
+	protected long commitWriterLen = 1;
+	protected long contentWriterLen = 1;
 
-		final Map<String, Integer> map = new HashMap<String, Integer>();
-		for (int i = 0; i < commits.length; i++) {
-			final String[] commit = commits[i];
-			map.put(commit[0], i);
-		}
-		for (final Revision rev : cr.getRevisionsList()) {
-			final Integer index = map.get(rev.getId());
-			if (index != null) {
-				final String[] commit = commits[index];
-				final List<ChangedFile> snapshot = rev.getFilesList();
-				assertThat(snapshot.size(), Matchers.is(Integer.parseInt(commit[1])));
-
-				for (final ChangedFile cf : snapshot)
-					data.add(new Object[]{cf.getName(), cf});
-			}
-		}
-		return data;
-	}
-
-	private ChangedFile changedFile;
-
-	private static Configuration conf = new Configuration();
-	private static FileSystem fileSystem = null;
-
-	private static SequenceFile.Writer projectWriter;
-	private static SequenceFile.Writer astWriter;
-	private static SequenceFile.Writer commitWriter;
-	private static SequenceFile.Writer contentWriter;
-	private static long astWriterLen = 1;
-	private static long commitWriterLen = 1;
-	private static long contentWriterLen = 1;
-
-	public TestJLSVersionOfChangedFile(final String name, final ChangedFile input) {
-		DefaultProperties.DEBUG = true;
-		this.changedFile = input;
-	}
-
-	@Test
-	public void testChangedFileJLSVersion() throws Exception {
-		final String kind = changedFile.getKind().name();
-		final String version = kind.substring(kind.lastIndexOf('_') + 1);
-		assertThat(changedFile.getName(), Matchers.containsString("/" + version + "/"));
-	}
-
-	private static CodeRepository buildCodeRepository(final String repoName) throws Exception {
+	protected CodeRepository buildCodeRepository(final String repoName) throws Exception {
 		fileSystem = FileSystem.get(conf);
 
-		System.out.println("Repo: " + repoName);
 		final File gitDir = new File("dataset/repos/" + repoName);
 		openWriters(gitDir.getAbsolutePath());
 		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
@@ -118,7 +63,6 @@ public class TestJLSVersionOfChangedFile {
 			repoBuilder.addRevisions(revBuilder);
 		}
 		if (repoBuilder.getRevisionsCount() > 0) {
-//			System.out.println("Build head snapshot");
 			repoBuilder.setHead(conn.getHeadCommitOffset());
 			repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot());
 		}
@@ -131,13 +75,11 @@ public class TestJLSVersionOfChangedFile {
 
 		List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
 		conn.getSnapshot(conn.getHeadCommitOffset(), snapshot1);
-//		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = conn.getSnapshot(Constants.HEAD);
 		Set<String> s1 = new HashSet<String>();
 		Set<String> s2 = new HashSet<String>(snapshot2);
 		for (final ChangedFile cf : snapshot1)
 			s1.add(cf.getName());
-//		System.out.println("Test head snapshot");
 		assertEquals(s2, s1);
 
 		for (int i = conn.getRevisions().size()-1; i >= 0; i--) {
@@ -149,7 +91,6 @@ public class TestJLSVersionOfChangedFile {
 			s2 = new HashSet<String>(snapshot2);
 			for (final ChangedFile cf : snapshot1)
 				s1.add(cf.getName());
-//			System.out.println("Test snapshot at " + commit.getId());
 			assertEquals(s2, s1);
 		}
 
@@ -163,20 +104,37 @@ public class TestJLSVersionOfChangedFile {
 			Arrays.sort(fileNames);
 			final String[] expectedFileNames = conn.getSnapshot(Constants.HEAD).toArray(new String[0]);
 			Arrays.sort(expectedFileNames);
-//			System.out.println("Test head snapshot");
 			assertArrayEquals(expectedFileNames, fileNames);
 		}
 
 		for (final Revision rev : cr.getRevisionsList()) {
-			final ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
-			final String[] fileNames = new String[snapshot.length];
+			final String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
+			Arrays.sort(expectedFileNames);
+
+			ChangedFile[] snapshot = BoaIntrinsics.getSnapshotById(cr, rev.getId());
+			String[] fileNames = new String[snapshot.length];
 			for (int i = 0; i < snapshot.length; i++)
 				fileNames[i] = snapshot[i].getName();
 			Arrays.sort(fileNames);
-			final String[] expectedFileNames = conn.getSnapshot(rev.getId()).toArray(new String[0]);
-			Arrays.sort(expectedFileNames);
-//			System.out.println("Test snapshot at " + rev.getId());
 			assertArrayEquals(expectedFileNames, fileNames);
+
+			snapshot = BoaIntrinsics.getSnapshot(cr, rev);
+			fileNames = new String[snapshot.length];
+			for (int i = 0; i < snapshot.length; i++)
+				fileNames[i] = snapshot[i].getName();
+			Arrays.sort(fileNames);
+			assertArrayEquals(expectedFileNames, fileNames);
+		}
+
+		// test changed files for each commit
+		for (final Revision rev : cr.getRevisionsList()) {
+			final String[] expectedFileNames = conn.getDiffFiles(rev.getId()).toArray(new String[0]);
+			final String[] actualFileNames = new String[rev.getFilesCount()];
+			for (int i = 0; i < actualFileNames.length; i++)
+				actualFileNames[i] = rev.getFiles(i).getName();
+			Arrays.sort(expectedFileNames);
+			Arrays.sort(actualFileNames);
+			assertArrayEquals(expectedFileNames, actualFileNames);
 		}
 
 		new Thread(new FileIO.DirectoryRemover(gitDir.getAbsolutePath())).start();
@@ -185,9 +143,8 @@ public class TestJLSVersionOfChangedFile {
 		return cr;
 	}
 
-	public static void openWriters(final String base) {
-		final long time = System.currentTimeMillis();
-		final String suffix = time + ".seq";
+	protected void openWriters(final String base) {
+		final String suffix = System.currentTimeMillis() + ".seq";
 		while (true) {
 			try {
 				projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/project/" + suffix),
@@ -209,7 +166,7 @@ public class TestJLSVersionOfChangedFile {
 		}
 	}
 
-	public static void closeWriters() {
+	protected void closeWriters() {
 		while (true) {
 			try {
 				projectWriter.close();
@@ -229,13 +186,5 @@ public class TestJLSVersionOfChangedFile {
 				}
 			}
 		}
-	}
-
-	public void print(final Set<String> s, final List<ChangedFile> snapshot, final Map<String, AbstractCommit> commits) {
-		final List<String> l = new ArrayList<String>(s);
-		Collections.sort(l);
-		for (final String f : l)
-			System.out.println(f + " " + commits.get(f).getId());
-		System.out.println("==========================================");
 	}
 }

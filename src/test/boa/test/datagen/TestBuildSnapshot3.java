@@ -4,17 +4,11 @@ import org.junit.Test;
 
 import boa.datagen.DefaultProperties;
 
-public class TestBuildSnapshot3 {
-	
+public class TestBuildSnapshot3 extends BuildSnapshotBase {
 	@Test
 	public void testBuildSnapshot() throws Exception {
 		DefaultProperties.DEBUG = true;
-		
-		String[] repoNames = new String[]{"junit-team/junit4"};
-		for (String repoName : repoNames)
-			TestBuildSnapshot.buildCodeRepository(repoName);
+
+		buildCodeRepository("junit-team/junit4");
 	}
-	
 }
-
-
