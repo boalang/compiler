@@ -10,7 +10,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "B<(@A C)>",
                   "kind": "OTHER"
                }

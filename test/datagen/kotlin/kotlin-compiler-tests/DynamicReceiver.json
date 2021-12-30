@@ -5,42 +5,42 @@
          "methods": [
             {
                "name": "foo",
-               "reciever_type": {
+               "receiver_type": {
                   "name": "dynamic",
                   "kind": "DYNAMIC"
                }
             },
             {
                "name": "foo",
-               "reciever_type": {
+               "receiver_type": {
                   "name": "dynamic?",
                   "kind": "OTHER"
                }
             },
             {
                "name": "foo",
-               "reciever_type": {
+               "receiver_type": {
                   "name": "dynamic",
                   "kind": "DYNAMIC"
                }
             },
             {
                "name": "foo",
-               "reciever_type": {
+               "receiver_type": {
                   "name": "dynamic",
                   "kind": "DYNAMIC"
                }
             },
             {
                "name": "foo",
-               "reciever_type": {
+               "receiver_type": {
                   "name": "dynamic",
                   "kind": "DYNAMIC"
                }
             },
             {
                "name": "foo",
-               "reciever_type": {
+               "receiver_type": {
                   "name": "dynamic",
                   "kind": "DYNAMIC"
                }

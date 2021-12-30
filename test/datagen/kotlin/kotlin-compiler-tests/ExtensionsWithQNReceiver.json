@@ -13,7 +13,7 @@
                   "kind": "LITERAL",
                   "literal": "1"
                },
-               "reciever_type": {
+               "receiver_type": {
                   "name": "java.util.Map<*,*>",
                   "kind": "OTHER"
                }
