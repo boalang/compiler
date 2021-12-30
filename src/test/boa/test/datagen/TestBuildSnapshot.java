@@ -1,8 +1,8 @@
 package boa.test.datagen;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -72,16 +72,16 @@ public class TestBuildSnapshot {
 		assertEquals(s2,  s1);
 	}
 
-	private static Configuration conf = new Configuration();
-	private static FileSystem fileSystem = null;
+	protected static Configuration conf = new Configuration();
+	protected static FileSystem fileSystem = null;
 	
-	private static SequenceFile.Writer projectWriter;
-	private static SequenceFile.Writer astWriter;
-	private static SequenceFile.Writer commitWriter;
-	private static SequenceFile.Writer contentWriter;
-	private static long astWriterLen = 1;
-	private static long commitWriterLen = 1;
-	private static long contentWriterLen = 1;
+	protected static SequenceFile.Writer projectWriter;
+	protected static SequenceFile.Writer astWriter;
+	protected static SequenceFile.Writer commitWriter;
+	protected static SequenceFile.Writer contentWriter;
+	protected static long astWriterLen = 1;
+	protected static long commitWriterLen = 1;
+	protected static long contentWriterLen = 1;
 	
 	@Test
 	public void testGetSnapshotFromProtobuf1() throws Exception {
