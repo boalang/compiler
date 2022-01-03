@@ -1,7 +1,8 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer
+ * Copyright 2016-2022, Hridesh Rajan, Robert Dyer
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ public class ASTFactory {
 
 	public static VarDeclStatement createVarDecl(final String name, final Operand init, final BoaType t, final SymbolTable env) {
 		final VarDeclStatement var = new VarDeclStatement(
-				new Identifier(name),
+				ASTFactory.createIdentifier(name, env),
 				new Expression(
 					new Conjunction(
 						new Comparison(
