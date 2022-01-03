@@ -53,25 +53,8 @@ public class LocalArgumentTransformer extends AbstractVisitorNoArgNoRet {
 				final String newName = "__arg_" + c.getIdentifier().getToken();
 
 				c.getIdentifier().setToken(newName);
-				//((BoaName)c.type).setId(newName);
 				c.env.set(newName, c.type);
 			}
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final VarDeclStatement n) {
-		if (n.type instanceof BoaFunction) {
-			//System.err.println("removing: " + n.env.get(n.getId().getToken()));
-			//n.env.removeLocal(n.getId().getToken());
-		}
-
-		super.visit(n);
-
-		if (n.type instanceof BoaFunction) {
-			//System.err.println("adding: " + n.getId().getToken() + " - " + n.type);
-			//n.env.set(n.getId().getToken(), n.type);
-		}
 	}
 
 	/** {@inheritDoc} */
