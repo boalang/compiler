@@ -29,6 +29,7 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
+import boa.compiler.transforms.LocalArgumentTransformer;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
 import boa.types.proto.CodeRepositoryProtoTuple;
@@ -231,6 +232,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 
 	protected boolean hasEmit = false;
+
+	/** {@inheritDoc} */
+	@Override
+	public void start(final Node n, final SymbolTable env) {
+		super.start(n, env);
+		new LocalArgumentTransformer().start(n);
+	}
 
 	/** {@inheritDoc} */
 	@Override
