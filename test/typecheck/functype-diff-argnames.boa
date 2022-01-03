@@ -1,0 +1,7 @@
+o: output collection of int;
+
+f := function(cmp: function(l: int, r: int) : int) : int {
+	return cmp(3, 5);
+};
+
+o << f(function(r: int, l: int) : int { return r; });

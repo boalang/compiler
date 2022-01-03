@@ -123,6 +123,25 @@ public class BoaFunction extends BoaType {
 
 	/** {@inheritDoc} */
 	@Override
+	public boolean accepts(final BoaType that) {
+		if (!(that instanceof BoaFunction))
+			return false;
+
+		if (!((BoaFunction) that).getType().assigns(this.getType()))
+			return false;
+
+		if (((BoaFunction) that).getFormalParameters().length != this.getFormalParameters().length)
+			return false;
+
+		for (int i = 0; i < this.getFormalParameters().length; i++)
+			if (!((BoaFunction) that).getParameter(i).assigns(this.getParameter(i)))
+				return false;
+
+		return true;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public boolean compares(final BoaType that) {
 		return this.type.compares(that);
 	}
