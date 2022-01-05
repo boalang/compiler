@@ -1,6 +1,7 @@
 /*
- * Copyright 2018, Robert Dyer, Che Shian Hung
- *                 and Bowling Green State University
+ * Copyright 2018-2022, Robert Dyer, Che Shian Hung
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +19,11 @@ package boa.compiler.transforms;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
+import boa.compiler.ast.Call;
 import boa.compiler.ast.Component;
+import boa.compiler.ast.expressions.FunctionExpression;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Selector;
@@ -41,7 +45,8 @@ import boa.types.BoaType;
  */
 public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 	int counter;
-	final Map<String, String> varHash = new HashMap<String, String>();
+	Map<String, String> varHash = new HashMap<>();
+	final Stack<Map<String, String>> hashStack = new Stack<>();
 
 	/** {@inheritDoc} */
 	@Override
@@ -72,6 +77,15 @@ public class VariableDeclRenameTransformer extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final Selector n) {
 		// do nothing, we dont want to rename the selector's identifier
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final FunctionExpression n) {
+		hashStack.push(varHash);
+		varHash = new HashMap<>(varHash);
+		super.visit(n);
+		varHash = hashStack.pop();
 	}
 
 	/** {@inheritDoc} */

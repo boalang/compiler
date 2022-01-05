@@ -139,6 +139,10 @@ public class BoaCompiler extends BoaMain {
 					TypeCheckingVisitor.warn = true;
 					TypeCheckingVisitor.instance.start(p, new SymbolTable());
 					TypeCheckingVisitor.warn = false;
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER TypeCheckingVisitor");
+						new PrettyPrintVisitor().start(p);
+					}
 
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);

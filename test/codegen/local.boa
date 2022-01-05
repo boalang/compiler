@@ -1,0 +1,18 @@
+o: output sum of int;
+
+f := function(i: int, j: int) : int {
+    i = 0;
+    return i + i;
+};
+f2 := function(i: int) : int {
+    i = 0;
+    return f(i, i);
+};
+
+g := function(i: int, j: int) {
+};
+
+h := function() {
+};
+
+o << f(5, 10);

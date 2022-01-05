@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2022, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 Bowling Green State University
  *                 and University of Nebraska Board of Regents
@@ -29,6 +29,7 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
+import boa.compiler.transforms.LocalArgumentTransformer;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
 import boa.types.proto.CodeRepositoryProtoTuple;
@@ -231,6 +232,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 
 	protected boolean hasEmit = false;
+
+	/** {@inheritDoc} */
+	@Override
+	public void start(final Node n, final SymbolTable env) {
+		super.start(n, env);
+		new LocalArgumentTransformer().start(n);
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -1124,24 +1132,24 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionExpression n, final SymbolTable env) {
-		SymbolTable st;
-		try {
-			st = env.cloneNonLocals();
-		} catch (final IOException e) {
-			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
-		}
-
-		n.env = st;
-
-		n.getType().accept(this, st);
+		n.getType().accept(this, env);
 		if (!(n.getType().type instanceof BoaFunction))
 			throw new TypeCheckException(n.getType(), "the identifier '" + n.getType() + "' must be a function type");
 		final BoaFunction t = (BoaFunction)n.getType().type;
 		n.type = t;
 
-		st.setIsVisitor(false);
-		n.getBody().accept(this, st);
-		st.unsetIsVisitor();
+		try {
+			n.env = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+		for (final BoaType p : t.getFormalParameters())
+			if (p instanceof BoaName)
+				n.env.set(((BoaName)p).getId(), ((BoaName)p).getType());
+
+		n.env.setIsVisitor(false);
+		n.getBody().accept(this, n.env);
+		n.env.unsetIsVisitor();
 
 		returnFinder.initialize(t.getType());
 		returnFinder.start(n.getBody());
@@ -1310,22 +1318,26 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionType n, final SymbolTable env) {
-		n.env = env;
+		try {
+			n.env = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
 
 		final BoaType[] params = new BoaType[n.getArgsSize()];
 		if (n.getArgsSize() > 0) {
 			int i = 0;
-			env.setShadowing(true);
+			n.env.setShadowing(true);
 			for (final Component c : n.getArgs()) {
-				c.accept(this, env);
+				c.accept(this, n.env);
 				params[i++] = new BoaName(c.getType().type, c.getIdentifier().getToken());
 			}
-			env.setShadowing(false);
+			n.env.setShadowing(false);
 		}
 
 		BoaType ret = new BoaAny();
 		if (n.hasType()) {
-			n.getType().accept(this, env);
+			n.getType().accept(this, n.env);
 			ret = n.getType().type;
 		}
 

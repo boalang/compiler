@@ -1,0 +1,7 @@
+TEST: output collection of int;
+
+f := function(f2: function(l: int, r: int) : int) : int {
+	return l;
+};
+
+TEST << f(function(l: int, r: int) : int { return 1; });
