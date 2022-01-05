@@ -130,4 +130,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void assignOutput() throws IOException {
 		typecheck(load(badDir + "assignoutput.boa"), "can not assign to output variable 'o' - did you mean to use <<?");
 	}
+
+	@Test
+	public void functionAsArgBad() throws IOException {
+		typecheck(load(badDir + "function-as-arg-bad.boa"), "invalid identifier 'l'");
+	}
 }
