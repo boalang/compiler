@@ -80,8 +80,10 @@ public class <name> extends boa.runtime.BoaRunner {
 		// pass any arguments to map/reduce classes via configuration
 		if (line.hasOption("excludelist"))
 			configuration.setStrings("boa.exclude.projects", line.getOptionValue("excludelist"));
-		if (line.hasOption("time"))
+		if (line.hasOption("time")) {
 			configuration.setBoolean("boa.debug.timings", true);
+			configuration.setLong("mapred.job.reuse.jvm.num.tasks", 1);
+		}
 
 		jb.submit();
 

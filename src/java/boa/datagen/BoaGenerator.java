@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021, Hridesh Rajan, Robert Dyer,
+ * Copyright 2015-2022, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and University of Nebraska Board of Regents
  *
@@ -48,7 +48,7 @@ public class BoaGenerator {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
 			System.err.println(e.getMessage());
-			new HelpFormatter().printHelp("BoaCompiler", options);
+			printHelp(options);
 			return;
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
@@ -95,15 +95,10 @@ public class BoaGenerator {
 		}
 	}
 
-	private static final void printHelp(final Options options, final String message) {
+	private static final void printHelp(final Options options) {
 		final String header = "Boa dataset generation options:";
 		final String footer = "\nPlease report issues at https://github.com/boalang/compiler/";
-		if (message != null) System.err.println(message);
 		new HelpFormatter().printHelp("boa -g [options]", header, options, footer);
-	}
-
-	private static final void printHelp(final Options options) {
-		printHelp(options, null);
 	}
 
 	private static void addOptions(final Options options) {
@@ -117,7 +112,8 @@ public class BoaGenerator {
 		options.addOption("nocommits", false, "do not store commits");
 		options.addOption("size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", true, "directory to store libraries");
-		options.addOption("output", true, "directory where output is desired");
+		options.addOption("output", true, "directory where output is stored");
+		options.addOption("combineoutput", true, "directory where combiner output is stored");
 		options.addOption("user", true, "github username to authenticate");
 		options.addOption("password", true, "github password to authenticate");
 		options.addOption("targetUser", true, "username of target repository");
@@ -171,14 +167,19 @@ public class BoaGenerator {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (cl.hasOption("help")) {
-			printHelp(options, cl.getOptionValue("help"));
 		} else {
-			System.err.println("Must specify the output, and the local input paths (JSON and repository) or remote login information.");
+			if (!cl.hasOption("help"))
+				System.err.println("Must specify the output, and the local input paths (JSON and repository) or remote login information.");
 			printHelp(options);
+			System.exit(1);
 		}
 		if (cl.hasOption("threads")) {
 			DefaultProperties.NUM_THREADS = cl.getOptionValue("threads");
+		}
+		if (cl.hasOption("combineoutput")) {
+			DefaultProperties.COMBINER_OUTPUT = cl.getOptionValue("combineoutput");
+		} else {
+			DefaultProperties.COMBINER_OUTPUT = DefaultProperties.OUTPUT;
 		}
 		if (cl.hasOption("projects")) {
 			DefaultProperties.MAX_PROJECTS = cl.getOptionValue("projects");
