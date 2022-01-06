@@ -486,13 +486,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected boolean abortGeneration = false;
 
 	protected String className;
-	protected int splitSize;
+	protected boolean simple;
 	protected int seed;
 	protected boolean isLocal;
 
-	public CodeGeneratingVisitor(final String className, final int splitSize, final int seed, final boolean isLocal) throws IOException {
+	public CodeGeneratingVisitor(final String className, final boolean simple, final int seed, final boolean isLocal) throws IOException {
 		this.className = className;
-		this.splitSize = splitSize;
+		this.simple = simple;
 		this.seed = seed;
 		this.isLocal = isLocal;
 
@@ -572,7 +572,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		Collections.sort(variableNames);
 
 		st.add("name", className);
-		st.add("splitsize", splitSize);
+		st.add("simple", simple);
 		st.add("seed", seed);
 		st.add("outputVariableNames", variableNames);
 		if (isLocal) st.add("isLocal", true);

@@ -178,7 +178,7 @@ public class BoaCompiler extends BoaMain {
 					if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 					if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 
-					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(className, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, DefaultProperties.localDataPath != null);
+					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(className, isSimple, seed, DefaultProperties.localDataPath != null);
 					cg.start(p);
 
 					final File outputFile = new File(outputSrcDir, className + ".java");
