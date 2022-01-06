@@ -263,7 +263,7 @@ public abstract class BaseTest {
 			new RecursiveFunctionTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
 
-			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", 64 * 1024 * 1024, seed, false);
+			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", true, seed, false);
 			cg.start(p);
 
 			try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {
