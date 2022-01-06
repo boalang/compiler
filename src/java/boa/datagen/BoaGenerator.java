@@ -167,6 +167,8 @@ public class BoaGenerator {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		} else if (cl.hasOption("recover") && cl.hasOption("output")) {
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 		} else {
 			if (!cl.hasOption("help"))
 				System.err.println("Must specify the output, and the local input paths (JSON and repository) or remote login information.");
