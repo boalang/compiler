@@ -113,6 +113,7 @@ public class BoaGenerator {
 		options.addOption("size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", true, "directory to store libraries");
 		options.addOption("output", true, "directory where output is stored");
+		options.addOption("combineoutput", true, "directory where combiner output is stored");
 		options.addOption("user", true, "github username to authenticate");
 		options.addOption("password", true, "github password to authenticate");
 		options.addOption("targetUser", true, "username of target repository");
@@ -174,6 +175,11 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("threads")) {
 			DefaultProperties.NUM_THREADS = cl.getOptionValue("threads");
+		}
+		if (cl.hasOption("combineoutput")) {
+			DefaultProperties.COMBINER_OUTPUT = cl.getOptionValue("combineoutput");
+		} else {
+			DefaultProperties.COMBINER_OUTPUT = DefaultProperties.OUTPUT;
 		}
 		if (cl.hasOption("projects")) {
 			DefaultProperties.MAX_PROJECTS = cl.getOptionValue("projects");
