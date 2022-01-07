@@ -68,6 +68,12 @@ abstract class MinOrMaxAggregator extends Aggregator {
 		else
 			weight = Double.parseDouble(metadata);
 
+		for (int i = 0; i < this.getArg(); i++)
+			if (data.equals(this.list[i].getString())) {
+				this.list[i] = new WeightedString(data, weight + this.list[i].getWeight());
+				return;
+			}
+
 		final WeightedString s = new WeightedString(data, weight);
 
 		if (this.compare(s, this.list[this.last]) > 0)
