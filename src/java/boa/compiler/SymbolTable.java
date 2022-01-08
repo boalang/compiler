@@ -275,8 +275,10 @@ public class SymbolTable {
 			globalFunctions.addFunction("current", new BoaFunction(t, new BoaType[] { t }, ""));
 
 		// proto to string
-		for (final BoaType t : dslTupleTypes)
+		for (final BoaType t : dslTupleTypes) {
 			globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { t }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+			globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { t, new BoaBool() }, "com.googlecode.protobuf.format.JsonFormatMin.printToString(${0})"));
+		}
 
 		// FIXME the json library doesnt support lists
 		//globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaProtoList(new BoaAny()) }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));

@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2022, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +68,12 @@ abstract class MinOrMaxAggregator extends Aggregator {
 			weight = 1.0;
 		else
 			weight = Double.parseDouble(metadata);
+
+		for (int i = 0; i < this.getArg(); i++)
+			if (data.equals(this.list[i].getString())) {
+				this.list[i].addWeight(weight);
+				return;
+			}
 
 		final WeightedString s = new WeightedString(data, weight);
 

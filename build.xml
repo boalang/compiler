@@ -188,16 +188,37 @@
 	</target>
 
 	<target name="test-datagen-general" depends="-compile-tests" description="Run non-language-specific datagen unit tests.">
-		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
-			<classpath refid="test.class.path" />
-			<batchtest>
-				<formatter type="plain" usefile="false" />
-				<fileset dir="build/tests">
-					<include name="boa/test/datagen/Test*.class" />
-					<exclude name="**/*$*.class" />
-				</fileset>
-			</batchtest>
-		</junit>
+		<parallel>
+			<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+				<classpath refid="test.class.path" />
+				<test name="boa.test.datagen.TestBuildSnapshot1">
+					<formatter type="plain" usefile="false" />
+				</test>
+			</junit>
+			<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+				<classpath refid="test.class.path" />
+				<test name="boa.test.datagen.TestBuildSnapshot2">
+					<formatter type="plain" usefile="false" />
+				</test>
+			</junit>
+			<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+				<classpath refid="test.class.path" />
+				<test name="boa.test.datagen.TestBuildSnapshot3">
+					<formatter type="plain" usefile="false" />
+				</test>
+			</junit>
+			<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+				<classpath refid="test.class.path" />
+				<batchtest>
+					<formatter type="plain" usefile="false" />
+					<fileset dir="build/tests">
+						<include name="boa/test/datagen/Test*.class" />
+						<exclude name="**/*$*.class" />
+						<exclude name="**/TestBuildSnapshot?.class" />
+					</fileset>
+				</batchtest>
+			</junit>
+		</parallel>
 		<delete file="SecurityAuth.audit" />
 		<fail message="Test failure detected." if="test.failed" />
 	</target>

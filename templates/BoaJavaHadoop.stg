@@ -1,4 +1,4 @@
-Program(name, staticDeclarations, staticStatements, statements, combineTables, reduceTables, splitsize, seed, isLocal, outputVariableNames) ::= <<
+Program(name, staticDeclarations, staticStatements, statements, combineTables, reduceTables, simple, seed, isLocal, outputVariableNames) ::= <<
 package boa;
 
 public class <name> extends boa.runtime.BoaRunner {
@@ -60,7 +60,13 @@ public class <name> extends boa.runtime.BoaRunner {
 		if (line.hasOption("splitsize"))
 			configuration.setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
 		else
-			configuration.setInt("mapred.max.split.size", <splitsize>);
+			configuration.setInt("mapred.max.split.size", <if(simple)>67108864<else>10485760<endif>);
+
+		<if(simple)>
+		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
+		<else>
+		configuration.setLong("mapred.job.reuse.jvm.num.tasks", 1);
+		<endif>
 
 		if (line.hasOption("profile")) {
 			configuration.setBoolean("mapred.task.profile", true);
@@ -80,8 +86,10 @@ public class <name> extends boa.runtime.BoaRunner {
 		// pass any arguments to map/reduce classes via configuration
 		if (line.hasOption("excludelist"))
 			configuration.setStrings("boa.exclude.projects", line.getOptionValue("excludelist"));
-		if (line.hasOption("time"))
+		if (line.hasOption("time")) {
 			configuration.setBoolean("boa.debug.timings", true);
+			configuration.setLong("mapred.job.reuse.jvm.num.tasks", 1);
+		}
 
 		jb.submit();
 

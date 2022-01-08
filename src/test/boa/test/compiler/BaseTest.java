@@ -19,6 +19,7 @@ package boa.test.compiler;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -48,6 +49,8 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
@@ -263,7 +266,7 @@ public abstract class BaseTest {
 			new RecursiveFunctionTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
 
-			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", 64 * 1024 * 1024, seed, false);
+			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", true, seed, false);
 			cg.start(p);
 
 			try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {
@@ -289,7 +292,7 @@ public abstract class BaseTest {
 				} else
 					fail("found unexpected exception: " + e.getMessage());
 			} else
-				assertEquals(error, e.getMessage());
+				assertThat(e.getMessage(), RegexMatcher.matches(error));
 		}
 
 		delete(outputSrcDir);
@@ -336,5 +339,25 @@ public abstract class BaseTest {
 
 		if (!f.delete())
 			throw new IOException("unable to delete file " + f);
+	}
+
+	public static class RegexMatcher extends BaseMatcher {
+		private final String regex;
+
+		public RegexMatcher(final String regex) {
+			this.regex = regex;
+		}
+
+		public boolean matches(final Object o) {
+			return ((String)o).matches(regex);
+		}
+
+		public void describeTo(final Description description) {
+			description.appendText("matches regex=" + regex);
+		}
+
+		public static RegexMatcher matches(final String regex) {
+			return new RegexMatcher(regex);
+		}
 	}
 }
