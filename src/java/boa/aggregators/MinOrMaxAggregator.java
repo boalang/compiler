@@ -31,7 +31,7 @@ import boa.io.EmitKey;
 abstract class MinOrMaxAggregator extends Aggregator {
 	protected final WeightedString[] list;
 	private final int last;
-	protected double DefaultWeight;
+	protected WeightedString defaultWeight;
 
 	/**
 	 * Construct a {@link MinOrMaxAggregator}.
@@ -56,7 +56,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 
 		// clear out the list
 		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new WeightedString("", DefaultWeight);
+			this.list[i] = defaultWeight;
 	}
 
 	/** {@inheritDoc} */
@@ -113,9 +113,11 @@ abstract class MinOrMaxAggregator extends Aggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		for (int i = 0; i < this.getArg(); i++)
-			if (this.isCombining())
-				this.collect(this.list[i].getString(), BoaCasts.doubleToString(this.list[i].getWeight()));
-			else
-				this.collect(this.list[i].toString());
+			if (this.list[i] != defaultWeight) {
+				if (this.isCombining())
+					this.collect(this.list[i].getString(), BoaCasts.doubleToString(this.list[i].getWeight()));
+				else
+					this.collect(this.list[i].toString());
+			}
 	}
 }

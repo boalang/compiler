@@ -32,7 +32,7 @@ public class MinimumAggregator extends MinOrMaxAggregator {
 	public MinimumAggregator(final long n) {
 		super(n);
 
-		DefaultWeight = Double.MAX_VALUE;
+		defaultWeight = new WeightedString(null, Double.MAX_VALUE);
 	}
 
 	/** {@inheritDoc} */
