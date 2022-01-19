@@ -19,6 +19,7 @@ package boa.test.datagen;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
