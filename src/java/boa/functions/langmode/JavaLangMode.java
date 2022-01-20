@@ -557,7 +557,10 @@ public class JavaLangMode implements LangMode {
 							s += ", ";
 						s += prettyprint(stmt.getInitializations(i));
 					}
-					s += "; " + prettyprint(stmt.getConditions(0)) + "; ";
+					s += "; ";
+					if (stmt.getConditionsCount() > 0)
+						s += prettyprint(stmt.getConditions(0));
+					s += "; ";
 					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
 						if (i > 0)
 							s += ", ";
@@ -721,7 +724,8 @@ public class JavaLangMode implements LangMode {
 			case NEWARRAY:
 				s += "new ";
 				final String arrtype = prettyprint(e.getNewType());
-				s += arrtype.substring(0, arrtype.length() - 1);
+				if (arrtype.length() > 0)
+					s += arrtype.substring(0, arrtype.length() - 1);
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					s += prettyprint(e.getExpressions(i));
 				s += "]";

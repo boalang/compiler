@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2022, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@ import boa.functions.BoaCasts;
  */
 class WeightedString {
 	private final String string;
-	private final double weight;
+	private double weight;
 
 	/**
 	 * Construct a WeightedString.
@@ -57,6 +58,16 @@ class WeightedString {
 	 */
 	public double getWeight() {
 		return this.weight;
+	}
+
+	/**
+	 * Adds to the weight part of the tuple.
+	 * 
+	 * @param double
+	 *            A double to add to the weight part of the tuple
+	 */
+	public void addWeight(final double weight) {
+		this.weight += weight;
 	}
 
 	/** {@inheritDoc} */

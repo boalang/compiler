@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -48,7 +49,7 @@ public class BuildSnapshotBase {
 	protected CodeRepository buildCodeRepository(final String repoName) throws Exception {
 		fileSystem = FileSystem.get(conf);
 
-		final File gitDir = new File("dataset/repos/" + repoName);
+		final File gitDir = Files.createTempDirectory(repoName.replaceAll("/", "_")).toFile();
 		openWriters(gitDir.getAbsolutePath());
 		FileIO.DirectoryRemover filecheck = new FileIO.DirectoryRemover(gitDir.getAbsolutePath());
 		filecheck.run();
