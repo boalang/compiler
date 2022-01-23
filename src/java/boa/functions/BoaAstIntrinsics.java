@@ -1,7 +1,8 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-20222, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,6 +67,7 @@ public class BoaAstIntrinsics {
 	private static MapFile.Reader map;
 	private static MapFile.Reader commentsMap;
 	private static MapFile.Reader issuesMap;
+	private static int samplecounter;
 
 	private static final Revision emptyRevision;
 	static {
@@ -279,7 +281,12 @@ public class BoaAstIntrinsics {
 
 	@SuppressWarnings("rawtypes")
 	public static void setup(final Context context) {
+		BoaAstIntrinsics.samplecounter = 0;
 		BoaAstIntrinsics.context = context;
+	}
+
+	public static boolean testsample(final int samplesize) {
+		return BoaAstIntrinsics.samplecounter++ % samplesize != 0;
 	}
 
 	private static void openMap() {
