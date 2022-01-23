@@ -42,6 +42,7 @@ public abstract class BoaMapper extends Mapper<Text, BytesWritable, EmitKey, Emi
 	private Configuration conf;
 	protected Context context;
 	protected Collection<String> excludeProjects;
+	protected int samplesize;
 
 	/** {@inheritDoc} */
 	@Override
@@ -62,6 +63,7 @@ public abstract class BoaMapper extends Mapper<Text, BytesWritable, EmitKey, Emi
 
 		this.context = context;
 		this.excludeProjects = this.conf.getStringCollection("boa.exclude.projects");
+		this.samplesize = (int)this.conf.getLong("boa.samplesize", 1);
 	}
 
 	protected boolean excludeProject(final String id) {
