@@ -94,7 +94,30 @@ public class TestPrettyprint {
 				{ STATEMENT_START + "for (String s : strs)"
 						+ indent(2) + "{" 
 							+ indent(3) + "System.out.println(s);" 
-						+ indent(2) + "}" + STATEMENT_END} // FOREACH
+						+ indent(2) + "}" + STATEMENT_END}, // FOREACH
+						
+				/*module declaration*/
+//				{"open module com.bytestree.calculator {\n"
+//						+ indent(1) + "	requires com.bytestree.maths;\n"
+//						+ "}"}
+			
+//				{STATEMENT_START + "int season = switch (month){ \n" 
+//						+ indent(3) +  "case JAN: yield 1;" 
+//						+ indent(3) + "case APRIL: yield 2;"
+//						+ indent(2) + "};" + STATEMENT_END },
+				
+//				{STATEMENT_START + "int season = switch (month){ \n" 
+//						+ indent(3) +  "case JAN -> 1;\n" 
+//						+ indent(3) + "case APRIL -> 2;\n"
+//						+ indent(2) + "};" + STATEMENT_END }
+			
+//			/* Local variable inference*/
+//			{STATEMENT_START + "var s = \"this is a string\";" + STATEMENT_END },
+			
+//			/* Java 8 Lambda Expression */
+//			{STATEMENT_START + "Sayable s = () -> { \n"
+//					+ indent(3) + "return \"I have nothing to day\"; \n" 
+//					+ indent(2) + "};" + STATEMENT_END }
 		});
 	}
 

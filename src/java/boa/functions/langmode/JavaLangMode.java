@@ -45,6 +45,7 @@ import boa.types.Ast.Variable;
  * @author rdyer
  */
 public class JavaLangMode implements LangMode {
+	public Boolean hasArrow = null;
 	public String type_name(final String s) {
 		// first, normalize the string
 		final String t = s.replaceAll("<\\s+", "<")
@@ -241,13 +242,22 @@ public class JavaLangMode implements LangMode {
 	}
 
 	public String prettyprint(final ASTRoot r) {
+<<<<<<< HEAD
 		if (r == null) return "";
 
+=======
+		if (r == null)
+			return "";
+		
+>>>>>>> 3c824fe3... update prettyprint
 		String s = "";
 
-		for (final Namespace n : r.getNamespacesList())
+		for (final Namespace n : r.getNamespacesList()) {
 			s += prettyprint(n);
-
+		}
+			
+//		System.out.println("--------------from JavaLangMode line 280------------------ \n" + s);
+//		System.out.println("-------------------------------- \n");
 		return s;
 	}
 
@@ -435,8 +445,13 @@ public class JavaLangMode implements LangMode {
 	private String prettyprint(final List<Modifier> mods) {
 		String s = "";
 
-		for (final Modifier m : mods)
+		for (final Modifier m : mods) {
 			s += prettyprint(m) + " ";
+			if(m.getKind().equals(boa.types.Ast.Modifier.ModifierKind.MODULE)) {
+				return "module";
+			}
+		}
+			
 
 		return s;
 	}
@@ -447,6 +462,7 @@ public class JavaLangMode implements LangMode {
 		String s = "";
 
 		switch (stmt.getKind()) {
+<<<<<<< HEAD
 			case EMPTY:
 				return ";";
 
@@ -540,6 +556,102 @@ public class JavaLangMode implements LangMode {
 						s += prettyprint(stmt.getInitializations(i));
 					}
 					s += ")";
+=======
+		case EMPTY:
+			return ";";
+
+		case BLOCK:
+			s += "{\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
+
+		case RETURN:
+			s += "return";
+			if (stmt.getExpressionsCount() > 0)
+				s += " " + prettyprint(stmt.getExpressions(0));
+			s += ";";
+			return s;
+		case BREAK:
+			s += "break";
+			if (stmt.getExpressionsCount() > 0)
+				s += " " + prettyprint(stmt.getExpressions(0));
+			s += ";";
+			return s;
+		case CONTINUE:
+			s += "continue";
+			if (stmt.getExpressionsCount() > 0)
+				s += " " + prettyprint(stmt.getExpressions(0));
+			s += ";";
+			return s;
+
+		case ASSERT:
+			s += "assert ";
+			s += prettyprint(stmt.getConditions(0));
+			if (stmt.getExpressionsCount() > 0)
+				s += " " + prettyprint(stmt.getExpressions(0));
+			s += ";";
+			return s;
+
+		case LABEL:
+			return prettyprint(stmt.getExpressions(0)) + ": " + prettyprint(stmt.getStatements(0));
+
+		case CASE:
+			if(hasArrow != null && hasArrow) {
+				return "case " + prettyprint(stmt.getExpressions(0)) + " ->";
+			}
+			return "case " + prettyprint(stmt.getExpressions(0)) + ":";
+
+		case DEFAULT:
+			return "default:";
+
+		case EXPRESSION:
+			return prettyprint(stmt.getExpressions(0)) + ";";
+
+		case TYPEDECL:
+			return prettyprint(stmt.getTypeDeclaration());
+
+		case SYNCHRONIZED:
+			s += "synchronized () {\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += "}";
+			return s;
+
+		case CATCH:
+			s += indent() + "catch (";
+			s += prettyprint(stmt.getVariableDeclaration());
+			s += ") {\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
+
+		case FINALLY:
+			s += indent() + "finally {\n";
+			indent++;
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
+
+		case TRY:
+			s += "try";
+			if (stmt.getInitializationsCount() > 0) {
+				s += "(";
+				for (int i = 0; i < stmt.getInitializationsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(stmt.getInitializations(i));
+>>>>>>> 3c824fe3... update prettyprint
 				}
 				s += " ";
 				for (int i = 0; i < stmt.getStatementsCount(); i++) {
@@ -596,6 +708,7 @@ public class JavaLangMode implements LangMode {
 				s += indent() + "}";
 				return s;
 
+<<<<<<< HEAD
 			case IF:
 				s += "if (" + prettyprint(stmt.getConditions(0)) + ")\n";
 				indent++;
@@ -617,14 +730,38 @@ public class JavaLangMode implements LangMode {
 				indent--;
 				s += indent() + "}";
 				return s;
+=======
+		case SWITCH:
+			s += "switch (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
+			indent++;
+			if(stmt.hasIsArrow()) {
+				hasArrow = stmt.getIsArrow();
+			}
+			for (int i = 0; i < stmt.getStatementsCount(); i++)
+				s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+			indent--;
+			s += indent() + "}";
+			return s;
+>>>>>>> 3c824fe3... update prettyprint
 
 			case THROW:
 				return "throw " + prettyprint(stmt.getExpressions(0)) + ";";
 
+<<<<<<< HEAD
 			case YIELD:
 				return s += "yield " + prettyprint(stmt.getExpressions(0)) + ";";
 
 			default: return s;
+=======
+		case YIELD:
+			return s += "yield " +  prettyprint(stmt.getExpressions(0)) + ";";
+			
+		case YIELD_IMPLICIT:
+			return s += prettyprint(stmt.getExpressions(0)) + ";";
+			
+		default:
+			return s;
+>>>>>>> 3c824fe3... update prettyprint
 		}
 	}
 
@@ -799,9 +936,25 @@ public class JavaLangMode implements LangMode {
 					s += prettyprint(e.getExpressions(0));
 				return s;
 
+<<<<<<< HEAD
 			// TODO
 			//case METHOD_REFERENCE:
 			//	return s;
+=======
+//			 TODO
+//			case METHOD_REFERENCE:
+//				return s;
+				
+			case STATEMENT:
+				if(e.getStatementsCount() != 0) {
+					int i = 0;
+					while(i < e.getStatementsCount()) {
+						s += prettyprint(e.getStatements(i));
+						i++;
+					}
+				}
+				return s;
+>>>>>>> 3c824fe3... update prettyprint
 
 			default: return s;
 		}
@@ -856,6 +1009,7 @@ public class JavaLangMode implements LangMode {
 				if (m.getAnnotationMembersCount() > 0) s += ")";
 				return s;
 
+<<<<<<< HEAD
 			case FINAL:        return "final";
 			case STATIC:       return "static";
 			case SYNCHRONIZED: return "synchronized";
@@ -863,6 +1017,35 @@ public class JavaLangMode implements LangMode {
 			case MODULE:       return "module";
 
 			default: return s;
+=======
+		case ANNOTATION:
+			s = "@" + m.getAnnotationName();
+			if (m.getAnnotationMembersCount() > 0)
+				s += "(";
+			for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += m.getAnnotationMembers(i) + " = " + prettyprint(m.getAnnotationValues(i));
+			}
+			if (m.getAnnotationMembersCount() > 0)
+				s += ")";
+			return s;
+
+		case FINAL:
+			return "final";
+		case STATIC:
+			return "static";
+		case SYNCHRONIZED:
+			return "synchronized";
+		case ABSTRACT:
+			return "abstract";
+		case MODULE:
+			return "module";
+	
+
+		default:
+			return s;
+>>>>>>> 3c824fe3... update prettyprint
 		}
 	}
 

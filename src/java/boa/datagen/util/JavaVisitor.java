@@ -59,6 +59,7 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS14 = 14;
 	public static final int JLS15 = 15;
 	public static final int JLS16 = 16;
+	public static final int SOURCE_JAVA_ERROR = 999;
 
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
@@ -1394,6 +1395,23 @@ public class JavaVisitor extends ASTVisitor {
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		
+		Boolean hasArrow = null;
+		
+		if (node.statements() != null && node.statements().get(0) instanceof SwitchCase) {
+			boolean temp = ((SwitchCase) node.statements().get(0)).isSwitchLabeledRule();
+			hasArrow = temp;
+			for (int i = 1; i < node.statements().size(); i ++) {
+				if(node.statements().get(i) instanceof SwitchCase && temp != ((SwitchCase)node.statements().get(i)).isSwitchLabeledRule()) {
+					setAstLevel(SOURCE_JAVA_ERROR);
+				}
+			}
+		}
+		
+		if(hasArrow != null) {
+			b.setIsArrow(hasArrow);
+		}
+		
 		for (Object s : node.statements())
 			((org.eclipse.jdt.core.dom.Statement) s).accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
@@ -1490,7 +1508,6 @@ public class JavaVisitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
-		
 		
 		
 		for (Object o : node.fragments()) {
@@ -2416,7 +2433,7 @@ public class JavaVisitor extends ASTVisitor {
 	// begin java 12
 	@Override
 	public boolean visit(SwitchExpression node) {
-		setAstLevel(JLS12);
+		setAstLevel(JLS14);
 		// System.out.println("SwitchExpression ----------------------------------------------------------");
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
@@ -2426,11 +2443,28 @@ public class JavaVisitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
+		
+		Boolean hasArrow = null;
+		if (node.statements() != null && node.statements().get(0) instanceof SwitchCase) {
+			boolean temp = ((SwitchCase) node.statements().get(0)).isSwitchLabeledRule();
+			hasArrow = temp;
+			for (int i = 1; i < node.statements().size(); i ++) {
+				if(node.statements().get(i) instanceof SwitchCase && temp != ((SwitchCase)node.statements().get(i)).isSwitchLabeledRule()) {
+					setAstLevel(SOURCE_JAVA_ERROR);
+				} 
+			}
+		}
+		
+		if(hasArrow != null) {
+			b.setIsArrow(hasArrow);
+		}
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.statements())
 			((org.eclipse.jdt.core.dom.Statement) s).accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
+		
+		
 
 		eb.addStatements(b.build());
 		expressions.push(eb.build());
@@ -2440,12 +2474,18 @@ public class JavaVisitor extends ASTVisitor {
 	// begin java 13
 	@Override
 	public boolean visit(YieldStatement node) {
-		setAstLevel(JLS13);
+		setAstLevel(JLS14);
 
 		// System.out.println("YieldStatement --------------------------------------");
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.YIELD);
+		
+		if(node.isImplicit()) {
+			b.setKind(boa.types.Ast.Statement.StatementKind.YIELD_IMPLICIT);
+		}else {
+			b.setKind(boa.types.Ast.Statement.StatementKind.YIELD);
+		}
+		
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
 

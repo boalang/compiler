@@ -231,6 +231,7 @@ message Statement {
 		TRAIT_PRECEDENCE = 37;
 		TRAIT_USE = 38;
 		YIELD = 39;
+		YIELD_IMPLICIT = 40;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -243,12 +244,14 @@ message Statement {
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
 	repeated Expression expressions = 9;
+	
 	/** */
 	optional int32 key = 12;
 	repeated Method methods = 13;
 	repeated Variable variable_declarations = 14;
 	repeated Declaration type_declarations = 15;
 	repeated string names = 16;
+	optional bool is_arrow = 17;
 }
 
 /** A single expression */
