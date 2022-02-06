@@ -62,7 +62,8 @@
                               "kind": "VARACCESS",
                               "variable": "d"
                            }
-                        ]
+                        ],
+                        "is_arrow": true
                      }
                   ]
                }

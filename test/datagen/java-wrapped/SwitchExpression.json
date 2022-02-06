@@ -26,7 +26,7 @@
                               ]
                            },
                            {
-                              "kind": "YIELD",
+                              "kind": "YIELD_IMPLICIT",
                               "expressions": [
                                  {
                                     "kind": "LITERAL",
@@ -44,7 +44,7 @@
                               ]
                            },
                            {
-                              "kind": "YIELD",
+                              "kind": "YIELD_IMPLICIT",
                               "expressions": [
                                  {
                                     "kind": "LITERAL",
@@ -58,7 +58,8 @@
                               "kind": "VARACCESS",
                               "variable": "month"
                            }
-                        ]
+                        ],
+                        "is_arrow": true
                      }
                   ]
                }

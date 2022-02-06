@@ -1398,7 +1398,9 @@ public class JavaVisitor extends ASTVisitor {
 		
 		Boolean hasArrow = null;
 		
-		if (node.statements() != null && node.statements().get(0) instanceof SwitchCase) {
+//		System.out.println("----------------- line 1401 size --------------- " + node.statements().size());
+		if (node.statements() != null && node.statements().size() > 0 && node.statements().get(0) instanceof SwitchCase) {
+//			System.out.println("----------------- line 1403 ---------------");
 			boolean temp = ((SwitchCase) node.statements().get(0)).isSwitchLabeledRule();
 			hasArrow = temp;
 			for (int i = 1; i < node.statements().size(); i ++) {
@@ -1407,6 +1409,8 @@ public class JavaVisitor extends ASTVisitor {
 				}
 			}
 		}
+		
+//		System.out.println("----------------- line 1413 ---------------");
 		
 		if(hasArrow != null) {
 			b.setIsArrow(hasArrow);
@@ -2445,7 +2449,7 @@ public class JavaVisitor extends ASTVisitor {
 		b.addExpressions(expressions.pop());
 		
 		Boolean hasArrow = null;
-		if (node.statements() != null && node.statements().get(0) instanceof SwitchCase) {
+		if (node.statements() != null && node.statements().size() > 0 && node.statements().get(0) instanceof SwitchCase) {
 			boolean temp = ((SwitchCase) node.statements().get(0)).isSwitchLabeledRule();
 			hasArrow = temp;
 			for (int i = 1; i < node.statements().size(); i ++) {
