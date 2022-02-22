@@ -102,13 +102,14 @@ public class GetReposByLanguage {
 			MetadataCacher mcGetAPI = new MetadataCacher("https://api.github.com/repositories", tokenGetAPI.getUserName(), tokenGetAPI.getToken());
 			mcGetAPI.authenticate();
 			while (true) {
-				String searchURL = "https://api.github.com/search/repositories?q=language:" + language + "+stars:>=" + stars
-						+ "+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
+//				String searchURL = "https://api.github.com/search/repositories?q=language:" + language + "+stars:>=" + stars
+//						+ "+pushed:<=" + time + "&sort=updated&order=desc&per_page=100";
 				
-//				String searchURL = "https://api.github.com/search/repositories?q=";
-//				searchURL+="tensorflow+NOT+tutorial+NOT+library+NOT+framework+NOT+tool+NOT+example";
-//				searchURL+="+language:" + language + "+stars:>=" + stars+"+is:public"
-//						+ "+pushed:<=" + time + "&sort=update&order=asc&per_page=100";
+				String searchURL = "https://api.github.com/search/repositories?q=";
+				searchURL+="NOT+tutorial+NOT+library+NOT+framework+NOT+tool+NOT+example";
+				searchURL+="+language:" + language + "+stars:>=" + stars+"+is:public";
+				searchURL+="+fork:false" +"+archived:false"
+						+ "+pushed:<=" + time + "&sort=update&order=asc&per_page=100";
 					
 
 				System.out.println(searchURL);
