@@ -561,10 +561,11 @@ public class JavaLangMode implements LangMode {
 							s += ", ";
 						s += prettyprint(stmt.getInitializations(i));
 					}
-					s += " ";
-					for (int i = 0; i < stmt.getStatementsCount(); i++) {
-						s += prettyprint(stmt.getStatements(i)) + "\n";
-					}
+					s += ")";
+				}
+				s += " ";
+				for (int i = 0; i < stmt.getStatementsCount(); i++) {
+					s += prettyprint(stmt.getStatements(i)) + "\n";
 				}
 				return s;
 
