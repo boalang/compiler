@@ -753,8 +753,10 @@ public class KotlinLangMode implements LangMode {
 				return ppPrefix("++", e);
 
 			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
-			case LABEL:
+
+			case LABEL:   return e.getLiteral();
 			case LITERAL: return e.getLiteral();
+
 			case VARACCESS:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					s += prettyprint(e.getExpressions(i)) + ".";
@@ -768,8 +770,14 @@ public class KotlinLangMode implements LangMode {
 					s += ">";
 				}
 				return s;
-			case CAST: return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
-			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
+
+			case CAST:
+				s += "(" + e.getNewType().getName() + ")";
+				if (e.getExpressionsCount() > 0)
+					s += prettyprint(e.getExpressions(0));
+				return s;
+
+			case CONDITIONAL:  return prettyprint(e.getExpressions(0)) + " ? "  + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
 			case NULLCOALESCE: return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
 
 			case METHODCALL:
