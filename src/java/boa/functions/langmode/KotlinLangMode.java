@@ -559,6 +559,7 @@ public class KotlinLangMode implements LangMode {
 				s += "@" + prettyprint(stmt.getExpressions(0));
 				if (stmt.getExpressionsCount() > 1)
 					s += " " + prettyprint(stmt.getExpressions(1));
+				return s;
 
 			case CASE:
 				return prettyprint(stmt.getExpressions(0)) + " -> ";
