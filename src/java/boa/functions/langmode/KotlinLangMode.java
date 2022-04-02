@@ -668,6 +668,8 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case THROW:
+				if (stmt.getExpressionsCount() == 0)
+					return "throw";
 				return "throw " + prettyprint(stmt.getExpressions(0));
 
 			default: return s;
