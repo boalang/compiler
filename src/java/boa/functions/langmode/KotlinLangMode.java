@@ -752,7 +752,10 @@ public class KotlinLangMode implements LangMode {
 					return ppPostfix("++", e);
 				return ppPrefix("++", e);
 
-			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
+			case PAREN:
+				if (e.getExpressionsCount() == 0)
+					return "()";
+				return "(" + prettyprint(e.getExpressions(0)) + ")";
 
 			case LABEL:   return e.getLiteral();
 			case LITERAL: return e.getLiteral();
