@@ -556,7 +556,9 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case LABEL:
-				return prettyprint(stmt.getExpressions(0)) + "@ " + prettyprint(stmt.getStatements(0));
+				s += "@" + prettyprint(stmt.getExpressions(0));
+				if (stmt.getExpressionsCount() > 1)
+					s += " " + prettyprint(stmt.getExpressions(1));
 
 			case CASE:
 				return prettyprint(stmt.getExpressions(0)) + " -> ";
