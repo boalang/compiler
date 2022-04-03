@@ -15,6 +15,7 @@
             "name": "e",
             "variable_type": {
                "name": "ArithmeticException",
+               "fully_qualified_name": "java.lang.ArithmeticException",
                "kind": "CLASS"
             }
          }
