@@ -55,6 +55,13 @@ public class BoaIntrinsics {
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
 	}
 
+	private final static Comparator<Integer> snapshotComparator = new Comparator<Integer>() {
+		@Override
+		public int compare(final Integer i1, final Integer i2) {
+			return i2 - i1;
+		}
+	};
+
 	@FunctionSpec(name = "getrevisionindex", returnType = "int", formalParameters = { "CodeRepository", "int" })
 	public static int getRevisionIndex(final CodeRepository cr, final long timestamp) {
 		return getRevisionIndex(cr, cr.getHead(), timestamp);
@@ -156,12 +163,7 @@ public class BoaIntrinsics {
 		final List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
 		final Set<String> adds = new HashSet<String>();
 		final Set<String> dels = new HashSet<String>();
-		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-			@Override
-			public int compare(final Integer i1, final Integer i2) {
-				return i2 - i1;
-			}
-		});
+		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
 		final Set<Integer> queuedCommitIds = new HashSet<Integer>();
 		pq.offer((int) commitOffset);
 		queuedCommitIds.add((int) commitOffset);
@@ -280,12 +282,7 @@ public class BoaIntrinsics {
 		final List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
 		final Set<String> adds = new HashSet<String>();
 		final Set<String> dels = new HashSet<String>();
-		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-			@Override
-			public int compare(final Integer i1, final Integer i2) {
-				return i2 - i1;
-			}
-		});
+		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
 		final Set<Integer> queuedCommitIds = new HashSet<Integer>();
 		update(snapshot, commit, adds, dels, pq, queuedCommitIds, kinds);
 		while (!pq.isEmpty()) {
@@ -333,12 +330,7 @@ public class BoaIntrinsics {
 			final ChangedFile key = fb.build();
 			int revisionIndex = cf.getPreviousVersions(i);
 			final Set<Integer> queuedRevisionIds = new HashSet<Integer>();
-			final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-				@Override
-				public int compare(final Integer i1, final Integer i2) {
-					return i2 - i1;
-				}
-			});
+			final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
 			pq.offer(revisionIndex);
 			queuedRevisionIds.add(revisionIndex);
 			while (!pq.isEmpty()) {
