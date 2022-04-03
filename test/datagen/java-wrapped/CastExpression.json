@@ -8,8 +8,7 @@
                "name": "x",
                "variable_type": {
                   "name": "String",
-                  "fully_qualified_name": "java.lang.String",
-                  "kind": "CLASS"
+                  "kind": "OTHER"
                },
                "initializer": {
                   "kind": "CAST",
@@ -21,8 +20,7 @@
                   ],
                   "new_type": {
                      "name": "String",
-                     "fully_qualified_name": "java.lang.String",
-                     "kind": "CLASS"
+                     "kind": "OTHER"
                   }
                }
             }
