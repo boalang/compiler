@@ -209,6 +209,12 @@
 			</junit>
 			<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 				<classpath refid="test.class.path" />
+				<test name="boa.test.datagen.TestBuildSnapshot4">
+					<formatter type="plain" usefile="false" />
+				</test>
+			</junit>
+			<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
+				<classpath refid="test.class.path" />
 				<batchtest>
 					<formatter type="plain" usefile="false" />
 					<fileset dir="build/tests">

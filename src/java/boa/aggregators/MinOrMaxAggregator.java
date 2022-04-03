@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2022, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +31,7 @@ import boa.io.EmitKey;
 abstract class MinOrMaxAggregator extends Aggregator {
 	protected final WeightedString[] list;
 	private final int last;
-	protected double DefaultWeight;
+	protected WeightedString defaultWeight;
 
 	/**
 	 * Construct a {@link MinOrMaxAggregator}.
@@ -55,7 +56,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 
 		// clear out the list
 		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new WeightedString("", DefaultWeight);
+			this.list[i] = defaultWeight;
 	}
 
 	/** {@inheritDoc} */
@@ -70,7 +71,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 
 		for (int i = 0; i < this.getArg(); i++)
 			if (data.equals(this.list[i].getString())) {
-				this.list[i] = new WeightedString(data, weight + this.list[i].getWeight());
+				this.list[i].addWeight(weight);
 				return;
 			}
 
@@ -112,9 +113,11 @@ abstract class MinOrMaxAggregator extends Aggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		for (int i = 0; i < this.getArg(); i++)
-			if (this.isCombining())
-				this.collect(this.list[i].getString(), BoaCasts.doubleToString(this.list[i].getWeight()));
-			else
-				this.collect(this.list[i].toString());
+			if (this.list[i] != defaultWeight) {
+				if (this.isCombining())
+					this.collect(this.list[i].getString(), BoaCasts.doubleToString(this.list[i].getWeight()));
+				else
+					this.collect(this.list[i].toString());
+			}
 	}
 }
