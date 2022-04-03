@@ -11,8 +11,7 @@
                      "name": "author",
                      "return_type": {
                         "name": "String",
-                        "fully_qualified_name": "java.lang.String",
-                        "kind": "CLASS"
+                        "kind": "OTHER"
                      }
                   }
                ],
