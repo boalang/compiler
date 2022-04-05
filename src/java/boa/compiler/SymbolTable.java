@@ -358,6 +358,57 @@ public class SymbolTable {
 
 		globalFunctions.addFunction("max", new BoaFunction(new BoaString(), new BoaType[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
 		globalFunctions.addFunction("min", new BoaFunction(new BoaString(), new BoaType[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+
+		// load built-in functions
+		final Class<?>[] builtinFuncs = {
+			boa.functions.BoaAstIntrinsics.class,
+			boa.functions.BoaGraphIntrinsics.class,
+			boa.functions.BoaIntrinsics.class,
+			boa.functions.BoaMetricIntrinsics.class,
+			boa.functions.BoaNormalFormIntrinsics.class,
+			boa.functions.BoaModifierIntrinsics.class,
+			boa.functions.BoaCasts.class,
+			boa.functions.BoaMathIntrinsics.class,
+			boa.functions.BoaSortIntrinsics.class,
+			boa.functions.BoaSpecialIntrinsics.class,
+			boa.functions.BoaStringIntrinsics.class,
+			boa.functions.BoaTimeIntrinsics.class
+		};
+		for (final Class<?> c : builtinFuncs)
+			importFunctions(c);
+
+		// load built-in aggregators
+		final Class<?>[] builtinAggs = {
+			boa.aggregators.BottomAggregator.class,
+			boa.aggregators.CollectionAggregator.class,
+			boa.aggregators.ConfidenceIntervalAggregator.class,
+			boa.aggregators.DistinctAggregator.class,
+			boa.aggregators.FloatHistogramAggregator.class,
+			boa.aggregators.FloatMeanAggregator.class,
+			boa.aggregators.FloatQuantileAggregator.class,
+			boa.aggregators.FloatSumAggregator.class,
+			boa.aggregators.GraphAggregator.class,
+			boa.aggregators.GraphvizAggregator.class,
+			boa.aggregators.IntHistogramAggregator.class,
+			boa.aggregators.IntMeanAggregator.class,
+			boa.aggregators.IntQuantileAggregator.class,
+			boa.aggregators.IntSumAggregator.class,
+			boa.aggregators.KurtosisAggregator.class,
+			boa.aggregators.LogAggregator.class,
+			boa.aggregators.MaximumAggregator.class,
+			boa.aggregators.MedianAggregator.class,
+			boa.aggregators.MinimumAggregator.class,
+			boa.aggregators.SetAggregator.class,
+			boa.aggregators.SkewnessAggregator.class,
+			boa.aggregators.StatisticsAggregator.class,
+			boa.aggregators.StDevAggregator.class,
+			boa.aggregators.TopAggregator.class,
+			boa.aggregators.UniqueAggregator.class,
+			boa.aggregators.VarianceAggregator.class,
+			boa.aggregators.PreconditionAggregator.class,
+		};
+		for (final Class<?> c : builtinAggs)
+			importAggregator(c);
 	}
 
 	public SymbolTable() {
@@ -551,57 +602,6 @@ public class SymbolTable {
 	}
 
 	private static void importLibs(final List<URL> urls) throws IOException {
-		// load built-in functions
-		final Class<?>[] builtinFuncs = {
-			boa.functions.BoaAstIntrinsics.class,
-			boa.functions.BoaGraphIntrinsics.class,
-			boa.functions.BoaIntrinsics.class,
-			boa.functions.BoaMetricIntrinsics.class,
-			boa.functions.BoaNormalFormIntrinsics.class,
-			boa.functions.BoaModifierIntrinsics.class,
-			boa.functions.BoaCasts.class,
-			boa.functions.BoaMathIntrinsics.class,
-			boa.functions.BoaSortIntrinsics.class,
-			boa.functions.BoaSpecialIntrinsics.class,
-			boa.functions.BoaStringIntrinsics.class,
-			boa.functions.BoaTimeIntrinsics.class
-		};
-		for (final Class<?> c : builtinFuncs)
-			importFunctions(c);
-
-		// load built-in aggregators
-		final Class<?>[] builtinAggs = {
-			boa.aggregators.BottomAggregator.class,
-			boa.aggregators.CollectionAggregator.class,
-			boa.aggregators.ConfidenceIntervalAggregator.class,
-			boa.aggregators.DistinctAggregator.class,
-			boa.aggregators.FloatHistogramAggregator.class,
-			boa.aggregators.FloatMeanAggregator.class,
-			boa.aggregators.FloatQuantileAggregator.class,
-			boa.aggregators.FloatSumAggregator.class,
-			boa.aggregators.GraphAggregator.class,
-			boa.aggregators.GraphvizAggregator.class,
-			boa.aggregators.IntHistogramAggregator.class,
-			boa.aggregators.IntMeanAggregator.class,
-			boa.aggregators.IntQuantileAggregator.class,
-			boa.aggregators.IntSumAggregator.class,
-			boa.aggregators.KurtosisAggregator.class,
-			boa.aggregators.LogAggregator.class,
-			boa.aggregators.MaximumAggregator.class,
-			boa.aggregators.MedianAggregator.class,
-			boa.aggregators.MinimumAggregator.class,
-			boa.aggregators.SetAggregator.class,
-			boa.aggregators.SkewnessAggregator.class,
-			boa.aggregators.StatisticsAggregator.class,
-			boa.aggregators.StDevAggregator.class,
-			boa.aggregators.TopAggregator.class,
-			boa.aggregators.UniqueAggregator.class,
-			boa.aggregators.VarianceAggregator.class,
-			boa.aggregators.PreconditionAggregator.class,
-		};
-		for (final Class<?> c : builtinAggs)
-			importAggregator(c);
-
 		// also check any libs passed into the compiler
 		if (urls.size() > 0) {
 			final AnnotationDB db = new AnnotationDB();
