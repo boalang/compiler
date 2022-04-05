@@ -665,7 +665,6 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "getlang", returnType = "FileKind", formalParameters = {})
 	public static ChangedFile.FileKind getlang() {
-		System.out.println("BoaAstinIn -------------------------------------------");
 		return curLang;
 	}
 

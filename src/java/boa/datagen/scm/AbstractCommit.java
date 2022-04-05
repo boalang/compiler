@@ -312,41 +312,51 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		} /*
-			 * else if (lowerPath.endsWith(".html") && parse) { final String content =
-			 * getFileContents(path);
-			 * 
-			 * fb.setKind(FileKind.Source_HTML); if (!parseHTML(path, fb, content, false,
-			 * astWriter)) { if (debugparse)
-			 * System.err.println("Found an HTML parse error in : revision " + id +
-			 * ": file " + path); fb.setKind(FileKind.SOURCE_HTML_ERROR);
-			 * 
-			 * } else if (debugparse) System.err.println("Accepted HTML: revisison " + id +
-			 * ": file " + path); } else if (lowerPath.endsWith(".xml") && parse) { final
-			 * String content = getFileContents(path);
-			 * 
-			 * fb.setKind(FileKind.Source_XML); if (!parseXML(path, fb, content, false,
-			 * astWriter)) { if (debugparse)
-			 * System.err.println("Found an XML parse error in : revision " + id + ": file "
-			 * + path); fb.setKind(FileKind.SOURCE_XML_ERROR); }else if (debugparse)
-			 * System.err.println("Accepted XML: revisison " + id + ": file " + path); }
-			 * else if (lowerPath.endsWith(".css") && parse) { final String content =
-			 * getFileContents(path);
-			 * 
-			 * fb.setKind(FileKind.Source_CSS); if (!parseCSS(path, fb, content, false,
-			 * astWriter)) { if (debugparse)
-			 * System.err.println("Found an CSS parse error in : revision " + id + ": file "
-			 * + path); fb.setKind(FileKind.SOURCE_CSS_ERROR); }else if (debugparse)
-			 * System.err.println("Accepted CSS: revisison " + id + ": file " + path); }
-			 */
-		/*
-		 * else { final String content = getFileContents(path); if
-		 * (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
-		 * try { fb.setKey(connector.contentWriterLen); BytesWritable bw = new
-		 * BytesWritable(content.getBytes()); connector.contentWriter.append(new
-		 * LongWritable(connector.contentWriterLen), bw); connector.contentWriterLen +=
-		 * bw.getLength(); } catch (IOException e) { e.printStackTrace(); } } }
-		 */
+		}/* else if (lowerPath.endsWith(".html") && parse) {
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.Source_HTML);
+			if (!parseHTML(path, fb, content, false, astWriter)) {
+				if (debugparse)
+					System.err.println("Found an HTML parse error in : revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_HTML_ERROR);
+
+			} else if (debugparse)
+				System.err.println("Accepted HTML: revisison " + id + ": file " + path);
+		} else if (lowerPath.endsWith(".xml") && parse) {
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.Source_XML);
+			if (!parseXML(path, fb, content, false, astWriter)) {
+				if (debugparse)
+					System.err.println("Found an XML parse error in : revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_XML_ERROR);
+			}else if (debugparse)
+				System.err.println("Accepted XML: revisison " + id + ": file " + path);
+		} else if (lowerPath.endsWith(".css") && parse) {
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.Source_CSS);
+			if (!parseCSS(path, fb, content, false, astWriter)) {
+				if (debugparse)
+					System.err.println("Found an CSS parse error in : revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_CSS_ERROR);
+			}else if (debugparse)
+				System.err.println("Accepted CSS: revisison " + id + ": file " + path);
+		}*/
+		/*else {
+			final String content = getFileContents(path);
+			if (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
+				try {
+					fb.setKey(connector.contentWriterLen);
+					BytesWritable bw = new BytesWritable(content.getBytes());
+					connector.contentWriter.append(new LongWritable(connector.contentWriterLen), bw);
+					connector.contentWriterLen += bw.getLength();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}*/
 
 		if (connector.astWriterLen > len) {
 			fb.setKey(len);
@@ -477,8 +487,10 @@ public abstract class AbstractCommit {
 		return true;
 	}
 
-	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content, final PHPVersion astLevel, final boolean storeOnError) {
-		final org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser.newParser(astLevel);
+	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content,
+			final PHPVersion astLevel, final boolean storeOnError) {
+		final org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser
+				.newParser(astLevel);
 		final Program cu;
 
 		try {
@@ -551,7 +563,8 @@ public abstract class AbstractCommit {
 					// for (final String s : visitor.getImports())
 					// ast.addImports(s);
 					/*
-					 * for (final Comment c : visitor.getComments()) comments.addComments(c);
+					 * for (final Comment c : visitor.getComments())
+					 * comments.addComments(c);
 					 */
 				} catch (final UnsupportedOperationException e) {
 					return false;
@@ -590,18 +603,16 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,
-			final boolean storeOnError) {
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		try {
-			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser
-					.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
+			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-			// parser.setResolveBindings(true);
+//			parser.setResolveBindings(true);
 			parser.setUnitName(FileIO.getFileName(path));
-			// parser.setEnvironment(null, null, null, true);
+//			parser.setEnvironment(null, null, null, true);
 			parser.setSource(content.toCharArray());
 
-			Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+			final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
 			JavaCore.setComplianceOptions(DefaultProperties.DEFAULT_JAVA_CORE, options);
 			parser.setCompilerOptions(options);
 
@@ -623,7 +634,7 @@ public abstract class AbstractCommit {
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
 
-					// for (final Comment c : visitor.getComments()) comments.addComments(c);
+//					for (final Comment c : visitor.getComments()) comments.addComments(c);
 				} catch (final Throwable e) {
 					if (debug) {
 						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
@@ -633,41 +644,41 @@ public abstract class AbstractCommit {
 				}
 
 				switch (visitor.getAstLevel()) {
-					case JavaVisitor.JLS2:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-						break;
-					case JavaVisitor.JLS3:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-						break;
-					case JavaVisitor.JLS4:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-						break;
-					case JavaVisitor.JLS8:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						break;
-					case JavaVisitor.JLS9:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS9);
-						break;
-					case JavaVisitor.JLS10:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS10);
-						break;
-					case JavaVisitor.JLS11:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS11);
-						break;
-					case JavaVisitor.JLS12:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS12);
-						break;
-					case JavaVisitor.JLS13:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS13);
-						break;
-					case JavaVisitor.JLS14:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS14);
-						break;
-					case JavaVisitor.JLS15:
-						fb.setKind(FileKind.SOURCE_JAVA_JLS15);
-						break;
-					default:
-						fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+				case JavaVisitor.JLS2:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
+					break;
+				case JavaVisitor.JLS3:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
+					break;
+				case JavaVisitor.JLS4:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
+					break;
+				case JavaVisitor.JLS8:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+					break;
+				case JavaVisitor.JLS9:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS9);
+					break;
+				case JavaVisitor.JLS10:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS10);
+					break;
+				case JavaVisitor.JLS11:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS11);
+					break;
+				case JavaVisitor.JLS12:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS12);
+					break;
+				case JavaVisitor.JLS13:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS13);
+					break;
+				case JavaVisitor.JLS14:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS14);
+					break;
+				case JavaVisitor.JLS15:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS15);
+					break;
+				default:
+					fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 				}
 
 				try {
