@@ -14,6 +14,5 @@ notifications:
     recipients:
       - hridesh@iastate.edu
       - rdyer@bgsu.edu
-      - huaiyao@iastate.edu
     on_success: change
     on_failure: always
