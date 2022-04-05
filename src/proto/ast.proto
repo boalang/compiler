@@ -107,7 +107,7 @@ enum TypeKind {
 	/** Immutable data type */
 	IMMUTABLE = 12;
 	/** Local variable type inference*/
-	INFERRED =13;
+	INFERRED = 13;
 }
 
 /** A type in an AST */
@@ -244,7 +244,6 @@ message Statement {
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
 	repeated Expression expressions = 9;
-	
 	/** */
 	optional int32 key = 12;
 	repeated Method methods = 13;
