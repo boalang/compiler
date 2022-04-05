@@ -1199,7 +1199,6 @@ public class PythonVisitor extends ASTVisitor {
 			for (int i = 0; i < md.getExpressionCount() - 1; i++) {
 				if (i < md.getExpressionCount() - 1 && md.getExpression(i + 1) instanceof CallHolder) {
 					i = visitForMethodCall(md, i);
-					i++;
 				} else
 					md.getExpression(i).traverse(this);
 				b.addExpressions(expressions.pop());
