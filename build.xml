@@ -229,7 +229,7 @@
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
 
-	<target name="test-datagen-queries" depends="-compile-tests" description="Run non-language-specific datagen query unit tests.">
+	<target name="test-datagen-queries" depends="package,-compile-tests" description="Run non-language-specific datagen query unit tests.">
 		<parallel>
 			<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 				<classpath refid="test.class.path" />
