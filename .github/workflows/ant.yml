@@ -75,7 +75,7 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
     - name: Run unit tests - datagen - Queries
-      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true test-datagen-queries
+      run: ant -noinput -buildfile build.xml -Dprotobuf.uptodate=true package test-datagen-queries
 
   test-datagen-java:
     needs: compile
