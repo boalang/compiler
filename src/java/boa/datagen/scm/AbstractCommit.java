@@ -66,8 +66,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
-	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii",
-			DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
+	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii", DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	protected AbstractConnector connector;
 	protected String projectName;
@@ -188,7 +187,7 @@ public abstract class AbstractCommit {
 			cfb.setKind(FileKind.OTHER);
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
 				cfb.setKey(0);
-				// cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
+//				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processChangeFile(cfb);
 			revision.addFiles(cfb.build());
@@ -358,8 +357,7 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseHTML(final String path, final Builder fb, final String content, final boolean b,
-			final Writer astWriter) {
+	private boolean parseHTML(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
 		final Document doc;
 		final HtmlVisitor visitor = new HtmlVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -398,8 +396,7 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseXML(final String path, final Builder fb, final String content, final boolean b,
-			final Writer astWriter) {
+	private boolean parseXML(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
 		final org.dom4j.Document doc;
 		final XMLVisitor visitor = new XMLVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -440,8 +437,7 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("unused")
-	private boolean parseCSS(final String path, final Builder fb, final String content, final boolean b,
-			final Writer astWriter) {
+	private boolean parseCSS(final String path, final Builder fb, final String content, final boolean b, final Writer astWriter) {
 		com.steadystate.css.dom.CSSStyleSheetImpl sSheet = null;
 		final CssVisitor visitor = new CssVisitor();
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -481,10 +477,8 @@ public abstract class AbstractCommit {
 		return true;
 	}
 
-	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content,
-			final PHPVersion astLevel, final boolean storeOnError) {
-		final org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser
-				.newParser(astLevel);
+	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content, final PHPVersion astLevel, final boolean storeOnError) {
+		final org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser.newParser(astLevel);
 		final Program cu;
 
 		try {

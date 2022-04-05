@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Hridesh Rajan, Robert Dyer,
+ * Copyright 2016-2022, Hridesh Rajan, Robert Dyer, Huaiyao Ma,
  *                 Iowa State University of Science and Technology,
  *                 Bowling Green State University
  *                 and University of Nebraska Board of Regents
@@ -53,6 +53,7 @@ import boa.types.Diff.ChangedFile;
 
 /*
  * @author rdyer
+ * @author huaiyao
  */
 public class JavaBaseTest extends BaseTest {
 	protected static int astLevel = DefaultProperties.DEFAULT_JAVA_ASTLEVEL;
@@ -141,11 +142,6 @@ public class JavaBaseTest extends BaseTest {
 		parser.setResolveBindings(true);
 		parser.createASTs(new String[] { path }, null, new String[0], r, null);
 
-//		if(path.contains("SwitchCase")) {
-//			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-//			System.out.println(sb.toString());
-//			System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-//		}
 		return FileIO.normalizeEOL(sb.toString());
 	}
 
@@ -167,80 +163,48 @@ public class JavaBaseTest extends BaseTest {
 		return parseJavaFile(path);
 	}
 
+	protected static String getWrappedResult(final String expected) {
+		return "{\n"
+				+ "   \"namespaces\": [\n"
+				+ "      {\n"
+				+ "         \"name\": \"\",\n"
+				+ "         \"declarations\": [\n"
+				+ "            {\n"
+				+ "               \"name\": \"t\",\n"
+				+ "               \"kind\": \"CLASS\",\n"
+				+ "               \"methods\": [\n"
+				+ "                  {\n"
+				+ "                     \"name\": \"m\",\n"
+				+ "                     \"return_type\": {\n"
+				+ "                        \"name\": \"void\",\n"
+				+ "                        \"kind\": \"PRIMITIVE\"\n"
+				+ "                     },\n"
+				+ "                     \"statements\": [\n"
+				+ "                        {\n"
+				+ "                           \"kind\": \"BLOCK\",\n"
+				+ "                           \"statements\": [\n"
+				+ "                              " + expected.replaceAll("\n", "\n                              ") + "\n"
+				+ "                           ]\n"
+				+ "                        }\n"
+				+ "                     ]\n"
+				+ "                  }\n"
+				+ "               ],\n"
+				+ "               \"fully_qualified_name\": \"t\"\n"
+				+ "            }\n"
+				+ "         ]\n"
+				+ "      }\n"
+				+ "   ]\n"
+				+ "}";
+	}
+
 	public static void testWrapped(final String java, final String expected) {
 		setJavaVersion();
-		assertEquals(
-				"{\n"
-						+ "   \"namespaces\": [\n"
-						+ "      {\n"
-						+ "         \"name\": \"\",\n"
-						+ "         \"declarations\": [\n"
-						+ "            {\n"
-						+ "               \"name\": \"t\",\n"
-						+ "               \"kind\": \"CLASS\",\n"
-						+ "               \"methods\": [\n"
-						+ "                  {\n"
-						+ "                     \"name\": \"m\",\n"
-						+ "                     \"return_type\": {\n"
-						+ "                        \"name\": \"void\",\n"
-						+ "                        \"kind\": \"PRIMITIVE\"\n"
-						+ "                     },\n"
-						+ "                     \"statements\": [\n"
-						+ "                        {\n"
-						+ "                           \"kind\": \"BLOCK\",\n"
-						+ "                           \"statements\": [\n"
-						+ "                              " + expected.replaceAll("\n", "\n                              ") + "\n"
-						+ "                           ]\n"
-						+ "                        }\n"
-						+ "                     ]\n"
-						+ "                  }\n"
-						+ "               ],\n"
-						+ "               \"fully_qualified_name\": \"t\"\n"
-						+ "            }\n"
-						+ "         ]\n"
-						+ "      }\n"
-						+ "   ]\n"
-						+ "}",
-						parseWrapped(java).trim()
-				);
+		assertEquals(getWrappedResult(expected), parseWrapped(java).trim());
 	}
 
 	public static void testWrappedFile(final String path, final String expected) {
 		setJavaVersion();
-		assertEquals(
-				"{\n"
-						+ "   \"namespaces\": [\n"
-						+ "      {\n"
-						+ "         \"name\": \"\",\n"
-						+ "         \"declarations\": [\n"
-						+ "            {\n"
-						+ "               \"name\": \"t\",\n"
-						+ "               \"kind\": \"CLASS\",\n"
-						+ "               \"methods\": [\n"
-						+ "                  {\n"
-						+ "                     \"name\": \"m\",\n"
-						+ "                     \"return_type\": {\n"
-						+ "                        \"name\": \"void\",\n"
-						+ "                        \"kind\": \"PRIMITIVE\"\n"
-						+ "                     },\n"
-						+ "                     \"statements\": [\n"
-						+ "                        {\n"
-						+ "                           \"kind\": \"BLOCK\",\n"
-						+ "                           \"statements\": [\n"
-						+ "                              " + expected.replaceAll("\n", "\n                              ") + "\n"
-						+ "                           ]\n"
-						+ "                        }\n"
-						+ "                     ]\n"
-						+ "                  }\n"
-						+ "               ],\n"
-						+ "               \"fully_qualified_name\": \"t\"\n"
-						+ "            }\n"
-						+ "         ]\n"
-						+ "      }\n"
-						+ "   ]\n"
-						+ "}",
-						parseWrappedFile(path).trim()
-				);
+		assertEquals(getWrappedResult(expected), parseWrappedFile(path).trim());
 	}
 
 	protected static Declaration getDeclaration(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId, final HashMap<Integer, Declaration> declarations) {

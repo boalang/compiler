@@ -77,7 +77,6 @@ public abstract class QueryTest {
 	}
 
 	protected static String getFileContents(final ObjectId fileid) {
-		// ObjectId fileid = filePathGitObjectIds.get(path);
 		try {
 			buffer.reset();
 			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());

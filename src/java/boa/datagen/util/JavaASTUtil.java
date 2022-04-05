@@ -110,7 +110,7 @@ public class JavaASTUtil {
 			ASTParser parser = ASTParser.newParser(astLevel);
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 	
-			Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+			final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
 			JavaCore.setComplianceOptions(compliance, options);
 			parser.setCompilerOptions(options);
 			return parser;
