@@ -1389,7 +1389,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		n.getType().accept(this, st);
-		final BoaType type = n.getType().type;
+		BoaType type = n.getType().type;
+		if (type instanceof BoaName)
+			type = ((BoaName)type).getType();
 
 		final AggregatorSpec annotation;
 		try {
