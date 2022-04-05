@@ -16,6 +16,7 @@ import org.junit.Test;
 
 public class TestQ16 extends QueryTest {
 
+	@org.junit.Ignore
 	@Test
 	public void testQ16() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int methods = 0;

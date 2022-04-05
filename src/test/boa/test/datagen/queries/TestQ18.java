@@ -14,6 +14,7 @@ import org.junit.Test;
 
 public class TestQ18 extends QueryTest {
 
+	@org.junit.Ignore
 	@Test
 	public void testQ18() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int thisKeyword = 0;

@@ -15,8 +15,9 @@ import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.errors.MissingObjectException;
 import org.junit.Test;
 
-public class Testq12 extends QueryTest {
+public class TestQ12 extends QueryTest {
 
+	@org.junit.Ignore
 	@Test
 	public void testQ12() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int methods = 0;

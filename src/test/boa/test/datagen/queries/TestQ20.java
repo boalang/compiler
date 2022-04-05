@@ -17,6 +17,7 @@ import org.junit.Test;
 
 public class TestQ20 extends QueryTest {
 	
+	@org.junit.Ignore
 	@Test
 	public void testQ20() throws MissingObjectException, IncorrectObjectTypeException, IOException {
 		int transientKW = 0;

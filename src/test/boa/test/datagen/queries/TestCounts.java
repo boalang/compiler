@@ -4,6 +4,7 @@ import org.junit.Test;
 
 public class TestCounts extends QueryTest{
 	
+	@org.junit.Ignore
 	@Test
 	public void tesCounts() {
 		String expected = "AST[] = 11639\n"
