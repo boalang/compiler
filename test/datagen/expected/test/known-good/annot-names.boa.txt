@@ -1,0 +1,8 @@
+AnnotUse[FunctionalInterface] = 3
+AnnotUse[Override] = 11
+AnnotUse[Retention] = 1
+AnnotUse[SafeVarargs] = 1
+AnnotUse[SuppressWarnings] = 1
+AnnotUse[Target] = 2
+AnnotUse[ThreadSafe] = 1
+AnnotUse[ToDo] = 17
