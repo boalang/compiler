@@ -437,9 +437,9 @@ public class JavaLangMode implements LangMode {
 		String s = "";
 
 		for (final Modifier m : mods) {
-			s += prettyprint(m) + " ";
 			if (m.getKind().equals(boa.types.Ast.Modifier.ModifierKind.MODULE))
 				return "module";
+			s += prettyprint(m) + " ";
 		}
 
 		return s;
@@ -630,10 +630,10 @@ public class JavaLangMode implements LangMode {
 				return "throw " + prettyprint(stmt.getExpressions(0)) + ";";
 
 			case YIELD:
-				return s += "yield " +  prettyprint(stmt.getExpressions(0)) + ";";
+				return "yield " +  prettyprint(stmt.getExpressions(0)) + ";";
 
 			case YIELD_IMPLICIT:
-				return s += prettyprint(stmt.getExpressions(0)) + ";";
+				return prettyprint(stmt.getExpressions(0)) + ";";
 
 			default: return s;
 		}
@@ -815,13 +815,8 @@ public class JavaLangMode implements LangMode {
 				return s;
 
 			case STATEMENT:
-				if (e.getStatementsCount() != 0) {
-					int i = 0;
-					while (i < e.getStatementsCount()) {
-						s += prettyprint(e.getStatements(i));
-						i++;
-					}
-				}
+				for (int i = 0; i < e.getStatementsCount(); i++)
+					s += prettyprint(e.getStatements(i));
 				return s;
 
 			default: return s;
