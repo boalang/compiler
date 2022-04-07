@@ -39,19 +39,21 @@ import boa.types.Diff.ChangedFile;
 public class TestPrettyprintJava extends PrettyprintBase {
 	private final static String CLASS_START = "class c {";
 	private final static String CLASS_END = "\n}\n";
-	private final static String STATEMENT_START = CLASS_START + indent(1) + "void m()" + indent(1) + "{" + indent(2);
-	private final static String STATEMENT_END = indent(1) + "}" + CLASS_END;
+	private final static String METHOD_START = CLASS_START + indent(1) + "void m()" + indent(1) + "{";
+	private final static String METHOD_END = indent(1) + "}" + CLASS_END;
+	private final static String STATEMENT_START = METHOD_START + indent(2);
+	private final static String STATEMENT_END = METHOD_END;
 
 	@Parameters(name = "{0}")
 	public static Collection<String[]> code() {
 		return Arrays.asList(new String[][] {
 				/* classes */
-				{ "CLASS1", "class c {\n}\n" },
-				{ "CLASS2", "public class c {\n}\n" },
-				{ "CLASS3", "class c extends d {\n}\n" },
-				{ "CLASS4", "class c implements i1 {\n}\n" },
-				{ "CLASS5", "class c implements i1, i2, i3 {\n}\n" },
-				{ "CLASS6", "abstract static final private class c extends d implements i1, i2, i3 {\n}\n" },
+				{ "CLASS1", CLASS_START + CLASS_END },
+				{ "CLASS2", "public " + CLASS_START + CLASS_END },
+				{ "CLASS3", "class c extends d {" + CLASS_END },
+				{ "CLASS4", "class c implements i1 {" + CLASS_END },
+				{ "CLASS5", "class c implements i1, i2, i3 {" + CLASS_END },
+				{ "CLASS6", "abstract static final private class c extends d implements i1, i2, i3 {" + CLASS_END },
 
 				/* enums */
 				{ "ENUM", "enum E {"
@@ -61,7 +63,7 @@ public class TestPrettyprintJava extends PrettyprintBase {
 						+ indent(1) + "String value;"
 						+ indent(1) + "E(final String value)"
 						+ indent(1) + "{"
-							+ indent(2) + "this.value = value;" + STATEMENT_END },
+							+ indent(2) + "this.value = value;" + METHOD_END },
 
 				/*module declaration*/
 //				{ "MODULE", "open module com.bytestree.calculator {\n"
@@ -69,10 +71,7 @@ public class TestPrettyprintJava extends PrettyprintBase {
 //						+ "}"},
 
 				/* methods */
-				{ "METHOD", CLASS_START
-						+ indent(1) + "void m()"
-						+ indent(1) + "{"
-						+ indent(1) + "}" + CLASS_END },
+				{ "METHOD", METHOD_START + METHOD_END },
 
 				/* statements */
 				{ "EMPTY", STATEMENT_START + ";" + STATEMENT_END },
