@@ -1,0 +1,3 @@
+# issue 280
+o: output sum of count: int;
+o << 1;

@@ -1,0 +1,15 @@
+AstNodes[] = 11639
+Files[] = 108
+JLS2Files[] = 25
+JLS3Files[] = 50
+JLS4Files[] = 11
+JLS8Files[] = 20
+JavaErrorFiles[] = 1
+JavaFiles[] = 107
+JavaSnapshots[] = 177
+NonEmptyJavaProjects[] = 1
+NonEmptyProjects[] = 1
+Projects[] = 1
+Repositories[] = 1
+Revisions[] = 53
+Snapshots[] = 183
