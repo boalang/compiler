@@ -85,44 +85,42 @@ public class TestPrettyprint {
 				{ STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END }, // THROW
 
 				/* expressions */
-				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END}, // NEW
+				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END }, // NEW
 				{ STATEMENT_START + "Func f = (E) -> {"
 							+ indent(3) + "x = 2 * x;"
 							+ indent(3) + "System.out.println(x);"
-						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 1
+						+ indent(2) + "};" + STATEMENT_END }, // LAMBDA 1
 				{ STATEMENT_START + "Func f = (int x, String y) -> {"
 							+ indent(3) + "x = 2 * x;"
 							+ indent(3) + "System.out.println(x);"
-						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 2
+						+ indent(2) + "};" + STATEMENT_END }, // LAMBDA 2
+				{STATEMENT_START + "Sayable s = () -> {"
+							+ indent(3) + "return \"I have nothing to day\";"
+						+ indent(2) + "};" + STATEMENT_END }, // LAMBDA 3
 				{ STATEMENT_START + "for (String s : strs)"
 						+ indent(2) + "{"
 							+ indent(3) + "System.out.println(s);"
-						+ indent(2) + "}" + STATEMENT_END}, // FOREACH
+						+ indent(2) + "}" + STATEMENT_END }, // FOREACH
 
 				/*module declaration*/
 //				{"open module com.bytestree.calculator {\n"
 //						+ indent(1) + "	requires com.bytestree.maths;\n"
-//						+ "}"}
+//						+ "}"},
 
 				{STATEMENT_START + "int season = switch (month) {"
-						+ indent(3) + "case JAN:"
-						+ indent(3) + "yield 1;"
-						+ indent(3) + "case APRIL:"
-						+ indent(3) + "yield 2;"
+							+ indent(3) + "case JAN:"
+							+ indent(3) + "yield 1;"
+							+ indent(3) + "case APRIL:"
+							+ indent(3) + "yield 2;"
 						+ indent(2) + "};" + STATEMENT_END },
 
 				{STATEMENT_START + "int season = switch (month) {"
-						+ indent(3) + "case JAN -> 1;"
-						+ indent(3) + "case APRIL -> 2;"
+							+ indent(3) + "case JAN -> 1;"
+							+ indent(3) + "case APRIL -> 2;"
 						+ indent(2) + "};" + STATEMENT_END }
 
 //			/* Local variable inference*/
 //			{STATEMENT_START + "var s = \"this is a string\";" + STATEMENT_END },
-
-//			/* Java 8 Lambda Expression */
-//			{STATEMENT_START + "Sayable s = () -> { \n"
-//					+ indent(3) + "return \"I have nothing to day\"; \n"
-//					+ indent(2) + "};" + STATEMENT_END }
 		});
 	}
 
