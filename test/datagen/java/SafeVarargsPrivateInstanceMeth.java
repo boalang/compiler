@@ -1,7 +1,5 @@
 class SafeVarargsPrivateInstanceMeth {
-	@SafeVarargs
+   @SafeVarargs
    private void m() {
-	 
    }
 }
-

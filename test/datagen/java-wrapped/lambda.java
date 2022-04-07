@@ -1,1 +1,1 @@
-MathOperation division = (int a, int b) -> a / b; 
+MathOperation division = (int a, int b) -> a / b;
