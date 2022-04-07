@@ -30,6 +30,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import boa.functions.BoaAstIntrinsics;
+import boa.types.Diff.ChangedFile;
+
+
 /**
  * Test prettyprint().
  *
@@ -37,7 +41,7 @@ import org.junit.runners.Parameterized.Parameters;
  * @author huaiyao
  */
 @RunWith(Parameterized.class)
-public class TestPrettyprint {
+public class TestPrettyprintJava {
 	private final static String CLASS_START = "class c {";
 	private final static String CLASS_END = "\n}\n";
 	private final static String STATEMENT_START = CLASS_START + indent(1) + "void m()" + indent(1) + "{" + indent(2);
@@ -131,14 +135,18 @@ public class TestPrettyprint {
 
 	private String code;
 
-	public TestPrettyprint(final String code) {
+	public TestPrettyprintJava(final String code) {
 		this.code = code;
 	}
 
 
 	@Test()
 	public void testPrettyprint() throws Exception {
+		BoaAstIntrinsics.setlang(ChangedFile.FileKind.SOURCE_JAVA_JLS15);
 		String expected = prettyprint(parse(code));
+        System.err.println(code);
+        System.err.println(expected);
+        System.err.println("----------");
 		assertEquals(code, expected);
 	}
 }
