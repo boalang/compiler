@@ -495,7 +495,7 @@ public class JavaLangMode implements LangMode {
 
 			case CASE:
 				if (hasArrow != null && hasArrow)
-					return "case " + prettyprint(stmt.getExpressions(0)) + " ->";
+					return "case " + prettyprint(stmt.getExpressions(0)) + " -> ";
 				return "case " + prettyprint(stmt.getExpressions(0)) + ":";
 
 			case DEFAULT:
@@ -620,8 +620,13 @@ public class JavaLangMode implements LangMode {
 				indent++;
 				if (stmt.hasIsArrow())
 					hasArrow = stmt.getIsArrow();
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				for (int i = 0; i < stmt.getStatementsCount(); i++) {
+					if (!hasArrow || stmt.getStatements(i).getKind() == Statement.StatementKind.CASE)
+						s += indent();
+					s += prettyprint(stmt.getStatements(i));
+					if (!hasArrow || stmt.getStatements(i).getKind() != Statement.StatementKind.CASE)
+						s += "\n";
+				}
 				indent--;
 				s += indent() + "}";
 				return s;

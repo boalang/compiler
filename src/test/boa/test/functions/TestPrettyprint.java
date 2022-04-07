@@ -1,6 +1,8 @@
 /*
- * Copyright 2019, Robert Dyer
- *                 and Bowling Green State University
+ * Copyright 2019-2022, Robert Dyer, Hridesh Rajan, Huaiyao Ma,
+ *                 Bowling Green State University,
+ *                 University of Nebraska Board of Regents,
+ *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +34,7 @@ import org.junit.runners.Parameterized.Parameters;
  * Test prettyprint().
  *
  * @author rdyer
+ * @author huaiyao
  */
 @RunWith(Parameterized.class)
 public class TestPrettyprint {
@@ -44,96 +47,98 @@ public class TestPrettyprint {
 	public static Collection<String[]> code() {
 		return Arrays.asList(new String[][] {
 				/* classes */
-				{ "class c {\n}\n" }, 
-				{ "public class c {\n}\n" }, 
+				{ "class c {\n}\n" },
+				{ "public class c {\n}\n" },
 				{ "class c extends d {\n}\n" },
-				{ "class c implements i1 {\n}\n" }, 
+				{ "class c implements i1 {\n}\n" },
 				{ "class c implements i1, i2, i3 {\n}\n" },
 				{ "abstract static final private class c extends d implements i1, i2, i3 {\n}\n" },
-				
+
 				/* enums */
-				{ "enum E {" 
+				{ "enum E {"
 						+ indent(1) + "NONE(\"None\"),"
 						+ indent(1) + "ONE(\"One\"),"
 						+ indent(1) + "TWO(T.NAME);"
 						+ indent(1) + "String value;"
 						+ indent(1) + "E(final String value)"
-						+ indent(1) + "{" 
-							+ indent(2) + "this.value = value;" + STATEMENT_END }, 
-				
+						+ indent(1) + "{"
+							+ indent(2) + "this.value = value;" + STATEMENT_END },
+
 				/* methods */
-				{ CLASS_START 
-						+ indent(1) + "void m()" 
-						+ indent(1) + "{" 
+				{ CLASS_START
+						+ indent(1) + "void m()"
+						+ indent(1) + "{"
 						+ indent(1) + "}" + CLASS_END },
-				{ CLASS_START 
+				{ CLASS_START
 						+ indent(1) + "int m()"
 						+ indent(1) + "{"
 							+ indent(2) + "return 1;"
 						+ indent(1) + "}" + CLASS_END },
-				
+
 				/* statements */
-				{ STATEMENT_START + "switch (f1) {" 
-							+ indent(3) + "case 1:" 
-							+ indent(3) + "f1 = 2;" 
+				{ STATEMENT_START + "switch (f1) {"
+							+ indent(3) + "case 1:"
+							+ indent(3) + "f1 = 2;"
 							+ indent(3) + "default:"
 							+ indent(3) + "break;"
 						+ indent(2) + "}" + STATEMENT_END }, // SWITCH
 				{ STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END }, // THROW
-				
+
 				/* expressions */
 				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END}, // NEW
-				{ STATEMENT_START + "Func f = (E) -> {" 
-							+ indent(3) + "x = 2 * x;" 
-							+ indent(3) + "System.out.println(x);" 
+				{ STATEMENT_START + "Func f = (E) -> {"
+							+ indent(3) + "x = 2 * x;"
+							+ indent(3) + "System.out.println(x);"
 						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 1
-				{ STATEMENT_START + "Func f = (int x, String y) -> {" 
-							+ indent(3) + "x = 2 * x;" 
-							+ indent(3) + "System.out.println(x);" 
+				{ STATEMENT_START + "Func f = (int x, String y) -> {"
+							+ indent(3) + "x = 2 * x;"
+							+ indent(3) + "System.out.println(x);"
 						+ indent(2) + "};" + STATEMENT_END}, // LAMBDA 2
 				{ STATEMENT_START + "for (String s : strs)"
-						+ indent(2) + "{" 
-							+ indent(3) + "System.out.println(s);" 
+						+ indent(2) + "{"
+							+ indent(3) + "System.out.println(s);"
 						+ indent(2) + "}" + STATEMENT_END}, // FOREACH
-						
+
 				/*module declaration*/
 //				{"open module com.bytestree.calculator {\n"
 //						+ indent(1) + "	requires com.bytestree.maths;\n"
 //						+ "}"}
-			
-//				{STATEMENT_START + "int season = switch (month){ \n" 
-//						+ indent(3) +  "case JAN: yield 1;" 
-//						+ indent(3) + "case APRIL: yield 2;"
-//						+ indent(2) + "};" + STATEMENT_END },
-				
-//				{STATEMENT_START + "int season = switch (month){ \n" 
-//						+ indent(3) +  "case JAN -> 1;\n" 
-//						+ indent(3) + "case APRIL -> 2;\n"
-//						+ indent(2) + "};" + STATEMENT_END }
-			
+
+				{STATEMENT_START + "int season = switch (month) {"
+						+ indent(3) + "case JAN:"
+						+ indent(3) + "yield 1;"
+						+ indent(3) + "case APRIL:"
+						+ indent(3) + "yield 2;"
+						+ indent(2) + "};" + STATEMENT_END },
+
+				{STATEMENT_START + "int season = switch (month) {"
+						+ indent(3) + "case JAN -> 1;"
+						+ indent(3) + "case APRIL -> 2;"
+						+ indent(2) + "};" + STATEMENT_END }
+
 //			/* Local variable inference*/
 //			{STATEMENT_START + "var s = \"this is a string\";" + STATEMENT_END },
-			
+
 //			/* Java 8 Lambda Expression */
 //			{STATEMENT_START + "Sayable s = () -> { \n"
-//					+ indent(3) + "return \"I have nothing to day\"; \n" 
+//					+ indent(3) + "return \"I have nothing to day\"; \n"
 //					+ indent(2) + "};" + STATEMENT_END }
 		});
 	}
 
 	private static String indent(int num) {
 		String str = "\n";
-		while (num-- > 0) 
-			str += "\t"; 
+		while (num-- > 0)
+			str += "\t";
 		return str;
 	}
-	
+
 	private String code;
 
 	public TestPrettyprint(final String code) {
 		this.code = code;
 	}
-	
+
 
 	@Test()
 	public void testPrettyprint() throws Exception {
