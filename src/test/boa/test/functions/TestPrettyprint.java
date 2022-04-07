@@ -83,6 +83,7 @@ public class TestPrettyprint {
 							+ indent(3) + "break;"
 						+ indent(2) + "}" + STATEMENT_END }, // SWITCH
 				{ STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END }, // THROW
+				{ STATEMENT_START + "var s = \"this is a string\";" + STATEMENT_END }, // LOCAL VAR INFERENCE
 
 				/* expressions */
 				{ STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END }, // NEW
@@ -94,7 +95,7 @@ public class TestPrettyprint {
 							+ indent(3) + "x = 2 * x;"
 							+ indent(3) + "System.out.println(x);"
 						+ indent(2) + "};" + STATEMENT_END }, // LAMBDA 2
-				{STATEMENT_START + "Sayable s = () -> {"
+				{ STATEMENT_START + "Sayable s = () -> {"
 							+ indent(3) + "return \"I have nothing to day\";"
 						+ indent(2) + "};" + STATEMENT_END }, // LAMBDA 3
 				{ STATEMENT_START + "for (String s : strs)"
@@ -107,20 +108,17 @@ public class TestPrettyprint {
 //						+ indent(1) + "	requires com.bytestree.maths;\n"
 //						+ "}"},
 
-				{STATEMENT_START + "int season = switch (month) {"
+				{ STATEMENT_START + "int season = switch (month) {"
 							+ indent(3) + "case JAN:"
 							+ indent(3) + "yield 1;"
 							+ indent(3) + "case APRIL:"
 							+ indent(3) + "yield 2;"
 						+ indent(2) + "};" + STATEMENT_END },
 
-				{STATEMENT_START + "int season = switch (month) {"
+				{ STATEMENT_START + "int season = switch (month) {"
 							+ indent(3) + "case JAN -> 1;"
 							+ indent(3) + "case APRIL -> 2;"
 						+ indent(2) + "};" + STATEMENT_END }
-
-//			/* Local variable inference*/
-//			{STATEMENT_START + "var s = \"this is a string\";" + STATEMENT_END },
 		});
 	}
 
