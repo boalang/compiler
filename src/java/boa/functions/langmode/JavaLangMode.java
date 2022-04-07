@@ -49,10 +49,10 @@ public class JavaLangMode implements LangMode {
 	public String type_name(final String s) {
 		// first, normalize the string
 		final String t = s.replaceAll("<\\s+", "<")
-				.replaceAll(",\\s+", ", ")
-				.replaceAll("\\s*>\\s*", ">")
-				.replaceAll("\\s*&\\s*", " & ")
-				.replaceAll("\\s*\\|\\s*", " | ");
+			.replaceAll(",\\s+", ", ")
+			.replaceAll("\\s*>\\s*", ">")
+			.replaceAll("\\s*&\\s*", " & ")
+			.replaceAll("\\s*\\|\\s*", " | ");
 
 		if (!t.contains("."))
 			return t;
@@ -60,7 +60,7 @@ public class JavaLangMode implements LangMode {
 		/*
 		 * Remove qualifiers from anywhere in the string...
 		 *
-		  * SomeType                               =>  SomeType
+		 * SomeType                               =>  SomeType
 		 * foo.SomeType                           =>  SomeType
 		 * foo.bar.SomeType                       =>  SomeType
 		 * SomeType<T>                            =>  SomeType<T>
@@ -87,20 +87,20 @@ public class JavaLangMode implements LangMode {
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
 	 *
 	 * <p>DecimalNumeral:
-	 *		[0-9] [lL]?
-	 * 		[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
-	 * 		[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
+	 * 	[0-9] [lL]?
+	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
+	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
 	 *
 	 * <p>HexNumeral:
-	 * 		0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
+	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
 	 *
 	 * <p>OctalNumeral:
-	 * 		0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
+	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
 	 *
 	 * <p>BinaryNumeral:
-	 * 		0 [bB] [01] ([01_]* [01])? [lL]?
+	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
 	 *
-	 * <p>If any of these match, it returns <code>true</code>. Otherwise it
+	 * <p>If any of these match, it returns <code>true</code>.  Otherwise it
 	 * returns <code>false</code>.
 	 *
 	 * @param e the expression to test
@@ -141,10 +141,8 @@ public class JavaLangMode implements LangMode {
 	 * @return true if the expression is a char literal, otherwise false
 	 */
 	public boolean isFloatLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL)
-			return false;
-		if (!e.hasLiteral())
-			return false;
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
 		final String lit = e.getLiteral();
 
 		if (lit.matches("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
@@ -177,10 +175,8 @@ public class JavaLangMode implements LangMode {
 	 * @return true if the expression is a string literal, otherwise false
 	 */
 	public boolean isStringLit(final Expression e) throws Exception {
-		if (e.getKind() != Expression.ExpressionKind.LITERAL)
-			return false;
-		if (!e.hasLiteral())
-			return false;
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
 		return e.getLiteral().startsWith("\"");
 	}
 
@@ -236,8 +232,8 @@ public class JavaLangMode implements LangMode {
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
 	}
 
-	int indent = 0;
 
+	int indent = 0;
 	private String indent() {
 		String s = "";
 		for (int i = 0; i < indent; i++)
@@ -250,12 +246,9 @@ public class JavaLangMode implements LangMode {
 
 		String s = "";
 
-		for (final Namespace n : r.getNamespacesList()) {
+		for (final Namespace n : r.getNamespacesList())
 			s += prettyprint(n);
-		}
 
-		// System.out.println("--------------from JavaLangMode line 280------------------ \n" + s);
-		// System.out.println("-------------------------------- \n");
 		return s;
 	}
 
@@ -279,8 +272,7 @@ public class JavaLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Declaration d) {
-		if (d == null)
-			return "";
+		if (d == null) return "";
 
 		String s = indent() + prettyprint(d.getModifiersList());
 
@@ -314,8 +306,7 @@ public class JavaLangMode implements LangMode {
 				if (d.getGenericParametersCount() > 0) {
 					s += "<";
 					for (int i = 0; i < d.getGenericParametersCount(); i++) {
-						if (i != 0)
-							s += ", ";
+						if (i != 0) s += ", ";
 						s += prettyprint(d.getGenericParameters(i));
 					}
 					s += ">";
@@ -327,8 +318,7 @@ public class JavaLangMode implements LangMode {
 					if (i < d.getParentsCount()) {
 						s += " implements ";
 						for (int j = i; i < d.getParentsCount(); i++) {
-							if (i != j)
-								s += ", ";
+							if (i != j) s += ", ";
 							s += prettyprint(d.getParents(i));
 						}
 					}
@@ -340,8 +330,7 @@ public class JavaLangMode implements LangMode {
 				if (d.getGenericParametersCount() > 0) {
 					s += "<";
 					for (int i = 0; i < d.getGenericParametersCount(); i++) {
-						if (i != 0)
-							s += ", ";
+						if (i != 0) s += ", ";
 						s += prettyprint(d.getGenericParameters(i));
 					}
 					s += ">";
@@ -353,8 +342,7 @@ public class JavaLangMode implements LangMode {
 					if (i < d.getParentsCount()) {
 						s += " implements ";
 						for (int j = i; i < d.getParentsCount(); i++) {
-							if (i != j)
-								s += ", ";
+							if (i != j) s += ", ";
 							s += prettyprint(d.getParents(i));
 						}
 					}
@@ -384,15 +372,13 @@ public class JavaLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Type t) {
-		if (t == null)
-			return "";
+		if (t == null) return "";
 
 		return t.getName();
 	}
 
 	public String prettyprint(final Method m) {
-		if (m == null)
-			return "";
+		if (m == null) return "";
 		String s = indent() + prettyprint(m.getModifiersList());
 
 		if (m.getGenericParametersCount() > 0) {
@@ -427,8 +413,7 @@ public class JavaLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Variable v) {
-		if (v == null)
-			return "";
+		if (v == null) return "";
 
 		String s = "";
 		if (v.getModifiersCount() > 0)
@@ -453,9 +438,8 @@ public class JavaLangMode implements LangMode {
 
 		for (final Modifier m : mods) {
 			s += prettyprint(m) + " ";
-			if (m.getKind().equals(boa.types.Ast.Modifier.ModifierKind.MODULE)) {
+			if (m.getKind().equals(boa.types.Ast.Modifier.ModifierKind.MODULE))
 				return "module";
-			}
 		}
 
 		return s;
@@ -467,7 +451,8 @@ public class JavaLangMode implements LangMode {
 		String s = "";
 
 		switch (stmt.getKind()) {
-			case EMPTY: return ";";
+			case EMPTY:
+				return ";";
 
 			case BLOCK:
 				s += "{\n";
@@ -509,9 +494,8 @@ public class JavaLangMode implements LangMode {
 				return prettyprint(stmt.getExpressions(0)) + ": " + prettyprint(stmt.getStatements(0));
 
 			case CASE:
-				if(hasArrow != null && hasArrow) {
+				if (hasArrow != null && hasArrow)
 					return "case " + prettyprint(stmt.getExpressions(0)) + " ->";
-				}
 				return "case " + prettyprint(stmt.getExpressions(0)) + ":";
 
 			case DEFAULT:
@@ -634,9 +618,8 @@ public class JavaLangMode implements LangMode {
 			case SWITCH:
 				s += "switch (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
 				indent++;
-				if(stmt.hasIsArrow()) {
+				if (stmt.hasIsArrow())
 					hasArrow = stmt.getIsArrow();
-				}
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
 				indent--;
@@ -648,18 +631,16 @@ public class JavaLangMode implements LangMode {
 
 			case YIELD:
 				return s += "yield " +  prettyprint(stmt.getExpressions(0)) + ";";
-			
+
 			case YIELD_IMPLICIT:
 				return s += prettyprint(stmt.getExpressions(0)) + ";";
-			
-			default:
-				return s;
+
+			default: return s;
 		}
 	}
 
 	public String prettyprint(final Expression e) {
-		if (e == null)
-			return "";
+		if (e == null) return "";
 
 		String s = "";
 
@@ -673,70 +654,39 @@ public class JavaLangMode implements LangMode {
 					return ppPrefix("-", e);
 				return ppInfix("-", e.getExpressionsList());
 
-			case LOGICAL_AND:
-				return "(" + ppInfix("&&", e.getExpressionsList()) + ")";
-			case LOGICAL_OR:
-				return "(" + ppInfix("||", e.getExpressionsList()) + ")";
+			case LOGICAL_AND:           return "(" + ppInfix("&&", e.getExpressionsList()) + ")";
+			case LOGICAL_OR:            return "(" + ppInfix("||", e.getExpressionsList()) + ")";
 
-			case EQ:
-				return ppInfix("==", e.getExpressionsList());
-			case NEQ:
-				return ppInfix("!=", e.getExpressionsList());
-			case LT:
-				return ppInfix("<", e.getExpressionsList());
-			case GT:
-				return ppInfix(">", e.getExpressionsList());
-			case LTEQ:
-				return ppInfix("<=", e.getExpressionsList());
-			case GTEQ:
-				return ppInfix(">=", e.getExpressionsList());
-			case OP_DIV:
-				return ppInfix("/", e.getExpressionsList());
-			case OP_MULT:
-				return ppInfix("*", e.getExpressionsList());
-			case OP_MOD:
-				return ppInfix("%", e.getExpressionsList());
-			case BIT_AND:
-				return ppInfix("&", e.getExpressionsList());
-			case BIT_OR:
-				return ppInfix("|", e.getExpressionsList());
-			case BIT_XOR:
-				return ppInfix("^", e.getExpressionsList());
-			case BIT_LSHIFT:
-				return ppInfix("<<", e.getExpressionsList());
-			case BIT_RSHIFT:
-				return ppInfix(">>", e.getExpressionsList());
-			case BIT_UNSIGNEDRSHIFT:
-				return ppInfix(">>>", e.getExpressionsList());
-			case ASSIGN:
-				return ppInfix("=", e.getExpressionsList());
-			case ASSIGN_ADD:
-				return ppInfix("+=", e.getExpressionsList());
-			case ASSIGN_SUB:
-				return ppInfix("-=", e.getExpressionsList());
-			case ASSIGN_MULT:
-				return ppInfix("*=", e.getExpressionsList());
-			case ASSIGN_DIV:
-				return ppInfix("/=", e.getExpressionsList());
-			case ASSIGN_MOD:
-				return ppInfix("%=", e.getExpressionsList());
-			case ASSIGN_BITXOR:
-				return ppInfix("^=", e.getExpressionsList());
-			case ASSIGN_BITAND:
-				return ppInfix("&=", e.getExpressionsList());
-			case ASSIGN_BITOR:
-				return ppInfix("|=", e.getExpressionsList());
-			case ASSIGN_LSHIFT:
-				return ppInfix("<<=", e.getExpressionsList());
-			case ASSIGN_RSHIFT:
-				return ppInfix(">>=", e.getExpressionsList());
-			case ASSIGN_UNSIGNEDRSHIFT:
-				return ppInfix(">>>=", e.getExpressionsList());
+			case EQ:                    return ppInfix("==",   e.getExpressionsList());
+			case NEQ:                   return ppInfix("!=",   e.getExpressionsList());
+			case LT:                    return ppInfix("<",    e.getExpressionsList());
+			case GT:                    return ppInfix(">",    e.getExpressionsList());
+			case LTEQ:                  return ppInfix("<=",   e.getExpressionsList());
+			case GTEQ:                  return ppInfix(">=",   e.getExpressionsList());
+			case OP_DIV:                return ppInfix("/",    e.getExpressionsList());
+			case OP_MULT:               return ppInfix("*",    e.getExpressionsList());
+			case OP_MOD:                return ppInfix("%",    e.getExpressionsList());
+			case BIT_AND:               return ppInfix("&",    e.getExpressionsList());
+			case BIT_OR:                return ppInfix("|",    e.getExpressionsList());
+			case BIT_XOR:               return ppInfix("^",    e.getExpressionsList());
+			case BIT_LSHIFT:            return ppInfix("<<",   e.getExpressionsList());
+			case BIT_RSHIFT:            return ppInfix(">>",   e.getExpressionsList());
+			case BIT_UNSIGNEDRSHIFT:    return ppInfix(">>>",  e.getExpressionsList());
+			case ASSIGN:                return ppInfix("=",    e.getExpressionsList());
+			case ASSIGN_ADD:            return ppInfix("+=",   e.getExpressionsList());
+			case ASSIGN_SUB:            return ppInfix("-=",   e.getExpressionsList());
+			case ASSIGN_MULT:           return ppInfix("*=",   e.getExpressionsList());
+			case ASSIGN_DIV:            return ppInfix("/=",   e.getExpressionsList());
+			case ASSIGN_MOD:            return ppInfix("%=",   e.getExpressionsList());
+			case ASSIGN_BITXOR:         return ppInfix("^=",   e.getExpressionsList());
+			case ASSIGN_BITAND:         return ppInfix("&=",   e.getExpressionsList());
+			case ASSIGN_BITOR:          return ppInfix("|=",   e.getExpressionsList());
+			case ASSIGN_LSHIFT:         return ppInfix("<<=",  e.getExpressionsList());
+			case ASSIGN_RSHIFT:         return ppInfix(">>=",  e.getExpressionsList());
+			case ASSIGN_UNSIGNEDRSHIFT: return ppInfix(">>>=", e.getExpressionsList());
 
-			case LOGICAL_NOT:
-				return ppPrefix("!", e);
-			case BIT_NOT:
-				return ppPrefix("~", e);
+			case LOGICAL_NOT: return ppPrefix("!", e);
+			case BIT_NOT:     return ppPrefix("~", e);
 
 			case OP_DEC:
 				if (e.getIsPostfix())
@@ -747,22 +697,16 @@ public class JavaLangMode implements LangMode {
 					return ppPostfix("++", e);
 				return ppPrefix("++", e);
 
-			case PAREN:
-				return "(" + prettyprint(e.getExpressions(0)) + ")";
-			case LITERAL:
-				return e.getLiteral();
+			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
+			case LITERAL: return e.getLiteral();
 			case VARACCESS:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					s += prettyprint(e.getExpressions(i)) + ".";
 				s += e.getVariable();
 				return s;
-			case CAST:
-				return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
-			case CONDITIONAL:
-				return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : "
-						+ prettyprint(e.getExpressions(2));
-			case NULLCOALESCE:
-				return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
+			case CAST: return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
+			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
+			case NULLCOALESCE: return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
 
 			case METHODCALL:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
@@ -867,8 +811,8 @@ public class JavaLangMode implements LangMode {
 				return s;
 
 			// TODO
-			// case METHOD_REFERENCE:
-			// return s;
+			case METHOD_REFERENCE:
+				return s;
 
 			case STATEMENT:
 				if (e.getStatementsCount() != 0) {
@@ -880,8 +824,7 @@ public class JavaLangMode implements LangMode {
 				}
 				return s;
 
-			default:
-				return s;
+			default: return s;
 		}
 	}
 
@@ -908,55 +851,39 @@ public class JavaLangMode implements LangMode {
 	}
 
 	public String prettyprint(final Modifier m) {
-		if (m == null)
-			return "";
+		if (m == null) return "";
 
 		String s = "";
 
 		switch (m.getKind()) {
-			case OTHER:
-				return m.getOther();
+			case OTHER: return m.getOther();
 
 			case VISIBILITY:
 				switch (m.getVisibility()) {
-					case PUBLIC:
-						return "public";
-					case PRIVATE:
-						return "private";
-					case PROTECTED:
-						return "protected";
-					case NAMESPACE:
-						return "namespace";
-					default:
-						return s;
+					case PUBLIC:    return "public";
+					case PRIVATE:   return "private";
+					case PROTECTED: return "protected";
+					case NAMESPACE: return "namespace";
+					default: return s;
 				}
 
 			case ANNOTATION:
 				s = "@" + m.getAnnotationName();
-				if (m.getAnnotationMembersCount() > 0)
-					s += "(";
+				if (m.getAnnotationMembersCount() > 0) s += "(";
 				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
-					if (i > 0)
-						s += ", ";
+					if (i > 0) s += ", ";
 					s += m.getAnnotationMembers(i) + " = " + prettyprint(m.getAnnotationValues(i));
 				}
-				if (m.getAnnotationMembersCount() > 0)
-					s += ")";
+				if (m.getAnnotationMembersCount() > 0) s += ")";
 				return s;
 
-			case FINAL:
-				return "final";
-			case STATIC:
-				return "static";
-			case SYNCHRONIZED:
-				return "synchronized";
-			case ABSTRACT:
-				return "abstract";
-			case MODULE:
-				return "module";
+			case FINAL:        return "final";
+			case STATIC:       return "static";
+			case SYNCHRONIZED: return "synchronized";
+			case ABSTRACT:     return "abstract";
+			case MODULE:       return "module";
 
-			default:
-				return s;
+			default: return s;
 		}
 	}
 
