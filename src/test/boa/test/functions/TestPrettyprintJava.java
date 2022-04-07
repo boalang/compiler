@@ -143,10 +143,6 @@ public class TestPrettyprintJava {
 	@Test()
 	public void testPrettyprint() throws Exception {
 		BoaAstIntrinsics.setlang(ChangedFile.FileKind.SOURCE_JAVA_JLS15);
-		String expected = prettyprint(parse(code));
-        System.err.println(code);
-        System.err.println(expected);
-        System.err.println("----------");
-		assertEquals(code, expected);
+		assertEquals(code, prettyprint(parse(code)));
 	}
 }
