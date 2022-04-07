@@ -1,7 +1,1 @@
-class t {
-   void m() {
-	   AnonymousClass anonymous = new Anonymous() { };
-      
-   }
-}
-
+AnonymousClass anonymous = new Anonymous() { };

@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   while(true){};
-	   
-   }
-}
+while(true){};

@@ -1,6 +1,1 @@
-class t {
-	void m() {
-		x = "Hello World";
-
-	}
-}
+x = "Hello World";

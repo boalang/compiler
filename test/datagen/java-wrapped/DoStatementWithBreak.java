@@ -1,8 +1,3 @@
-class t {
-   void m() {
-      do{
-      	break;
-      }while(true)
-      ;
-   }
-}
+do {
+    break;
+} while(true);

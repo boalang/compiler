@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   int x;
-	   
-   }
-}
+int x;

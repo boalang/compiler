@@ -91,9 +91,9 @@ public class TestJava extends JavaBaseTest {
 	@Test
 	public void java() throws IOException {
 		if (isWrapped)
-			testWrappedFile(
-				javaFileName,
-				load(jsonFileName).trim()
+			assertEquals(
+				getWrappedResult(load(jsonFileName).trim()),
+				parseWrapped(load(javaFileName)).trim()
 			);
 		else
 			assertEquals(

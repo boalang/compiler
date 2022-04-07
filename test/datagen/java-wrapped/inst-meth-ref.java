@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   m(String::compareToIgnoreCase);
-	   
-   }
-}
+m(String::compareToIgnoreCase);

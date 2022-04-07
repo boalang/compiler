@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   y = ~x; 
-	   
-   }
-}
+y = ~x; 

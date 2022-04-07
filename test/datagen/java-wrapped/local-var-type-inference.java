@@ -1,5 +1,1 @@
-class t {
-   void m() {
-	   var test = true;
-   }
-}
+var test = true;

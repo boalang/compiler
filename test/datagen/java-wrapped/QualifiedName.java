@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   x = MyClass.x;
-	   
-   }
-}
+x = MyClass.x;

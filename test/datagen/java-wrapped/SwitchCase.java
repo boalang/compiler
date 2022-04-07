@@ -1,8 +1,3 @@
-class t {
-   void m() {
-	   switch(x){
-	   case 1:
-	   }
-	   
-   }
+switch(x){
+case 1:
 }

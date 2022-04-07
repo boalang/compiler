@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   synchronized (y) {}  
-	   
-   }
-}
+synchronized (y) {}  

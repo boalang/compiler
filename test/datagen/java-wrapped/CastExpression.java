@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   String x = (String ) 5;
-      
-   }
-}
+String x = (String ) 5;

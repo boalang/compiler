@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   z = x >> y;
-	   
-   }
-}
+z = x >> y;

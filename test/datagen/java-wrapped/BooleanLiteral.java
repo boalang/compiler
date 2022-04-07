@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   boolean x = true;
-      
-   }
-}
+boolean x = true;

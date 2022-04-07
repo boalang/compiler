@@ -1,7 +1,2 @@
-class t {
-   void m() {
-	   int x;
-	   x >>= 5;
-	   
-   }
-}
+int x;
+x >>= 5;

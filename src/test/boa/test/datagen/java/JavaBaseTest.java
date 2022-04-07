@@ -20,11 +20,13 @@ package boa.test.datagen.java;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -92,26 +94,13 @@ public class JavaBaseTest extends BaseTest {
 	}
 
 	public static String parseJava(final String content) {
-		setJavaVersion();
-		@SuppressWarnings("rawtypes")
-		final Map<String, String> options = JavaCore.getOptions();
-		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
-		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
-		final ASTParser parser = ASTParser.newParser(astLevel);
-		parser.setCompilerOptions(options);
-		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
-		parser.setResolveBindings(true);
-		parser.setSource(content.toCharArray());
-		final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
-		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		final File f = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
+		FileIO.writeFileContents(f, content);
+		final String res = parseJavaFile(f.getPath());
 		try {
-			ast.addNamespaces(visitor.getNamespaces(cu));
-		} catch (final Exception e) {
-			System.err.println(e);
-			e.printStackTrace();
-		}
-
-		return FileIO.normalizeEOL(JsonFormat.printToString(ast.build()));
+			FileIO.delete(f);
+		} catch (final Exception e) {}
+		return res;
 	}
 
 	public static String parseJavaFile(final String path) {
@@ -146,21 +135,18 @@ public class JavaBaseTest extends BaseTest {
 	}
 
 	protected static String getWrapped(final String content) {
-		String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ");
-		if (!content.endsWith(";") && !content.endsWith(";\n"))
+		String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ").trim();
+		if (content.indexOf(";") == -1 && !s.endsWith("}"))
 			s += ";";
-		s += "\n   }\n}";
+		if (!s.endsWith("\n"))
+			s += "\n";
+		s += "   }\n}";
 		return s;
 	}
 
 	protected static String parseWrapped(final String content) {
 		setJavaVersion();
 		return parseJava(getWrapped(content));
-	}
-
-	protected static String parseWrappedFile(final String path) {
-		setJavaVersion();
-		return parseJavaFile(path);
 	}
 
 	protected static String getWrappedResult(final String expected) {
@@ -195,16 +181,6 @@ public class JavaBaseTest extends BaseTest {
 				+ "      }\n"
 				+ "   ]\n"
 				+ "}";
-	}
-
-	public static void testWrapped(final String java, final String expected) {
-		setJavaVersion();
-		assertEquals(getWrappedResult(expected), parseWrapped(java).trim());
-	}
-
-	public static void testWrappedFile(final String path, final String expected) {
-		setJavaVersion();
-		assertEquals(getWrappedResult(expected), parseWrappedFile(path).trim());
 	}
 
 	protected static Declaration getDeclaration(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId, final HashMap<Integer, Declaration> declarations) {

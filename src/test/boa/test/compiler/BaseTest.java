@@ -95,15 +95,15 @@ public abstract class BaseTest {
 	// lexing
 	//
 
-	protected CommonTokenStream lex(final String input) throws IOException {
+	protected static CommonTokenStream lex(final String input) throws IOException {
 		return lex(input, new int[0], new String[0]);
 	}
 
-	protected CommonTokenStream lex(final String input, final int[] ids, final String[] strings) throws IOException {
+	protected static CommonTokenStream lex(final String input, final int[] ids, final String[] strings) throws IOException {
 		return lex(input, ids, strings, new String[0]);
 	}
 
-	protected CommonTokenStream lex(final String input, final int[] ids, final String[] strings, final String[] errors) throws IOException {
+	protected static CommonTokenStream lex(final String input, final int[] ids, final String[] strings, final String[] errors) throws IOException {
 		final List<String> foundErr = new ArrayList<String>();
 		final BoaLexer lexer = new BoaLexer(new ANTLRInputStream(new StringReader(input)));
 		lexer.removeErrorListeners();
@@ -159,11 +159,11 @@ public abstract class BaseTest {
 	// parsing
 	//
 
-	protected StartContext parse(final String input) throws IOException {
+	protected static StartContext parse(final String input) throws IOException {
 		return parse(input, new String[0]);
 	}
 
-	protected StartContext parse(final String input, final String[] errors) throws IOException {
+	protected static StartContext parse(final String input, final String[] errors) throws IOException {
 		final CommonTokenStream tokens = lex(input);
 		final BoaParser parser = new BoaParser(tokens);
 
@@ -216,11 +216,11 @@ public abstract class BaseTest {
 	// type checking
 	//
 
-	protected StartContext typecheck(final String input) throws IOException {
+	protected static StartContext typecheck(final String input) throws IOException {
 		return typecheck(input, null);
 	}
 
-	protected StartContext typecheck(final String input, final String error) throws IOException {
+	protected static StartContext typecheck(final String input, final String error) throws IOException {
 		final StartContext ctx = parse(input);
 
 		try {
@@ -243,11 +243,11 @@ public abstract class BaseTest {
 	// code generation
 	//
 
-	protected StartContext codegen(final String input) throws IOException {
+	protected static StartContext codegen(final String input) throws IOException {
 		return codegen(input, null);
 	}
 
-	protected StartContext codegen(final String input, final String error) throws IOException {
+	protected static StartContext codegen(final String input, final String error) throws IOException {
 		final File outputRoot = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
 		final File outputSrcDir = new File(outputRoot, "boa");
 		if (!outputSrcDir.mkdirs())
@@ -305,7 +305,7 @@ public abstract class BaseTest {
 	// misc utils
 	//
 
-	protected String load(final String fileName) throws IOException {
+	protected static String load(final String fileName) throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		BufferedReader br = null;
 		FileReader fr = null;
@@ -332,7 +332,7 @@ public abstract class BaseTest {
 		return sb.toString();
 	}
 
-	protected final void delete(final File f) throws IOException {
+	protected final static void delete(final File f) throws IOException {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
 				delete(g);

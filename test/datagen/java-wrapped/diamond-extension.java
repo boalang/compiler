@@ -1,7 +1,2 @@
-class t {
-   void m() {
-	  
-	   FooClass<?> fc1 = new FooClass<>(1) { 
-	   };
-   }
-}
+FooClass<?> fc1 = new FooClass<>(1) { 
+};

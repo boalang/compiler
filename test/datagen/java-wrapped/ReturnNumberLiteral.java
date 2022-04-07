@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   return 4; 
-	   
-   }
-}
+return 4; 

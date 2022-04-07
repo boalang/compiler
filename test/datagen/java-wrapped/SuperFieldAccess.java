@@ -1,6 +1,1 @@
-class t {
-   void m() {
-	   super.x = y;
-	   
-   }
-}
+super.x = y;
