@@ -39,8 +39,10 @@ import boa.types.Diff.ChangedFile;
 public class TestPrettyprintJava extends PrettyprintBase {
 	private final static String CLASS_START = "class c {";
 	private final static String CLASS_END = "\n}\n";
+
 	private final static String METHOD_START = CLASS_START + indent(1) + "void m()" + indent(1) + "{";
 	private final static String METHOD_END = indent(1) + "}" + CLASS_END;
+
 	private final static String STATEMENT_START = METHOD_START + indent(2);
 	private final static String STATEMENT_END = METHOD_END;
 
@@ -81,11 +83,21 @@ public class TestPrettyprintJava extends PrettyprintBase {
 				{ "RETURN2", STATEMENT_START + "return 1;" + STATEMENT_END },
 				{ "BREAK1", STATEMENT_START + "break;" + STATEMENT_END },
 				{ "BREAK2", STATEMENT_START + "break LABEL;" + STATEMENT_END },
+				{ "CONTINUE1", STATEMENT_START + "continue;" + STATEMENT_END },
+				{ "CONTINUE2", STATEMENT_START + "continue LABEL;" + STATEMENT_END },
+				{ "ASSERT1", STATEMENT_START + "assert true;" + STATEMENT_END },
+				{ "ASSERT2", STATEMENT_START + "assert true : \"some message\";" + STATEMENT_END },
+				{ "LABEL", STATEMENT_START + "FOO: ;" + STATEMENT_END },
 				{ "SWITCH", STATEMENT_START + "switch (f1) {"
 							+ indent(3) + "case 1:"
 							+ indent(3) + "f1 = 2;"
 							+ indent(3) + "default:"
 							+ indent(3) + "break;"
+						+ indent(2) + "}" + STATEMENT_END },
+				{ "EXPRESSION", STATEMENT_START + "x++;" + STATEMENT_END },
+				{ "TYPEDECL", STATEMENT_START + "\t\tclass d {" + indent(2) + "}\n" + STATEMENT_END },
+				{ "SYNCHRONIZED", STATEMENT_START + "synchronized (o) {"
+							+ indent(3) + ";"
 						+ indent(2) + "}" + STATEMENT_END },
 				{ "THROW", STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END },
 				{ "VARINF", STATEMENT_START + "var s = \"this is a string\";" + STATEMENT_END },
