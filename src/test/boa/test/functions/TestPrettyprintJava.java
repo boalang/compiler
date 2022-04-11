@@ -99,12 +99,29 @@ public class TestPrettyprintJava extends PrettyprintBase {
 				{ "SYNCHRONIZED", STATEMENT_START + "synchronized (o) {"
 							+ indent(3) + ";"
 						+ indent(2) + "}" + STATEMENT_END },
+				{ "TRY/CATCH/FINALLY", STATEMENT_START + "try {"
+							+ indent(3) + ";"
+						+ indent(2) + "}"
+						+ indent(2) + "catch (Exception e) {"
+							+ indent(3) + ";"
+						+ indent(2) + "}"
+						+ indent(2) + "finally {"
+							+ indent(3) + ";"
+						+ indent(2) + "}\n" + STATEMENT_END },
+				{ "FOR", STATEMENT_START + "for (int i = 0; i < l; i++)"
+							+ indent(3) + "{"
+							+ indent(4) + ";"
+						+ indent(3) + "}\n" + STATEMENT_END },
+				{ "FOREACH", STATEMENT_START + "for (String s : strs)"
+						+ indent(3) + "{"
+							+ indent(4) + ";"
+						+ indent(3) + "}" + STATEMENT_END },
+				{ "WHILE", STATEMENT_START + "while (x)"
+							+ indent(3) + "{"
+							+ indent(4) + ";"
+						+ indent(3) + "}" + STATEMENT_END },
 				{ "THROW", STATEMENT_START + "throw new RuntimeException(e);" + STATEMENT_END },
 				{ "VARINF", STATEMENT_START + "var s = \"this is a string\";" + STATEMENT_END },
-				{ "FOREACH", STATEMENT_START + "for (String s : strs)"
-						+ indent(2) + "{"
-							+ indent(3) + "System.out.println(s);"
-						+ indent(2) + "}" + STATEMENT_END },
 
 				/* expressions */
 				{ "NEW", STATEMENT_START + "List<String> list = new ArrayList<String>();" + STATEMENT_END },

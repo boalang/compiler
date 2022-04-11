@@ -581,7 +581,9 @@ public class JavaLangMode implements LangMode {
 
 			case FOREACH:
 				s += "for (" + prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpressions(0)) + ")\n";
+				indent++;
 				s += indent() + prettyprint(stmt.getStatements(0));
+				indent--;
 				return s;
 
 			case DO:
@@ -594,12 +596,10 @@ public class JavaLangMode implements LangMode {
 				return s;
 
 			case WHILE:
-				s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
+				s += "while (" + prettyprint(stmt.getConditions(0)) + ")\n";
 				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				s += indent() + prettyprint(stmt.getStatements(0));
 				indent--;
-				s += indent() + "}";
 				return s;
 
 			case IF:
