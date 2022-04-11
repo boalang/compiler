@@ -1495,11 +1495,10 @@ public class JavaVisitor extends ASTVisitor {
 
 		for (final Object o : node.fragments()) {
 			final VariableDeclarationFragment f = (VariableDeclarationFragment) o;
-			if (node.getType().isVar() && !node.fragments().toString().contains("new var(")) {
+			if (node.getType().isVar() && !node.fragments().toString().contains("new var("))
 				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.INFERRED));
-			} else {
+			else
 				eb.addVariableDecls(build(f, node.getType(), node.modifiers(), TypeKind.OTHER));
-			}
 		}
 		b.addExpressions(eb.build());
 		list.add(b.build());
@@ -1739,8 +1738,9 @@ public class JavaVisitor extends ASTVisitor {
 					b.setReturnType(buildType(vb.getType()));
 				if (vb.getDeclaringClass() != null)
 					b.setDeclaringType(buildType(vb.getDeclaringClass()));
-			} else
+			} else {
 				b.setReturnType(buildType(node.resolveTypeBinding()));
+			}
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		b.setVariable(node.getFullyQualifiedName());
@@ -2587,8 +2587,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		String name = "";
 		for (final Object o : t.typeArguments()) {
-			if (name.length() > 0)
-				name += ", ";
+			if (name.length() > 0) name += ", ";
 			name += typeName((org.eclipse.jdt.core.dom.Type) o);
 		}
 		return typeName(t.getType()) + "<" + name + ">";
@@ -2619,8 +2618,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		String name = "";
 		for (final Object o : t.types()) {
-			if (name.length() > 0)
-				name += " & ";
+			if (name.length() > 0) name += " & ";
 			name += typeName((org.eclipse.jdt.core.dom.Type) o);
 		}
 		return name;
@@ -2631,8 +2629,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		String name = "";
 		for (final Object o : t.types()) {
-			if (name.length() > 0)
-				name += " | ";
+			if (name.length() > 0) name += " | ";
 			name += typeName((org.eclipse.jdt.core.dom.Type) o);
 		}
 		return name;
