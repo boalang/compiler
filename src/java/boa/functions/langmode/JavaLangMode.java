@@ -486,7 +486,7 @@ public class JavaLangMode implements LangMode {
 				s += "assert ";
 				s += prettyprint(stmt.getConditions(0));
 				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
+					s += " : " + prettyprint(stmt.getExpressions(0));
 				s += ";";
 				return s;
 
@@ -508,12 +508,12 @@ public class JavaLangMode implements LangMode {
 				return prettyprint(stmt.getTypeDeclaration());
 
 			case SYNCHRONIZED:
-				s += "synchronized () {\n";
+				s += "synchronized (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
 				indent--;
-				s += "}";
+				s += indent() + "}";
 				return s;
 
 			case CATCH:
