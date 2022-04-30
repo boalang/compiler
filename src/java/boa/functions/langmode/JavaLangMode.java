@@ -924,6 +924,9 @@ public class JavaLangMode implements LangMode {
 		return eb.build();
 	}
 
+	private static final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+	private static final JavaVisitor visitor = new JavaVisitor("");
+
 	/**
 	 * Converts a string into an AST.
 	 *
@@ -942,11 +945,9 @@ public class JavaLangMode implements LangMode {
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		try {
 			final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
-			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-			cu.accept(errorCheck);
 
-			if (!errorCheck.hasError) {
-				final JavaVisitor visitor = new JavaVisitor(s);
+			if (!errorCheck.check(cu)) {
+				visitor.reset(s);
 				ast.addNamespaces(visitor.getNamespaces(cu));
 			}
 		} catch (final Exception e) {

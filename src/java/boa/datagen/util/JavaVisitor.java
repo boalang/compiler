@@ -78,7 +78,7 @@ public class JavaVisitor extends ASTVisitor {
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 
-	protected int astLevel = JLS2;
+	protected int astLevel = JLS1;
 
 	public int getAstLevel() {
 		return astLevel;
@@ -115,7 +115,7 @@ public class JavaVisitor extends ASTVisitor {
 		methods.clear();
 		statements.clear();
 
-		astLevel = JLS2;
+		astLevel = JLS1;
 	}
 
 	public Namespace getNamespaces(final CompilationUnit node) {
@@ -962,7 +962,7 @@ public class JavaVisitor extends ASTVisitor {
 		setAstLevel(JLS3);
 
 		final String name = node.getTypeName().getFullyQualifiedName();
-		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
+		if (name.equals("SafeVarargs"))
 			setAstLevel(JLS7);
 
 		modifiers.push(getAnnotationBuilder(node).build());
@@ -974,8 +974,12 @@ public class JavaVisitor extends ASTVisitor {
 		setAstLevel(JLS3);
 
 		final String name = node.getTypeName().getFullyQualifiedName();
-		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
+		if (name.equals("SafeVarargs")) {
 			setAstLevel(JLS7);
+		} else if (name.equals("SuppressWarnings")) {
+			if (node.getValue().toString().contains("\"varargs\""))
+				setAstLevel(JLS7);
+		}
 
 		final boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		node.getValue().accept(this);
@@ -998,8 +1002,12 @@ public class JavaVisitor extends ASTVisitor {
 		setAstLevel(JLS3);
 
 		final String name = node.getTypeName().getFullyQualifiedName();
-		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
+		if (name.equals("SafeVarargs")) {
 			setAstLevel(JLS7);
+		} else if (name.equals("SuppressWarnings")) {
+			if (node.values().size() > 0 && node.values().toString().contains("\"varargs\""))
+				setAstLevel(JLS7);
+		}
 		final boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		for (final Object v : node.values()) {
 			final MemberValuePair pair = (MemberValuePair) v;

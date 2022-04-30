@@ -604,10 +604,13 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
+	private static final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+	private static final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(JavaLangMode.DEFAULT_JAVA_ASTLEVEL);
+	private static final JavaVisitor visitor = new JavaVisitor("");
+
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb) {
 		try {
 			final String content = getFileContents(path);
-			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(JavaLangMode.DEFAULT_JAVA_ASTLEVEL);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
 			parser.setUnitName(FileIO.getFileName(path));
@@ -626,13 +629,10 @@ public abstract class AbstractCommit {
 				return false;
 			}
 
-			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-			cu.accept(errorCheck);
-
-			if (!errorCheck.hasError) {
+			if (!errorCheck.check(cu)) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
-				final JavaVisitor visitor = new JavaVisitor(content);
+				visitor.reset(content);
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
 
@@ -646,6 +646,7 @@ public abstract class AbstractCommit {
 				}
 
 				switch (visitor.getAstLevel()) {
+				case JavaVisitor.JLS1:
 				case JavaVisitor.JLS2:
 					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
 					break;

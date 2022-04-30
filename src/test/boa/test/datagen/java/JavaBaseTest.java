@@ -61,9 +61,9 @@ public class JavaBaseTest extends BaseTest {
 		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 
-		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-
 		try {
+			final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+
 			try (final UglyMathCommentsExtractor cex = new UglyMathCommentsExtractor(cu, content)) {
 				new ASTDumper(cex).dump(cu);
 			}

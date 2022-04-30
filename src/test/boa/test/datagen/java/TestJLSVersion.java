@@ -85,7 +85,7 @@ public class TestJLSVersion {
 	public void testJLSVersion() throws Exception {
 		final String kind = changedFile.getKind().name();
 		final String version = kind.substring(kind.lastIndexOf('_') + 1);
-		assertThat(changedFile.getName(), Matchers.containsString("/" + version + "/"));
+		assertThat(changedFile.getName(), Matchers.containsString("src/" + version + "/"));
 	}
 
 	private static CodeRepository buildCodeRepository(final String repoName) throws Exception {
