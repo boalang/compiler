@@ -38,58 +38,57 @@ import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
 public class TestSequenceFile extends JavaBaseTest {
-	private Configuration conf = new Configuration();
+	private final Configuration conf = new Configuration();
 	private FileSystem fileSystem;
 	private SequenceFile.Reader pr;
 	private SequenceFile.Reader ar;
-		
+
 	public TestSequenceFile() throws IOException {
 		fileSystem = FileSystem.get(conf);
-		Path projectPath = new Path("dataset/projects.seq");
-		Path dataPath = new Path("dataset/data");
+		final Path projectPath = new Path("dataset/projects.seq");
+		final Path dataPath = new Path("dataset/data");
 		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
 			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
 			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
 		}
 	}
-	
+
 	@Test
 	public void projectSeqTest1() throws IOException {
-		String path = "dataset/temp_data";
-		File dataFile = new File(path);
-    	path = dataFile.getAbsolutePath();
-    	
+		final File dataFile = new File("dataset/temp_data");
+    	final String path = dataFile.getAbsolutePath();
+
 //    	DefaultProperties.DEBUG = true;
     	DefaultProperties.localDataPath = path;
-		
+
 		new FileIO.DirectoryRemover(dataFile.getAbsolutePath()).run();
-		
-		String[] args = {	"-inputJson", "test/datagen/jsons", 
+
+		final String[] args = {	"-inputJson", "test/datagen/jsons",
 							"-inputRepo", "dataset/repos",
 							"-output", path,
 							"-commits", "1",
 							"-threads", "2"};
 		BoaGenerator.main(args);
-		
+
 		openMaps(path);
 		fileSystem = FileSystem.get(conf);
-		Path projectPath = new Path(path + "/projects.seq");
-		Path dataPath = new Path(path + "/ast/data");
+		final Path projectPath = new Path(path + "/projects.seq");
+		final Path dataPath = new Path(path + "/ast/data");
 		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
 			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
 			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
 		}
-		Set<Long> cfKeys = new HashSet<Long>();
-		Set<Long> astKeys = new HashSet<Long>();
-		Writable key = new Text();
-		BytesWritable val = new BytesWritable();
+		final Set<Long> cfKeys = new HashSet<Long>();
+		final Set<Long> astKeys = new HashSet<Long>();
+		final Writable key = new Text();
+		final BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {
-			byte[] bytes = val.getBytes();
-			Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-			for (CodeRepository cr : project.getCodeRepositoriesList()) {
+			final byte[] bytes = val.getBytes();
+			final Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+			for (final CodeRepository cr : project.getCodeRepositoriesList()) {
 				for (int i = 0; i < BoaIntrinsics.getRevisionsCount(cr); i++) {
-					Revision rev = getRevision(cr, i);
-					for (ChangedFile cf : rev.getFilesList()) {
+					final Revision rev = getRevision(cr, i);
+					for (final ChangedFile cf : rev.getFilesList()) {
 						if (cf.getAst()) {
 							if (DefaultProperties.DEBUG) {
 								System.out.println(project.getName());
@@ -101,7 +100,7 @@ public class TestSequenceFile extends JavaBaseTest {
 						}
 					}
 				}
-				for (ChangedFile cf : cr.getHeadSnapshotList()) {
+				for (final ChangedFile cf : cr.getHeadSnapshotList()) {
 					if (cf.getAst()) {
 						if (DefaultProperties.DEBUG) {
 							System.out.println(project.getName());
@@ -113,16 +112,16 @@ public class TestSequenceFile extends JavaBaseTest {
 				}
 			}
 		}
-		LongWritable lkey = new LongWritable();
+		final LongWritable lkey = new LongWritable();
 		while (ar.next(lkey, val)) {
 			assertThat(astKeys.contains(lkey.get()), Matchers.is(false));
 			astKeys.add(lkey.get());
 		}
-		
+
 		if (DefaultProperties.DEBUG) {
-			Set<Long> inter = new HashSet<Long>(astKeys);
+			final Set<Long> inter = new HashSet<Long>(astKeys);
 			inter.retainAll(cfKeys);
-			
+
 			System.out.println("In ASTs: " + astKeys.size());
 			astKeys.removeAll(inter);
 			System.out.println(astKeys.size());
@@ -135,36 +134,36 @@ public class TestSequenceFile extends JavaBaseTest {
 	//			System.out.println(k + " ");
 		}
 		assertThat(cfKeys, Matchers.is(astKeys));
-		
+
 		pr.close();
 		ar.close();
 		closeMaps();
-		
+
 		new FileIO.DirectoryRemover(dataFile.getAbsolutePath()).run();
 	}
 
 	private static final Revision emptyRevision;
-	
+
 	static {
-		Revision.Builder rb = Revision.newBuilder();
+		final Revision.Builder rb = Revision.newBuilder();
 		rb.setCommitDate(0);
-		Person.Builder pb = Person.newBuilder();
+		final Person.Builder pb = Person.newBuilder();
 		pb.setUsername("");
 		rb.setCommitter(pb);
 		rb.setId("");
 		rb.setLog("");
 		emptyRevision = rb.build();
 	}
-	
+
 	public static Revision getRevision(final CodeRepository cr, final int index) {
 		if (cr.getRevisionKeysCount() > 0) {
-			long key = cr.getRevisionKeys(index);
+			final long key = cr.getRevisionKeys(index);
 			return getRevision(key);
 		}
 		return cr.getRevisions(index);
 	}
-	
-	static Revision getRevision(long key) {
+
+	static Revision getRevision(final long key) {
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (commitMap.get(new LongWritable(key), value) != null) {
@@ -183,11 +182,11 @@ public class TestSequenceFile extends JavaBaseTest {
 		System.err.println("error with revision: " + key);
 		return emptyRevision;
 	}
-	
+
 	private static MapFile.Reader commitMap;
 	private static MapFile.Reader astMap;
 
-	private static void openMaps(String path) {
+	private static void openMaps(final String path) {
 		try {
 			final Configuration conf = new Configuration();
 			final FileSystem fs;
@@ -201,29 +200,32 @@ public class TestSequenceFile extends JavaBaseTest {
 
 	private static void closeMaps() {
 		closeMap(astMap);
+		astMap = null;
 		closeMap(commitMap);
+		commitMap = null;
 	}
-	
-	private static void closeMap(MapFile.Reader map) {
+
+	private static void closeMap(final MapFile.Reader map) {
 		if (map != null)
 			try {
 				map.close();
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
-		map = null;
 	}
-	
+
 	@Test
 	public void projectSeqTest() throws IOException {
 		if (pr == null || ar == null)
 			return;
+
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
+
 		while (pr.next(key, val)) {
 			byte[] bytes = val.getBytes();
-			Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-			String name = project.getName();
+			final Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+			final String name = project.getName();
 			System.out.println(name);
 			assertThat(name, anyOf(is("junit-team/junit4"), is("boalang/compiler"), is("candoia/candoia")));
 			assertFalse(project.getForked());
@@ -244,24 +246,24 @@ public class TestSequenceFile extends JavaBaseTest {
 			assertTrue(cr.getHeadSnapshotCount() > 0);
 //			HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = collectDeclarations(cr.getHeadSnapshotList());
 			final HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = new HashMap<Integer, HashMap<Integer, Declaration>>();
-			for (ChangedFile cf : cr.getHeadSnapshotList()) {
+			for (final ChangedFile cf : cr.getHeadSnapshotList()) {
 				long astpos = cf.getKey();
 				if (cf.getAst() && astpos > -1) {
 					ar.seek(astpos);
-					Writable astkey = new LongWritable();
+					final Writable astkey = new LongWritable();
 					val = new BytesWritable();
 					ar.next(astkey, val);
 					bytes = val.getBytes();
-					CodedInputStream cis = CodedInputStream.newInstance(bytes, 0, val.getLength());
+					final CodedInputStream cis = CodedInputStream.newInstance(bytes, 0, val.getLength());
 					cis.setRecursionLimit(Integer.MAX_VALUE);
-					ASTRoot root = ASTRoot.parseFrom(cis);
+					final ASTRoot root = ASTRoot.parseFrom(cis);
 //					System.out.println(root);
-					ProtoMessageVisitor v = new ProtoMessageVisitor() {
+					final ProtoMessageVisitor v = new ProtoMessageVisitor() {
 						@Override
-						public boolean preVisit(Message message) {
+						public boolean preVisit(final Message message) {
 							if (message instanceof boa.types.Ast.Type) {
-								boa.types.Ast.Type type = (boa.types.Ast.Type) message;
-								String fqn = type.getFullyQualifiedName();
+								final boa.types.Ast.Type type = (boa.types.Ast.Type) message;
+								final String fqn = type.getFullyQualifiedName();
 								final int fileId = type.getDeclarationFile();
 								final int nodeId = type.getDeclaration();
 								if (fqn != null && !fqn.isEmpty() && fileId > 0) {
@@ -290,5 +292,43 @@ public class TestSequenceFile extends JavaBaseTest {
 		}
 		pr.close();
 		ar.close();
+	}
+
+	protected static Declaration getDeclaration(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId, final HashMap<Integer, Declaration> declarations) {
+		long astpos = cf.getKey();
+		if (cf.getAst() && astpos > -1) {
+			try {
+				ar.seek(astpos);
+				final Writable astkey = new LongWritable();
+				final BytesWritable val = new BytesWritable();
+				ar.next(astkey, val);
+				final byte[] bytes = val.getBytes();
+				final ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+				final ProtoMessageVisitor v = new ProtoMessageVisitor() {
+					private boolean found = false;
+
+					@Override
+					public boolean preVisit(final Message message) {
+						if (found)
+							return false;
+						if (message instanceof Declaration) {
+							final Declaration temp = (Declaration) message;
+							Declaration type = declarations.get(temp.getKey());
+							if (type == null) {
+								type = Declaration.newBuilder(temp).build();
+								declarations.put(type.getKey(), type);
+							}
+							if (type.getKey() == nodeId) {
+								found = true;
+								return false;
+							}
+						}
+						return true;
+					};
+				};
+				v.visit(root);
+			} catch (final IOException e) {}
+		}
+		return declarations.get(nodeId);
 	}
 }
