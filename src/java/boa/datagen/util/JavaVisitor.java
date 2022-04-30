@@ -19,8 +19,6 @@
 
 package boa.datagen.util;
 
-import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -2652,6 +2650,25 @@ public class JavaVisitor extends ASTVisitor {
 		visitTypeAnnotations(t);
 
 		return t.getName().getFullyQualifiedName();
+	}
+
+	protected String getFullyQualifiedName(final AbstractTypeDeclaration node) {
+		final StringBuilder sb = new StringBuilder();
+		sb.append(node.getName().getIdentifier());
+		ASTNode n = node;
+		while (n.getParent() != null) {
+			n = n.getParent();
+			if (n instanceof CompilationUnit) {
+				final CompilationUnit cu = (CompilationUnit) n;
+				if (cu.getPackage() != null)
+					sb.insert(0, cu.getPackage().getName().getFullyQualifiedName() + ".");
+			} else if (n instanceof AbstractTypeDeclaration) {
+				sb.insert(0, ((AbstractTypeDeclaration) n).getName().getIdentifier() + ".");
+			} else {
+				return "";
+			}
+		}
+		return sb.toString();
 	}
 
 	//////////////////////////////////////////////////////////////

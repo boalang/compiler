@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.dom.Initializer;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import org.eclipse.jdt.core.dom.PostfixExpression;
 import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.ReturnStatement;
@@ -39,7 +40,7 @@ import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
-import boa.datagen.util.JavaASTUtil;
+
 import boa.types.Shared.ChangeKind;
 
 public class TreedMapper implements TreedConstants {
@@ -55,12 +56,28 @@ public class TreedMapper implements TreedConstants {
 	private int numOfChanges = 0;
 	private int numOfUnmaps = 0;
 	private int numOfNonNameUnMaps = 0;
-	
+	private static final HashMap<ModifierKeyword, Integer> modifierTypes = new HashMap<ModifierKeyword, Integer>();
+
+	static {
+		modifierTypes.put(ModifierKeyword.ABSTRACT_KEYWORD, 1);
+		modifierTypes.put(ModifierKeyword.DEFAULT_KEYWORD, 2);
+		modifierTypes.put(ModifierKeyword.FINAL_KEYWORD, 3);
+		modifierTypes.put(ModifierKeyword.NATIVE_KEYWORD, 4);
+		modifierTypes.put(ModifierKeyword.PRIVATE_KEYWORD, 2);
+		modifierTypes.put(ModifierKeyword.PROTECTED_KEYWORD, 2);
+		modifierTypes.put(ModifierKeyword.PUBLIC_KEYWORD, 2);
+		modifierTypes.put(ModifierKeyword.STATIC_KEYWORD, 5);
+		modifierTypes.put(ModifierKeyword.STRICTFP_KEYWORD, 6);
+		modifierTypes.put(ModifierKeyword.SYNCHRONIZED_KEYWORD, 7);
+		modifierTypes.put(ModifierKeyword.TRANSIENT_KEYWORD, 8);
+		modifierTypes.put(ModifierKeyword.VOLATILE_KEYWORD, 7);
+	}
+
 	public TreedMapper(ASTNode astM, ASTNode astN) {
 		this.astM = astM;
 		this.astN = astN;
 	}
-	
+
 	public int getNumOfChanges() {
 		return numOfChanges;
 	}
@@ -72,15 +89,15 @@ public class TreedMapper implements TreedConstants {
 	public boolean isChanged() {
 		return this.numOfChanges > 0;
 	}
-	
+
 	public boolean hasUnmap() {
 		return this.numOfUnmaps > 0;
 	}
-	
+
 	public boolean hasNonNameUnmap() {
 		return this.numOfNonNameUnMaps > 0;
 	}
-	
+
 	public void map() {
 		buildTrees();
 		mapPivots();
@@ -125,12 +142,12 @@ public class TreedMapper implements TreedConstants {
 	private void printChanges(ASTNode node) {
 		node.accept(new ASTVisitor() {
 			private int indent = 0;
-			
+
 			private void printIndent() {
 				for (int i = 0; i < indent; i++)
 					System.out.print("\t");
 			}
-			
+
 			@Override
 			public void preVisit(ASTNode node) {
 				printIndent();
@@ -142,7 +159,7 @@ public class TreedMapper implements TreedConstants {
 				System.out.println();
 				indent++;
 			}
-			
+
 			@Override
 			public void postVisit(ASTNode node) {
 				indent--;
@@ -483,7 +500,7 @@ public class TreedMapper implements TreedConstants {
 	private boolean labelMatch(PrefixExpression nodeM, PrefixExpression nodeN) {
 		return nodeM.getOperator().equals(nodeN.getOperator());
 	}
-	
+
 	@SuppressWarnings("unused")
 	private void lss(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN, double threshold) {
 		int lenM = lM.size();
@@ -574,7 +591,7 @@ public class TreedMapper implements TreedConstants {
 			for (ASTNode nodeN : nodesN) {
 				double sim = computeSimilarity(nodeM, nodeN, threshold);
 				if (sim >= threshold) {
-					Pair pair = new Pair(nodeM, nodeN, sim, 
+					Pair pair = new Pair(nodeM, nodeN, sim,
 							-Math.abs((nodeM.getParent().getStartPosition() - nodeM.getStartPosition()) - (nodeN.getParent().getStartPosition() - nodeN.getStartPosition())));
 					pairs1.add(pair);
 					HashSet<Pair> pairs2 = pairsOfAncestor.get(nodeN);
@@ -633,15 +650,15 @@ public class TreedMapper implements TreedConstants {
 			if (nodeM instanceof Modifier) {
 				Modifier mnM = (Modifier) nodeM;
 				Modifier mnN = (Modifier) nodeN;
-				if (JavaASTUtil.getType(mnM) != JavaASTUtil.getType(mnN))
+				if (modifierTypes.get(mnM.getKeyword()) != modifierTypes.get(mnN.getKeyword()))
 					return 0;
 			}
 			int type = nodeM.getNodeType();
 			double sim = 0;
-			if (type == ASTNode.ARRAY_CREATION 
-					|| type == ASTNode.ARRAY_INITIALIZER 
-					|| type == ASTNode.BLOCK 
-					|| type == ASTNode.INFIX_EXPRESSION 
+			if (type == ASTNode.ARRAY_CREATION
+					|| type == ASTNode.ARRAY_INITIALIZER
+					|| type == ASTNode.BLOCK
+					|| type == ASTNode.INFIX_EXPRESSION
 					|| type == ASTNode.METHOD_INVOCATION
 					|| type == ASTNode.SWITCH_STATEMENT
 					)
@@ -675,6 +692,10 @@ public class TreedMapper implements TreedConstants {
 			return sim;
 		}
 		return 0;
+	}
+
+	private int getModifierType(final Modifier mn) {
+		return modifierTypes.get(mn.getKeyword());
 	}
 
 	@SuppressWarnings("unused")
@@ -715,7 +736,7 @@ public class TreedMapper implements TreedConstants {
 			for (Pair p : pairsOfNode.get(pair.getObj2()))
 				pairs.remove(p);
 		}
-		
+
 		return sims;
 	}
 
@@ -836,7 +857,7 @@ public class TreedMapper implements TreedConstants {
 									int type = childM.getNodeType();
 									if (type == ASTNode.BLOCK || (treeMap.get(childM).isEmpty() && treeMap.get(childN).isEmpty()))
 										sim = 1.0;
-									else 
+									else
 										sim = computeSimilarity(childM, childN, MIN_SIM);
 									if (sim >= MIN_SIM) {
 										setMap(childM, childN, MIN_SIM);
@@ -969,7 +990,7 @@ public class TreedMapper implements TreedConstants {
 				}
 				return true;
 			}
-			
+
 			@Override
 			public boolean visit(EnumConstantDeclaration node) {
 				HashMap<ASTNode, Double> maps = treeMap.get(node);
@@ -980,7 +1001,7 @@ public class TreedMapper implements TreedConstants {
 				}
 				return true;
 			}
-			
+
 			@Override
 			public boolean visit(FieldDeclaration node) {
 				HashMap<ASTNode, Double> maps = treeMap.get(node);
@@ -991,7 +1012,7 @@ public class TreedMapper implements TreedConstants {
 				}
 				return true;
 			}
-			
+
 			@Override
 			public boolean visit(Initializer node) {
 				HashMap<ASTNode, Double> maps = treeMap.get(node);
@@ -1002,7 +1023,7 @@ public class TreedMapper implements TreedConstants {
 				}
 				return true;
 			}
-			
+
 			@Override
 			public boolean visit(MethodDeclaration node) {
 				HashMap<ASTNode, Double> maps = treeMap.get(node);
@@ -1089,5 +1110,4 @@ public class TreedMapper implements TreedConstants {
 		treeDepth.putAll(visitor.treeDepth);
 		treeVector.putAll(visitor.treeVector);
 	}
-	
 }
