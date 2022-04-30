@@ -96,12 +96,14 @@ public class JavaBaseTest extends BaseTest {
 
 	public static String parseJava(final String content) {
 		final File f = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
-		FileIO.writeFileContents(f, content);
-		final String res = parseJavaFile(f.getPath());
 		try {
-			FileIO.delete(f);
-		} catch (final Exception e) {}
-		return res;
+			FileIO.writeFileContents(f, content);
+			return parseJavaFile(f.getPath());
+		} finally {
+			try {
+				FileIO.delete(f);
+			} catch (final Exception e) {}
+		}
 	}
 
 	public static String parseJavaFile(final String path) {
