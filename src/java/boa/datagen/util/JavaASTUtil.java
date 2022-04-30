@@ -16,7 +16,7 @@ import boa.types.Diff.ChangedFile.FileKind;
 
 public class JavaASTUtil {
 	private static final HashMap<ModifierKeyword, Integer> modifierType = new HashMap<ModifierKeyword, Integer>();
-	
+
 	static {
 		modifierType.put(ModifierKeyword.ABSTRACT_KEYWORD, 1);
 		modifierType.put(ModifierKeyword.DEFAULT_KEYWORD, 2);
@@ -53,69 +53,4 @@ public class JavaASTUtil {
 	public static int getType(Modifier mn) {
 		return modifierType.get(mn.getKeyword());
 	}
-	
-	@SuppressWarnings("deprecation")
-	public static ASTParser buildParser(FileKind fileKind) {
-		int astLevel = -1;
-		String compliance = null;
-		switch (fileKind) {
-		case SOURCE_JAVA_JLS2:
-			astLevel = AST.JLS2;
-			compliance = JavaCore.VERSION_1_4;
-			break;
-		case SOURCE_JAVA_JLS3:
-			astLevel = AST.JLS3;
-			compliance = JavaCore.VERSION_1_5;
-			break;
-		case SOURCE_JAVA_JLS7:
-			astLevel = AST.JLS4;
-			compliance = JavaCore.VERSION_1_7;
-			break;
-		case SOURCE_JAVA_JLS8:
-			astLevel = AST.JLS8;
-			compliance = JavaCore.VERSION_1_8;
-			break;
-		case SOURCE_JAVA_JLS9:
-			astLevel = AST.JLS9;
-			compliance = JavaCore.VERSION_9;
-			break;
-		case SOURCE_JAVA_JLS10:
-			astLevel = AST.JLS10;
-			compliance = JavaCore.VERSION_10;
-			break;
-		case SOURCE_JAVA_JLS11:
-			astLevel = AST.JLS11;
-			compliance = JavaCore.VERSION_11;
-			break;
-		case SOURCE_JAVA_JLS12:
-			astLevel = AST.JLS12;
-			compliance = JavaCore.VERSION_12;
-			break;
-		case SOURCE_JAVA_JLS13:
-			astLevel = AST.JLS13;
-			compliance = JavaCore.VERSION_13;
-			break;
-		case SOURCE_JAVA_JLS14:
-			astLevel = AST.JLS14;
-			compliance = JavaCore.VERSION_14;
-			break;
-		case SOURCE_JAVA_JLS15:
-			astLevel = AST.JLS15;
-			compliance = JavaCore.VERSION_15;
-			break;
-		default:
-			break;
-		}
-		if (compliance != null) {
-			ASTParser parser = ASTParser.newParser(astLevel);
-			parser.setKind(ASTParser.K_COMPILATION_UNIT);
-	
-			final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
-			JavaCore.setComplianceOptions(compliance, options);
-			parser.setCompilerOptions(options);
-			return parser;
-		}
-		return null;
-	}
-
 }
