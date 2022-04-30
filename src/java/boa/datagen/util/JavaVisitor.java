@@ -52,7 +52,7 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS1 = 1;
 	public static final int JLS2 = 2;
 	public static final int JLS3 = 3;
-	public static final int JLS4 = 4;
+	public static final int JLS7 = 7;
 	public static final int JLS8 = 8;
 	public static final int JLS9 = 9;
 	public static final int JLS10 = 10;
@@ -946,7 +946,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		final String name = node.getTypeName().getFullyQualifiedName();
 		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
-			setAstLevel(JLS4);
+			setAstLevel(JLS7);
 
 		modifiers.push(getAnnotationBuilder(node).build());
 		return false;
@@ -958,7 +958,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		final String name = node.getTypeName().getFullyQualifiedName();
 		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
-			setAstLevel(JLS4);
+			setAstLevel(JLS7);
 
 		final boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		node.getValue().accept(this);
@@ -982,7 +982,7 @@ public class JavaVisitor extends ASTVisitor {
 
 		final String name = node.getTypeName().getFullyQualifiedName();
 		if (name.equals("SafeVarargs") || name.equals("SuppressWarnings"))
-			setAstLevel(JLS4);
+			setAstLevel(JLS7);
 		final boa.types.Ast.Modifier.Builder b = getAnnotationBuilder(node);
 		for (final Object v : node.values()) {
 			final MemberValuePair pair = (MemberValuePair) v;
@@ -1361,7 +1361,7 @@ public class JavaVisitor extends ASTVisitor {
 			if (node.expressions().size() > 1)
 				setAstLevel(JLS14);
 			else if (node.expressions().size() > 0 && node.expressions().get(0) instanceof StringLiteral)
-				setAstLevel(JLS4);
+				setAstLevel(JLS7);
 		}
 		final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		final List<boa.types.Ast.Statement> list = statements.peek();
@@ -1450,7 +1450,7 @@ public class JavaVisitor extends ASTVisitor {
 		for (final boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		if (!node.resources().isEmpty())
-			setAstLevel(JLS4);
+			setAstLevel(JLS7);
 
 		for (final Object v : node.resources()) {
 			((Expression) v).accept(this);
@@ -1896,9 +1896,9 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(final NumberLiteral node) {
 		if (node.getToken().toLowerCase().startsWith("0b"))
-			setAstLevel(JLS4);
+			setAstLevel(JLS7);
 		if (node.getToken().contains("_"))
-			setAstLevel(JLS4);
+			setAstLevel(JLS7);
 		final boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getToken());
@@ -2583,7 +2583,7 @@ public class JavaVisitor extends ASTVisitor {
 		setAstLevel(JLS3);
 
 		if (t.typeArguments().isEmpty())
-			setAstLevel(JLS4);
+			setAstLevel(JLS7);
 
 		String name = "";
 		for (final Object o : t.typeArguments()) {
@@ -2625,7 +2625,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 
 	protected String typeName(final UnionType t) {
-		setAstLevel(JLS4);
+		setAstLevel(JLS7);
 
 		String name = "";
 		for (final Object o : t.types()) {

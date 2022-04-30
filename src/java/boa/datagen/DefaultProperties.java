@@ -84,10 +84,6 @@ public class DefaultProperties {
 
 	public static String localDataPath = null;
 
-	// default AST version
-	public static int DEFAULT_JAVA_ASTLEVEL = AST.JLS15;
-	public static String DEFAULT_JAVA_CORE = "15";
-
 	@SuppressWarnings("unused")
 	private static String getRoot() {
 		File dir = new File(System.getProperty("user.dir"));

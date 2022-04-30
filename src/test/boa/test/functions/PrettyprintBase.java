@@ -16,8 +16,9 @@
  */
 package boa.test.functions;
 
-import static boa.functions.BoaAstIntrinsics.prettyprint;
 import static org.junit.Assert.assertEquals;
+
+import static boa.functions.BoaAstIntrinsics.prettyprint;
 import static boa.functions.BoaAstIntrinsics.parse;
 
 import org.junit.Test;

@@ -39,13 +39,6 @@ import org.w3c.css.sac.InputSource;
 
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 
-import boa.types.Ast.ASTRoot;
-import boa.types.Code.Revision;
-import boa.types.Diff.ChangedFile;
-import boa.types.Diff.ChangedFile.Builder;
-import boa.types.Diff.ChangedFile.FileKind;
-import boa.types.Shared.ChangeKind;
-import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.CssVisitor;
@@ -59,6 +52,14 @@ import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
+import boa.functions.langmode.JavaLangMode;
+import boa.types.Ast.ASTRoot;
+import boa.types.Code.Revision;
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.Builder;
+import boa.types.Diff.ChangedFile.FileKind;
+import boa.types.Shared.ChangeKind;
+import boa.types.Shared.Person;
 
 /**
  * @author rdyer
@@ -605,7 +606,7 @@ public abstract class AbstractCommit {
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
 		try {
-			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
+			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(JavaLangMode.DEFAULT_JAVA_ASTLEVEL);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
 			parser.setUnitName(FileIO.getFileName(path));
@@ -613,7 +614,7 @@ public abstract class AbstractCommit {
 			parser.setSource(content.toCharArray());
 
 			final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
-			JavaCore.setComplianceOptions(DefaultProperties.DEFAULT_JAVA_CORE, options);
+			JavaCore.setComplianceOptions(JavaLangMode.DEFAULT_JAVA_CORE, options);
 			parser.setCompilerOptions(options);
 
 			final CompilationUnit cu;
@@ -650,8 +651,8 @@ public abstract class AbstractCommit {
 				case JavaVisitor.JLS3:
 					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
 					break;
-				case JavaVisitor.JLS4:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
+				case JavaVisitor.JLS7:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS7);
 					break;
 				case JavaVisitor.JLS8:
 					fb.setKind(FileKind.SOURCE_JAVA_JLS8);

@@ -68,9 +68,9 @@ public class TestPrettyprintJava extends PrettyprintBase {
 							+ indent(2) + "this.value = value;" + METHOD_END },
 
 				/*module declaration*/
-//				{ "MODULE", "open module com.bytestree.calculator {\n"
-//						+ indent(1) + "	requires com.bytestree.maths;\n"
-//						+ "}"},
+//				{ "MODULE", "open module com.bytestree.calculator {"
+//						+ indent(1) + "	requires com.bytestree.maths;"
+//						+ "\n}\n" },
 
 				/* methods */
 				{ "METHOD", METHOD_START + METHOD_END },

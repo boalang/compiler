@@ -67,7 +67,7 @@ public class JavaASTUtil {
 			astLevel = AST.JLS3;
 			compliance = JavaCore.VERSION_1_5;
 			break;
-		case SOURCE_JAVA_JLS4:
+		case SOURCE_JAVA_JLS7:
 			astLevel = AST.JLS4;
 			compliance = JavaCore.VERSION_1_7;
 			break;

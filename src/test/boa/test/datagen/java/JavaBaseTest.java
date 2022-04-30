@@ -46,6 +46,7 @@ import com.googlecode.protobuf.format.JsonFormat;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaVisitor;
+import boa.functions.langmode.JavaLangMode;
 import boa.test.compiler.BaseTest;
 import boa.test.datagen.ProtoMessageVisitor;
 import boa.types.Ast.ASTRoot;
@@ -58,13 +59,13 @@ import boa.types.Diff.ChangedFile;
  * @author huaiyao
  */
 public class JavaBaseTest extends BaseTest {
-	protected static int astLevel = DefaultProperties.DEFAULT_JAVA_ASTLEVEL;
-	protected static String javaVersion = JavaCore.VERSION_15;
+	protected static int astLevel = JavaLangMode.DEFAULT_JAVA_ASTLEVEL;
+	protected static String javaVersion = JavaLangMode.DEFAULT_JAVA_CORE;
 	protected static JavaVisitor visitor = new JavaVisitor("");
 
 	protected static void setJavaVersion() {
-		astLevel = DefaultProperties.DEFAULT_JAVA_ASTLEVEL;
-		javaVersion = JavaCore.VERSION_15;
+		astLevel = JavaLangMode.DEFAULT_JAVA_ASTLEVEL;
+		javaVersion = JavaLangMode.DEFAULT_JAVA_CORE;
 		visitor = new JavaVisitor("");
 	}
 

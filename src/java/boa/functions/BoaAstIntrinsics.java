@@ -210,7 +210,7 @@ public class BoaAstIntrinsics {
 		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS7
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS9
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS10
@@ -675,6 +675,17 @@ public class BoaAstIntrinsics {
 		curLang = l;
 
 		switch (curLang) {
+		case SOURCE_JAVA_JLS2:
+		case SOURCE_JAVA_JLS3:
+		case SOURCE_JAVA_JLS7:
+		case SOURCE_JAVA_JLS8:
+		case SOURCE_JAVA_JLS9:
+		case SOURCE_JAVA_JLS10:
+		case SOURCE_JAVA_JLS11:
+		case SOURCE_JAVA_JLS12:
+		case SOURCE_JAVA_JLS13:
+		case SOURCE_JAVA_JLS14:
+		case SOURCE_JAVA_JLS15:
 		default:
 			lang = javaLang;
 			break;

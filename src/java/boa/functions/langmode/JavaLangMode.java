@@ -45,7 +45,15 @@ import boa.types.Ast.Variable;
  * @author rdyer
  */
 public class JavaLangMode implements LangMode {
-	public Boolean hasArrow = null;
+	// default AST version
+	public static int DEFAULT_JAVA_ASTLEVEL = AST.JLS15;
+	public static String DEFAULT_JAVA_CORE = JavaCore.VERSION_15;
+
+	protected static int astLevel = DEFAULT_JAVA_ASTLEVEL;
+	protected static String javaVersion = DEFAULT_JAVA_CORE;
+
+	protected static Boolean hasArrow = null;
+
 	public String type_name(final String s) {
 		// first, normalize the string
 		final String t = s.replaceAll("<\\s+", "<")
@@ -894,13 +902,13 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public Expression parseexpression(final String s) {
-		final ASTParser parser = ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
+		final ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
 
 		@SuppressWarnings("rawtypes")
 		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
-		JavaCore.setComplianceOptions(DefaultProperties.DEFAULT_JAVA_CORE, options);
+		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 
 		try {
@@ -924,13 +932,13 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public ASTRoot parse(final String s) {
-		final ASTParser parser = ASTParser.newParser(DefaultProperties.DEFAULT_JAVA_ASTLEVEL);
+		final ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(s.toCharArray());
 
 		@SuppressWarnings("rawtypes")
 		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
-		JavaCore.setComplianceOptions(DefaultProperties.DEFAULT_JAVA_CORE, options);
+		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
