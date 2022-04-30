@@ -564,14 +564,14 @@ message Element {
 	/** The Element's attributes */
 	repeated Attribute attributes = 6;
 	optional Namespace script = 7;
-	optional Namespace php = 8;  
+	optional Namespace php = 8;
 	repeated Variable var_decl = 9;
 	/** The Element's title */
 	optional string title = 10;
 	repeated Attribute processing_instruction = 11;
 }
 
-/** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */  
+/** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */
 message Attribute {
 	required string key = 1;
 	required string value = 2;
