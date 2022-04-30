@@ -68,7 +68,7 @@ public class JavaVisitor extends ASTVisitor {
 	protected Map<String, Integer> declarationFile;
 	protected Map<String, Integer> declarationNode;
 
-	protected Namespace.Builder b = Namespace.newBuilder();
+	protected Namespace.Builder b = null;
 
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
@@ -100,8 +100,27 @@ public class JavaVisitor extends ASTVisitor {
 		this.declarationNode = declarationNode;
 	}
 
+	public void reset(final String src) {
+		root = null;
+		pos = null;
+		this.src = src;
+		declarationFile = null;
+		declarationNode = null;
+
+		comments.clear();
+		declarations.clear();
+		modifiers.clear();
+		expressions.clear();
+		fields.clear();
+		methods.clear();
+		statements.clear();
+
+		astLevel = JLS2;
+	}
+
 	public Namespace getNamespaces(final CompilationUnit node) {
 		root = node;
+		b = Namespace.newBuilder();
 		node.accept(this);
 		return b.build();
 	}
