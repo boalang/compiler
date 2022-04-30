@@ -1,7 +1,8 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen
- *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ * Copyright 2016-2022, Hridesh Rajan, Robert Dyer, Hoan Nguyen,
+ *                 Iowa State University of Science and Technology,
+ *                 Bowling Green State University,
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +52,6 @@ import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.functions.langmode.JavaLangMode;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -594,103 +594,21 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	private static final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-	private static final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(JavaLangMode.DEFAULT_JAVA_ASTLEVEL);
-	private static final JavaVisitor visitor = new JavaVisitor("");
-
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb) {
+		final ASTRoot.Builder ast = JavaLangMode.parseJavaFile(path, getFileContents(path), fb, projectName, debug);
+		if (ast == null)
+			return false;
+
 		try {
-			final String content = getFileContents(path);
-			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-//			parser.setResolveBindings(true);
-			parser.setUnitName(FileIO.getFileName(path));
-//			parser.setEnvironment(null, null, null, true);
-			parser.setSource(content.toCharArray());
-
-			final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
-			JavaCore.setComplianceOptions(JavaLangMode.DEFAULT_JAVA_CORE, options);
-			parser.setCompilerOptions(options);
-
-			final CompilationUnit cu;
-
-			try {
-				cu = (CompilationUnit) parser.createAST(null);
-			} catch (final Throwable e) {
-				return false;
-			}
-
-			if (!errorCheck.check(cu)) {
-				final ASTRoot.Builder ast = ASTRoot.newBuilder();
-				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
-				visitor.reset(content);
-				try {
-					ast.addNamespaces(visitor.getNamespaces(cu));
-
-//					for (final Comment c : visitor.getComments()) comments.addComments(c);
-				} catch (final Throwable e) {
-					if (debug) {
-						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
-						e.printStackTrace();
-					}
-					return false;
-				}
-
-				switch (visitor.getAstLevel()) {
-				case JavaVisitor.JLS1:
-				case JavaVisitor.JLS2:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-					break;
-				case JavaVisitor.JLS3:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-					break;
-				case JavaVisitor.JLS7:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS7);
-					break;
-				case JavaVisitor.JLS8:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-					break;
-				case JavaVisitor.JLS9:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS9);
-					break;
-				case JavaVisitor.JLS10:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS10);
-					break;
-				case JavaVisitor.JLS11:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS11);
-					break;
-				case JavaVisitor.JLS12:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS12);
-					break;
-				case JavaVisitor.JLS13:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS13);
-					break;
-				case JavaVisitor.JLS14:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS14);
-					break;
-				case JavaVisitor.JLS15:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS15);
-					break;
-				default:
-					fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-				}
-
-				try {
-					final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
-					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-					connector.astWriterLen += bw.getLength();
-				} catch (final IOException e) {
-					if (debug)
-						e.printStackTrace();
-				}
-				// fb.setComments(comments);
-			}
-
-			return !errorCheck.hasError;
-		} catch (final Throwable e) {
+			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
+		} catch (final IOException e) {
 			if (debug)
 				e.printStackTrace();
-			return false;
 		}
+
+		return true;
 	}
 
 	public Map<String, String> getLOC() {

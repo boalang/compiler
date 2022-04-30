@@ -13,7 +13,7 @@
 //  is preserved, and any changes are properly documented.
 //
 
-package boa.test.datagen.java;
+package boa.functions.langmode;
 
 import java.io.OutputStream;
 import java.io.PrintWriter;

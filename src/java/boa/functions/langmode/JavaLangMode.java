@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2022, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 Bowling Green State University
  *                 and University of Nebraska Board of Regents
@@ -18,14 +18,20 @@
  */
 package boa.functions.langmode;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FileASTRequestor;
+import org.eclipse.jdt.core.JavaCore;
+
+import com.googlecode.protobuf.format.JsonFormat;
 
 import boa.datagen.DefaultProperties;
+import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
 import boa.types.Ast.ASTRoot;
@@ -38,6 +44,8 @@ import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.FileKind;
 
 /**
  * Boa functions for working with Java ASTs.
@@ -49,8 +57,8 @@ public class JavaLangMode implements LangMode {
 	public static int DEFAULT_JAVA_ASTLEVEL = AST.JLS15;
 	public static String DEFAULT_JAVA_CORE = JavaCore.VERSION_15;
 
-	protected static int astLevel = DEFAULT_JAVA_ASTLEVEL;
-	protected static String javaVersion = DEFAULT_JAVA_CORE;
+	public static int astLevel = DEFAULT_JAVA_ASTLEVEL;
+	public static String javaVersion = DEFAULT_JAVA_CORE;
 
 	protected static Boolean hasArrow = null;
 
@@ -929,9 +937,9 @@ public class JavaLangMode implements LangMode {
 		return defaultExp;
 	}
 
-	private static final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-	private static final JavaVisitor visitor = new JavaVisitor("");
-	private static final ASTParser parser = ASTParser.newParser(astLevel);
+	public static final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+	public static final JavaVisitor visitor = new JavaVisitor("");
+	public static final ASTParser parser = ASTParser.newParser(astLevel);
 
 	/**
 	 * Converts a string into an AST.
@@ -949,7 +957,7 @@ public class JavaLangMode implements LangMode {
 
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		try {
-			final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
+			final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
 			if (!errorCheck.check(cu)) {
 				visitor.reset(s);
@@ -960,5 +968,138 @@ public class JavaLangMode implements LangMode {
 		}
 
 		return ast.build();
+	}
+
+	public static ASTRoot.Builder parseJavaFile(final String path, final String content, final ChangedFile.Builder fb, final String projectName, final boolean debug) {
+		try {
+			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+//			parser.setResolveBindings(true);
+			parser.setUnitName(FileIO.getFileName(path));
+//			parser.setEnvironment(null, null, null, true);
+			parser.setSource(content.toCharArray());
+
+			final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+			JavaCore.setComplianceOptions(javaVersion, options);
+			parser.setCompilerOptions(options);
+
+			final CompilationUnit cu;
+
+			try {
+				cu = (CompilationUnit) parser.createAST(null);
+			} catch (final Throwable e) {
+				return null;
+			}
+
+			if (!errorCheck.check(cu)) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+//				final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
+				visitor.reset(content);
+				try {
+					ast.addNamespaces(visitor.getNamespaces(cu));
+//					for (final Comment c : visitor.getComments())
+//						comments.addComments(c);
+				} catch (final Throwable e) {
+					if (debug) {
+						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
+						e.printStackTrace();
+					}
+					return null;
+				}
+
+				switch (visitor.getAstLevel()) {
+				case JavaVisitor.JLS1:
+				case JavaVisitor.JLS2:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
+					break;
+				case JavaVisitor.JLS3:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
+					break;
+				case JavaVisitor.JLS7:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS7);
+					break;
+				case JavaVisitor.JLS8:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+					break;
+				case JavaVisitor.JLS9:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS9);
+					break;
+				case JavaVisitor.JLS10:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS10);
+					break;
+				case JavaVisitor.JLS11:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS11);
+					break;
+				case JavaVisitor.JLS12:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS12);
+					break;
+				case JavaVisitor.JLS13:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS13);
+					break;
+				case JavaVisitor.JLS14:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS14);
+					break;
+				case JavaVisitor.JLS15:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS15);
+					break;
+				default:
+					fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+				}
+//				fb.setComments(comments);
+
+				return ast;
+			}
+		} catch (final Throwable e) {
+			if (debug)
+				e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static void dumpJava(final String content) {
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setSource(content.toCharArray());
+
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+		JavaCore.setComplianceOptions(javaVersion, options);
+		parser.setCompilerOptions(options);
+
+		try {
+			final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+
+			try (final UglyMathCommentsExtractor cex = new UglyMathCommentsExtractor(cu, content)) {
+				new ASTDumper(cex).dump(cu);
+			}
+		} catch (final Exception e) {}
+	}
+
+	public static String parseJavaFile(final String path) {
+		final StringBuilder sb = new StringBuilder();
+		final FileASTRequestor r = new FileASTRequestor() {
+			@Override
+			public void acceptAST(final String sourceFilePath, final CompilationUnit cu) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				try {
+					visitor.reset("");
+					ast.addNamespaces(visitor.getNamespaces(cu));
+				} catch (final Exception e) {
+					System.err.println(e);
+					e.printStackTrace();
+				}
+
+				sb.append(JsonFormat.printToString(ast.build()));
+			}
+		};
+
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
+		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
+		parser.setCompilerOptions(options);
+
+		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
+		parser.setResolveBindings(true);
+		parser.createASTs(new String[] { path }, null, new String[0], r, null);
+
+		return sb.toString();
 	}
 }
