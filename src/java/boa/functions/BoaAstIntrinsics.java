@@ -652,10 +652,9 @@ public class BoaAstIntrinsics {
 		}
 	}
 
-	@FunctionSpec(name = "debug", returnType = "string", formalParameters = { "string" })
-	public static String debug(final String s) {
+	@FunctionSpec(name = "debug", formalParameters = { "string" })
+	public static void debug(final String s) {
 		System.err.println(s);
-		return null;
 	}
 
 	private static final LangMode javaLang = new JavaLangMode();

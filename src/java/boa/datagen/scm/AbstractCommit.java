@@ -594,16 +594,6 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	public Map<String, String> getLOC() {
-		final Map<String, String> l = new HashMap<String, String>();
-
-		for (final ChangedFile.Builder cf : changedFiles)
-			if (cf.getChange() != ChangeKind.DELETED)
-				l.put(cf.getName(), processLOC(cf.getName()));
-
-		return l;
-	}
-
 	private static final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 	private static final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(JavaLangMode.DEFAULT_JAVA_ASTLEVEL);
 	private static final JavaVisitor visitor = new JavaVisitor("");
@@ -701,6 +691,16 @@ public abstract class AbstractCommit {
 				e.printStackTrace();
 			return false;
 		}
+	}
+
+	public Map<String, String> getLOC() {
+		final Map<String, String> l = new HashMap<String, String>();
+
+		for (final ChangedFile.Builder cf : changedFiles)
+			if (cf.getChange() != ChangeKind.DELETED)
+				l.put(cf.getName(), processLOC(cf.getName()));
+
+		return l;
 	}
 
 	protected String processLOC(final String path) {
