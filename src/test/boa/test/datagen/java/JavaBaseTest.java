@@ -64,10 +64,9 @@ public class JavaBaseTest extends BaseTest {
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
 		try {
-			final UglyMathCommentsExtractor cex = new UglyMathCommentsExtractor(cu, content);
-			final ASTDumper dumper = new ASTDumper(cex);
-			dumper.dump(cu);
-			cex.close();
+			try (final UglyMathCommentsExtractor cex = new UglyMathCommentsExtractor(cu, content)) {
+				new ASTDumper(cex).dump(cu);
+			}
 		} catch (final Exception e) {}
 	}
 

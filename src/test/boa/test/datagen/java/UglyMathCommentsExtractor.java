@@ -141,10 +141,10 @@ public final class UglyMathCommentsExtractor implements ICommentsExtractor, Clos
 
     @Override
     public void close() throws IOException {
+        System.out.flush();
         for (int i = 0; i < commentsVisited.length; i++) {
             if (commentsVisited[i] == false) {
-                System.err.println("Orphan comment is lost:");
-                System.err.println(extractCommentItem(i).value);
+                System.err.println("Orphan comment is lost: " + extractCommentItem(i).value);
             }
         }
     }
