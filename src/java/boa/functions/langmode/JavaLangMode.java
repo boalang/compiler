@@ -895,6 +895,13 @@ public class JavaLangMode implements LangMode {
 		}
 	}
 
+	private static final Expression defaultExp;
+	static {
+		final Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.OTHER);
+		defaultExp = eb.build();
+	}
+
 	/**
 	 * Converts a string expression into an AST.
 	 *
@@ -902,7 +909,6 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public Expression parseexpression(final String s) {
-		final ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
 
@@ -912,20 +918,20 @@ public class JavaLangMode implements LangMode {
 
 		try {
 			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
-			final JavaVisitor visitor = new JavaVisitor(s);
+
+			visitor.reset(s);
 			e.accept(visitor);
 			return visitor.getExpression();
 		} catch (final Exception e) {
 			// do nothing
 		}
 
-		final Expression.Builder eb = Expression.newBuilder();
-		eb.setKind(Expression.ExpressionKind.OTHER);
-		return eb.build();
+		return defaultExp;
 	}
 
 	private static final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 	private static final JavaVisitor visitor = new JavaVisitor("");
+	private static final ASTParser parser = ASTParser.newParser(astLevel);
 
 	/**
 	 * Converts a string into an AST.
@@ -934,7 +940,6 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public ASTRoot parse(final String s) {
-		final ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(s.toCharArray());
 
