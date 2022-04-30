@@ -44,17 +44,11 @@ import boa.types.Ast.ASTRoot;
 public class JavaBaseTest extends BaseTest {
 	protected static int astLevel = JavaLangMode.DEFAULT_JAVA_ASTLEVEL;
 	protected static String javaVersion = JavaLangMode.DEFAULT_JAVA_CORE;
-	protected static JavaVisitor visitor = new JavaVisitor("");
+	protected static final JavaVisitor visitor = new JavaVisitor("");
 
 	protected static void setJavaVersion() {
 		astLevel = JavaLangMode.DEFAULT_JAVA_ASTLEVEL;
 		javaVersion = JavaLangMode.DEFAULT_JAVA_CORE;
-		visitor = new JavaVisitor("");
-	}
-
-	protected static void dumpJavaWrapped(final String content) {
-		setJavaVersion();
-		dumpJava(getWrapped(content));
 	}
 
 	protected static void dumpJava(final String content) {
@@ -94,9 +88,10 @@ public class JavaBaseTest extends BaseTest {
 		final StringBuilder sb = new StringBuilder();
 		final FileASTRequestor r = new FileASTRequestor() {
 			@Override
-			public void acceptAST(String sourceFilePath, CompilationUnit cu) {
+			public void acceptAST(final String sourceFilePath, final CompilationUnit cu) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				try {
+					visitor.reset("");
 					ast.addNamespaces(visitor.getNamespaces(cu));
 				} catch (final Exception e) {
 					System.err.println(e);
@@ -120,6 +115,16 @@ public class JavaBaseTest extends BaseTest {
 		return FileIO.normalizeEOL(sb.toString());
 	}
 
+	protected static void dumpJavaWrapped(final String content) {
+		setJavaVersion();
+		dumpJava(getWrapped(content));
+	}
+
+	protected static String parseWrapped(final String content) {
+		setJavaVersion();
+		return parseJava(getWrapped(content));
+	}
+
 	protected static String getWrapped(final String content) {
 		String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ").trim();
 		if (content.indexOf(";") == -1 && !s.endsWith("}"))
@@ -128,11 +133,6 @@ public class JavaBaseTest extends BaseTest {
 			s += "\n";
 		s += "   }\n}";
 		return s;
-	}
-
-	protected static String parseWrapped(final String content) {
-		setJavaVersion();
-		return parseJava(getWrapped(content));
 	}
 
 	protected static String getWrappedResult(final String expected) {
