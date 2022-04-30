@@ -2,6 +2,6 @@ DEAD[] = {
    "change": "UNKNOWN",
    "kind": "SOURCE_JAVA_JLS7",
    "name": "src/JLS7/UnsafeVarargsDemo/UnsafeVarargsDemo.java",
-   "key": 142653,
+   "key": 150152,
    "ast": true
 } - unsafe, 1.0

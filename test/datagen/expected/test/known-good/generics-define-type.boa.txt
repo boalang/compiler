@@ -14,5 +14,5 @@ USES[https://github.com/boalang/test-datagen][src/JLS3/GenDemo/v5/GenDemo.java][
 USES[https://github.com/boalang/test-datagen][src/JLS3/GenDemo/v5/GenDemo5.java][1532699593000000] = 1
 USES[https://github.com/boalang/test-datagen][src/JLS3/GenDemo/v5/GenDemo5.java][1532699626000000] = 1
 USES[https://github.com/boalang/test-datagen][src/JLS3/GenDemo/v5/GenDemo5.java][1534433645000000] = 1
-USES[https://github.com/boalang/test-datagen][src/JLS7/BoxDemo/Box.java][1531520725000000] = 1
-USES[https://github.com/boalang/test-datagen][src/JLS7/BoxDemo/Box.java][1531880750000000] = 1
+USES[https://github.com/boalang/test-datagen][src/JLS4/BoxDemo/Box.java][1531520725000000] = 1
+USES[https://github.com/boalang/test-datagen][src/JLS4/BoxDemo/Box.java][1531880750000000] = 1
