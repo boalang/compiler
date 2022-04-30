@@ -582,13 +582,13 @@ composite returns [Composite ast]
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: LBRACE
 		(
-			  el=expressionList { $ast = new Composite($el.list); }
-			| { $ast = new Composite(); } p=pair { $ast.addPair($p.ast); } (COMMA p=pair { $ast.addPair($p.ast); })*
+			  el=expressionList { $ast = new Composite($el.list); } COMMA?
+			| { $ast = new Composite(); } p=pair { $ast.addPair($p.ast); } (COMMA p=pair { $ast.addPair($p.ast); })* COMMA?
 			| COLON { $ast = new Composite(true); }
 		)?
 		RBRACE
 // FIXME this would be nice, but seems to make a ton of extra error messages
-//	| LBRACE (expressionList | pair (COMMA pair)* | COLON)? { notifyErrorListeners("error: '}' expected"); }
+//	| LBRACE (expressionList COMMA? | pair (COMMA pair)* COMMA? | COLON)? { notifyErrorListeners("error: '}' expected"); }
 	;
 
 pair returns [boa.compiler.ast.Pair ast]

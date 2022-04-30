@@ -334,9 +334,9 @@ traversalExpression
 	;
 
 composite
-	: LBRACE (expressionList | pair (COMMA pair)* | COLON)? RBRACE
+	: LBRACE (expressionList COMMA? | pair (COMMA pair)* COMMA? | COLON)? RBRACE
 // FIXME this would be nice, but seems to make a ton of extra error messages
-//	| LBRACE (expressionList | pair (COMMA pair)* | COLON)? { notifyErrorListeners("error: '}' expected"); }
+//	| LBRACE (expressionList COMMA? | pair (COMMA pair)* COMMA? | COLON)? { notifyErrorListeners("error: '}' expected"); }
 	;
 
 pair
