@@ -125,7 +125,7 @@ public class ASTDumper {
                 final String commentId = comment.node.isLineComment() ? "LineComment"
                         : comment.node.isDocComment() ? "DocComment" : "BlockComment";
                 printer.startType(commentId, true);
-                printer.literal("value", comment.value);
+                printer.literal("value", comment.value.replace("\n", "\\n"));
                 printer.endType(commentId, true);
             }
 

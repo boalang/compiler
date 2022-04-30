@@ -57,7 +57,7 @@ public class JavaBaseTest extends BaseTest {
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(content.toCharArray());
 
-		final Map<String, String> options = JavaCore.getOptions();
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
 		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 

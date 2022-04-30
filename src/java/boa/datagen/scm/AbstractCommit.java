@@ -210,7 +210,7 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java")) {
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			if (parseJavaFile(path, fb, getFileContents(path), false)) {
+			if (parseJavaFile(path, fb)) {
 				if (debugparse)
 					System.err.println("Accepted " + fb.getKind() + ": revision " + id + ": file " + path);
 			} else {
@@ -604,8 +604,9 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb) {
 		try {
+			final String content = getFileContents(path);
 			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(JavaLangMode.DEFAULT_JAVA_ASTLEVEL);
 			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
@@ -628,7 +629,7 @@ public abstract class AbstractCommit {
 			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
 			cu.accept(errorCheck);
 
-			if (!errorCheck.hasError || storeOnError) {
+			if (!errorCheck.hasError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
 				final JavaVisitor visitor = new JavaVisitor(content);

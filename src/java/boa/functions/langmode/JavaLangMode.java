@@ -906,7 +906,6 @@ public class JavaLangMode implements LangMode {
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
 
-		@SuppressWarnings("rawtypes")
 		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
 		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
@@ -936,7 +935,6 @@ public class JavaLangMode implements LangMode {
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(s.toCharArray());
 
-		@SuppressWarnings("rawtypes")
 		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
 		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
