@@ -448,7 +448,7 @@ expression returns [Expression ast]
 expressionList returns [ArrayList<Expression> list]
 	@init { $list = new ArrayList<Expression>(); }
 	: e=expression { $list.add($e.ast); } (COMMA e=expression   { $list.add($e.ast); })*
-	| e=expression { $list.add($e.ast); } ({ notifyErrorListeners("error: ',' expected"); } e=expression { $list.add($e.ast); } | COMMA e=expression { $list.add($e.ast); })*
+    | e=expression { $list.add($e.ast); } ({ notifyErrorListeners("error: ',' expected"); } e=expression { $list.add($e.ast); } | COMMA (e=expression { $list.add($e.ast); } | { notifyErrorListeners("error: expression expected"); }))*
 	;
 
 conjunction returns [Conjunction ast]

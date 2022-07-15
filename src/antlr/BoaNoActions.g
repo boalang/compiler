@@ -256,7 +256,7 @@ expression
 
 expressionList
 	: expression (COMMA expression)*
-	| expression ({ notifyErrorListeners("error: ',' expected"); } expression | COMMA expression)*
+    | expression ({ this.notifyErrorListeners("error: ',' expected"); } expression | COMMA (expression | { this.notifyErrorListeners("error: expression expected"); }))*
 	;
 
 conjunction
