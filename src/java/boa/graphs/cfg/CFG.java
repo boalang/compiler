@@ -617,7 +617,8 @@ public class CFG {
 
 		// condition
 		final CFGNode control = new CFGNode("FOR", NodeType.CONTROL, "FOR", "FOR");
-		control.setAstNode(root.getConditions(0));
+        if (root.getConditionsList().size() > 0)
+            control.setAstNode(root.getConditions(0));
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getNodeId() + ".");
 		graph.mergeSeq(control);
 
