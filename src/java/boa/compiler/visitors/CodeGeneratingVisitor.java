@@ -309,7 +309,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<Component> members = n.getMembers();
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
-			final List<Boolean> protos = new ArrayList<Boolean>();
+			final List<Boolean> nocopies = new ArrayList<Boolean>();
 
 			int fieldCount = 0;
 			for (final Component c : members) {
@@ -320,14 +320,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 				fieldCount++;
 				BoaType type = c.getType().type;
-				protos.add((type instanceof BoaProtoTuple) || (type instanceof BoaEnum));
+				nocopies.add((type instanceof BoaProtoTuple) || (type instanceof BoaEnum));
 				types.add(type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
-			st.add("protos", protos);
+			st.add("nocopies", nocopies);
 
 			code.add(st.render());
 		}
