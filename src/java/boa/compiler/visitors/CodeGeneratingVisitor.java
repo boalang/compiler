@@ -320,7 +320,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 				fieldCount++;
 				BoaType type = c.getType().type;
-				protos.add(type instanceof BoaProtoTuple);
+				protos.add((type instanceof BoaProtoTuple) || (type instanceof BoaEnum));
 				types.add(type.toBoxedJavaType());
 			}
 
