@@ -1,0 +1,8 @@
+o: output sum of int;
+type Foo = enum {
+    BAR = "BAR",
+    BAZ = "BAZ"
+};
+
+type Quux = { id: int, isa: Foo };
+o << 1;
