@@ -209,7 +209,7 @@ switchStatement
 	;
 
 switchCase
-	: CASE expressionList COLON (statement)+
+	: CASE expressionList COLON (programStatement)+
 	;
 
 foreachStatement
