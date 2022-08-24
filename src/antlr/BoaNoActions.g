@@ -204,7 +204,7 @@ switchStatement
 	: SWITCH LPAREN expression RPAREN LBRACE
 		(switchCase)*
 		DEFAULT COLON
-		(statement)+
+		(programStatement)+
 		RBRACE
 	;
 
