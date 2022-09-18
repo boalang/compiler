@@ -8,6 +8,7 @@ You need to have following already installed in your system:
 2. Apache Ant
 3. Git
 4. Eclipse IDE
+5. Protobuf (See Appendix for instruction on how to install protobuf)
 
 ## Development Setup Steps
 1. Clone the Boa project using the command line: `git clone https://github.com/boalang/compiler.git`
@@ -87,3 +88,12 @@ You need to have following already installed in your system:
 
 6. The output of the query will be printed in the console. 
 
+## Appendix
+Install protobuf 2.5.0 using below steps:
+1. $wget https://github.com/google/protobuf/releases/download/v2.5.0/protobuf-2.5.0.tar.bz2
+2. $tar xvf protobuf-2.5.0.tar.bz2
+3. $cd protobuf-2.5.0
+4. $./configure CC=clang CXX=clang++ CXXFLAGS='-std=c++11 -stdlib=libc++ -O3 -g' LDFLAGS='-stdlib=libc++' LIBS="-lc++ -lc++abi"
+5. $make -j 4 
+6. $sudo make install
+7. $protoc --version
