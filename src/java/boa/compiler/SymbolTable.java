@@ -1,6 +1,7 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2022, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
+ *                 University of Nebraska Board of Regents
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -332,16 +333,19 @@ public class SymbolTable {
 		globalFunctions.addFunction("time", new BoaFunction(new BoaTime(), new BoaType[] { new BoaTime() }, "${0}"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaString() }, "${0}"));
 
-		/* expose the java.lang.Math class to Sawzall */
+		/* expose the java.lang.Math class */
 
 		globalFunctions.addFunction("highbit", new BoaFunction("java.lang.Long.highestOneBit", new BoaInt(), new BoaType[] { new BoaInt() }));
 
 		// abs just needs to be overloaded
-		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaType[] { new BoaInt() }));
+		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaInt(), new BoaType[] { new BoaInt() }));
 		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaType[] { new BoaFloat() }));
 
+		// round returns int
+		globalFunctions.addFunction("round", new BoaFunction("java.lang.Math.round", new BoaInt(), new BoaType[] { new BoaFloat() }));
+
 		// expose the rest of the unary functions
-		for (final String s : Arrays.asList("log", "log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "round", "cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
+		for (final String s : Arrays.asList("log", "log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
 			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaType[] { new BoaFloat() }));
 
 		// expose the binary functions
