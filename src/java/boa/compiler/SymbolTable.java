@@ -393,6 +393,7 @@ public class SymbolTable {
 			boa.aggregators.FloatSumAggregator.class,
 			boa.aggregators.GraphAggregator.class,
 			boa.aggregators.GraphvizAggregator.class,
+			boa.aggregators.GspanAggregator.class,
 			boa.aggregators.IntHistogramAggregator.class,
 			boa.aggregators.IntMeanAggregator.class,
 			boa.aggregators.IntQuantileAggregator.class,
