@@ -17,15 +17,19 @@
  */
 package boa.io;
 
+import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Arrays;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
 import boa.functions.BoaCasts;
+
+import boa.graphs.cfg.CFG;
 
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
@@ -37,6 +41,7 @@ import boa.functions.BoaCasts;
 public class EmitValue implements Writable {
 	private String[] data;
 	private String metadata;
+	private CFG cfgdata;
 
 	/**
 	 * Construct an EmitValue.
@@ -65,6 +70,15 @@ public class EmitValue implements Writable {
 	 *            An array of {@link String} containing the data to be emitted
 	 */
 	public EmitValue(final String[] data) {
+		this(data, null);
+	}
+	
+	public EmitValue(final CFG data, final String metadata) {
+		this.cfgdata = data;
+		this.metadata = metadata;
+	}
+	
+	public EmitValue(final CFG data) {
 		this(data, null);
 	}
 
@@ -294,20 +308,46 @@ public class EmitValue implements Writable {
 			this.metadata = null;
 		else
 			this.metadata = metadata;
+		
+		final int length = in.readInt();
+		if(length > 0) {
+			byte[] bytes = new byte[length];
+			in.readFully(bytes, 0, length);
+			ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+			ObjectInputStream dataIn = new ObjectInputStream(bin);
+			Object o = null;
+			try {
+				o = dataIn.readObject();
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			this.cfgdata = (CFG)o;
+		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		out.writeInt(this.data.length);
-
-		for (final String d : this.data)
-			Text.writeString(out, d);
+		if(this.data == null)
+			out.writeInt(0);
+		else {
+			out.writeInt(this.data.length);
+			for (final String d : this.data)
+				Text.writeString(out, d);
+		}
 
 		if (this.metadata == null)
 			Text.writeString(out, "");
 		else
 			Text.writeString(out, this.metadata);
+
+		if (this.cfgdata == null)
+			out.writeInt(0);
+		else {
+			byte[] serializedObject = this.cfgdata.serialize(this.cfgdata);
+			out.writeInt(serializedObject.length);
+			out.write(serializedObject);
+		}
 	}
 
 	/**
@@ -338,6 +378,14 @@ public class EmitValue implements Writable {
 	 */
 	public void setMetadata(final String metadata) {
 		this.metadata = metadata;
+	}
+	
+	public CFG getCFG() {
+		return this.cfgdata;
+	}
+	
+	public void setCFG(final CFG cfgdata) {
+		this.cfgdata = cfgdata;
 	}
 
 	@Override

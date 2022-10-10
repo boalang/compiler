@@ -5,20 +5,18 @@ import boa.graphs.cfg.*;
 import java.util.HashMap;
 
 public class GspanSearcher<G extends CFG> { //TODO: currently is only working with CFGs, will extend to more later.
-	
-	private G my_graph;
+
 	private int maxSize;
 	
-	public GspanSearcher(G my_graph, int maxSize) {
+	public GspanSearcher(int maxSize) {
 		this.maxSize = maxSize;
-		this.my_graph = my_graph;
 	}
 	
-	public HashMap<String,Integer> search() {
+	public HashMap<String,Integer> search(G my_graph) {
 		
 		HashMap<String, Integer> result = new HashMap<String, Integer>();
 		
-		//TODO: don't just start at the root...
+		//create graphs starting at each node, combining as we go.
 		for(CFGNode start : my_graph.getNodes()) {
 			result.putAll(dfs(start, null, "", 0, result));
 		}
@@ -28,17 +26,20 @@ public class GspanSearcher<G extends CFG> { //TODO: currently is only working wi
 	
 	public HashMap<String, Integer> dfs(CFGNode currNode, CFGEdge currEdge, String currString, int currSize, HashMap<String, Integer> currHM) {
 		
+		//base case
 		if (currSize == maxSize) {
 			return currHM;
 		}
 		
 		//Construct our extension of current string.
-		if (currEdge == null) {
-			currString = currNode.getName().toString();
+		if (currString.equals("")) {
+			currString = currNode.getKind().toString();
 		}
 		else {
 			currString = currString + "," + currEdge.getLabel().toString() + "," + currNode.getKind().toString();
 		}
+		
+		currHM.put(currString, 1);
 		
 		//Go to every outward neighbor, expanding our results
 		//NOTE: because we are only assigning 1 as our values for each pattern, 

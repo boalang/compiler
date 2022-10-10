@@ -40,7 +40,11 @@ import boa.types.Control.Node.NodeType;
  * @author rdyer
  * @author marafat
  */
-public class CFG {
+public class CFG implements java.io.Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected Method md;
 	protected String class_name;
 
@@ -938,6 +942,10 @@ public class CFG {
 		sb.append(" edges\n");
 		return sb.toString();
 	}
+	
+	public boolean isEqual(CFG compare) {
+		return this.toString().equals(compare.toString());
+	}
 
 	public Builder newBuilder() {
 		final CFGNode[] sortedNodes = sortNodes();
@@ -970,5 +978,13 @@ public class CFG {
 			}
 		}
 		return b;
+	}
+	
+	public byte[] serialize(Object o) throws java.io.IOException {
+		java.io.ByteArrayOutputStream byteOutStream = new java.io.ByteArrayOutputStream();
+		java.io.ObjectOutputStream objectOut = new java.io.ObjectOutputStream(byteOutStream);
+		objectOut.writeObject(o);
+		objectOut.close();
+		return byteOutStream.toByteArray();
 	}
 }

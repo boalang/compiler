@@ -26,6 +26,8 @@ import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
+import boa.graphs.cfg.CFG;
+
 /**
  * The base class for all Boa aggregators.
  * 
@@ -91,6 +93,13 @@ public abstract class Aggregator {
 
 	public void aggregate(final double data) throws IOException, InterruptedException, FinishedException {
 		this.aggregate(BoaCasts.doubleToString(data), null);
+	}
+	
+	public void aggregate(final CFG data, final String metadata) throws IOException, FinishedException {
+	}
+	
+	public void aggregate(final CFG data) throws IOException, InterruptedException, FinishedException{
+		this.aggregate(data, null);
 	}
 
 	@SuppressWarnings("unchecked")
