@@ -30,11 +30,10 @@ import boa.types.Control.Node.NodeType;
  * @author ganeshau
  * @author rdyer
  */
-public class CFGNode extends Node<CFGNode, CFGEdge> implements java.io.Serializable{
+public class CFGNode extends Node<CFGNode, CFGEdge> {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	private int methodId;
 	private int objectNameId;
 	private int classNameId;
@@ -236,11 +235,4 @@ public class CFGNode extends Node<CFGNode, CFGEdge> implements java.io.Serializa
 		return strComponents[0];
 	}
 	
-	public byte[] serialize(Object o) throws java.io.IOException {
-		java.io.ByteArrayOutputStream byteOutStream = new java.io.ByteArrayOutputStream();
-		java.io.ObjectOutputStream objectOut = new java.io.ObjectOutputStream(byteOutStream);
-		objectOut.writeObject(o);
-		objectOut.close();
-		return byteOutStream.toByteArray();
-	}
 }

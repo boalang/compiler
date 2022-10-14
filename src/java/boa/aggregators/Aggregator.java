@@ -17,6 +17,7 @@
 package boa.aggregators;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
@@ -25,8 +26,6 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
-
-import boa.graphs.cfg.CFG;
 
 /**
  * The base class for all Boa aggregators.
@@ -95,15 +94,25 @@ public abstract class Aggregator {
 		this.aggregate(BoaCasts.doubleToString(data), null);
 	}
 	
-	public void aggregate(final CFG data, final String metadata) throws IOException, FinishedException {
+	public void aggregate(final HashMap<String,Integer> data, final String metadata) throws IOException, InterruptedException, FinishedException {
 	}
 	
-	public void aggregate(final CFG data) throws IOException, InterruptedException, FinishedException{
+	public void aggregate(final HashMap<String,Integer> data) throws IOException, InterruptedException, InterruptedException, FinishedException{
 		this.aggregate(data, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected void collect(final String data, final String metadata) throws IOException, InterruptedException {
+		if (this.combining)
+			this.getContext().write(this.getKey(), new EmitValue(data, metadata));
+		else if (metadata != null)
+			this.getContext().write(new Text(this.getKey() + " = " + data + " weight " + metadata), NullWritable.get());
+		else
+			this.getContext().write(new Text(this.getKey() + " = " + data), NullWritable.get());
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected void collect(final HashMap<String,Integer> data, final String metadata) throws IOException, InterruptedException {
 		if (this.combining)
 			this.getContext().write(this.getKey(), new EmitValue(data, metadata));
 		else if (metadata != null)

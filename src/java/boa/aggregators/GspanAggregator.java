@@ -5,20 +5,20 @@ import java.util.HashMap;
 
 import boa.io.EmitKey;
 
-import boa.aggregators.GspanSearcher;
-
+import boa.functions.BoaCasts;
 import boa.graphs.cfg.CFG;
 
+import static boa.functions.BoaGraphIntrinsics.cfgToDot;
+
 /**
- * A Boa aggregator to calculate the sum of the values in a dataset.
+ * A Boa aggregator to count through subpatterns.
  * 
- * @author anthonyu
+ * @author DavidMOBrien
  * @author rdyer
  */
-@AggregatorSpec(name = "gSpan", type = "CFG", canCombine = true)
+@AggregatorSpec(name = "gSpanAgg", canCombine = true)
 public class GspanAggregator extends Aggregator {
 
-	private GspanSearcher<CFG> gss; //TODO: make work with all graph types.
 	private HashMap<String, Integer> results;
 	
 	/** {@inheritDoc} */
@@ -26,32 +26,52 @@ public class GspanAggregator extends Aggregator {
 	public void start(final EmitKey key) {
 		super.start(key);
 		
-		gss = new GspanSearcher<CFG>(3); //TODO: figure out a good size.
 		results = new HashMap<String, Integer>();
 	}
 	
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		System.out.println("in aggregate");
-		//TODO: last step of aggregation - combine HashMaps
-	}
-
-	public void aggregate(final CFG data, final String metadata) throws IOException, FinishedException {
-		//First time through we aggregates CFGs, second time through it is HMs
-		HashMap<String, Integer> my_patterns = gss.search(data);
-		
-		results.putAll(my_patterns);
+	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+		this.collect(data);
 	}
 	
-	public void aggregate(final CFG data) throws IOException, FinishedException {
+	/** {@inheritDoc} */
+	@Override
+	public void aggregate(final HashMap<String, Integer> data, final String metadata) throws IOException, InterruptedException, FinishedException {
+		
+		for (String key : data.keySet()) {
+			if (results.containsKey(key)) {
+				results.put(key, results.get(key) + data.get(key));
+			} else {
+				results.put(key, data.get(key));
+			}
+		}
+	}
+	
+	public void aggregate(final HashMap<String, Integer> data) throws IOException, InterruptedException, FinishedException {
 		this.aggregate(data, null);
+	}
+	
+	private void filter_results() {
+		//TODO: change this later
+		
+		for (String key : this.results.keySet()) {
+			if (this.results.get(key) < 10) {
+				this.results.remove(key);
+			}
+		}
 	}
 	
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		this.collect(this.results.toString());
+		// if we are in the combiner, output the sum and the count
+			if (this.isCombining())
+				this.collect(this.results, null);
+			// otherwise, output the final answer
+			else {
+				this.collect(this.results.toString());
+			}
 	}
 
 }

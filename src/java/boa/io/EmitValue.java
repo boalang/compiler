@@ -17,19 +17,18 @@
  */
 package boa.io;
 
-import java.io.ByteArrayInputStream;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
-import boa.functions.BoaCasts;
+import org.apache.commons.lang.SerializationUtils;
 
-import boa.graphs.cfg.CFG;
+import boa.functions.BoaCasts;
 
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
@@ -41,7 +40,7 @@ import boa.graphs.cfg.CFG;
 public class EmitValue implements Writable {
 	private String[] data;
 	private String metadata;
-	private CFG cfgdata;
+	private HashMap<String, Integer> hmdata;
 
 	/**
 	 * Construct an EmitValue.
@@ -73,12 +72,12 @@ public class EmitValue implements Writable {
 		this(data, null);
 	}
 	
-	public EmitValue(final CFG data, final String metadata) {
-		this.cfgdata = data;
+	public EmitValue(final HashMap<String, Integer> data, final String metadata) {
+		this.hmdata = data;
 		this.metadata = metadata;
 	}
 	
-	public EmitValue(final CFG data) {
+	public EmitValue(final HashMap<String, Integer> data) {
 		this(data, null);
 	}
 
@@ -309,19 +308,28 @@ public class EmitValue implements Writable {
 		else
 			this.metadata = metadata;
 		
+		//HM handling:
 		final int length = in.readInt();
-		if(length > 0) {
-			byte[] bytes = new byte[length];
-			in.readFully(bytes, 0, length);
-			ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
-			ObjectInputStream dataIn = new ObjectInputStream(bin);
+		
+		if (length != 0) {
+			System.out.println(length);
+			//we have a HM
+			byte[] temp = new byte[length];
+			
 			Object o = null;
+			
 			try {
-				o = dataIn.readObject();
-			} catch(Exception e) {
+				in.readFully(temp, 0, length);
+				
+				o = SerializationUtils.deserialize(temp);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			this.cfgdata = (CFG)o;
+			
+			this.hmdata = (HashMap<String, Integer>)o;
+			
+		} else {
+			this.hmdata = null;
 		}
 	}
 
@@ -341,12 +349,12 @@ public class EmitValue implements Writable {
 		else
 			Text.writeString(out, this.metadata);
 
-		if (this.cfgdata == null)
+		if (this.hmdata == null)
 			out.writeInt(0);
 		else {
-			byte[] serializedObject = this.cfgdata.serialize(this.cfgdata);
-			out.writeInt(serializedObject.length);
-			out.write(serializedObject);
+			byte[] temp = SerializationUtils.serialize(this.hmdata);
+			out.writeInt(temp.length);
+			out.write(temp);
 		}
 	}
 
@@ -380,12 +388,12 @@ public class EmitValue implements Writable {
 		this.metadata = metadata;
 	}
 	
-	public CFG getCFG() {
-		return this.cfgdata;
+	public HashMap<String,Integer> getHM() {
+		return this.hmdata;
 	}
 	
-	public void setCFG(final CFG cfgdata) {
-		this.cfgdata = cfgdata;
+	public void setHM(final HashMap<String,Integer> hmdata) {
+		this.hmdata = hmdata;
 	}
 
 	@Override

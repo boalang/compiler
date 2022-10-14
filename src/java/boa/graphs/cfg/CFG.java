@@ -40,11 +40,10 @@ import boa.types.Control.Node.NodeType;
  * @author rdyer
  * @author marafat
  */
-public class CFG implements java.io.Serializable{
+public class CFG {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
 	protected Method md;
 	protected String class_name;
 
@@ -60,6 +59,8 @@ public class CFG implements java.io.Serializable{
 	protected boolean isLoopPresent = false;
 	protected boolean isBranchPresent = false;
 	protected boolean paramAsStatement = false;
+	
+	protected HashMap<String, Integer> result;
 
 	public CFG(final Method method) {
 		this(method, "this");
@@ -980,11 +981,53 @@ public class CFG implements java.io.Serializable{
 		return b;
 	}
 	
-	public byte[] serialize(Object o) throws java.io.IOException {
-		java.io.ByteArrayOutputStream byteOutStream = new java.io.ByteArrayOutputStream();
-		java.io.ObjectOutputStream objectOut = new java.io.ObjectOutputStream(byteOutStream);
-		objectOut.writeObject(o);
-		objectOut.close();
-		return byteOutStream.toByteArray();
+	public HashMap<String, Integer> gSpan() {
+		
+		result = new HashMap<String, Integer>();
+		
+		//create graphs starting at each node, combining as we go.
+		for(CFGNode start : this.getNodes()) {
+			dfs(start, null, "", 0);
+		}
+		
+		return result;
+	}
+	
+	public void dfs(CFGNode currNode, CFGEdge currEdge, String currString, int currSize) {
+
+		//base case
+		if (currSize == 3) {
+			return;
+		}
+		
+		String nodeName = removeNewlines(currNode.getName());
+		
+		//Construct our extension of current string.
+		if (currString.equals("")) {
+			currString = nodeName;
+		}
+		else {
+			String edgeName = removeNewlines(CFGEdge.convertLabel(currEdge.getLabel()).name());
+			currString = currString + ";" + edgeName + ";" + nodeName;
+		}
+		
+		result.put(currString, 1);
+		
+		//Go to every outward neighbor, expanding our results
+		//NOTE: because we are only assigning 1 as our values for each pattern, 
+		//      we can use HashMap.putall without worrying about overwriting data.
+		for (CFGEdge next : currNode.getOutEdges()) {
+			dfs(next.getDest(), next, currString, currSize + 1);
+		}
+		
+		return;
+		
+	}
+	
+	private String removeNewlines(String str) {
+		while (str.contains("\n"))
+			str = str.replace("\n", "");
+		
+		return str;
 	}
 }

@@ -26,7 +26,7 @@ import boa.types.Control.Node.NodeType;
  * @author ganeshau
  * @author rdyer
  */
-public class CFGEdge extends Edge<CFGNode, CFGEdge> implements java.io.Serializable{
+public class CFGEdge extends Edge<CFGNode, CFGEdge> {
 	/**
 	 * 
 	 */
@@ -52,11 +52,4 @@ public class CFGEdge extends Edge<CFGNode, CFGEdge> implements java.io.Serializa
 		this.label = label;
 	}
 	
-	public byte[] serialize(Object o) throws java.io.IOException {
-		java.io.ByteArrayOutputStream byteOutStream = new java.io.ByteArrayOutputStream();
-		java.io.ObjectOutputStream objectOut = new java.io.ObjectOutputStream(byteOutStream);
-		objectOut.writeObject(o);
-		objectOut.close();
-		return byteOutStream.toByteArray();
-	}
 }
