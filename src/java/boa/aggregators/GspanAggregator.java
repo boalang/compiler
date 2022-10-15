@@ -53,8 +53,10 @@ public class GspanAggregator extends MeanAggregator {
 	public HashMap<String, Integer> filter() {
 		HashMap<String, Integer> temp = new HashMap<String, Integer>();
 		
-		double minimum = this.getCount() * this.freq; //TODO: change from hard-coded.
+		double minimum = this.getCount() * this.freq; 
 		
+		//FIXME: find a better way than creating an entirely new HashMap
+		//     however, we get a concurrency error if we try using .remove
 		for (String key: this.results.keySet()) {
 			if (this.results.get(key) > minimum) {
 				temp.put(key, this.results.get(key));

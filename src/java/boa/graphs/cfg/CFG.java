@@ -33,6 +33,8 @@ import boa.types.Control.Edge.EdgeLabel;
 import boa.types.Control.Graph.Builder;
 import boa.types.Control.Node.NodeType;
 
+import boa.runtime.BoaAbstractTraversal;
+
 /**
  * Control flow graph builder.
  *
@@ -981,28 +983,47 @@ public class CFG {
 		return b;
 	}
 	
-	public HashMap<String, Integer> gSpan() {
+	public HashMap<String, Integer> gSpan() throws Exception {
 		
 		result = new HashMap<String, Integer>();
 		
 		//create graphs starting at each node, combining as we go.
 		for(CFGNode start : this.getNodes()) {
-			dfs(start, null, "", 0);
+			dfs(start, null, "", 0, null);
 		}
 		
 		return result;
 	}
 	
-	public void dfs(CFGNode currNode, CFGEdge currEdge, String currString, int currSize) {
+	public HashMap<String, Integer> gSpan(BoaAbstractTraversal tra) throws Exception {
+		
+		result = new HashMap<String, Integer>();
+		
+		//create graphs starting at each node, combining as we go.
+		for(CFGNode start : this.getNodes()) {
+			dfs(start, null, "", 0, tra);
+		}
+		
+		return result;
+	}
+	
+	public void dfs(CFGNode currNode, CFGEdge currEdge, String currString, int currSize, BoaAbstractTraversal tra) throws Exception {
 
 		//base case
 		if (currSize == 3) {
 			return;
 		}
 		
-		String nodeName = removeNewlines(currNode.getName());
+		//Construct our extension string depending on if we have
+		//a traversal or not.
+		String nodeName = null;
 		
-		//Construct our extension of current string.
+		if (tra == null)
+			nodeName = removeNewlines(currNode.getName());
+		else
+			nodeName = tra.getValue(currNode).toString();
+		
+		//Extend our string using nodeName
 		if (currString.equals("")) {
 			currString = nodeName;
 		}
@@ -1017,7 +1038,10 @@ public class CFG {
 		//NOTE: because we are only assigning 1 as our values for each pattern, 
 		//      we can use HashMap.putall without worrying about overwriting data.
 		for (CFGEdge next : currNode.getOutEdges()) {
-			dfs(next.getDest(), next, currString, currSize + 1);
+			if (tra == null)
+				dfs(next.getDest(), next, currString, currSize + 1, null);
+			else
+				dfs(next.getDest(), next, currString, currSize + 1, tra);
 		}
 		
 		return;
