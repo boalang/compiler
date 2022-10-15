@@ -312,7 +312,6 @@ public class EmitValue implements Writable {
 		final int length = in.readInt();
 		
 		if (length != 0) {
-			System.out.println(length);
 			//we have a HM
 			byte[] temp = new byte[length];
 			

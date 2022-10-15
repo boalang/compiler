@@ -3,12 +3,8 @@ package boa.aggregators;
 import java.io.IOException;
 import java.util.HashMap;
 
-import boa.io.EmitKey;
-
 import boa.functions.BoaCasts;
-import boa.graphs.cfg.CFG;
-
-import static boa.functions.BoaGraphIntrinsics.cfgToDot;
+import boa.io.EmitKey;
 
 /**
  * A Boa aggregator to count through subpatterns.
@@ -16,10 +12,15 @@ import static boa.functions.BoaGraphIntrinsics.cfgToDot;
  * @author DavidMOBrien
  * @author rdyer
  */
-@AggregatorSpec(name = "gSpanAgg", canCombine = true)
-public class GspanAggregator extends Aggregator {
+@AggregatorSpec(name = "gSpanAgg", formalParameters = { "double" }, canCombine = true)
+public class GspanAggregator extends MeanAggregator {
 
 	private HashMap<String, Integer> results;
+	private double freq;
+	
+	public GspanAggregator(final double n) {
+		this.freq = n;
+	}
 	
 	/** {@inheritDoc} */
 	@Override
@@ -32,12 +33,13 @@ public class GspanAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-		this.collect(data);
 	}
 	
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final HashMap<String, Integer> data, final String metadata) throws IOException, InterruptedException, FinishedException {
+		
+		this.count(metadata);
 		
 		for (String key : data.keySet()) {
 			if (results.containsKey(key)) {
@@ -48,18 +50,18 @@ public class GspanAggregator extends Aggregator {
 		}
 	}
 	
-	public void aggregate(final HashMap<String, Integer> data) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(data, null);
-	}
-	
-	private void filter_results() {
-		//TODO: change this later
+	public HashMap<String, Integer> filter() {
+		HashMap<String, Integer> temp = new HashMap<String, Integer>();
 		
-		for (String key : this.results.keySet()) {
-			if (this.results.get(key) < 10) {
-				this.results.remove(key);
+		double minimum = this.getCount() * this.freq; //TODO: change from hard-coded.
+		
+		for (String key: this.results.keySet()) {
+			if (this.results.get(key) > minimum) {
+				temp.put(key, this.results.get(key));
 			}
 		}
+		
+		return temp;
 	}
 	
 	/** {@inheritDoc} */
@@ -67,10 +69,10 @@ public class GspanAggregator extends Aggregator {
 	public void finish() throws IOException, InterruptedException {
 		// if we are in the combiner, output the sum and the count
 			if (this.isCombining())
-				this.collect(this.results, null);
+				this.collect(this.results, BoaCasts.longToString(this.getCount()));
 			// otherwise, output the final answer
 			else {
-				this.collect(this.results.toString());
+				this.collect(filter().toString());
 			}
 	}
 
