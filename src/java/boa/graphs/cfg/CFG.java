@@ -1021,7 +1021,12 @@ public class CFG {
 		if (tra == null)
 			nodeName = removeNewlines(currNode.getName());
 		else
-			nodeName = tra.getValue(currNode).toString();
+			try {
+				nodeName = tra.getValue(currNode).toString();
+			} catch (Exception e) {
+				//System.out.println("here");
+				return;
+			}
 		
 		//Extend our string using nodeName
 		if (currString.equals("")) {
