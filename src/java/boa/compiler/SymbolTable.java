@@ -387,6 +387,7 @@ public class SymbolTable {
 		// load built-in aggregators
 		final Class<?>[] builtinAggs = {
 			boa.aggregators.BottomAggregator.class,
+			boa.aggregators.CGspanAggregator.class,
 			boa.aggregators.CollectionAggregator.class,
 			boa.aggregators.ConfidenceIntervalAggregator.class,
 			boa.aggregators.DistinctAggregator.class,

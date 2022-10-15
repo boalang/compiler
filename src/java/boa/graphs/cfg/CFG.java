@@ -1023,7 +1023,7 @@ public class CFG {
 		else
 			try {
 				nodeName = tra.getValue(currNode).toString();
-			} catch (Exception e) {
+			} catch (Exception e) { //sometimes we encounter a NPE, unsure why.
 				//System.out.println("here");
 				return;
 			}
