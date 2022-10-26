@@ -940,7 +940,7 @@ public class CFG {
 		sb.append(" edges\n");
 		return sb.toString();
 	}
-	
+
 	public boolean isEqual(final CFG compare) {
 		return this.toString().equals(compare.toString());
 	}
@@ -977,39 +977,39 @@ public class CFG {
 		}
 		return b;
 	}
-	
+
 	public HashMap<String, Integer> gSpan() throws Exception {
 		final HashMap<String, Integer> result = new HashMap<String, Integer>();
-		
+
 		//create graphs starting at each node, combining as we go.
 		for (final CFGNode start: this.getNodes()) {
 			dfs(result, start, null, "", 0, null);
 		}
-		
+
 		return result;
 	}
-	
+
 	public HashMap<String, Integer> gSpan(final BoaAbstractTraversal tra) throws Exception {
 		final HashMap<String, Integer> result = new HashMap<String, Integer>();
-		
+
 		//create graphs starting at each node, combining as we go.
 		for (final CFGNode start: this.getNodes()) {
 			dfs(result, start, null, "", 0, tra);
 		}
-		
+
 		return result;
 	}
-	
+
 	public void dfs(final HashMap<String, Integer> result, final CFGNode currNode, final CFGEdge currEdge, String currString, final int currSize, final BoaAbstractTraversal tra) throws Exception {
 		//base case
 		if (currSize == 3) {
 			return;
 		}
-		
+
 		//Construct our extension string depending on if we have
 		//a traversal or not.
 		String nodeName = null;
-		
+
 		if (tra == null)
 			nodeName = currNode.getName().replace("\n", "");
 		else
@@ -1019,7 +1019,7 @@ public class CFG {
 				//System.out.println("here");
 				return;
 			}
-		
+
 		//Extend our string using nodeName
 		if (currString.equals("")) {
 			currString = nodeName;
@@ -1027,11 +1027,11 @@ public class CFG {
 			final String edgeName = CFGEdge.convertLabel(currEdge.getLabel()).name().replace("\n", "");
 			currString = currString + ";" + edgeName + ";" + nodeName;
 		}
-		
+
 		result.put(currString, 1);
-		
+
 		//Go to every outward neighbor, expanding our results
-		//NOTE: because we are only assigning 1 as our values for each pattern, 
+		//NOTE: because we are only assigning 1 as our values for each pattern,
 		//      we can use HashMap.putall without worrying about overwriting data.
 		for (final CFGEdge next: currNode.getOutEdges()) {
 			if (tra == null)
@@ -1039,7 +1039,7 @@ public class CFG {
 			else
 				dfs(result, next.getDest(), next, currString, currSize + 1, tra);
 		}
-		
+
 		return;
 	}
 }

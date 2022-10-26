@@ -71,13 +71,13 @@ public class EmitValue implements Writable {
 	public EmitValue(final String[] data) {
 		this(data, null);
 	}
-	
+
 	public EmitValue(final HashMap<String, Integer> data, final String metadata) {
 		this.data = new String[0];
 		this.hmdata = data;
 		this.metadata = metadata;
 	}
-	
+
 	public EmitValue(final HashMap<String, Integer> data) {
 		this(data, null);
 	}
@@ -308,13 +308,13 @@ public class EmitValue implements Writable {
 			this.metadata = null;
 		else
 			this.metadata = metadata;
-		
+
 		this.hmdata = null;
 		final int length = in.readInt();
-		
+
 		if (length > 0) {
 			final byte[] temp = new byte[length];
-			
+
 			try {
 				in.readFully(temp, 0, length);
 				this.hmdata = (HashMap<String, Integer>)SerializationUtils.deserialize(temp);
@@ -328,7 +328,8 @@ public class EmitValue implements Writable {
 	@Override
 	public void write(final DataOutput out) throws IOException {
 		out.writeInt(this.data.length);
-		for (final String d: this.data)
+
+		for (final String d : this.data)
 			Text.writeString(out, d);
 
 		if (this.metadata == null)
@@ -374,11 +375,11 @@ public class EmitValue implements Writable {
 	public void setMetadata(final String metadata) {
 		this.metadata = metadata;
 	}
-	
+
 	public HashMap<String,Integer> getHM() {
 		return this.hmdata;
 	}
-	
+
 	public void setHM(final HashMap<String,Integer> hmdata) {
 		this.hmdata = hmdata;
 	}

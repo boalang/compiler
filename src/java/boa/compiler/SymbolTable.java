@@ -196,7 +196,7 @@ public class SymbolTable {
 
 		globalFunctions.addFunction("gSpan", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple() }, "${0}.gSpan()"));
 		globalFunctions.addFunction("gSpan", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.gSpan(${1})"));
-		
+
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.containsKey(${1})"));
 		globalFunctions.addFunction("keys", new BoaFunction(new BoaArray(new BoaTypeVar("K")), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.keySet().toArray(new ${K}[0]))"));
