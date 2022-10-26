@@ -27,11 +27,6 @@ import boa.types.Control.Node.NodeType;
  * @author rdyer
  */
 public class CFGEdge extends Edge<CFGNode, CFGEdge> {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public CFGEdge(final CFGNode src, final CFGNode dest) {
         super(src, dest);
 
@@ -51,5 +46,4 @@ public class CFGEdge extends Edge<CFGNode, CFGEdge> {
 
 		this.label = label;
 	}
-	
 }

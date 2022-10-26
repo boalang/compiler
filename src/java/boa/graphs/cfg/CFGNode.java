@@ -31,9 +31,6 @@ import boa.types.Control.Node.NodeType;
  * @author rdyer
  */
 public class CFGNode extends Node<CFGNode, CFGEdge> {
-	/**
-	 * 
-	 */
 	private int methodId;
 	private int objectNameId;
 	private int classNameId;
@@ -234,5 +231,4 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 			return strComponents[strComponents.length - 2];
 		return strComponents[0];
 	}
-	
 }

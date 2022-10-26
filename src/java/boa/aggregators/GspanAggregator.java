@@ -1,3 +1,19 @@
+/*
+ * Copyright 2022, Hridesh Rajan, David M. OBrien,
+ *                 and Iowa State University of Science and Technology
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package boa.aggregators;
 
 import java.io.IOException;
@@ -10,11 +26,9 @@ import boa.io.EmitKey;
  * A Boa aggregator to count through subpatterns.
  * 
  * @author DavidMOBrien
- * @author rdyer
  */
 @AggregatorSpec(name = "gSpanAgg", formalParameters = { "double" }, canCombine = true)
 public class GspanAggregator extends MeanAggregator {
-
 	private HashMap<String, Integer> results;
 	private double freq;
 	
@@ -38,10 +52,9 @@ public class GspanAggregator extends MeanAggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final HashMap<String, Integer> data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		
 		this.count(metadata);
 		
-		for (String key : data.keySet()) {
+		for (final String key: data.keySet()) {
 			if (results.containsKey(key)) {
 				results.put(key, results.get(key) + data.get(key));
 			} else {
@@ -51,13 +64,13 @@ public class GspanAggregator extends MeanAggregator {
 	}
 	
 	public HashMap<String, Integer> filter() {
-		HashMap<String, Integer> temp = new HashMap<String, Integer>();
+		final HashMap<String, Integer> temp = new HashMap<String, Integer>();
 		
-		double minimum = this.getCount() * this.freq; 
+		final double minimum = this.getCount() * this.freq; 
 		
 		//FIXME: find a better way than creating an entirely new HashMap
 		//     however, we get a concurrency error if we try using .remove
-		for (String key: this.results.keySet()) {
+		for (final String key: this.results.keySet()) {
 			if (this.results.get(key) > minimum) {
 				temp.put(key, this.results.get(key));
 			}
@@ -70,12 +83,11 @@ public class GspanAggregator extends MeanAggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		// if we are in the combiner, output the sum and the count
-			if (this.isCombining())
-				this.collect(this.results, BoaCasts.longToString(this.getCount()));
+		if (this.isCombining()) {
+			this.collect(this.results, BoaCasts.longToString(this.getCount()));
+		} else {
 			// otherwise, output the final answer
-			else {
-				this.collect(filter().toString());
-			}
+			this.collect(filter().toString());
+		}
 	}
-
 }

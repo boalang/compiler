@@ -73,6 +73,7 @@ public class EmitValue implements Writable {
 	}
 	
 	public EmitValue(final HashMap<String, Integer> data, final String metadata) {
+		this.data = new String[0];
 		this.hmdata = data;
 		this.metadata = metadata;
 	}
@@ -308,50 +309,37 @@ public class EmitValue implements Writable {
 		else
 			this.metadata = metadata;
 		
-		//HM handling:
+		this.hmdata = null;
 		final int length = in.readInt();
 		
-		if (length != 0) {
-			//we have a HM
-			byte[] temp = new byte[length];
-			
-			Object o = null;
+		if (length > 0) {
+			final byte[] temp = new byte[length];
 			
 			try {
 				in.readFully(temp, 0, length);
-				
-				o = SerializationUtils.deserialize(temp);
-			} catch (Exception e) {
+				this.hmdata = (HashMap<String, Integer>)SerializationUtils.deserialize(temp);
+			} catch (final Exception e) {
 				e.printStackTrace();
 			}
-			
-			this.hmdata = (HashMap<String, Integer>)o;
-			
-		} else {
-			this.hmdata = null;
 		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		if(this.data == null)
-			out.writeInt(0);
-		else {
-			out.writeInt(this.data.length);
-			for (final String d : this.data)
-				Text.writeString(out, d);
-		}
+		out.writeInt(this.data.length);
+		for (final String d: this.data)
+			Text.writeString(out, d);
 
 		if (this.metadata == null)
 			Text.writeString(out, "");
 		else
 			Text.writeString(out, this.metadata);
 
-		if (this.hmdata == null)
+		if (this.hmdata == null) {
 			out.writeInt(0);
-		else {
-			byte[] temp = SerializationUtils.serialize(this.hmdata);
+		} else {
+			final byte[] temp = SerializationUtils.serialize(this.hmdata);
 			out.writeInt(temp.length);
 			out.write(temp);
 		}

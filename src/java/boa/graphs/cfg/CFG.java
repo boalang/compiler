@@ -43,9 +43,6 @@ import boa.runtime.BoaAbstractTraversal;
  * @author marafat
  */
 public class CFG {
-	/**
-	 * 
-	 */
 	protected Method md;
 	protected String class_name;
 
@@ -946,7 +943,7 @@ public class CFG {
 		return sb.toString();
 	}
 	
-	public boolean isEqual(CFG compare) {
+	public boolean isEqual(final CFG compare) {
 		return this.toString().equals(compare.toString());
 	}
 
@@ -984,31 +981,28 @@ public class CFG {
 	}
 	
 	public HashMap<String, Integer> gSpan() throws Exception {
-		
 		result = new HashMap<String, Integer>();
 		
 		//create graphs starting at each node, combining as we go.
-		for(CFGNode start : this.getNodes()) {
+		for (CFGNode start: this.getNodes()) {
 			dfs(start, null, "", 0, null);
 		}
 		
 		return result;
 	}
 	
-	public HashMap<String, Integer> gSpan(BoaAbstractTraversal tra) throws Exception {
-		
+	public HashMap<String, Integer> gSpan(final BoaAbstractTraversal tra) throws Exception {
 		result = new HashMap<String, Integer>();
 		
 		//create graphs starting at each node, combining as we go.
-		for(CFGNode start : this.getNodes()) {
+		for (final CFGNode start: this.getNodes()) {
 			dfs(start, null, "", 0, tra);
 		}
 		
 		return result;
 	}
 	
-	public void dfs(CFGNode currNode, CFGEdge currEdge, String currString, int currSize, BoaAbstractTraversal tra) throws Exception {
-
+	public void dfs(final CFGNode currNode, final CFGEdge currEdge, String currString, final int currSize, final BoaAbstractTraversal tra) throws Exception {
 		//base case
 		if (currSize == 3) {
 			return;
@@ -1019,11 +1013,11 @@ public class CFG {
 		String nodeName = null;
 		
 		if (tra == null)
-			nodeName = removeNewlines(currNode.getName());
+			nodeName = currNode.getName().replace("\n", "");
 		else
 			try {
 				nodeName = tra.getValue(currNode).toString();
-			} catch (Exception e) { //sometimes we encounter a NPE, unsure why.
+			} catch (final Exception e) { //sometimes we encounter a NPE, unsure why.
 				//System.out.println("here");
 				return;
 			}
@@ -1031,9 +1025,8 @@ public class CFG {
 		//Extend our string using nodeName
 		if (currString.equals("")) {
 			currString = nodeName;
-		}
-		else {
-			String edgeName = removeNewlines(CFGEdge.convertLabel(currEdge.getLabel()).name());
+		} else {
+			final String edgeName = CFGEdge.convertLabel(currEdge.getLabel()).name().replace("\n", "");
 			currString = currString + ";" + edgeName + ";" + nodeName;
 		}
 		
@@ -1042,7 +1035,7 @@ public class CFG {
 		//Go to every outward neighbor, expanding our results
 		//NOTE: because we are only assigning 1 as our values for each pattern, 
 		//      we can use HashMap.putall without worrying about overwriting data.
-		for (CFGEdge next : currNode.getOutEdges()) {
+		for (final CFGEdge next: currNode.getOutEdges()) {
 			if (tra == null)
 				dfs(next.getDest(), next, currString, currSize + 1, null);
 			else
@@ -1050,13 +1043,5 @@ public class CFG {
 		}
 		
 		return;
-		
-	}
-	
-	private String removeNewlines(String str) {
-		while (str.contains("\n"))
-			str = str.replace("\n", "");
-		
-		return str;
 	}
 }
