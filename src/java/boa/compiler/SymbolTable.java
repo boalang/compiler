@@ -194,8 +194,8 @@ public class SymbolTable {
 		globalFunctions.addFunction("gettotalcontrolnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalControlNodes()"));
 		globalFunctions.addFunction("gettotaledges", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalEdges()"));
 
-		globalFunctions.addFunction("gSpan", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple() }, "${0}.gSpan()"));
-		globalFunctions.addFunction("gSpan", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.gSpan(${1})"));
+		globalFunctions.addFunction("gSpan", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt() }, "${0}.gSpan((long)${1})"));
+		globalFunctions.addFunction("gSpan", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.gSpan((long)${1}, ${2})"));
 
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.containsKey(${1})"));

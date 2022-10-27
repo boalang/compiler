@@ -978,31 +978,31 @@ public class CFG {
 		return b;
 	}
 
-	public HashMap<String, Integer> gSpan() throws Exception {
+	public HashMap<String, Integer> gSpan(final long sizeLimit) throws Exception {
 		final HashMap<String, Integer> result = new HashMap<String, Integer>();
 
 		//create graphs starting at each node, combining as we go.
 		for (final CFGNode start: this.getNodes()) {
-			dfs(result, start, null, "", 0, null);
+			dfs(result, sizeLimit, start, null, "", 0, null);
 		}
 
 		return result;
 	}
 
-	public HashMap<String, Integer> gSpan(final BoaAbstractTraversal tra) throws Exception {
+	public HashMap<String, Integer> gSpan(final long sizeLimit, final BoaAbstractTraversal tra) throws Exception {
 		final HashMap<String, Integer> result = new HashMap<String, Integer>();
 
 		//create graphs starting at each node, combining as we go.
 		for (final CFGNode start: this.getNodes()) {
-			dfs(result, start, null, "", 0, tra);
+			dfs(result, sizeLimit, start, null, "", 0, tra);
 		}
 
 		return result;
 	}
 
-	public void dfs(final HashMap<String, Integer> result, final CFGNode currNode, final CFGEdge currEdge, String currString, final int currSize, final BoaAbstractTraversal tra) throws Exception {
+	public void dfs(final HashMap<String, Integer> result, final long sizeLimit, final CFGNode currNode, final CFGEdge currEdge, String currString, final int currSize, final BoaAbstractTraversal tra) throws Exception {
 		//base case
-		if (currSize == 3) {
+		if (currSize == sizeLimit) {
 			return;
 		}
 
@@ -1035,9 +1035,9 @@ public class CFG {
 		//      we can use HashMap.putall without worrying about overwriting data.
 		for (final CFGEdge next: currNode.getOutEdges()) {
 			if (tra == null)
-				dfs(result, next.getDest(), next, currString, currSize + 1, null);
+				dfs(result, sizeLimit, next.getDest(), next, currString, currSize + 1, null);
 			else
-				dfs(result, next.getDest(), next, currString, currSize + 1, tra);
+				dfs(result, sizeLimit, next.getDest(), next, currString, currSize + 1, tra);
 		}
 
 		return;
