@@ -1060,6 +1060,10 @@ public class JavaVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.NATIVE);
 		else if (node.isStrictfp())
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.STRICTFP);
+		else if (node.isSealed())
+			b.setKind(boa.types.Ast.Modifier.ModifierKind.SEALED);
+		else if (node.isNonSealed())
+			b.setKind(boa.types.Ast.Modifier.ModifierKind.NON_SEALED);
 		else {
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
 			b.setOther(node.getKeyword().toString());

@@ -33171,6 +33171,22 @@ public final class Ast {
        * </pre>
        */
       TRANSITIVE(17, 15),
+      /**
+       * <code>SEALED = 16;</code>
+       *
+       * <pre>
+       ** A sealed modifier 
+       * </pre>
+       */
+      SEALED(18, 16),
+      /**
+       * <code>NON_SEALED = 17;</code>
+       *
+       * <pre>
+       ** A non_sealed modifier 
+       * </pre>
+       */
+      NON_SEALED(19, 17),
       ;
 
       /**
