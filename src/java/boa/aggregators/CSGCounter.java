@@ -21,16 +21,16 @@ import java.util.HashMap;
 
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
-import boa.aggregators.GspanAggregator;
+import boa.aggregators.SGCounter;
 
 /**
- * A Boa aggregator to count through subpatterns.
- *
+ * A Boa aggregator to count through subgraphs.
+ * CSGCounter = "Closed Sub-Graph Counter"
  * @author DavidMOBrien
  */
-@AggregatorSpec(name = "cgSpanAgg", formalParameters = { "double" }, canCombine = true)
-public class CGspanAggregator extends GspanAggregator {
-	public CGspanAggregator(final double n) {
+@AggregatorSpec(name = "csgcounter", formalParameters = { "double" }, canCombine = true)
+public class CSGCounter extends SGCounter {
+	public CSGCounter(final double n) {
 		super(n);
 	}
 

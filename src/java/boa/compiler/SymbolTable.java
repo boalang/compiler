@@ -194,8 +194,10 @@ public class SymbolTable {
 		globalFunctions.addFunction("gettotalcontrolnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalControlNodes()"));
 		globalFunctions.addFunction("gettotaledges", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalEdges()"));
 
-		globalFunctions.addFunction("gSpan", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt() }, "${0}.gSpan((long)${1})"));
-		globalFunctions.addFunction("gSpan", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.gSpan((long)${1}, ${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt() }, "${0}.genSG((long)${1})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaInt() }, "${0}.genSG((long)${1}, (long)${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, ${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, (long)${2}, ${3})"));
 
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.containsKey(${1})"));
@@ -387,7 +389,7 @@ public class SymbolTable {
 		// load built-in aggregators
 		final Class<?>[] builtinAggs = {
 			boa.aggregators.BottomAggregator.class,
-			boa.aggregators.CGspanAggregator.class,
+			boa.aggregators.CSGCounter.class,
 			boa.aggregators.CollectionAggregator.class,
 			boa.aggregators.ConfidenceIntervalAggregator.class,
 			boa.aggregators.DistinctAggregator.class,
@@ -397,7 +399,6 @@ public class SymbolTable {
 			boa.aggregators.FloatSumAggregator.class,
 			boa.aggregators.GraphAggregator.class,
 			boa.aggregators.GraphvizAggregator.class,
-			boa.aggregators.GspanAggregator.class,
 			boa.aggregators.IntHistogramAggregator.class,
 			boa.aggregators.IntMeanAggregator.class,
 			boa.aggregators.IntQuantileAggregator.class,
@@ -408,6 +409,7 @@ public class SymbolTable {
 			boa.aggregators.MedianAggregator.class,
 			boa.aggregators.MinimumAggregator.class,
 			boa.aggregators.SetAggregator.class,
+			boa.aggregators.SGCounter.class,
 			boa.aggregators.SkewnessAggregator.class,
 			boa.aggregators.StatisticsAggregator.class,
 			boa.aggregators.StDevAggregator.class,

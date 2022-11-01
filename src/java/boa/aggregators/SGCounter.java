@@ -24,15 +24,15 @@ import boa.io.EmitKey;
 
 /**
  * A Boa aggregator to count through subpatterns.
- *
+ * SGCounter = "Sub-Graph Counter"
  * @author DavidMOBrien
  */
-@AggregatorSpec(name = "gSpanAgg", formalParameters = { "double" }, canCombine = true)
-public class GspanAggregator extends MeanAggregator {
+@AggregatorSpec(name = "sgcounter", formalParameters = { "double" }, canCombine = true)
+public class SGCounter extends MeanAggregator {
 	private HashMap<String, Integer> results;
 	private double freq;
 
-	public GspanAggregator(final double n) {
+	public SGCounter(final double n) {
 		this.freq = n;
 	}
 

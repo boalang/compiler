@@ -977,49 +977,53 @@ public class CFG {
 		}
 		return b;
 	}
+	
+	public HashMap<String, Integer> genSG(final long upperLimit) throws Exception {
+		//upperLimit inclusive
+		return this.genSG(1, upperLimit, null);
+	}
+	
+	public HashMap<String, Integer> genSG(final long lowerLimit, final long upperLimit) throws Exception {
+		//upperLimit inclusive
+		return this.genSG(lowerLimit, upperLimit, null);
+	}
+	
+	public HashMap<String, Integer> genSG(final long upperLimit, BoaAbstractTraversal tra) throws Exception {
+		//upperLimit inclusive
+		return this.genSG(1, upperLimit, tra);
+	}
 
-	public HashMap<String, Integer> gSpan(final long sizeLimit) throws Exception {
+	public HashMap<String, Integer> genSG(final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra) throws Exception {
+		//lowerLimit + upperLimit inclusive
 		final HashMap<String, Integer> result = new HashMap<String, Integer>();
 
 		//create graphs starting at each node, combining as we go.
 		for (final CFGNode start: this.getNodes()) {
-			dfs(result, sizeLimit, start, null, "", 0, null);
+			dfs(result, lowerLimit, upperLimit, start, null, "", 1, tra);
 		}
 
 		return result;
 	}
 
-	public HashMap<String, Integer> gSpan(final long sizeLimit, final BoaAbstractTraversal tra) throws Exception {
-		final HashMap<String, Integer> result = new HashMap<String, Integer>();
-
-		//create graphs starting at each node, combining as we go.
-		for (final CFGNode start: this.getNodes()) {
-			dfs(result, sizeLimit, start, null, "", 0, tra);
-		}
-
-		return result;
-	}
-
-	public void dfs(final HashMap<String, Integer> result, final long sizeLimit, final CFGNode currNode, final CFGEdge currEdge, String currString, final int currSize, final BoaAbstractTraversal tra) throws Exception {
+	public void dfs(final HashMap<String, Integer> result, final long lowerLimit, final long upperLimit, final CFGNode currNode, final CFGEdge currEdge, String currString, final int currSize, final BoaAbstractTraversal tra) throws Exception {
 		//base case
-		if (currSize == sizeLimit) {
+		if (currSize > upperLimit) {
 			return;
 		}
 
 		//Construct our extension string depending on if we have
 		//a traversal or not.
 		String nodeName = null;
-
+	
 		if (tra == null)
 			nodeName = currNode.getName().replace("\n", "");
 		else
 			try {
 				nodeName = tra.getValue(currNode).toString();
-			} catch (final Exception e) { //sometimes we encounter a NPE, unsure why.
-				//System.out.println("here");
+			} catch (final Exception e) {
 				return;
 			}
-
+	
 		//Extend our string using nodeName
 		if (currString.equals("")) {
 			currString = nodeName;
@@ -1027,17 +1031,19 @@ public class CFG {
 			final String edgeName = CFGEdge.convertLabel(currEdge.getLabel()).name().replace("\n", "");
 			currString = currString + ";" + edgeName + ";" + nodeName;
 		}
+		
+		if (currSize >= lowerLimit)
+			result.put(currString, 1);
 
-		result.put(currString, 1);
-
+		
 		//Go to every outward neighbor, expanding our results
 		//NOTE: because we are only assigning 1 as our values for each pattern,
 		//      we can use HashMap.putall without worrying about overwriting data.
 		for (final CFGEdge next: currNode.getOutEdges()) {
 			if (tra == null)
-				dfs(result, sizeLimit, next.getDest(), next, currString, currSize + 1, null);
+				dfs(result, lowerLimit, upperLimit, next.getDest(), next, currString, currSize + 1, null);
 			else
-				dfs(result, sizeLimit, next.getDest(), next, currString, currSize + 1, tra);
+				dfs(result, lowerLimit, upperLimit, next.getDest(), next, currString, currSize + 1, tra);
 		}
 
 		return;
