@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import boa.graphs.Node;
+import boa.runtime.BoaAbstractTraversal;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Control.Node.NodeType;
 
@@ -138,6 +139,30 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		}
 		return false;
 	}
+	
+	public CFGEdge getFalseBranch() {
+		for (final CFGEdge e : this.outEdges) {
+			if (e.getLabel().equals("F"))
+				return e;
+		}
+		return null;
+	}
+	
+	public boolean hasTrueBranch() {
+		for (final CFGEdge e : this.outEdges) {
+			if (e.getLabel().equals("T"))
+				return true;
+		}
+		return false;
+	}
+	
+	public CFGEdge getTrueBranch() {
+		for (final CFGEdge e : this.outEdges) {
+			if (e.getLabel().equals("T"))
+				return e;
+		}
+		return null;
+	}
 
 	public String getMethod() {
 		return CFGNode.labelOfID.get(this.methodId);
@@ -152,6 +177,21 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		if (name == null)
 			name = "";
 		return name;
+	}
+	
+	public String getTraName(final BoaAbstractTraversal tra) {
+		String nodeName = null;
+		
+		if (tra == null)
+			nodeName = getName().replace("\n", "");
+		else
+			try {
+				nodeName = tra.getValue(this).toString();
+			} catch (final Exception e) {
+				return nodeName;
+			}
+		
+		return nodeName;
 	}
 
 	private void processDef() {

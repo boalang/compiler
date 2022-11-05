@@ -999,53 +999,56 @@ public class CFG {
 
 		//create graphs starting at each node, combining as we go.
 		for (final CFGNode start: this.getNodes()) {
-			dfs(result, lowerLimit, upperLimit, start, null, "", 1, tra);
+			
+			String firstExt = ";;" + start.getTraName(tra) + "\n";
+			
+			dfs(result, lowerLimit, upperLimit, tra, 1, "", firstExt, start);
 		}
 
 		return result;
 	}
-
-	public void dfs(final HashMap<String, Integer> result, final long lowerLimit, final long upperLimit, final CFGNode currNode, final CFGEdge currEdge, String currString, final int currSize, final BoaAbstractTraversal tra) throws Exception {
-		//base case
-		if (currSize > upperLimit) {
+	
+	public void dfs(final HashMap<String, Integer> result, final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra, final int currSize, final String currString, final String nextExt, final CFGNode currNode) throws Exception {
+		
+		if (currSize > upperLimit)
 			return;
-		}
-
-		//Construct our extension string depending on if we have
-		//a traversal or not.
-		String nodeName = null;
-	
-		if (tra == null)
-			nodeName = currNode.getName().replace("\n", "");
-		else
-			try {
-				nodeName = tra.getValue(currNode).toString();
-			} catch (final Exception e) {
-				return;
-			}
-	
-		//Extend our string using nodeName
-		if (currString.equals("")) {
-			currString = nodeName;
-		} else {
-			final String edgeName = CFGEdge.convertLabel(currEdge.getLabel()).name().replace("\n", "");
-			currString = currString + ";" + edgeName + ";" + nodeName;
-		}
+		
+		String myString = currString + nextExt;
 		
 		if (currSize >= lowerLimit)
-			result.put(currString, 1);
-
+			result.put(myString, 1);
 		
-		//Go to every outward neighbor, expanding our results
-		//NOTE: because we are only assigning 1 as our values for each pattern,
-		//      we can use HashMap.putall without worrying about overwriting data.
+		//1-neighbor extension
 		for (final CFGEdge next: currNode.getOutEdges()) {
-			if (tra == null)
-				dfs(result, lowerLimit, upperLimit, next.getDest(), next, currString, currSize + 1, null);
-			else
-				dfs(result, lowerLimit, upperLimit, next.getDest(), next, currString, currSize + 1, tra);
+			String src = currNode.getTraName(tra);
+			String dst = next.getDest().getTraName(tra);
+			String edgeName = next.convertLabel(next.getLabel()).name().replace("\n", "");
+			
+			String ext = src + ";" + edgeName + ";" + dst + "\n";
+			dfs(result, lowerLimit, upperLimit, tra, currSize + 1, myString, ext, next.getDest());
 		}
-
-		return;
+		
+		//2-neighbor extension
+		if (currNode.hasFalseBranch() && currNode.hasTrueBranch()) {
+			String src = currNode.getTraName(tra);
+			
+			CFGEdge t = currNode.getTrueBranch();
+			CFGEdge f = currNode.getFalseBranch();
+			
+			String tedge = t.convertLabel(t.getLabel()).name().replace("\n", "");
+			String fedge = f.convertLabel(f.getLabel()).name().replace("\n", "");
+			
+			String tdst = t.getDest().getTraName(tra);
+			String fdst = f.getDest().getTraName(tra);
+			
+			String ext = src + ";" + tedge + ";" + tdst + "\n";
+			ext = ext + src + ";" + fedge + ";" + fdst + "\n";
+			
+			dfs(result, lowerLimit, upperLimit, tra, currSize + 2, myString, ext, t.getDest());
+			dfs(result, lowerLimit, upperLimit, tra, currSize + 2, myString, ext, f.getDest());
+			
+		}
+		
 	}
+
 }
