@@ -198,7 +198,12 @@ public class SymbolTable {
 		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaInt() }, "${0}.genSG((long)${1}, (long)${2})"));
 		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, ${2})"));
 		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, (long)${2}, ${3})"));
-
+		
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new PDGProtoTuple(), new BoaInt() }, "${0}.genSG((long)${1})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaInt() }, "${0}.genSG((long)${1}, (long)${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, ${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, (long)${2}, ${3})"));
+		
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.containsKey(${1})"));
 		globalFunctions.addFunction("keys", new BoaFunction(new BoaArray(new BoaTypeVar("K")), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.keySet().toArray(new ${K}[0]))"));

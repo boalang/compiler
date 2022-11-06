@@ -21,8 +21,11 @@ import boa.graphs.cdg.CDG;
 import boa.graphs.cdg.CDGEdge;
 import boa.graphs.cdg.CDGNode;
 import boa.graphs.cfg.CFG;
+import boa.graphs.cfg.CFGEdge;
+import boa.graphs.cfg.CFGNode;
 import boa.graphs.ddg.DDG;
 import boa.graphs.ddg.DDGNode;
+import boa.runtime.BoaAbstractTraversal;
 import boa.types.Ast.*;
 import boa.types.Control;
 
@@ -386,4 +389,79 @@ public class PDG {
 
         return hashcode;
     }
+    
+    //FSG Mining:
+    
+    public HashMap<String, Integer> genSG(final long upperLimit) throws Exception {
+		//upperLimit inclusive
+		return this.genSG(1, upperLimit, null);
+	}
+	
+	public HashMap<String, Integer> genSG(final long lowerLimit, final long upperLimit) throws Exception {
+		//upperLimit inclusive
+		return this.genSG(lowerLimit, upperLimit, null);
+	}
+	
+	public HashMap<String, Integer> genSG(final long upperLimit, BoaAbstractTraversal tra) throws Exception {
+		//upperLimit inclusive
+		return this.genSG(1, upperLimit, tra);
+	}
+
+	public HashMap<String, Integer> genSG(final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra) throws Exception {
+		//lowerLimit + upperLimit inclusive
+		final HashMap<String, Integer> result = new HashMap<String, Integer>();
+
+		//create graphs starting at each node, combining as we go.
+		for (final PDGNode start: this.getNodes()) {
+			
+			String firstExt = ";;" + start.getTraName(tra) + "\n";
+			
+			dfs(result, lowerLimit, upperLimit, tra, 1, "", firstExt, start);
+		}
+
+		return result;
+	}
+	
+	public void dfs(final HashMap<String, Integer> result, final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra, final int currSize, final String currString, final String nextExt, final PDGNode currNode) throws Exception {
+		
+		if (currSize > upperLimit)
+			return;
+		
+		String myString = currString + nextExt;
+		
+		if (currSize >= lowerLimit)
+			result.put(myString, 1);
+		
+		//1-neighbor extension
+		for (final PDGEdge next: currNode.getOutEdges()) {
+			String src = currNode.getTraName(tra);
+			String dst = next.getDest().getTraName(tra);
+			String edgeName = next.convertLabel(next.getLabel()).name().replace("\n", "");
+			
+			String ext = src + ";" + edgeName + ";" + dst + "\n";
+			dfs(result, lowerLimit, upperLimit, tra, currSize + 1, myString, ext, next.getDest());
+		}
+		
+		//2-neighbor extension
+		if (currNode.hasFalseBranch() && currNode.hasTrueBranch()) {
+			String src = currNode.getTraName(tra);
+			
+			PDGEdge t = currNode.getTrueBranch();
+			PDGEdge f = currNode.getFalseBranch();
+			
+			String tedge = t.convertLabel(t.getLabel()).name().replace("\n", "");
+			String fedge = f.convertLabel(f.getLabel()).name().replace("\n", "");
+			
+			String tdst = t.getDest().getTraName(tra);
+			String fdst = f.getDest().getTraName(tra);
+			
+			String ext = src + ";" + tedge + ";" + tdst + "\n";
+			ext = ext + src + ";" + fedge + ";" + fdst + "\n";
+			
+			dfs(result, lowerLimit, upperLimit, tra, currSize + 2, myString, ext, t.getDest());
+			dfs(result, lowerLimit, upperLimit, tra, currSize + 2, myString, ext, f.getDest());
+			
+		}
+		
+	}
 }
