@@ -17,8 +17,10 @@
  */
 package boa.graphs.cfg;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import boa.graphs.Node;
 import boa.runtime.BoaAbstractTraversal;
@@ -270,5 +272,21 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		if (strComponents.length > 1)
 			return strComponents[strComponents.length - 2];
 		return strComponents[0];
+	}
+	
+	public List<List<CFGEdge>> getOutCombination() {
+		final List<List<CFGEdge>> result = new ArrayList<List<CFGEdge>>();
+		final List<CFGEdge> edges = new ArrayList<CFGEdge>(this.outEdges);
+		final int n = edges.size();
+		for (int i = 0; i < (1 << n); i++) {
+			final List<CFGEdge> combination = new ArrayList<CFGEdge>();
+			for (int j = 0; j < n; j++) {
+				if ((i & (1 << j)) > 0) {
+					combination.add(edges.get(j));
+				}
+			}
+			result.add(combination);
+		}
+		return result;
 	}
 }

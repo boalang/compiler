@@ -18,9 +18,11 @@
 package boa.graphs.cfg;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.List;
 
 import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Expression;
@@ -1001,15 +1003,18 @@ public class CFG {
 		for (final CFGNode start: this.getNodes()) {
 			
 			String firstExt = ";;" + start.getTraName(tra) + "\n";
+			ArrayList<CFGEdge> startQueue = new ArrayList<CFGEdge>(start.getOutEdges());
+			Collections.sort(startQueue);
 			
-			dfs(result, lowerLimit, upperLimit, tra, 1, "", firstExt, start);
+			dfs(result, lowerLimit, upperLimit, tra, 1, "", firstExt, startQueue);
 		}
 
 		return result;
 	}
 	
-	public void dfs(final HashMap<String, Integer> result, final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra, final int currSize, final String currString, final String nextExt, final CFGNode currNode) throws Exception {
+	public void dfs(final HashMap<String, Integer> result, final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra, final int currSize, final String currString, final String nextExt, final ArrayList<CFGEdge> myQueue) throws Exception {
 		
+		//size check
 		if (currSize > upperLimit)
 			return;
 		
@@ -1018,37 +1023,77 @@ public class CFG {
 		if (currSize >= lowerLimit)
 			result.put(myString, 1);
 		
-		//1-neighbor extension
-		for (final CFGEdge next: currNode.getOutEdges()) {
-			String src = currNode.getTraName(tra);
-			String dst = next.getDest().getTraName(tra);
-			String edgeName = next.convertLabel(next.getLabel()).name().replace("\n", "");
-			
-			String ext = src + ";" + edgeName + ";" + dst + "\n";
-			dfs(result, lowerLimit, upperLimit, tra, currSize + 1, myString, ext, next.getDest());
+		//performance issue - sometimes myQueue gets ridiculously large
+		if (myQueue.size() > 4) {
+			return;
 		}
 		
-		//2-neighbor extension
-		if (currNode.hasFalseBranch() && currNode.hasTrueBranch()) {
-			String src = currNode.getTraName(tra);
-			
-			CFGEdge t = currNode.getTrueBranch();
-			CFGEdge f = currNode.getFalseBranch();
-			
-			String tedge = t.convertLabel(t.getLabel()).name().replace("\n", "");
-			String fedge = f.convertLabel(f.getLabel()).name().replace("\n", "");
-			
-			String tdst = t.getDest().getTraName(tra);
-			String fdst = f.getDest().getTraName(tra);
-			
-			String ext = src + ";" + tedge + ";" + tdst + "\n";
-			ext = ext + src + ";" + fedge + ";" + fdst + "\n";
-			
-			dfs(result, lowerLimit, upperLimit, tra, currSize + 2, myString, ext, t.getDest());
-			dfs(result, lowerLimit, upperLimit, tra, currSize + 2, myString, ext, f.getDest());
-			
+		//performance issue - backedge causes many useless subgraphs
+		for (final CFGEdge temp : myQueue) {
+			if (temp.getLabel().equals("B")) {
+				myQueue.remove(temp);
+				break;
+			} 
 		}
 		
+		//general neighbor expansion - of all recently expanded nodes, generate all combinations
+		//of their outward edges to form the next expansions.
+		ArrayList<ArrayList<CFGEdge>> outCombos = this.getCombination(myQueue);
+		
+		for (final ArrayList<CFGEdge> currCombo: outCombos) {
+			
+			String ext = "";
+			HashSet<CFGEdge> tempQueue = new HashSet<CFGEdge>();
+			
+			for (final CFGEdge next: currCombo) {
+				
+				String src;
+				String dst;
+				if (tra != null) {
+					src = next.getSrc().getTraName(tra);
+					dst = next.getDest().getTraName(tra);
+				} else {
+					src = next.getSrc().getName().replace("\n", "");
+					dst = next.getDest().getName().replace("\n", "");
+				}
+				String edgeName = next.convertLabel(next.getLabel()).name().replace("\n", "");
+				ext = ext + src + ";" + edgeName + ";" + dst + "\n";
+				
+				for (final CFGEdge temp: next.getDest().getOutEdges()) {
+					tempQueue.add(temp);
+				}
+			}
+			
+			ArrayList<CFGEdge> nextQueue = new ArrayList<CFGEdge>(tempQueue);
+			Collections.sort(nextQueue);
+			
+			if (currCombo.size() != 0)
+				dfs(result, lowerLimit, upperLimit, tra, currSize + currCombo.size(), myString, ext, nextQueue);
+		}
+		
+	}
+	
+	public ArrayList<ArrayList<CFGEdge>> getCombination(ArrayList<CFGEdge> allItems) {
+		
+		ArrayList<ArrayList<CFGEdge>> res = new ArrayList<ArrayList<CFGEdge>>();
+		
+		for (int i = 0; i<allItems.size(); i++) {
+			findAllHelper(res, allItems, i, new ArrayList<CFGEdge>());
+		}
+		
+		return res;
+		
+	}
+	
+	public void findAllHelper(ArrayList<ArrayList<CFGEdge>> res, ArrayList<CFGEdge> allItems, int currIndex, ArrayList<CFGEdge> currIter) {
+		
+		currIter.add(allItems.get(currIndex));
+		
+		res.add(currIter);
+		
+		for (int i = currIndex + 1; i<allItems.size(); i++) {
+			findAllHelper(res, allItems, i, currIter);
+		}
 	}
 
 }
