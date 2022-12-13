@@ -228,4 +228,20 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 	public String toString() {
 		return "node " + getNodeId();
 	}
+
+	public List<List<E>> getOutCombination() {
+		final List<List<E>> result = new ArrayList<List<E>>();
+		final List<E> edges = new ArrayList<E>(this.outEdges);
+		final int n = edges.size();
+		for (int i = 0; i < (1 << n); i++) {
+			final List<E> combination = new ArrayList<E>();
+			for (int j = 0; j < n; j++) {
+				if ((i & (1 << j)) > 0) {
+					combination.add(edges.get(j));
+				}
+			}
+			result.add(combination);
+		}
+		return result;
+	}
 }
