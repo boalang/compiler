@@ -17,6 +17,8 @@
  */
 package boa.graphs.cfg;
 
+import java.util.HashSet;
+
 import boa.graphs.Edge;
 import boa.types.Control.Node.NodeType;
 
@@ -45,5 +47,30 @@ public class CFGEdge extends Edge<CFGNode, CFGEdge> {
 		this(src, dest);
 
 		this.label = label;
+	}
+	
+	public String getVarRelations() {
+		String srcDef = this.getSrc().getDefVariables();
+		String dstDef = this.getDest().getDefVariables();
+		HashSet<String> srcUse = this.getSrc().getUseVariables();
+		HashSet<String> dstUse = this.getDest().getUseVariables();
+		
+		String result = "(";
+		
+		if (srcDef.equals(dstDef) && (!srcDef.equals("")))
+			result = result + "DD ";
+		
+		if (srcUse.contains(dstDef))
+			result = result + "UD ";
+		
+		if (dstUse.contains(srcDef))
+			result = result + "DU ";
+		
+		srcUse.retainAll(dstUse);
+		if (srcUse.size() != 0)
+			result = result + "UU ";
+		
+		result = result + ")";
+		return result;
 	}
 }

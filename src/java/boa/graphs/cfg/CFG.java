@@ -1023,24 +1023,23 @@ public class CFG {
 		if (currSize >= lowerLimit)
 			result.put(myString, 1);
 		
-		//performance issue - sometimes myQueue gets ridiculously large
+		//performance issue - when there is a Switch with multiple cases we hit an explosion problem
 		if (myQueue.size() > 4) {
 			return;
 		}
 		
 		//performance issue - backedge causes many useless subgraphs
-		for (final CFGEdge temp : myQueue) {
-			if (temp.getLabel().equals("B")) {
-				myQueue.remove(temp);
-				break;
-			} 
-		}
+		myQueue.removeIf(s -> s.getLabel().equals("B"));
 		
 		//general neighbor expansion - of all recently expanded nodes, generate all combinations
 		//of their outward edges to form the next expansions.
 		ArrayList<ArrayList<CFGEdge>> outCombos = this.getCombination(myQueue);
 		
 		for (final ArrayList<CFGEdge> currCombo: outCombos) {
+			
+			if ((upperLimit - currSize) < currCombo.size()) {
+				continue;
+			}
 			
 			String ext = "";
 			HashSet<CFGEdge> tempQueue = new HashSet<CFGEdge>();
@@ -1056,7 +1055,7 @@ public class CFG {
 					src = next.getSrc().getName().replace("\n", "");
 					dst = next.getDest().getName().replace("\n", "");
 				}
-				String edgeName = next.convertLabel(next.getLabel()).name().replace("\n", "");
+				String edgeName = next.getLabel() + next.getVarRelations();
 				ext = ext + src + ";" + edgeName + ";" + dst + "\n";
 				
 				for (final CFGEdge temp: next.getDest().getOutEdges()) {
