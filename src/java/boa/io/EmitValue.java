@@ -40,7 +40,7 @@ import boa.functions.BoaCasts;
 public class EmitValue implements Writable {
 	private String[] data;
 	private String metadata;
-	private HashMap<String, Integer> hmdata;
+	private HashMap<String, Long> hmdata;
 
 	/**
 	 * Construct an EmitValue.
@@ -72,13 +72,13 @@ public class EmitValue implements Writable {
 		this(data, null);
 	}
 
-	public EmitValue(final HashMap<String, Integer> data, final String metadata) {
+	public EmitValue(final HashMap<String, Long> data, final String metadata) {
 		this.data = new String[0];
 		this.hmdata = data;
 		this.metadata = metadata;
 	}
 
-	public EmitValue(final HashMap<String, Integer> data) {
+	public EmitValue(final HashMap<String, Long> data) {
 		this(data, null);
 	}
 
@@ -317,7 +317,7 @@ public class EmitValue implements Writable {
 
 			try {
 				in.readFully(temp, 0, length);
-				this.hmdata = (HashMap<String, Integer>)SerializationUtils.deserialize(temp);
+				this.hmdata = (HashMap<String, Long>)SerializationUtils.deserialize(temp);
 			} catch (final Exception e) {
 				e.printStackTrace();
 			}
@@ -376,11 +376,11 @@ public class EmitValue implements Writable {
 		this.metadata = metadata;
 	}
 
-	public HashMap<String,Integer> getHM() {
+	public HashMap<String,Long> getHM() {
 		return this.hmdata;
 	}
 
-	public void setHM(final HashMap<String,Integer> hmdata) {
+	public void setHM(final HashMap<String,Long> hmdata) {
 		this.hmdata = hmdata;
 	}
 

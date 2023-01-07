@@ -34,11 +34,11 @@ public class CSGCounter extends SGCounter {
 		super(n);
 	}
 
-	public HashMap<String, Integer> filter() {
-		HashMap<String, Integer> subpatterns = super.filter();
+	public HashMap<String, Long> filter() {
+		HashMap<String, Long> subpatterns = super.filter();
 
 		//TODO: find something not O(n^2)?
-		HashMap<String, Integer> filtered = new HashMap<String, Integer>();
+		HashMap<String, Long> filtered = new HashMap<String, Long>();
 
 		for (String key : subpatterns.keySet()) {
 			boolean keep = true;

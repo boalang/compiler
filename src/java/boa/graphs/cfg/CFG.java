@@ -980,24 +980,24 @@ public class CFG {
 		return b;
 	}
 	
-	public HashMap<String, Integer> genSG(final long upperLimit) throws Exception {
+	public HashMap<String, Long> genSG(final long upperLimit) throws Exception {
 		//upperLimit inclusive
 		return this.genSG(1, upperLimit, null);
 	}
 	
-	public HashMap<String, Integer> genSG(final long lowerLimit, final long upperLimit) throws Exception {
+	public HashMap<String, Long> genSG(final long lowerLimit, final long upperLimit) throws Exception {
 		//upperLimit inclusive
 		return this.genSG(lowerLimit, upperLimit, null);
 	}
 	
-	public HashMap<String, Integer> genSG(final long upperLimit, BoaAbstractTraversal tra) throws Exception {
+	public HashMap<String, Long> genSG(final long upperLimit, BoaAbstractTraversal tra) throws Exception {
 		//upperLimit inclusive
 		return this.genSG(1, upperLimit, tra);
 	}
 
-	public HashMap<String, Integer> genSG(final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra) throws Exception {
+	public HashMap<String, Long> genSG(final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra) throws Exception {
 		//lowerLimit + upperLimit inclusive
-		final HashMap<String, Integer> result = new HashMap<String, Integer>();
+		final HashMap<String, Long> result = new HashMap<String, Long>();
 
 		//create graphs starting at each node, combining as we go.
 		for (final CFGNode start: this.getNodes()) {
@@ -1012,7 +1012,7 @@ public class CFG {
 		return result;
 	}
 	
-	public void dfs(final HashMap<String, Integer> result, final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra, final int currSize, final String currString, final String nextExt, final ArrayList<CFGEdge> myQueue) throws Exception {
+	public void dfs(final HashMap<String, Long> result, final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra, final int currSize, final String currString, final String nextExt, final ArrayList<CFGEdge> myQueue) throws Exception {
 		
 		//size check
 		if (currSize > upperLimit)
@@ -1021,7 +1021,7 @@ public class CFG {
 		String myString = currString + nextExt;
 		
 		if (currSize >= lowerLimit)
-			result.put(myString, 1);
+			result.put(myString, (long) 1);
 		
 		//performance issue - when there is a Switch with multiple cases we hit an explosion problem
 		if (myQueue.size() > 4) {

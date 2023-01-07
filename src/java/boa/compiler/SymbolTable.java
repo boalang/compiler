@@ -194,15 +194,15 @@ public class SymbolTable {
 		globalFunctions.addFunction("gettotalcontrolnodes", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalControlNodes()"));
 		globalFunctions.addFunction("gettotaledges", new BoaFunction(new BoaInt(), new BoaType[] { new PDGSlicerProtoTuple() }, "${0}.getTotalEdges()"));
 
-		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt() }, "${0}.genSG((long)${1})"));
-		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaInt() }, "${0}.genSG((long)${1}, (long)${2})"));
-		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, ${2})"));
-		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, (long)${2}, ${3})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaMap(new BoaInt(), new BoaString()), new BoaType[] {new CFGProtoTuple(), new BoaInt() }, "${0}.genSG((long)${1})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaMap(new BoaInt(), new BoaString()), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaInt() }, "${0}.genSG((long)${1}, (long)${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaMap(new BoaInt(), new BoaString()), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, ${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaMap(new BoaInt(), new BoaString()), new BoaType[] {new CFGProtoTuple(), new BoaInt(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG(${1}, ${2}, ${3})"));
 		
-		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new PDGProtoTuple(), new BoaInt() }, "${0}.genSG((long)${1})"));
-		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaInt() }, "${0}.genSG((long)${1}, (long)${2})"));
-		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, ${2})"));
-		globalFunctions.addFunction("gensg", new BoaFunction(new BoaString(), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, (long)${2}, ${3})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaMap(new BoaInt(), new BoaString()), new BoaType[] {new PDGProtoTuple(), new BoaInt() }, "${0}.genSG((long)${1})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaMap(new BoaInt(), new BoaString()), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaInt() }, "${0}.genSG((long)${1}, (long)${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaMap(new BoaInt(), new BoaString()), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG((long)${1}, ${2})"));
+		globalFunctions.addFunction("gensg", new BoaFunction(new BoaMap(new BoaInt(), new BoaString()), new BoaType[] {new PDGProtoTuple(), new BoaInt(), new BoaInt(), new BoaTraversal(new BoaTypeVar("K")) }, "${0}.genSG(${1}, ${2}, ${3})"));
 		
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.containsKey(${1})"));

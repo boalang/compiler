@@ -94,10 +94,10 @@ public abstract class Aggregator {
 		this.aggregate(BoaCasts.doubleToString(data), null);
 	}
 
-	public void aggregate(final HashMap<String,Integer> data, final String metadata) throws IOException, InterruptedException, FinishedException {
+	public void aggregate(final HashMap<String,Long> data, final String metadata) throws IOException, InterruptedException, FinishedException {
 	}
 
-	public void aggregate(final HashMap<String,Integer> data) throws IOException, InterruptedException, InterruptedException, FinishedException{
+	public void aggregate(final HashMap<String,Long> data) throws IOException, InterruptedException, InterruptedException, FinishedException{
 		this.aggregate(data, null);
 	}
 
@@ -112,7 +112,7 @@ public abstract class Aggregator {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void collect(final HashMap<String,Integer> data, final String metadata) throws IOException, InterruptedException {
+	protected void collect(final HashMap<String,Long> data, final String metadata) throws IOException, InterruptedException {
 		if (this.combining)
 			this.getContext().write(this.getKey(), new EmitValue(data, metadata));
 		else if (metadata != null)

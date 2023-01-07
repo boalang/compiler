@@ -29,7 +29,7 @@ import boa.io.EmitKey;
  */
 @AggregatorSpec(name = "sgcounter", formalParameters = { "double" }, canCombine = true)
 public class SGCounter extends MeanAggregator {
-	private HashMap<String, Integer> results;
+	private HashMap<String, Long> results;
 	private double freq;
 
 	public SGCounter(final double n) {
@@ -41,7 +41,7 @@ public class SGCounter extends MeanAggregator {
 	public void start(final EmitKey key) {
 		super.start(key);
 
-		results = new HashMap<String, Integer>();
+		results = new HashMap<String, Long>();
 	}
 
 	/** {@inheritDoc} */
@@ -51,7 +51,7 @@ public class SGCounter extends MeanAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(final HashMap<String, Integer> data, final String metadata) throws IOException, InterruptedException, FinishedException {
+	public void aggregate(final HashMap<String, Long> data, final String metadata) throws IOException, InterruptedException, FinishedException {
 		this.count(metadata);
 
 		for (final String key: data.keySet()) {
@@ -63,8 +63,8 @@ public class SGCounter extends MeanAggregator {
 		}
 	}
 
-	public HashMap<String, Integer> filter() {
-		final HashMap<String, Integer> temp = new HashMap<String, Integer>();
+	public HashMap<String, Long> filter() {
+		final HashMap<String, Long> temp = new HashMap<String, Long>();
 
 		final double minimum = this.getCount() * this.freq;
 
