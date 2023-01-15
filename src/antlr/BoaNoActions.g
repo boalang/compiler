@@ -171,7 +171,8 @@ emitStatement
 	;
 
 forStatement
-	: FOR LPAREN (forExpression)? SEMICOLON (expression)? SEMICOLON (forExpression)? RPAREN programStatement
+	: FOR LPAREN (forExpression)? SEMICOLON (expression)? { notifyErrorListeners("FOR statements require 3 parts, but only 2 given - did you mean foreach?"); } RPAREN programStatement
+	| FOR LPAREN (forExpression)? SEMICOLON (expression)? SEMICOLON (forExpression)? RPAREN programStatement
 	;
 
 forExpression
