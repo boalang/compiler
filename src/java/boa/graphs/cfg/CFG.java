@@ -1055,7 +1055,7 @@ public class CFG {
 					src = next.getSrc().getName().replace("\n", "");
 					dst = next.getDest().getName().replace("\n", "");
 				}
-				String edgeName = next.getLabel() + next.getVarRelations();
+				String edgeName = next.getLabel();
 				ext = ext + src + ";" + edgeName + ";" + dst + "\n";
 				
 				for (final CFGEdge temp: next.getDest().getOutEdges()) {
