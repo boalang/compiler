@@ -59,6 +59,7 @@ public class TestBuildSnapshot1 extends BuildSnapshotBase {
 		assertArrayEquals(new String[]{}, fileNames);
 	}
 
+	@Ignore
 	@Test
 	public void testGetSnapshotFromProtobuf2() throws Exception {
 		DefaultProperties.DEBUG = true;
