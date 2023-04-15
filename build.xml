@@ -116,9 +116,9 @@
 	<target name="-check-parser" depends="-init">
 		<condition property="parser.uptodate">
 			<and>
-				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaParser.java" />
-				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaLexer.java" />
-				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaListener.java" />
+				<uptodate srcfile="src/antlr/Boa.g4" targetfile="build/java/boa/parser/BoaParser.java" />
+				<uptodate srcfile="src/antlr/Boa.g4" targetfile="build/java/boa/parser/BoaLexer.java" />
+				<uptodate srcfile="src/antlr/Boa.g4" targetfile="build/java/boa/parser/BoaListener.java" />
 			</and>
 		</condition>
 	</target>
@@ -130,7 +130,7 @@
 			<arg value="../../build/java/boa/parser/" />
 			<arg value="-package" />
 			<arg value="boa.parser" />
-			<arg value="Boa.g" />
+			<arg value="Boa.g4" />
 		</java>
 	</target>
 
