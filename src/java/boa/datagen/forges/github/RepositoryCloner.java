@@ -46,6 +46,18 @@ public class RepositoryCloner {
 //				System.out.println("Cloned repo " + url);
 				result.getRepository().close();
 			}
+			try {
+				// fall back to only TLSv1 to avoid a bug where TLS wont fall back, so servers only supports TLSv1 refuse to work
+				java.lang.System.setProperty("https.protocols", "TLSv1");
+				final CredentialsProvider cp = new UsernamePasswordCredentialsProvider("user", "password");
+				result = Git.cloneRepository().setCredentialsProvider(cp).setURI(url).setBare(true).setDirectory(localGitDir).call();
+				result.getRepository().close();
+			} finally {
+				if (result != null && result.getRepository() != null) {
+//					System.out.println("Cloned repo " + url);
+					result.getRepository().close();
+				}
+			}
 		} 
 	}
 }
