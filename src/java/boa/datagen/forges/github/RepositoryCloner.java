@@ -36,16 +36,9 @@ public class RepositoryCloner {
 			// workaround for
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
 			result.getRepository().close();
-			/*
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.err.println("Error cloning " + url);
 			e.printStackTrace();
-			*/
-		} finally {
-			if (result != null && result.getRepository() != null) {
-//				System.out.println("Cloned repo " + url);
-				result.getRepository().close();
-			}
 			try {
 				// fall back to only TLSv1 to avoid a bug where TLS wont fall back, so servers only supports TLSv1 refuse to work
 				java.lang.System.setProperty("https.protocols", "TLSv1");
@@ -57,6 +50,11 @@ public class RepositoryCloner {
 //					System.out.println("Cloned repo " + url);
 					result.getRepository().close();
 				}
+			}
+		} finally {
+			if (result != null && result.getRepository() != null) {
+//				System.out.println("Cloned repo " + url);
+				result.getRepository().close();
 			}
 		} 
 	}
