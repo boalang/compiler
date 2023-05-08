@@ -29,7 +29,7 @@ public class RepositoryCloner {
 		java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 		try {
 			final CredentialsProvider cp = new UsernamePasswordCredentialsProvider("user", "password");
-			result = Git.cloneRepository().setCredentialsProvider(cp).setURI(url).setBare(true).setDirectory(localGitDir).call();
+			result = Git.cloneRepository().setCredentialsProvider(cp).setURI(url).setTimeout(120).setBare(true).setDirectory(localGitDir).call();
 			// Note: the call() returns an opened repository already which
 			// needs
 			// to be closed to avoid file handle leaks!
@@ -43,7 +43,7 @@ public class RepositoryCloner {
 				// fall back to only TLSv1 to avoid a bug where TLS wont fall back, so servers only supports TLSv1 refuse to work
 				java.lang.System.setProperty("https.protocols", "TLSv1");
 				final CredentialsProvider cp = new UsernamePasswordCredentialsProvider("user", "password");
-				result = Git.cloneRepository().setCredentialsProvider(cp).setURI(url).setBare(true).setDirectory(localGitDir).call();
+				result = Git.cloneRepository().setCredentialsProvider(cp).setURI(url).setTimeout(120).setBare(true).setDirectory(localGitDir).call();
 				result.getRepository().close();
 			} finally {
 				if (result != null && result.getRepository() != null) {
