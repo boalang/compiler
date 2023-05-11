@@ -117,7 +117,13 @@ public class SeqRepoImporter {
 
 		JsonArray repoArray = null;
 		try {
-			repoArray = parser.fromJson(content, JsonElement.class).getAsJsonArray();
+			final JsonElement elem = parser.fromJson(content, JsonElement.class);
+			if (elem.isJsonArray()) {
+				repoArray = elem.getAsJsonArray();
+			} else {
+				repoArray = new JsonArray();
+				repoArray.add(elem);
+			}
 		} catch (final Exception e) {
 			System.err.println("Error proccessing page: " + file.getPath());
 			e.printStackTrace();
