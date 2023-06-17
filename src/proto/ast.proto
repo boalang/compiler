@@ -451,6 +451,10 @@ message Modifier {
 		MODULE = 14;
 		/** A transitive modifier */
 		TRANSITIVE = 15;
+		/** A sealed modifier */
+		SEALED = 16;
+		/** A non_sealed modifier */
+		NON_SEALED= 17;
 	}
 	/** A visibility modifier */
 	enum Visibility {

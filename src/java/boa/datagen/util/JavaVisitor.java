@@ -59,6 +59,7 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS14 = 14;
 	public static final int JLS15 = 15;
 	public static final int JLS16 = 16;
+	public static final int JLS17 = 17;
 	public static final int SOURCE_JAVA_ERROR = 999;
 
 	protected CompilationUnit root = null;
@@ -1059,11 +1060,13 @@ public class JavaVisitor extends ASTVisitor {
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.NATIVE);
 		else if (node.isStrictfp())
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.STRICTFP);
-		else if (node.isSealed())
+		else if (node.isSealed()) {
+			setAstLevel(JLS17);
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.SEALED);
-		else if (node.isNonSealed())
+		} else if (node.isNonSealed()) {
+			setAstLevel(JLS17);
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.NON_SEALED);
-		else {
+		} else {
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.OTHER);
 			b.setOther(node.getKeyword().toString());
 		}
