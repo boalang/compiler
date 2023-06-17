@@ -46,7 +46,6 @@ import boa.types.Ast.Variable;
  * @author huaiyao
  */
 public class JavaVisitor extends ASTVisitor {
-	public static final String PROPERTY_INDEX = "i";
 	public static final int JLS1 = 1;
 	public static final int JLS2 = 2;
 	public static final int JLS3 = 3;
