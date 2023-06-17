@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2023, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 University of Nebraska Board of Regents
  *                 and Bowling Green State University
@@ -335,28 +335,25 @@ public class SymbolTable {
 
 		/* expose the java.lang.Math class */
 
-		globalFunctions.addFunction("highbit", new BoaFunction("java.lang.Long.highestOneBit", new BoaInt(), new BoaType[] { new BoaInt() }));
+		// expose the unary functions
+		for (final String s : Arrays.asList("abs"))
+			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaInt(), new BoaType[] { new BoaInt() }));
 
-		// abs just needs to be overloaded
-		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaInt(), new BoaType[] { new BoaInt() }));
-		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaType[] { new BoaFloat() }));
-
-		// round returns int
-		globalFunctions.addFunction("round", new BoaFunction("java.lang.Math.round", new BoaInt(), new BoaType[] { new BoaFloat() }));
-
-		// expose the rest of the unary functions
-		for (final String s : Arrays.asList("log", "log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
+		for (final String s : Arrays.asList("abs", "log", "log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
 			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaType[] { new BoaFloat() }));
 
 		// expose the binary functions
-		for (final String s : Arrays.asList("pow", "atan2", "hypot", "IEEEremainder", "toDegrees", "toRadians"))
+		for (final String s : Arrays.asList("max", "min", "pow", "atan2", "hypot", "IEEEremainder", "toDegrees", "toRadians"))
+			globalFunctions.addFunction(s.toLowerCase(), new BoaFunction("java.lang.Math." + s, new BoaInt(), new BoaType[] { new BoaInt(), new BoaInt() }));
+
+		for (final String s : Arrays.asList("max", "min", "pow", "atan2", "hypot", "IEEEremainder", "toDegrees", "toRadians"))
 			globalFunctions.addFunction(s.toLowerCase(), new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaType[] { new BoaFloat(), new BoaFloat() }));
 
-		// max and min
-		for (final String s : Arrays.asList("max", "min"))
-			for (final BoaType t : Arrays.asList(new BoaInt(), new BoaFloat()))
-				globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, t, new BoaType[] { t, t }));
+		// some that need special handling
+		globalFunctions.addFunction("highbit", new BoaFunction("java.lang.Long.highestOneBit", new BoaInt(), new BoaType[] { new BoaInt() }));
+		globalFunctions.addFunction("round", new BoaFunction("java.lang.Math.round", new BoaInt(), new BoaType[] { new BoaFloat() }));
 
+		// max/min on other types
 		globalFunctions.addFunction("max", new BoaFunction(new BoaTime(), new BoaType[] { new BoaTime(), new BoaTime() }, "(${0} > ${1} ? ${0} : ${1})"));
 		globalFunctions.addFunction("min", new BoaFunction(new BoaTime(), new BoaType[] { new BoaTime(), new BoaTime() }, "(${0} < ${1} ? ${0} : ${1})"));
 
