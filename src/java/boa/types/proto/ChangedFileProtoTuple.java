@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ import boa.types.proto.enums.FileKindProtoMap;
 
 /**
  * A {@link ChangedFileProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class ChangedFileProtoTuple extends BoaProtoTuple {
@@ -54,13 +54,13 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 		// NOTE: this is here to make reachableTypes() work properly
 		names.put("_placeholder_", counter++);
 		members.add(new ASTRootProtoTuple());
-		
+
 		names.put("key", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("ast", counter++);
 		members.add(new BoaBool());
-		
+
 		names.put("comments", counter++);
 		members.add(new CommentsRootProtoTuple());
 
@@ -69,13 +69,13 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 
 		names.put("previous_names", counter++);
 		members.add(new BoaProtoList(new BoaString()));
-		
+
 		names.put("previous_versions", counter++);
 		members.add(new BoaProtoList(new BoaInt()));
 
 		names.put("previous_indices", counter++);
 		members.add(new BoaProtoList(new BoaInt()));
-		
+
 		names.put("mapped_key", counter++);
 		members.add(new BoaInt());
 	}

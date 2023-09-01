@@ -78,6 +78,10 @@ public class TraverseStatement extends Statement {
 		return node != null;
 	}
 
+	public boolean hasReturnType() {
+		return returnType != null;
+	}
+
 	public boolean hasBody() {
 		return body != null;
 	}
@@ -152,7 +156,7 @@ public class TraverseStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 
@@ -176,7 +180,7 @@ public class TraverseStatement extends Statement {
 			v.node = node.clone();
 		if (hasCondition())
 			v.condition = condition.clone();
-		if (returnType!=null)
+		if (hasReturnType())
 			v.returnType = this.returnType;
 		for (final Identifier id : ids)
 			v.addId(id.clone());

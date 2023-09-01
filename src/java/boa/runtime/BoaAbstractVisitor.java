@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,19 +30,19 @@ import boa.types.Toplevel.Project;
 
 /**
  * Boa abstract AST visitor.
- * 
- * The <code>visit()</code> methods first call <code>preVisit()</code> for the node.
+ *
+ * <p>The <code>visit()</code> methods first call <code>preVisit()</code> for the node.
  * If <code>preVisit()</code> returns <code>true</code>, then each of that node's children are visited and then <code>postVisit()</code> is called.
- * 
- * By default, all <code>preVisit()</code> methods call {@link #defaultPreVisit()} and return <code>true</code>.
+ *
+ * <p>By default, all <code>preVisit()</code> methods call {@link #defaultPreVisit()} and return <code>true</code>.
  * By default, all <code>postVisit()</code> methods call {@link #defaultPostVisit()}.
- * 
+ *
  * @author rdyer
  */
 public abstract class BoaAbstractVisitor {
 	/**
 	 * Initializes any visitor-specific data before starting a visit.
-	 * 
+	 *
 	 * @return itself, to allow method chaining
 	 */
 	public BoaAbstractVisitor initialize() {
@@ -51,7 +52,7 @@ public abstract class BoaAbstractVisitor {
 	/**
 	 * Provides a default action for pre-visiting nodes.
 	 * Any <code>preVisit()</code> method that is not overridden calls this method.
-	 * 
+	 *
 	 * @return always returns true
 	 */
 	protected boolean defaultPreVisit() throws Exception {
@@ -98,6 +99,15 @@ public abstract class BoaAbstractVisitor {
 		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Comment node) throws Exception {
+		return defaultPreVisit();
+	}
+	protected boolean preVisit(final Document node) throws Exception {
+		return defaultPreVisit();
+	}
+	protected boolean preVisit(final Element node) throws Exception {
+		return defaultPreVisit();
+	}
+	protected boolean preVisit(final Attribute node) throws Exception {
 		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Person node) throws Exception {
@@ -150,6 +160,15 @@ public abstract class BoaAbstractVisitor {
 		defaultPostVisit();
 	}
 	protected void postVisit(final Comment node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final Document node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final Element node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final Attribute node) throws Exception {
 		defaultPostVisit();
 	}
 	protected void postVisit(final Person node) throws Exception {
@@ -215,20 +234,48 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < namespacesSize; i++)
 				visit(namespacesList.get(i));
 
+			if (node.hasDocument())
+				visit(node.getDocument());
+
 			postVisit(node);
 		}
 	}
 	public final void visit(final Namespace node) throws Exception {
 		if (preVisit(node)) {
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
+
 			final List<Declaration> declarationsList = node.getDeclarationsList();
 			final int declarationsSize = declarationsList.size();
 			for (int i = 0; i < declarationsSize; i++)
 				visit(declarationsList.get(i));
 
-			final List<Modifier> modifiersList = node.getModifiersList();
-			final int modifiersSize = modifiersList.size();
-			for (int i = 0; i < modifiersSize; i++)
-				visit(modifiersList.get(i));
+			final List<Statement> statementsList = node.getStatementsList();
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
+				visit(statementsList.get(i));
+
+			final List<Method> methodsList = node.getMethodsList();
+			final int methodsSize = methodsList.size();
+			for (int i = 0; i < methodsSize; i++)
+				visit(methodsList.get(i));
+
+			final List<Expression> expressionsList = node.getExpressionsList();
+			final int expressionsSize = expressionsList.size();
+			for (int i = 0; i < expressionsSize; i++)
+				visit(expressionsList.get(i));
+
+			final List<Namespace> namespacesList = node.getNamespacesList();
+			final int namespacesSize = namespacesList.size();
+			for (int i = 0; i < namespacesSize; i++)
+				visit(namespacesList.get(i));
+
+			final List<Variable> variablesList = node.getVariablesList();
+			final int variablesSize = variablesList.size();
+			for (int i = 0; i < variablesSize; i++)
+				visit(variablesList.get(i));
 
 			postVisit(node);
 		}
@@ -265,22 +312,31 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < nestedSize; i++)
 				visit(nestedList.get(i));
 
+			final List<Statement> statementsList = node.getStatementsList();
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
+				visit(statementsList.get(i));
+
 			postVisit(node);
 		}
 	}
 	public final void visit(final Type node) throws Exception {
 		if (preVisit(node)) {
+			if (node.hasComputedName())
+				visit(node.getComputedName());
+
 			postVisit(node);
 		}
 	}
 	public final void visit(final Method node) throws Exception {
 		if (preVisit(node)) {
-			visit(node.getReturnType());
-
 			final List<Modifier> modifiersList = node.getModifiersList();
 			final int modifiersSize = modifiersList.size();
 			for (int i = 0; i < modifiersSize; i++)
 				visit(modifiersList.get(i));
+
+			if (node.hasReturnType())
+				visit(node.getReturnType());
 
 			final List<Type> genericParametersList = node.getGenericParametersList();
 			final int genericParametersSize = genericParametersList.size();
@@ -302,12 +358,16 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < statementsSize; i++)
 				visit(statementsList.get(i));
 
+			if (node.hasComputedName())
+				visit(node.getComputedName());
+
 			postVisit(node);
 		}
 	}
 	public final void visit(final Variable node) throws Exception {
 		if (preVisit(node)) {
-			visit(node.getVariableType());
+			if (node.hasVariableType())
+				visit(node.getVariableType());
 
 			final List<Modifier> modifiersList = node.getModifiersList();
 			final int modifiersSize = modifiersList.size();
@@ -316,6 +376,14 @@ public abstract class BoaAbstractVisitor {
 
 			if (node.hasInitializer())
 				visit(node.getInitializer());
+
+			if (node.hasComputedName())
+				visit(node.getComputedName());
+
+			final List<Expression> expressionsList = node.getExpressionsList();
+			final int expressionsSize = expressionsList.size();
+			for (int i = 0; i < expressionsSize; i++)
+				visit(expressionsList.get(i));
 
 			postVisit(node);
 		}
@@ -348,8 +416,25 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasTypeDeclaration())
 				visit(node.getTypeDeclaration());
 
-			if (node.getExpressionsCount() > 0)
-				visit(node.getExpressions(0));
+			final List<Expression> expressionsList = node.getExpressionsList();
+			final int expressionsSize = expressionsList.size();
+			for (int i = 0; i < expressionsSize; i++)
+				visit(expressionsList.get(i));
+
+			final List<Method> methodsList = node.getMethodsList();
+			final int methodsSize = methodsList.size();
+			for (int i = 0; i < methodsSize; i++)
+				visit(methodsList.get(i));
+
+			final List<Variable> variableDeclarationsList = node.getVariableDeclarationsList();
+			final int variableDeclarationsSize = variableDeclarationsList.size();
+			for (int i = 0; i < variableDeclarationsSize; i++)
+				visit(variableDeclarationsList.get(i));
+
+			final List<Declaration> typeDeclarationsList = node.getTypeDeclarationsList();
+			final int typeDeclarationsSize = typeDeclarationsList.size();
+			for (int i = 0; i < typeDeclarationsSize; i++)
+				visit(typeDeclarationsList.get(i));
 
 			postVisit(node);
 		}
@@ -382,6 +467,34 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasAnonDeclaration())
 				visit(node.getAnonDeclaration());
 
+			if (node.hasAnnotation())
+				visit(node.getAnnotation());
+
+			if (node.hasDeclaringType())
+				visit(node.getDeclaringType());
+
+			if (node.hasReturnType())
+				visit(node.getReturnType());
+
+			final List<Method> methodsList = node.getMethodsList();
+			final int methodsSize = methodsList.size();
+			for (int i = 0; i < methodsSize; i++)
+				visit(methodsList.get(i));
+
+			final List<Statement> statementsList = node.getStatementsList();
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
+				visit(statementsList.get(i));
+
+			if (node.hasComputedVariable())
+				visit(node.getComputedVariable());
+
+			if (node.hasComputedMethod())
+				visit(node.getComputedMethod());
+
+			if (node.hasTrait())
+				visit(node.getTrait());
+
 			postVisit(node);
 		}
 	}
@@ -396,6 +509,60 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Comment node) throws Exception {
+		if (preVisit(node)) {
+			postVisit(node);
+		}
+	}
+	public final void visit(final Document node) throws Exception {
+		if (preVisit(node)) {
+			final List<Element> elementsList = node.getElementsList();
+			final int elementsSize = elementsList.size();
+			for (int i = 0; i < elementsSize; i++)
+				visit(elementsList.get(i));
+
+			if (node.hasDocType())
+				visit(node.getDocType());
+
+			final List<Attribute> processingInstructionList = node.getProcessingInstructionList();
+			final int processingInstructionSize = processingInstructionList.size();
+			for (int i = 0; i < processingInstructionSize; i++)
+				visit(processingInstructionList.get(i));
+
+			postVisit(node);
+		}
+	}
+	public final void visit(final Element node) throws Exception {
+		if (preVisit(node)) {
+			final List<Element> elementsList = node.getElementsList();
+			final int elementsSize = elementsList.size();
+			for (int i = 0; i < elementsSize; i++)
+				visit(elementsList.get(i));
+
+			final List<Attribute> attributesList = node.getAttributesList();
+			final int attributesSize = attributesList.size();
+			for (int i = 0; i < attributesSize; i++)
+				visit(attributesList.get(i));
+
+			if (node.hasScript())
+				visit(node.getScript());
+
+			if (node.hasPhp())
+				visit(node.getPhp());
+
+			final List<Variable> varDeclList = node.getVarDeclList();
+			final int varDeclSize = varDeclList.size();
+			for (int i = 0; i < varDeclSize; i++)
+				visit(varDeclList.get(i));
+
+			final List<Attribute> processingInstructionList = node.getProcessingInstructionList();
+			final int processingInstructionSize = processingInstructionList.size();
+			for (int i = 0; i < processingInstructionSize; i++)
+				visit(processingInstructionList.get(i));
+
+			postVisit(node);
+		}
+	}
+	public final void visit(final Attribute node) throws Exception {
 		if (preVisit(node)) {
 			postVisit(node);
 		}

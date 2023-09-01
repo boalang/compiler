@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Stack;
 
 /**
  * String Manipulation
@@ -112,8 +114,8 @@ public class BoaStringIntrinsics {
 	/**
 	 * Returns the substring of <em>str</em> from <em>start</em> to the end.
 	 * 
-	 * @param str
-	 * @param start
+	 * @param str the string to substring
+	 * @param start the starting index of the substring
 	 * 
 	 * @return the substring of <em>str</em>
 	 */
@@ -125,9 +127,9 @@ public class BoaStringIntrinsics {
 	/**
 	 * Returns the substring of <em>str</em> from <em>start</em> inclusive to <em>end</em> exclusive.
 	 * 
-	 * @param str
-	 * @param start
-	 * @param end
+	 * @param str the string to substring
+	 * @param start the starting index of the substring
+	 * @param end the ending index of the substring, exclusive
 	 * 
 	 * @return the substring of <em>str</em>
 	 */
@@ -139,22 +141,9 @@ public class BoaStringIntrinsics {
 	/**
 	 * Splits a string into an array of strings using the given regex.
 	 * 
-	 * @param str
-	 * @param regex
-	 * 
-	 * @return the substrings of <em>str</em>, split once by <em>regex</em>
-	 */
-	@FunctionSpec(name = "split", returnType = "array of string", formalParameters = { "string", "string"})
-	public static String[] split(final String str, final String regex) {
-		return str.split(regex, 1);
-	}
-
-	/**
-	 * Splits a string into an array of strings using the given regex.
-	 * 
-	 * @param str
-	 * @param regex
-	 * @param n
+	 * @param str the string to split
+	 * @param regex the regular expression to use for splitting
+	 * @param n at most how many times to split
 	 * 
 	 * @return the substrings of <em>str</em>, split at most <em>n</em> times by <em>regex</em>
 	 */
@@ -166,14 +155,40 @@ public class BoaStringIntrinsics {
 	/**
 	 * Splits a string into an array of strings using the given regex.
 	 * 
-	 * @param str
-	 * @param regex
+	 * @param str the string to split
+	 * @param regex the regular expression to use for splitting
 	 * 
 	 * @return the substrings of <em>str</em>, split entirely by <em>regex</em>
 	 */
-	@FunctionSpec(name = "splitall", returnType = "array of string", formalParameters = { "string", "string"})
-	public static String[] splitall(final String str, final String regex) {
+	@FunctionSpec(name = "split", returnType = "array of string", formalParameters = { "string", "string"})
+	public static String[] split(final String str, final String regex) {
 		return str.split(regex);
+	}
+
+	/**
+	 * Joins an array of strings into a single string using the given join string.
+	 * 
+	 * @param joinStr the string to use to join
+	 * @param strs the strings to be joined
+	 * 
+	 * @return the strings in the array with joinStr in between each
+	 */
+	@FunctionSpec(name = "join", returnType = "string", formalParameters = { "string", "array of string"})
+	public static String join(final String joinStr, final String[] strs) {
+		return String.join(joinStr, strs);
+	}
+
+	/**
+	 * Joins a stack of strings into a single string using the given join string.
+	 * 
+	 * @param joinStr the string to use to join
+	 * @param strs the strings to be joined
+	 * 
+	 * @return the strings in the stack with joinStr in between each
+	 */
+	@FunctionSpec(name = "join", returnType = "string", formalParameters = { "string", "stack of string"})
+	public static String join(final String joinStr, final Stack<String> strs) {
+		return String.join(joinStr, strs);
 	}
 
 	/**

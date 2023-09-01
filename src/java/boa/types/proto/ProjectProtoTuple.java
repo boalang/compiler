@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ import boa.types.proto.enums.ForgeKindProtoMap;
 
 /**
  * A {@link BoaProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class ProjectProtoTuple extends BoaProtoTuple {
@@ -113,13 +113,13 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 
 		names.put("stars", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("programing_languages_loc", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("size", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("main_language", counter++);
 		members.add(new BoaString());
 	}

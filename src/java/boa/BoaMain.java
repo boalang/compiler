@@ -33,49 +33,49 @@ import org.apache.commons.cli.PosixParser;
  * @author rdyer
  */
 public class BoaMain {
-    public static void main(final String[] args) throws IOException {
-        final Options options = new Options();
+	public static void main(final String[] args) throws IOException {
+		final Options options = new Options();
 
-        options.addOption("p", "parse",    false, "parse and semantic check a Boa program (don't generate code)");
-        options.addOption("c", "compile",  false, "compile a Boa program");
-        options.addOption("e", "execute",  false, "execute a Boa program locally");
-        options.addOption("g", "generate", false, "generate a Boa dataset");
+		options.addOption("p", "parse",    false, "parse and semantic check a Boa program (don't generate code)");
+		options.addOption("c", "compile",  false, "compile a Boa program");
+		options.addOption("e", "execute",  false, "execute a Boa program locally");
+		options.addOption("g", "generate", false, "generate a Boa dataset");
 
-        try {
-            if (args.length == 0) {
-                printHelp(options, null);
-                return;
-            } else {
-                final CommandLine cl = new PosixParser().parse(options, new String[] { args[0] });
-                final String[] tempargs = new String[args.length - 1];
-                System.arraycopy(args, 1, tempargs, 0, args.length - 1);
+		try {
+			if (args.length == 0) {
+				printHelp(options, null);
+				return;
+			} else {
+				final CommandLine cl = new PosixParser().parse(options, new String[] { args[0] });
+				final String[] tempargs = new String[args.length - 1];
+				System.arraycopy(args, 1, tempargs, 0, args.length - 1);
 
-                if (cl.hasOption("c")) {
-                    boa.compiler.BoaCompiler.main(tempargs);
-                } else if (cl.hasOption("p")) {
-                    boa.compiler.BoaCompiler.parseOnly(tempargs);
-                } else if (cl.hasOption("e")) {
-                    boa.evaluator.BoaEvaluator.main(tempargs);
-                } else if (cl.hasOption("g")) {
-                    boa.datagen.BoaGenerator.main(tempargs);
-                }
-            }
-        } catch (final org.apache.commons.cli.ParseException e) {
-            printHelp(options, e.getMessage());
-        }
-    }
+				if (cl.hasOption("c")) {
+					boa.compiler.BoaCompiler.main(tempargs);
+				} else if (cl.hasOption("p")) {
+					boa.compiler.BoaCompiler.parseOnly(tempargs);
+				} else if (cl.hasOption("e")) {
+					boa.evaluator.BoaEvaluator.main(tempargs);
+				} else if (cl.hasOption("g")) {
+					boa.datagen.BoaGenerator.main(tempargs);
+				}
+			}
+		} catch (final org.apache.commons.cli.ParseException e) {
+			printHelp(options, e.getMessage());
+		}
+	}
 
-    protected static final void printHelp (final Options options, final String message) {
-        if (message != null) System.err.println(message);
+	protected static final void printHelp(final Options options, final String message) {
+		if (message != null) System.err.println(message);
 
-        final HelpFormatter help = new HelpFormatter();
+		final HelpFormatter help = new HelpFormatter();
 
 		final PrintWriter pw = new PrintWriter(System.out);
 		help.printWrapped(pw, HelpFormatter.DEFAULT_WIDTH, "The available options are:");
 		help.printOptions(pw, HelpFormatter.DEFAULT_WIDTH, options, HelpFormatter.DEFAULT_LEFT_PAD, HelpFormatter.DEFAULT_DESC_PAD);
 		help.printWrapped(pw, HelpFormatter.DEFAULT_WIDTH, "\nPlease report issues at http://www.github.com/boalang/compiler");
 		pw.flush();
-    }
+	}
 
 	protected static String pascalCase(final String string) {
 		final StringBuilder pascalized = new StringBuilder();
@@ -95,11 +95,11 @@ public class BoaMain {
 		return pascalized.toString();
 	}
 
-	protected static String jarToClassname(final String path) {
+	public static String jarToClassname(final String path) {
 		return jarToClassname(new File(path));
 	}
 
-	protected static String jarToClassname(final File f) {
+	public static String jarToClassname(final File f) {
 		String s = f.getName();
 		if (s.indexOf('.') != -1)
 			s = s.substring(0, s.lastIndexOf('.'));

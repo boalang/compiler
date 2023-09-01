@@ -63,10 +63,10 @@ public class FunctionType extends AbstractType {
 		this.t = t;
 	}
 
-	public FunctionType () {
+	public FunctionType() {
 	}
 
-	public FunctionType (final AbstractType t) {
+	public FunctionType(final AbstractType t) {
 		if (t != null)
 			t.setParent(this);
 		this.t = t;
@@ -74,7 +74,7 @@ public class FunctionType extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

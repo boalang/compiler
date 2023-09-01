@@ -155,7 +155,6 @@ public class DTree {
      *
      * @param cfg control flow graph
      * @return map of nodes and corresponding set of dominator nodes
-     * @throws Exception
      */
     private Map<CFGNode, Set<CFGNode>> computeDominators(final CFG cfg) {
         final Map<CFGNode, Set<CFGNode>> pDomMap = new HashMap<CFGNode, Set<CFGNode>>();

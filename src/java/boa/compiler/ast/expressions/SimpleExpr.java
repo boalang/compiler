@@ -72,7 +72,7 @@ public class SimpleExpr extends Node {
 		rhs.add(t);
 	}
 
-	public SimpleExpr (final Term lhs) {
+	public SimpleExpr(final Term lhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		this.lhs = lhs;
@@ -80,7 +80,7 @@ public class SimpleExpr extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

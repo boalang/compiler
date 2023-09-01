@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ import boa.types.BoaType;
 
 import java.util.List;
 /**
- * 
+ *
  * @author rdyer
  * @author hridesh
  */
@@ -34,15 +34,15 @@ public abstract class Node {
 	protected Node parent;
 	public int nodeId;
 	/* The following fields are added to represent the edges of
-     	* the control flow graph. */
-    	public List<Node> predecessors;
+	 * the control flow graph. */
+	public List<Node> predecessors;
 	public List<Node> successors;
 
 	// The following fields are building the control flow graph.
 	public List<Node> startNodes;
 	public List<Node> endNodes;
 	public List<Node> exitNodes;
-		
+
 	public Node getParent() {
 		return parent;
 	}
@@ -51,8 +51,10 @@ public abstract class Node {
 		this.parent = parent;
 	}
 
-	public int beginLine, beginColumn;
-	public int endLine, endColumn;
+	public int beginLine;
+	public int beginColumn;
+	public int endLine;
+	public int endColumn;
 
 	public Node setPositions(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
 		this.beginLine = beginLine;
@@ -82,7 +84,7 @@ public abstract class Node {
 		newNode.endColumn = endColumn;
 	}
 
-	public abstract <T,A> T accept(final AbstractVisitor<T,A> v, final A arg);
+	public abstract <T, A> T accept(final AbstractVisitor<T, A> v, final A arg);
 	public abstract <A> void accept(final AbstractVisitorNoReturn<A> v, final A arg);
 	public abstract void accept(final AbstractVisitorNoArgNoRet v);
 

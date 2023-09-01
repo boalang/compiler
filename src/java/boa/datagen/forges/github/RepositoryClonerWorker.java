@@ -23,7 +23,8 @@ import boa.datagen.util.FileIO;
 public class RepositoryClonerWorker implements Runnable {
 	private String outPath = "";
 	private String inPath = "";
-	private int from, to;
+	private int from;
+	private int to;
 	private File recovory;
 	private HashSet<String> names = new HashSet<String>();
 	

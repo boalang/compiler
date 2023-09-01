@@ -1,6 +1,5 @@
 /repos/
-/*.crc
-/source.seq
-/index
-/data
-/projects.seq
+*.crc
+index
+data
+*.seq

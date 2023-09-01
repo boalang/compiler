@@ -38,7 +38,7 @@ public class PostfixStatement extends Statement {
 		return op;
 	}
 
-	public PostfixStatement (final Expression e, final String op) {
+	public PostfixStatement(final Expression e, final String op) {
 		if (e != null)
 			e.setParent(this);
 		this.e = e;
@@ -47,7 +47,7 @@ public class PostfixStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

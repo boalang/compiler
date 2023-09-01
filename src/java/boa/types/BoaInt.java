@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +17,15 @@
  */
 package boa.types;
 
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.Identifier;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaScalar} representing a 64 bit integer value.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaInt extends BoaScalar {
 	/** {@inheritDoc} */
@@ -44,8 +50,27 @@ public class BoaInt extends BoaScalar {
 
 	/** {@inheritDoc} */
 	@Override
+	public boolean assigns(final BoaType that) {
+		// time can be assigned to ints
+		if (that instanceof BoaTime)
+			return true;
+
+		// otherwise, just check the defaults
+		return super.assigns(that);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public boolean accepts(final BoaType that) {
 		return this.assigns(that);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final AbstractType t = new Identifier("int");
+		t.env = env;
+		return t;
 	}
 
 	/** {@inheritDoc} */
@@ -64,5 +89,11 @@ public class BoaInt extends BoaScalar {
 	@Override
 	public String toBoxedJavaType() {
 		return "Long";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String defaultValue() {
+		return "0L";
 	}
 }

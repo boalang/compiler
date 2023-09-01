@@ -32,7 +32,7 @@ import boa.compiler.ast.types.*;
  *
  * @param <ArgTypeT> the type of the argument to pass down the tree while visiting
  */
-public abstract class AbstractVisitorNoReturn<ArgTypeT> {
+public abstract class AbstractVisitorNoReturn<ArgTypeT> extends AbstractVisitorBase {
 	protected void initialize(final ArgTypeT arg) { }
 
 	public void start(final Node n, final ArgTypeT arg) {
@@ -253,7 +253,7 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 		for (final Identifier id : n.getIdList())
 			id.accept(this, arg);
 		if (n.hasCondition())
-			n.getCondition().accept(this,arg);
+			n.getCondition().accept(this, arg);
 		if(n.getReturnType()!=null) {
 			n.getReturnType().accept(this, arg);
 		}
@@ -269,7 +269,7 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 		for (final Identifier id : n.getIdList())
 			id.accept(this, arg);
 		if (n.hasCondition())
-			n.getCondition().accept(this,arg);
+			n.getCondition().accept(this, arg);
 		if(n.getReturnType()!=null) {
 			n.getReturnType().accept(this, arg);
 		}

@@ -29,29 +29,29 @@ import java.util.Map;
  * @author marafat
  */
 public class PDGSlicerProtoTuple extends BoaProtoTuple {
-    private final static List<BoaType> members = new ArrayList<BoaType>();
-    private final static Map<String, Integer> names = new HashMap<String, Integer>();
+	private final static List<BoaType> members = new ArrayList<BoaType>();
+	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-        int counter = 0;
+	static {
+		int counter = 0;
 
-        names.put("entrynodes", counter++);
-        members.add(new BoaProtoList(new PDGNodeProtoTuple()));
+		names.put("entrynodes", counter++);
+		members.add(new BoaProtoList(new PDGNodeProtoTuple()));
 
-        names.put("slice", counter++);
-        members.add(new BoaProtoList(new PDGNodeProtoTuple()));
-    }
+		names.put("slice", counter++);
+		members.add(new BoaProtoList(new PDGNodeProtoTuple()));
+	}
 
-    /**
-     * Construct a {@link CFGSlicerProtoTuple}.
-     */
-    public PDGSlicerProtoTuple() {
-        super(members, names);
-    }
+	/**
+	 * Construct a {@link CFGSlicerProtoTuple}.
+	 */
+	public PDGSlicerProtoTuple() {
+		super(members, names);
+	}
 
-    /** @{inheritDoc} */
-    @Override
-    public String toJavaType() {
-        return "boa.graphs.slicers.PDGSlicer";
-    }
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.graphs.slicers.PDGSlicer";
+	}
 }

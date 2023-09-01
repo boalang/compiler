@@ -22,9 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
-import boa.types.BoaType;
 import boa.types.BoaSet;
+import boa.types.BoaType;
 
 /**
  * A {@link CDGProtoTuple}.
@@ -32,27 +31,29 @@ import boa.types.BoaSet;
  * @author marafat
  */
 public class CDGProtoTuple extends BoaProtoTuple {
-    private final static List<BoaType> members = new ArrayList<BoaType>();
-    private final static Map<String, Integer> names = new HashMap<String, Integer>();
+	private final static List<BoaType> members = new ArrayList<BoaType>();
+	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-        int counter = 0;
+	static {
+		int counter = 0;
 
-        names.put("nodes", counter++);
-        members.add(new BoaSet(new CDGNodeProtoTuple()));
-    }
+		names.put("nodes", counter++);
+		members.add(new BoaSet(new CDGNodeProtoTuple()));
 
-    /**
-     * Construct a {@link CDGProtoTuple}.
-     */
-    public CDGProtoTuple() {
-        super(members, names);
-    }
+		names.put("cfg", counter++);
+		members.add(new CFGProtoTuple());
+	}
 
-    /** @{inheritDoc} */
-    @Override
-    public String toJavaType() {
-        return "boa.graphs.cdg.CDG";
-    }
+	/**
+	 * Construct a {@link CDGProtoTuple}.
+	 */
+	public CDGProtoTuple() {
+		super(members, names);
+	}
 
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.graphs.cdg.CDG";
+	}
 }

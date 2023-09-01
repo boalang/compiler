@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +17,16 @@
  */
 package boa.types;
 
+import boa.compiler.ast.Component;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.types.ArrayType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} representing an array of values.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaArray extends BoaType {
 	private BoaType type;
@@ -32,7 +39,7 @@ public class BoaArray extends BoaType {
 
 	/**
 	 * Construct a BoaArray.
-	 * 
+	 *
 	 * @param boaType
 	 *            A {@link BoaType} representing the type of the elements in
 	 *            this array
@@ -112,7 +119,7 @@ public class BoaArray extends BoaType {
 
 	/**
 	 * Get the element type of this array.
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the element type of this
 	 *         array
 	 */
@@ -122,7 +129,7 @@ public class BoaArray extends BoaType {
 
 	/**
 	 * Set the element type of this array.
-	 * 
+	 *
 	 * @param type
 	 *            A {@link BoaType} representing the element type of this
 	 *            array
@@ -165,6 +172,15 @@ public class BoaArray extends BoaType {
 			return false;
 
 		return true;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final Component c = new Component(this.type.toAST(env));
+		final AbstractType t = new ArrayType(c);
+		c.env = t.env = env;
+		return t;
 	}
 
 	/** {@inheritDoc} */

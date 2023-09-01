@@ -95,6 +95,16 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final EnumBodyDeclaration n) {
+		indent();
+		System.out.println("EnumBodyDeclaration");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final Composite n) {
 		indent();
 		System.out.println("Composite");
@@ -127,7 +137,7 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final Identifier n) {
 		indent();
-		System.out.println("Identifier");
+		System.out.println("Identifier - " + n.getToken());
 		indent++;
 		super.visit(n);
 		indent--;
@@ -378,6 +388,26 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final TraverseStatement n) {
+		indent();
+		System.out.println("TraverseStatement");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final FixPStatement n) {
+		indent();
+		System.out.println("FixPStatement");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final WhileStatement n) {
 		indent();
 		System.out.println("WhileStatement");
@@ -434,6 +464,26 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final VisitorExpression n) {
 		indent();
 		System.out.println("VisitorExpression");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TraversalExpression n) {
+		indent();
+		System.out.println("TraversalExpression");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final FixPExpression n) {
+		indent();
+		System.out.println("FixPExpression");
 		indent++;
 		super.visit(n);
 		indent--;
@@ -586,9 +636,39 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final EnumType n) {
+		indent();
+		System.out.println("EnumType");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final VisitorType n) {
 		indent();
 		System.out.println("VisitorType");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TraversalType n) {
+		indent();
+		System.out.println("TraversalType");
+		indent++;
+		super.visit(n);
+		indent--;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final FixPType n) {
+		indent();
+		System.out.println("FixPType");
 		indent++;
 		super.visit(n);
 		indent--;

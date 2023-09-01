@@ -35,7 +35,7 @@ public class Java8BaseTest extends Java7BaseTest {
 	public static void dumpJavaWrapped(final String content) {
 		setJava8();
 		Java7BaseTest.dumpJavaWrapped(content);
-    }
+	}
 
 	public static void dumpJava(final String content) {
 		setJava8();

@@ -71,8 +71,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	private void buildPosition(final AstNode node) {
 		pos = PositionInfo.newBuilder();
-		int start = node.getPosition();// getStartPosition();
-		int length = node.getLength();// getLength();
+		int start = node.getPosition(); // getStartPosition();
+		int length = node.getLength(); // getLength();
 		pos.setStartPos(start);
 		pos.setLength(length);
 		pos.setStartLine(root.getBaseLineno());

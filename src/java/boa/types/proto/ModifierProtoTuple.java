@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,14 +26,13 @@ import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.ModifierKindProtoMap;
 import boa.types.proto.enums.ScopeProtoMap;
 import boa.types.proto.enums.VisibilityProtoMap;
 
 /**
  * A {@link ModifierProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class ModifierProtoTuple extends BoaProtoTuple {
@@ -60,10 +59,10 @@ public class ModifierProtoTuple extends BoaProtoTuple {
 
 		names.put("other", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("key", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("scope", counter++);
 		members.add(new ScopeProtoMap());
 	}

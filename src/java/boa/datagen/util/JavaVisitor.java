@@ -18,29 +18,46 @@
 
 package boa.datagen.util;
 
-import java.util.*;
+import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.*;
-import boa.datagen.treed.TreedConstants;
-import boa.types.Ast.*;
-import boa.types.Ast.Modifier;
-import boa.types.Ast.Type;
-import boa.types.Shared.ChangeKind;
 
-import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
+import boa.types.Ast.Declaration;
+import boa.types.Ast.Method;
+import boa.types.Ast.Modifier;
+import boa.types.Ast.Namespace;
+import boa.types.Ast.PositionInfo;
+import boa.types.Ast.Type;
+import boa.types.Ast.TypeKind;
+import boa.types.Ast.Variable;
 
 /**
  * @author rdyer
  */
 public class JavaVisitor extends ASTVisitor {
 	public static final String PROPERTY_INDEX = "i";
+	public static final int JLS1 = 1;
 	@SuppressWarnings("deprecation")
-	public static final int JLS1 = 1, JLS2 = AST.JLS2, JLS3 = AST.JLS3, JLS4 = AST.JLS4, JLS8 = AST.JLS8;
+	public static final int JLS2 = AST.JLS2;
+	@SuppressWarnings("deprecation")
+	public static final int JLS3 = AST.JLS3;
+	@SuppressWarnings("deprecation")
+	public static final int JLS4 = AST.JLS4;
+	public static final int JLS8 = AST.JLS8;
 	
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
 	protected String src = null;
-	protected Map<String, Integer> declarationFile, declarationNode;
+	protected Map<String, Integer> declarationFile;
+	protected Map<String, Integer> declarationNode;
 
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();

@@ -1,7 +1,8 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2022, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
+import boa.compiler.transforms.LocalArgumentTransformer;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
 import boa.types.proto.CodeRepositoryProtoTuple;
@@ -42,6 +44,9 @@ import boa.types.proto.CodeRepositoryProtoTuple;
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
+
+	public static final TypeCheckingVisitor instance = new TypeCheckingVisitor();
+	public static boolean warn = true;
 
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
@@ -230,6 +235,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public void start(final Node n, final SymbolTable env) {
+		super.start(n, env);
+		new LocalArgumentTransformer().start(n);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(Start n, SymbolTable env) {
 		n.env = env;
 		super.visit(n, env);
@@ -404,15 +416,22 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if (!((BoaMap) type).getIndexType().assigns(index))
 							throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
 
+						if (!n.env.getIsLhs())
+							warn(node, "directly indexing maps can lead to runtime crashes - replace with lookup(" + n.getOperand() + ", " + new PrettyPrintVisitor().startAndReturn(((Index)node).getStart()) + ", <defaultValue>)");
 						type = ((BoaMap) type).getType();
 					} else {
+						if (n.getOperand().type instanceof BoaTable)
+							throw new TypeCheckException(n.getOperand(), "can not assign to output variable '" + n.getOperand() + "' - did you mean to use <<?");
 						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
 					}
 				} else {
 					node.accept(this, env);
 					n.getOperand().env = env;
 
+					boolean oldwarn = warn;
+					warn = false;
 					final List<BoaType> formalParameters = this.check((Call) node, env);
+					warn = oldwarn;
 
 					try {
 						type = env.getFunction(((Identifier)n.getOperand()).getToken(), formalParameters).erase(formalParameters);
@@ -562,13 +581,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = env;
 
 		try {
+			n.env.setIsLhs(true);
 			n.getLhs().accept(this, env);
+			n.env.setIsLhs(false);
 		} catch (final TypeCheckException e) {
 			if (!e.getMessage().startsWith("expected a call to function"))
 				throw e;
 		}
 
 		n.getRhs().accept(this, env);
+
+		if (n.getLhs().type instanceof BoaTable)
+			throw new TypeCheckException(n.getLhs(), "can not assign to output variable '" + n.getLhs().getOperand() + "' - did you mean to use <<?");
 
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
 			if (!n.getLhs().type.assigns(n.getRhs().type))
@@ -645,6 +669,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			throw new TypeCheckException(n.getId(), "emitting to undeclared output variable '" + id + "'");
 		if (!(type instanceof BoaTable))
 			throw new TypeCheckException(n.getId(), "emitting to non-output variable '" + id + "'");
+
+		Class<?> aggregator = null;
+		try {
+			aggregator = env.getAggregator(id, ((BoaTable)type).getType());
+		} catch (final RuntimeException e) {
+			// do nothing
+		}
+		if (aggregator != null)
+			throw new TypeCheckException(n.getId(), "'" + id + "' is an aggregator function - you must declare an output variable that uses this function, then emit to it");
 
 		final BoaTable t = (BoaTable) type;
 
@@ -818,10 +851,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StopStatement n, final SymbolTable env) {
-		n.env = env;
-
 		if (!env.getIsVisitor())
 			throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits");
+		if (!env.getLastVisit().isBefore())
+			throw new TypeCheckException(n, "Stop statement not allowed inside 'after' visits");
+
+		n.env = env;
 	}
 
 	/** {@inheritDoc} */
@@ -962,7 +997,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 		st.setIsVisitor(true);
+		st.setLastVisit(n);
 		n.getBody().accept(this, st);
+		st.unsetLastVisit();
 		st.unsetIsVisitor();
 	}
 
@@ -1095,24 +1132,24 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionExpression n, final SymbolTable env) {
-		SymbolTable st;
-		try {
-			st = env.cloneNonLocals();
-		} catch (final IOException e) {
-			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
-		}
-
-		n.env = st;
-
-		n.getType().accept(this, st);
+		n.getType().accept(this, env);
 		if (!(n.getType().type instanceof BoaFunction))
 			throw new TypeCheckException(n.getType(), "the identifier '" + n.getType() + "' must be a function type");
 		final BoaFunction t = (BoaFunction)n.getType().type;
 		n.type = t;
 
-		st.setIsVisitor(false);
-		n.getBody().accept(this, st);
-		st.unsetIsVisitor();
+		try {
+			n.env = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+		for (final BoaType p : t.getFormalParameters())
+			if (p instanceof BoaName)
+				n.env.set(((BoaName)p).getId(), ((BoaName)p).getType());
+
+		n.env.setIsVisitor(false);
+		n.getBody().accept(this, n.env);
+		n.env.unsetIsVisitor();
 
 		returnFinder.initialize(t.getType());
 		returnFinder.start(n.getBody());
@@ -1137,7 +1174,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getLhs().accept(this, env);
 		BoaType type = n.getLhs().type;
 
-		// only allow '+' (concat) on arrays
+		// only allow '+' (concat) on arrays and strings
 		if (type instanceof BoaArray) {
 			for (final String s : n.getOps())
 				if (!s.equals("+"))
@@ -1149,7 +1186,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				if (!(t.type instanceof BoaArray) || !valType.assigns(((BoaArray)t.type).getType()))
 					throw new TypeCheckException(t, "invalid array concatenation, found: " + t.type + " expected: " + type);
 			}
-		// only allow '+' (concat) on strings
 		} else if (type instanceof BoaString) {
 			for (final String s : n.getOps())
 				if (!s.equals("+"))
@@ -1179,14 +1215,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final VisitorExpression n, final SymbolTable env) {
 		n.env = env;
 		n.getType().accept(this, env);
+		n.type = n.getType().type;
 		for (final Statement s : n.getBody().getStatements())
 			if (!(s instanceof VisitStatement))
 				throw new TypeCheckException(s, "only 'before' or 'after' visit statements are allowed inside visitor bodies");
 		visitorChecker.start(n);
+		new VisitorDesugar().start(n);
 		n.getBody().accept(this, env);
-		n.type = n.getType().type;
-		final VisitorDesugar desugar = new VisitorDesugar();
-		desugar.start(n);
 	}
 
 	/** {@inheritDoc} */
@@ -1283,22 +1318,26 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionType n, final SymbolTable env) {
-		n.env = env;
+		try {
+			n.env = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
 
 		final BoaType[] params = new BoaType[n.getArgsSize()];
 		if (n.getArgsSize() > 0) {
 			int i = 0;
-			env.setShadowing(true);
+			n.env.setShadowing(true);
 			for (final Component c : n.getArgs()) {
-				c.accept(this, env);
+				c.accept(this, n.env);
 				params[i++] = new BoaName(c.getType().type, c.getIdentifier().getToken());
 			}
-			env.setShadowing(false);
+			n.env.setShadowing(false);
 		}
 
 		BoaType ret = new BoaAny();
 		if (n.hasType()) {
-			n.getType().accept(this, env);
+			n.getType().accept(this, n.env);
 			ret = n.getType().type;
 		}
 
@@ -1350,7 +1389,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		n.getType().accept(this, st);
-		final BoaType type = n.getType().type;
+		BoaType type = n.getType().type;
+		if (type instanceof BoaName)
+			type = ((BoaName)type).getType();
 
 		final AggregatorSpec annotation;
 		try {
@@ -1471,7 +1512,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				else if (f.getOperand() instanceof TimeLiteral)
 					fieldType = new BoaTime();
 				values.add(((ILiteral)(f.getOperand())).getLiteral());
-				types.add(new BoaEnum(c.getIdentifier().getToken(),((ILiteral)(f.getOperand())).getLiteral(),fieldType));
+				types.add(new BoaEnum(c.getIdentifier().getToken(), ((ILiteral)(f.getOperand())).getLiteral(), fieldType));
 			}
 		}
 
@@ -1546,5 +1587,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		return boaMap;
+	}
+
+	protected void warn(final Node node, final String msg) {
+		if (warn)
+			System.err.println("WARNING at line " + node.beginLine + ", columns " + node.beginColumn + "-" + node.endColumn + ": " + msg);
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ import boa.types.proto.enums.IssueStatusProtoMap;
 
 /**
  * A {@link IssueProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class IssueProtoTuple extends BoaProtoTuple {
@@ -87,42 +87,42 @@ public class IssueProtoTuple extends BoaProtoTuple {
 		/*
 		names.put("component", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("resolution", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("duplicated_by", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("duplicate_of", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("subcomponent", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("version", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("os", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("platform", counter++);
 		members.add(new BoaString());
 */
 		/** The issues's associated milestone */
 		names.put("milestone", counter++);
 		members.add(new BoaString());
-		
+
 		//	names.put("depends_on", counter++);
 		//members.add(new BoaString());
-		
+
 		/** The issue's blocked or locked status */
 		names.put("blocked", counter++);
 		members.add(new BoaString());
 		/*
 		names.put("secrecy", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("changes", counter++);
 		members.add(new BoaProtoList(new IssueChangeProtoTuple()));
 		 */
@@ -147,10 +147,9 @@ public class IssueProtoTuple extends BoaProtoTuple {
 
 		names.put("other_labels", counter++);
 		members.add(new BoaProtoList(new IssueLabelProtoMap()));
-	
+
 		names.put("commit", counter++);
 		members.add(new BoaString());
-		
 	}
 
 	/**

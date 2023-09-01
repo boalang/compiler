@@ -16,6 +16,15 @@
  */
 package boa.graphs.slicers;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import boa.graphs.cfg.CFG;
 import boa.graphs.cfg.CFGEdge;
 import boa.graphs.cfg.CFGNode;
@@ -23,11 +32,10 @@ import boa.graphs.trees.PDTree;
 import boa.graphs.trees.TreeNode;
 import boa.runtime.BoaAbstractFixP;
 import boa.runtime.BoaAbstractTraversal;
-import boa.types.Ast.*;
+import boa.types.Ast.Method;
 import boa.types.Control;
-import boa.types.Graph.Traversal.*;
-
-import java.util.*;
+import boa.types.Graph.Traversal.TraversalDirection;
+import boa.types.Graph.Traversal.TraversalKind;
 
 /**
  * A forward slicer based on CFG
@@ -95,7 +103,6 @@ public class CFGSlicer {
      *
      * @param cfg control flow graph
      * @param slicingNodes variable to be used for method slicing
-     * @throws Exception
      */
     private void getSlice(final CFG cfg, final List<CFGNode> slicingNodes) throws Exception {
         if (slicingNodes.size() == 0) return;
@@ -104,8 +111,7 @@ public class CFGSlicer {
         final Set<CFGNode> controlInflNodes = new LinkedHashSet<CFGNode>();
         final Map<Integer, Set<CFGNode>> infl = getInfluence(new PDTree(cfg), cfg);
 
-        // TODO: get rid of the traversal
-        final BoaAbstractTraversal slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
+        final BoaAbstractTraversal<Set<String>> slicer = new BoaAbstractTraversal<Set<String>>(true, true) {
             protected Set<String> preTraverse(final CFGNode node) throws Exception {
                 // in(n) = \/(pred) out(pred)
                 final Set<String> in = new LinkedHashSet<String>();
@@ -158,16 +164,10 @@ public class CFGSlicer {
         };
 
         final BoaAbstractFixP fixp = new BoaAbstractFixP() {
-            public boolean invoke1(final Set<String> current, final Set<String> previous) {
-                final Set<String> curr = new LinkedHashSet<String>(current);
-                curr.removeAll(previous);
-                return curr.size() == 0;
-            }
-
             @Override
             @SuppressWarnings({"unchecked"})
             public boolean invoke(final Object current, final Object previous) throws Exception {
-                return invoke1((LinkedHashSet<String>) current, (LinkedHashSet<String>) previous);
+                return boa.functions.BoaIntrinsics.set_symdiff((LinkedHashSet<String>) current, (LinkedHashSet<String>) previous).size() == 0;
             }
         };
 
@@ -190,11 +190,12 @@ public class CFGSlicer {
         final Map<Integer[], String> controlEdges = new HashMap<Integer[], String>();
         for (final CFGNode n : cfg.getNodes()) {
             if (n.getKind() == Control.Node.NodeType.CONTROL)
-                for (final CFGEdge e : n.getOutEdges())
+                for (final CFGEdge e : n.getOutEdges()) {
                     if (e.getLabel().equals("."))
-                        controlEdges.put(new Integer[]{e.getSrc().getNodeId(), e.getDest().getNodeId()}, "F");
+                        controlEdges.put(new Integer[] { e.getSrc().getNodeId(), e.getDest().getNodeId() }, "F");
                     else
-                        controlEdges.put(new Integer[]{e.getSrc().getNodeId(), e.getDest().getNodeId()}, e.getLabel());
+                        controlEdges.put(new Integer[] { e.getSrc().getNodeId(), e.getDest().getNodeId() }, e.getLabel());
+                }
         }
 
         // add the edge: entry ---> start

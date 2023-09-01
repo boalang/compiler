@@ -1,0 +1,8 @@
+type T1 = enum { A = "yes" };
+type T2 = enum { A = "yes", B = "no" };
+type T3 = enum { A = "yes", B = "no", C = "maybe" };
+
+# trailing commas
+type T1B = enum { A = "yes", };
+type T2B = enum { A = "yes", B = "no", };
+type T3B = enum { A = "yes", B = "no", C = "maybe", };

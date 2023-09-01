@@ -32,6 +32,11 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffFormatter;
+import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.diff.DiffEntry.ChangeType;
+import org.eclipse.jgit.errors.IncorrectObjectTypeException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
@@ -40,7 +45,10 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.AbstractTreeIterator;
+import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.util.io.NullOutputStream;
 
 import boa.datagen.DefaultProperties;
 import boa.types.Code.Revision;
@@ -121,14 +129,15 @@ public class GitConnector extends AbstractConnector {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-			Set<RevCommit> heads = getHeads();
+			Set<RevCommit> heads = getHeads(); // all branches
+//			RevCommit heads = revwalk.parseCommit(repository.resolve(Constants.HEAD)); // main branch
 			revwalk.markStart(heads);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
-			
+
 			revisionMap = new HashMap<String, Integer>();
-			
+
 			int i = 0;
 			long maxTime = 1000;
 			List<RevCommit> commitList = new ArrayList<RevCommit>();
@@ -139,9 +148,8 @@ public class GitConnector extends AbstractConnector {
 				System.err.println(projectName + " has " + commitList.size() + " commits " + " exceeding the maximum commit size of " + MAX_COMMITS);
 //				return;
 			}
-				
+
 			for (final RevCommit rc: commitList) {
-				i++;
 				long startTime = System.currentTimeMillis();
 				
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk, projectName);
@@ -163,12 +171,11 @@ public class GitConnector extends AbstractConnector {
 					gc.setMessage(rc.getFullMessage());
 				} catch (Exception e) {}
 				
-				gc.getChangeFiles(rc);
+				gc.updateChangedFiles(rc);
 				gc.fileNameIndices.clear();
 				
 				if (commitList.size() > MAX_COMMITS) {
 					revisionMap.put(gc.id, revisionKeys.size());
-					
 					Revision revision = gc.asProtobuf(projectName);
 					revisionKeys.add(commitWriterLen);
 					BytesWritable bw = new BytesWritable(revision.toByteArray());
@@ -176,10 +183,11 @@ public class GitConnector extends AbstractConnector {
 					commitWriterLen += bw.getLength();
 				} else {
 					revisionMap.put(gc.id, revisions.size());
-					
 					revisions.add(gc);
 				}
-				
+
+				i++; 
+
 				if (debug) {
 					long endTime = System.currentTimeMillis();
 					long time = endTime - startTime;
@@ -303,6 +311,39 @@ public class GitConnector extends AbstractConnector {
 		return snapshot;
 	}
 	
+	public List<String> getDiffFiles(String commit) {
+		ArrayList<String> files = new ArrayList<String>();
+		try {
+			RevCommit child = revwalk.parseCommit(repository.resolve(commit));
+			if (child.getParentCount() == 0) { // edge case: for the first commit, consider all files as changes
+				TreeWalk tw = new TreeWalk(repository);
+				tw.reset();
+				tw.addTree(child.getTree());
+				tw.setRecursive(true);
+				while (tw.next())
+					if (!tw.isSubtree())
+						files.add(tw.getPathString());
+				tw.close();
+			} else { // use jgit diff for changed file detection
+				DiffFormatter df = new DiffFormatter(NullOutputStream.INSTANCE);
+				df.setRepository(repository);
+				df.setDiffComparator(RawTextComparator.DEFAULT);
+				df.setDetectRenames(true);
+				AbstractTreeIterator parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), child.getParent(0).getTree());
+				AbstractTreeIterator childIter = new CanonicalTreeParser(null, repository.newObjectReader(), child.getTree());
+				// DELETE file has no new path
+				for (final DiffEntry diff : df.scan(parentIter, childIter))
+					files.add(diff.getChangeType() == ChangeType.DELETE ? diff.getOldPath() : diff.getNewPath());
+				df.close();
+			}
+		} catch (IncorrectObjectTypeException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return files;
+	}
+	
 	public List<String> logCommitIds() {
 		List<String> commits = new ArrayList<String>();
 		RevWalk temprevwalk = new RevWalk(repository);
@@ -313,8 +354,7 @@ public class GitConnector extends AbstractConnector {
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
-			
-			for (final RevCommit rc: revwalk)
+			for (final RevCommit rc : revwalk)
 				commits.add(rc.getName());
 		} catch (final IOException e) {
 			e.printStackTrace();

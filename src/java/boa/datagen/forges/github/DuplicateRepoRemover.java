@@ -25,8 +25,8 @@ public class DuplicateRepoRemover {
 		File dir = new File(args[0]);
 		File[] files = dir.listFiles();
 		int totalFiles = files.length;
-		int from = 0, 
-		to = totalFiles;
+		int from = 0;
+		int to = totalFiles;
 		DuplicateRepoWorker worker = new DuplicateRepoWorker(args[0], args[1], from, to);
 		new Thread(worker).start();
 	}

@@ -6,6 +6,9 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+
 
 /**
  * Simple snippet which shows how to clone a repository from a remote source
@@ -25,18 +28,29 @@ public class RepositoryCloner {
 
 		java.lang.System.setProperty("https.protocols", "TLSv1,TLSv1.1,TLSv1.2");
 		try {
-			result = Git.cloneRepository().setURI(url).setBare(true).setDirectory(localGitDir).call();
+			final CredentialsProvider cp = new UsernamePasswordCredentialsProvider("user", "password");
+			result = Git.cloneRepository().setCredentialsProvider(cp).setURI(url).setTimeout(120).setBare(true).setDirectory(localGitDir).call();
 			// Note: the call() returns an opened repository already which
 			// needs
 			// to be closed to avoid file handle leaks!
 			// workaround for
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
 			result.getRepository().close();
-			/*
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			System.err.println("Error cloning " + url);
 			e.printStackTrace();
-			*/
+			try {
+				// fall back to only TLSv1 to avoid a bug where TLS wont fall back, so servers only supports TLSv1 refuse to work
+				java.lang.System.setProperty("https.protocols", "TLSv1");
+				final CredentialsProvider cp = new UsernamePasswordCredentialsProvider("user", "password");
+				result = Git.cloneRepository().setCredentialsProvider(cp).setURI(url).setTimeout(120).setBare(true).setDirectory(localGitDir).call();
+				result.getRepository().close();
+			} finally {
+				if (result != null && result.getRepository() != null) {
+//					System.out.println("Cloned repo " + url);
+					result.getRepository().close();
+				}
+			}
 		} finally {
 			if (result != null && result.getRepository() != null) {
 //				System.out.println("Cloned repo " + url);

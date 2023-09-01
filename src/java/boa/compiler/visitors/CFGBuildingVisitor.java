@@ -84,7 +84,6 @@ import boa.compiler.ast.types.TupleType;
  * @author ganeshau
  */
 public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
-	private int id = 0;
 	public List<Node> currentStartNodes;
 	public List<Node> currentEndNodes;
 	public List<Node> currentExitNodes;
@@ -103,12 +102,23 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 	/** {@inheritDoc} */
 	@Override
+	public void initialize() {
+		this.order = new ArrayList<Node>();
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final Block n) {
 		List<Statement> stats = n.getStatements();
 
 		if (stats.size() == 0) {
 			singleton(n);
 		} else {
+			currentStartNodes = new ArrayList<Node>(1);
+			currentStartNodes.add(n);
+			currentEndNodes = new ArrayList<Node>(1);
+			currentEndNodes.add(n);
+			currentExitNodes = emptyList;
 			visitStatements(stats);
 			addNode(n);
 			visitList(stats);
@@ -476,7 +486,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final SwitchStatement n) {
 		Expression selector = n.getCondition();
-		List<SwitchCase> cases = n.getCases();
+		List<SwitchCase> cases = new ArrayList<SwitchCase>(n.getCases());
 
 		// fill the start/end/exit nodes
 		selector.accept(this);
@@ -883,14 +893,12 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FixPStatement n) {
-		this.order = new ArrayList<Node>();
 		n.getBody().accept(this);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TraverseStatement n) {
-		this.order = new ArrayList<Node>();
 		n.getBody().accept(this);
 	}
 
@@ -945,7 +953,8 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final IfAllStatement n) {
 		Component initS = n.getVar();
-		List<Component> init = new ArrayList<Component>(); init.add(initS);
+		List<Component> init = new ArrayList<Component>();
+		init.add(initS);
 		Expression cond = n.getCondition();
 		Block thenpart = n.getBody();
 
@@ -985,7 +994,8 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final ExistsStatement n) {
 		Component initS = n.getVar();
-		List<Component> init = new ArrayList<Component>(); init.add(initS);
+		List<Component> init = new ArrayList<Component>();
+		init.add(initS);
 		Expression cond = n.getCondition();
 		Block thenpart = n.getBody();
 
@@ -1379,19 +1389,16 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 	private static void connectStartNodesToEndNodesOf(Node start, Node end) {
 		if (end.endNodes != null)
-			for (Node endNode : end.endNodes) {
-				for (Node startNode : start.startNodes) {
-					endNode.successors.add(startNode);
-					startNode.predecessors.add(endNode);
-				}
-			}
+			for (Node endNode : end.endNodes)
+				connectToStartNodesOf(endNode, start);
 	}
 
 	private static void connectToStartNodesOf(Node start, Node end) {
-		for (Node startNode : end.startNodes) {
-			startNode.predecessors.add(start);
-			start.successors.add(startNode);
-		}
+		if (end.startNodes != null)
+			for (Node startNode : end.startNodes) {
+				startNode.predecessors.add(start);
+				start.successors.add(startNode);
+			}
 	}
 
 	private void visitStatements(List<? extends Node> statements) {

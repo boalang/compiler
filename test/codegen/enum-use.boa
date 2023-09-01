@@ -1,0 +1,7 @@
+o: output sum of int;
+o << 1; 
+
+type e = enum { A = 1, B = 2, C = 3 };
+mye: e;
+mye = e.A;
+mye2 := e.A;

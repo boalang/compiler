@@ -1,5 +1,5 @@
 /*
- * Copyright 2019, Yijia Huang, Hridesh Rajan, 
+ * Copyright 2019, Yijia Huang, Hridesh Rajan,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,14 @@
  */
 package boa.types;
 
+import boa.compiler.ast.Component;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.types.QueueType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} representing a queue of values.
- * 
+ *
  * @author hyj
  */
 public class BoaQueue extends BoaType {
@@ -33,7 +38,7 @@ public class BoaQueue extends BoaType {
 
 	/**
 	 * Construct a {@link BoaQueue}.
-	 * 
+	 *
 	 * @param boaType
 	 *            A {@link BoaType} representing the type of the values in
 	 *            this queue
@@ -107,12 +112,22 @@ public class BoaQueue extends BoaType {
 
 	/**
 	 * Get the type of the values of this queue.
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the type of the values of this
 	 *         queue
 	 */
 	public BoaType getType() {
 		return this.type;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final Component c = new Component(this.type.toAST(env));
+		final AbstractType t = new QueueType(c);
+		c.env = t.env = env;
+		t.type = this;
+		return t;
 	}
 
 	/** {@inheritDoc} */

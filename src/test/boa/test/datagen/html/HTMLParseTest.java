@@ -4,13 +4,10 @@ import java.io.File;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.parser.Parser;
 import org.junit.Test;
 
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
-import boa.types.Ast.*;
-import boa.types.Ast.ASTRoot;
 
 public class HTMLParseTest {
 	@Test

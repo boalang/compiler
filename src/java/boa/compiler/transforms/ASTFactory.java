@@ -1,7 +1,8 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer
+ * Copyright 2016-2022, Hridesh Rajan, Robert Dyer
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Operand;
+import boa.compiler.ast.statements.AssignmentStatement;
 import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.Term;
@@ -44,12 +46,13 @@ public class ASTFactory {
 				type
 			);
 		type.type = var.type = t;
+		var.env = env;
 		return var;
 	}
 
 	public static VarDeclStatement createVarDecl(final String name, final Operand init, final BoaType t, final SymbolTable env) {
 		final VarDeclStatement var = new VarDeclStatement(
-				new Identifier(name),
+				ASTFactory.createIdentifier(name, env),
 				new Expression(
 					new Conjunction(
 						new Comparison(
@@ -71,6 +74,16 @@ public class ASTFactory {
 		final Identifier id = new Identifier(name);
 		id.env = env;
 		return id;
+	}
+
+	public static AssignmentStatement createAssignment(final String name, final Expression init, final BoaType t, final SymbolTable env) {
+		final AssignmentStatement var = new AssignmentStatement(
+				new Factor(ASTFactory.createIdentifier(name, env)),
+				init
+			);
+		var.type = init.type = t;
+		var.env = init.env = env;
+		return var;
 	}
 
 	public static Expression createIdentifierExpr(final String name, final SymbolTable env, BoaType t) {

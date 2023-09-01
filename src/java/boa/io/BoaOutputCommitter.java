@@ -1,7 +1,8 @@
 /*
- * Copyright 2019, Hridesh Rajan, Robert Dyer, Che Shian Hung
+ * Copyright 2019-2021, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 Bowling Green State University
- *                 and Iowa State University of Science and Technology
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +18,22 @@
  */
 package boa.io;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FSDataInputStream;
-import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapred.JobClient;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.JobID;
 import org.apache.hadoop.mapred.RunningJob;
 import org.apache.hadoop.mapred.TaskCompletionEvent;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.JobStatus;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
 
 /**
  * A {@link FileOutputCommitter} that stores the job results into a database.
@@ -67,17 +69,26 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		final JobClient jobClient = new JobClient(new JobConf(context.getConfiguration()));
 		final RunningJob job = jobClient.getJob((org.apache.hadoop.mapred.JobID) JobID.forName(context.getConfiguration().get("mapred.job.id")));
 		String diag = "";
-		for (final TaskCompletionEvent event : job.getTaskCompletionEvents(0))
-			switch (event.getTaskStatus()) {
-				case SUCCEEDED:
-					break;
-				default:
-					diag += "Diagnostics for: " + event.getTaskTrackerHttp() + "\n";
-					for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
-						diag += s + "\n";
-					diag += "\n";
-					break;
-			}
+		int start = 0;
+		while (true) {
+			final TaskCompletionEvent[] events = job.getTaskCompletionEvents(start);
+			if (events == null || events.length == 0)
+				break;
+			start += events.length;
+			for (final TaskCompletionEvent event : events)
+				switch (event.getTaskStatus()) {
+					case KILLED:
+						break;
+					case SUCCEEDED:
+						break;
+					default:
+						diag += "Diagnostics for: " + event.getTaskAttemptId() + "\n";
+						for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
+							diag += s + "\n";
+						diag += "\n";
+						break;
+				}
+		}
 		updateStatus(diag, context.getConfiguration().getInt("boa.hadoop.jobid", 0));
 	}
 
@@ -103,13 +114,28 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				ps2.setString(1, error == null ? "" : error);
 				ps2.executeUpdate();
 			} finally {
-				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
-				try { if (ps2 != null) ps2.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
+				try {
+					if (ps2 != null)
+						ps2.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
-			try { if (con != null) con.close(); } catch (final Exception e) { e.printStackTrace(); }
+			try {
+				if (con != null)
+					con.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -132,7 +158,12 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				ps.executeUpdate();
 			} catch (final Exception e) {
 			} finally {
-				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 
 			fileSystem.mkdirs(new Path("/boa", new Path("" + jobId)));
@@ -141,7 +172,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			final int MAX_OUTPUT = 64 * 1024 - 1;
 			final byte[] b = new byte[MAX_OUTPUT];
-			int length = 0;
+			long length = 0;
 			String output = "";
 
 			// ensure the reducer class is initialized in the cleanup task
@@ -154,18 +185,30 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				if (!fileSystem.exists(path))
 					break;
 
-				fileSystem.rename(path, new Path("/boa", new Path("" + jobId, new Path(boa.runtime.BoaPartitioner.getVariableFromPartition(partNum) + ".txt"))));
-				partNum++;
+				final Path newpath = new Path("/boa", new Path("" + jobId, new Path(boa.runtime.BoaPartitioner.getVariableFromPartition(partNum++) + ".txt")));
+				if (fileSystem.exists(newpath))
+					try {
+						fileSystem.delete(newpath, false);
+					} catch (final Exception e) {
+						// do nothing
+					}
+
+				fileSystem.rename(path, newpath);
 
 				if (in != null)
-					try { in.close(); } catch (final Exception e) { e.printStackTrace(); }
-				in = fileSystem.open(path);
+					try {
+						in.close();
+					} catch (final Exception e) {
+						e.printStackTrace();
+					}
+				in = fileSystem.open(newpath);
 
 				int numBytes = 0;
 
-				while (length < MAX_OUTPUT && (numBytes = in.read(b)) > 0) {
+				while ((numBytes = in.read(b)) > 0) {
+					if (output.length() < MAX_OUTPUT)
+						output += new String(b, 0, numBytes);
 					length += numBytes;
-					output += new String(b, 0, numBytes < MAX_OUTPUT ? numBytes : MAX_OUTPUT);
 
 					this.context.progress();
 				}
@@ -174,17 +217,40 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			try {
 				ps = con.prepareStatement("UPDATE boa_output SET length=?, web_result=?, hash=MD5(web_result) WHERE id=" + jobId);
 				ps.setLong(1, length);
-				ps.setString(2, output.substring(0, length < MAX_OUTPUT ? length : MAX_OUTPUT));
+				if (output.length() < MAX_OUTPUT)
+					ps.setString(2, output);
+				else
+					ps.setString(2, output.substring(0, MAX_OUTPUT));
 				ps.executeUpdate();
 			} finally {
-				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
-			try { if (con != null) con.close(); } catch (final Exception e) { e.printStackTrace(); }
-			try { if (in != null) in.close(); } catch (final Exception e) { e.printStackTrace(); }
-			try { if (fileSystem != null) fileSystem.close(); } catch (final Exception e) { e.printStackTrace(); }
+			try {
+				if (con != null)
+					con.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				if (in != null)
+					in.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				if (fileSystem != null)
+					fileSystem.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -201,12 +267,22 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				ps.setString(1, id);
 				ps.executeUpdate();
 			} finally {
-				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try {
+					if (ps != null)
+						ps.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
-			try { if (con != null) con.close(); } catch (final Exception e) { e.printStackTrace(); }
+			try {
+				if (con != null)
+					con.close();
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

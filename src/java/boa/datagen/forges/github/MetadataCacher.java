@@ -14,11 +14,11 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 public class MetadataCacher {
 	private String url;
 
-	private String username, password;
+	private String username;
+	private String password;
 	private boolean authenticated = false;
 	private HttpURLConnection connection = null;
 	private int responseCode = -1;
-	private String responseMessage;
 	private String content = "";
 	
 	public MetadataCacher(String url) {
@@ -118,7 +118,6 @@ public class MetadataCacher {
 	private void getHttpResponseCode() {
 		try {
 			this.responseCode = this.connection.getResponseCode();
-			this.responseMessage = this.connection.getResponseMessage();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

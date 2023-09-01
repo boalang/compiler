@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,11 +24,10 @@ import java.util.Map;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.IssueLabelProtoMap;
 
 /**
  * A {@link BoaProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class IssueRepositoryProtoTuple extends BoaProtoTuple {
@@ -43,7 +42,7 @@ public class IssueRepositoryProtoTuple extends BoaProtoTuple {
 
 		names.put("name", counter++);
 		members.add(new BoaString());
-		
+
 		names.put("key", counter++);
 		members.add(new BoaString());
 	}

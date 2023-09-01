@@ -31,7 +31,8 @@ public class StringProcessor {
 	}
 	public static ArrayList<ArrayList<Integer>> match(ArrayList<String> str, ArrayList<String> target)
 	{
-		int lenM = str.size(), lenN = target.size();
+		int lenM = str.size();
+		int lenN = target.size();
 		int[][] d = new int[lenM+1][lenN+1];
 		String[] codeM = new String[lenM+1];
 		String[] codeN = new String[lenN+1];
@@ -73,21 +74,24 @@ public class StringProcessor {
 		printLCS(p, lenM, lenN, lcsM, lcsN);
 		
 		ArrayList<ArrayList<Integer>> pos = new ArrayList<ArrayList<Integer>>();
-		pos.add(lcsM); pos.add(lcsN);
+		pos.add(lcsM);
+		pos.add(lcsN);
 		return pos;
 	}
 	private static void printLCS(char[][] p, int lenM, int lenN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN)
 	{
-		int i = lenM, j = lenN;
-		while(i > 0 && j > 0)
+		int i = lenM;
+		int j = lenN;
+		while (i > 0 && j > 0)
 		{
-			if(p[i][j] =='D')
+			if (p[i][j] =='D')
 			{
 				lcsM.add(0, i-1);
 				lcsN.add(0, j-1);
-				i--; j--;
+				i--;
+				j--;
 			}
-			else if(p[i][j] == 'U')
+			else if (p[i][j] == 'U')
 				i--;
 			else
 				j--;
@@ -283,19 +287,11 @@ public class StringProcessor {
 	}
 	/**
 	 * Largest Common Sub-sequence
-	 * @param sequence1
-	 * @param sequence2
-	 * @param neighborhood
-	 * @param lcsM
-	 * @param lcsN
-	 * @param startM
-	 * @param endM
-	 * @param startN
-	 * @param endN
 	 */
 	public static void doLCS(ArrayList<String> sequence1, ArrayList<String> sequence2, int startM, int endM, int startN, int endN, int neighborhood, int minNeighborhood, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN)
 	{
-		int lenM = endM - startM + 1, lenN = endN - startN + 1;
+		int lenM = endM - startM + 1;
+		int lenN = endN - startN + 1;
 		int[][] d = new int[2][lenN+1];
 		String[] codeM = new String[lenM+1];
 		String[] codeN = new String[lenN+1];
@@ -422,11 +418,13 @@ public class StringProcessor {
 				}
 			}
 		}
-		int i = lenM, j = lenN;
-		int preM = lenM+1, preN = lenN+1;
-		while(i > 0 && j > 0)
+		int i = lenM;
+		int j = lenN;
+		int preM = lenM+1;
+		int preN = lenN+1;
+		while (i > 0 && j > 0)
 		{
-			if(p[i][j] == 'D')
+			if (p[i][j] == 'D')
 			{
 				lcsM.set(startM+i-1, startN+j-1);
 				lcsN.set(startN+j-1, startM+i-1);
@@ -434,11 +432,13 @@ public class StringProcessor {
 				{
 					if (i < preM-1 && j < preN-1)
 						doLCS(sequence1, sequence2, startM+i, startM+preM-2, startN+j, startN+preN-2, (neighborhood-1)/2, minNeighborhood, lcsM, lcsN);
-					preM = i; preN = j;
+					preM = i;
+					preN = j;
 				}	
-				i--; j--;
+				i--;
+				j--;
 			}
-			else if(p[i][j] == 'U')
+			else if (p[i][j] == 'U')
 				i--;
 			else
 				j--;
@@ -448,18 +448,10 @@ public class StringProcessor {
 	}
 	/**
 	 * Largest Similar Sub-sequence
-	 * @param term1
-	 * @param term2
-	 * @param neighborhood
-	 * @param lcsM
-	 * @param lcsN
-	 * @param startM
-	 * @param endM
-	 * @param startN
-	 * @param endN
 	 */
 	public static void doLSS(ArrayList<String> term1, ArrayList<String> term2, int neighborhood, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN, int startM, int endM, int startN, int endN) {
-		int lenM = endM - startM + 1, lenN = endN - startN + 1;
+		int lenM = endM - startM + 1;
+		int lenN = endN - startN + 1;
 		double[][] d = new double[lenM + 1][lenN + 1];
 		String[] codeM = new String[lenM + 1];
 		String[] codeN = new String[lenN + 1];
@@ -491,7 +483,8 @@ public class StringProcessor {
 				}
 			}
 		}
-		int i = lenM, j = lenN;
+		int i = lenM;
+		int j = lenN;
 		while (i > 0 && j > 0) {
 			if (p[i][j].equals("LU")) {
 				lcsM.set(startM + i - 1, startN + j - 1);
@@ -513,7 +506,8 @@ public class StringProcessor {
 	}
 	
 	public static double computeCharLCS(ArrayList<Character> term1, ArrayList<Character> term2) {
-		int lenM = term1.size(), lenN = term2.size();
+		int lenM = term1.size();
+		int lenN = term2.size();
 		int[][] d = new int[lenM + 1][lenN + 1];
 		char[] codeM = new char[lenM + 1];
 		char[] codeN = new char[lenN + 1];
@@ -547,7 +541,8 @@ public class StringProcessor {
 	}
 
 	public static void doLCS(String s1, String s2, ArrayList<Integer> lcs1, ArrayList<Integer> lcs2) {
-		int lenM = s1.length(), lenN = s2.length();
+		int lenM = s1.length();
+		int lenN = s2.length();
 		double[][] d = new double[lenM+1][lenN+1];
 		char[] codeM = new char[lenM+1];
 		char[] codeN = new char[lenN+1];
@@ -596,7 +591,8 @@ public class StringProcessor {
 			alignments.add(a);
 		}
 		for (int i = 1; i < sequences.size(); i++) {
-			ArrayList<Integer> lcs1 = new ArrayList<Integer>(), lcs2 = new ArrayList<Integer>();
+			ArrayList<Integer> lcs1 = new ArrayList<Integer>();
+			ArrayList<Integer> lcs2 = new ArrayList<Integer>();
 			doLCS(s0, sequences.get(i), lcs1, lcs2);
 			update(alignments, lcs1, lcs2);
 		}

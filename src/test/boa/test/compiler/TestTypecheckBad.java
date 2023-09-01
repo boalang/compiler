@@ -115,4 +115,24 @@ public class TestTypecheckBad extends BaseTest {
 	public void addSetWrongVal() throws IOException {
 		typecheck(load(badDir + "add-set-wrong-val.boa"), "no such function add([set of string, ChangedFile])");
 	}
+
+	@Test
+	public void aggregatorInEmit() throws IOException {
+		typecheck(load(badDir + "aggregator-in-emit.boa"), "'sum' is an aggregator function - you must declare an output variable that uses this function, then emit to it");
+	}
+
+	@Test
+	public void stopInAfter() throws IOException {
+		typecheck(load(badDir + "stop-in-after.boa"), "Stop statement not allowed inside 'after' visits");
+	}
+
+	@Test
+	public void assignOutput() throws IOException {
+		typecheck(load(badDir + "assignoutput.boa"), "can not assign to output variable 'o' - did you mean to use <<?");
+	}
+
+	@Test
+	public void functionAsArgBad() throws IOException {
+		typecheck(load(badDir + "function-as-arg-bad.boa"), "invalid identifier 'l'");
+	}
 }

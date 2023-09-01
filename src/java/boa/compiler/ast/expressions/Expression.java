@@ -60,11 +60,11 @@ public class Expression extends Node {
 		rhs.add(c);
 	}
 
-	public Expression () {
+	public Expression() {
 		this(null);
 	}
 
-	public Expression (final Conjunction lhs) {
+	public Expression(final Conjunction lhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		this.lhs = lhs;
@@ -72,7 +72,7 @@ public class Expression extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

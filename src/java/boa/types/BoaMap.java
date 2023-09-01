@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,10 +16,16 @@
  */
 package boa.types;
 
+import boa.compiler.ast.Component;
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.types.MapType;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaType} representing a mapping a set of keys to some value.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaMap extends BoaType {
 	private final BoaType valueType;
@@ -34,11 +40,11 @@ public class BoaMap extends BoaType {
 
 	/**
 	 * Construct a BoaMap.
-	 * 
+	 *
 	 * @param valueType
 	 *            A {@link BoaType} representing the valueType of the values in
 	 *            this map
-	 * 
+	 *
 	 * @param indexType
 	 *            A {@link BoaType} representing the valueType of the indices in
 	 *            this map
@@ -121,7 +127,7 @@ public class BoaMap extends BoaType {
 
 	/**
 	 * Get the valueType of the values of this map.
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the valueType of the values of this
 	 *         map
 	 */
@@ -131,12 +137,23 @@ public class BoaMap extends BoaType {
 
 	/**
 	 * Get the valueType of the indices of this map.
-	 * 
+	 *
 	 * @return A {@link BoaType} representing the valueType of the indices of this
 	 *         map
 	 */
 	public BoaType getIndexType() {
 		return this.indexType;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final Component i = new Component(this.indexType.toAST(env));
+		final Component v = new Component(this.valueType.toAST(env));
+		final AbstractType t = new MapType(i, v);
+		i.env = v.env = t.env = env;
+		t.type = this;
+		return t;
 	}
 
 	/** {@inheritDoc} */

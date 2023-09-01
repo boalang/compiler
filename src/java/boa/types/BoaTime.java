@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +17,15 @@
  */
 package boa.types;
 
+import boa.compiler.ast.types.AbstractType;
+import boa.compiler.ast.Identifier;
+import boa.compiler.SymbolTable;
+
 /**
  * A {@link BoaScalar} representing a time value in milliseconds since 1970.
- * 
+ *
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaTime extends BoaScalar {
 	/** {@inheritDoc} */
@@ -43,6 +49,14 @@ public class BoaTime extends BoaScalar {
 
 	/** {@inheritDoc} */
 	@Override
+	public AbstractType toAST(final SymbolTable env) {
+		final AbstractType t = new Identifier("time");
+		t.env = env;
+		return t;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public String toString() {
 		return "time";
 	}
@@ -57,5 +71,11 @@ public class BoaTime extends BoaScalar {
 	@Override
 	public String toBoxedJavaType() {
 		return "Long";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String defaultValue() {
+		return "0L";
 	}
 }

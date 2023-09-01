@@ -39,7 +39,7 @@ public class FixPExpression extends Operand {
 		return body;
 	}
 
-	public FixPExpression (final FixPType t, final Block body) {
+	public FixPExpression(final FixPType t, final Block body) {
 		if (t != null)
 			t.setParent(this);
 		if (body != null)
@@ -50,7 +50,7 @@ public class FixPExpression extends Operand {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

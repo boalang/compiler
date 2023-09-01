@@ -14,11 +14,11 @@ import java.util.Map;
 public class MetadataLangCacher {
     private String url;
 
-    private String username, password;
+    private String username;
+    private String password;
     private boolean authenticated = false;
     private HttpURLConnection connection = null;
     private int responseCode = -1;
-    private String responseMessage;
     private String content = "";
 
     public MetadataLangCacher(String url) {
@@ -118,7 +118,6 @@ public class MetadataLangCacher {
     private void getHttpResponseCode() {
         try {
             this.responseCode = this.connection.getResponseCode();
-            this.responseMessage = this.connection.getResponseMessage();
         } catch (IOException e) {
             e.printStackTrace();
         }

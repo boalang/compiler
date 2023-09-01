@@ -33,7 +33,7 @@ public class ParenExpression extends Operand {
 		return e;
 	}
 
-	public ParenExpression (final Expression e) {
+	public ParenExpression(final Expression e) {
 		if (e != null)
 			e.setParent(this);
 		this.e = e;
@@ -41,7 +41,7 @@ public class ParenExpression extends Operand {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 

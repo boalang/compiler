@@ -27,7 +27,6 @@ import com.google.protobuf.Message;
 import boa.datagen.BoaGenerator;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
-import boa.datagen.util.ProtoMessageVisitor;
 import boa.functions.BoaIntrinsics;
 import boa.test.datagen.java.Java8BaseTest;
 import boa.types.Ast.ASTRoot;
@@ -46,7 +45,8 @@ public class TestSequenceFile extends Java8BaseTest {
 		
 	public TestSequenceFile() throws IOException {
 		fileSystem = FileSystem.get(conf);
-		Path projectPath = new Path("dataset/projects.seq"), dataPath = new Path("dataset/data");
+		Path projectPath = new Path("dataset/projects.seq");
+		Path dataPath = new Path("dataset/data");
 		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
 			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
 			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
@@ -73,12 +73,14 @@ public class TestSequenceFile extends Java8BaseTest {
 		
 		openMaps(path);
 		fileSystem = FileSystem.get(conf);
-		Path projectPath = new Path(path + "/projects.seq"), dataPath = new Path(path + "/ast/data");
+		Path projectPath = new Path(path + "/projects.seq");
+		Path dataPath = new Path(path + "/ast/data");
 		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
 			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
 			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
 		}
-		Set<Long> cfKeys = new HashSet<Long>(), astKeys = new HashSet<Long>();
+		Set<Long> cfKeys = new HashSet<Long>();
+		Set<Long> astKeys = new HashSet<Long>();
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {
@@ -182,7 +184,8 @@ public class TestSequenceFile extends Java8BaseTest {
 		return emptyRevision;
 	}
 	
-	private static MapFile.Reader commitMap, astMap;
+	private static MapFile.Reader commitMap;
+	private static MapFile.Reader astMap;
 
 	private static void openMaps(String path) {
 		try {
@@ -259,7 +262,8 @@ public class TestSequenceFile extends Java8BaseTest {
 							if (message instanceof boa.types.Ast.Type) {
 								boa.types.Ast.Type type = (boa.types.Ast.Type) message;
 								String fqn = type.getFullyQualifiedName();
-								final int fileId = type.getDeclarationFile(), nodeId = type.getDeclaration();
+								final int fileId = type.getDeclarationFile();
+								final int nodeId = type.getDeclaration();
 								if (fqn != null && !fqn.isEmpty() && fileId > 0) {
 									Declaration decl = null;
 									HashMap<Integer, Declaration> declarations = fileNodeDeclaration.get(fileId);

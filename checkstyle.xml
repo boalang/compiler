@@ -33,14 +33,6 @@
         <!-- Checks that the outer type name and the file name match. For example, the class Foo must be in a file named Foo.java.
              See http://checkstyle.sourceforge.net/config_misc.html#OuterTypeFilename -->
         <module name="OuterTypeFilename"/>
-    </module>
-
-    <!--========
-    = WARNINGS =
-    =========-->
-
-    <module name="TreeWalker">
-        <property name="severity" value="warning"/>
 
         <!--====================================================
                               Annotations
@@ -90,9 +82,17 @@
              See http://checkstyle.sourceforge.net/config_coding.html#MissingSwitchDefault -->
         <module name="MissingSwitchDefault"/>
 
+        <!-- Checks that each variable declaration is in its own statement and on its own line.
+             See http://checkstyle.sourceforge.net/config_coding.html#MultipleVariableDeclarations -->
+        <module name="MultipleVariableDeclarations"/>
+
         <!-- Verifies there are no finalize() methods defined in a class.
              See http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
         <module name="NoFinalizer"/>
+
+        <!-- Checks that there is only one statement per line.
+             See http://checkstyle.sourceforge.net/config_coding.html#OneStatementPerLine -->
+        <module name="OneStatementPerLine"/>
 
         <!--=================================================
                               JavaDoc
@@ -106,9 +106,17 @@
             <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
 
+        <!-- Checks paragraphs.
+             See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocParagraph -->
+        <module name="JavadocParagraph"/>
+
         <!-- Checks the indentation of the continuation lines in at-clauses.
              See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocTagContinuationIndentation -->
         <module name="JavadocTagContinuationIndentation"/>
+
+        <!-- Checks that the at-clause tag is followed by description.
+             See http://checkstyle.sourceforge.net/config_javadoc.html#NonEmptyAtclauseDescription -->
+        <module name="NonEmptyAtclauseDescription"/>
 
         <!--==============================================
                            Miscellaneous
@@ -192,9 +200,20 @@
             <message key="ws.notPreceded" value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
         </module>
 
+        <!-- Checks the padding between the identifier of a method definition, constructor definition, method call, or constructor invocation; and the left parenthesis of the parameter list.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#MethodParamPad -->
+        <module name="MethodParamPad"/>
+
         <!-- Checks that chosen statements are not line-wrapped.
              See http://checkstyle.sourceforge.net/config_whitespace.html#NoLineWrap -->
         <module name="NoLineWrap"/>
+
+        <!-- Checks the policy on how to wrap lines on operators.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#OperatorWrap -->
+        <module name="OperatorWrap">
+            <property name="option" value="NL"/>
+            <property name="tokens" value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR"/>
+        </module>
 
         <!-- Checks line wrapping with separators.
              See http://checkstyle.sourceforge.net/config_whitespace.html#SeparatorWrap -->
@@ -206,5 +225,21 @@
             <property name="tokens" value="COMMA"/>
             <property name="option" value="EOL"/>
         </module>
+
+        <!-- Checks that a token is followed by whitespace.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAfter -->
+        <!-- NOTE: not part of Google style guidelines -->
+        <module name="WhitespaceAfter">
+            <!-- dont enforce on TYPECAST -->
+            <property name="tokens" value="COMMA, SEMI"/>
+        </module>
+    </module>
+
+    <!--========
+    = WARNINGS =
+    =========-->
+
+    <module name="TreeWalker">
+        <property name="severity" value="warning"/>
     </module>
 </module>

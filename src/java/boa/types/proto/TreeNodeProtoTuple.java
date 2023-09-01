@@ -33,38 +33,38 @@ import java.util.Map;
  * @author marafat
  */
 public class TreeNodeProtoTuple extends BoaProtoTuple {
-    private final static List<BoaType> members = new ArrayList<BoaType>();
-    private final static Map<String, Integer> names = new HashMap<String, Integer>();
+	private final static List<BoaType> members = new ArrayList<BoaType>();
+	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-        int counter = 0;
+	static {
+		int counter = 0;
 
-        names.put("kind", counter++);
-        members.add(new NodeTypeProtoMap());
+		names.put("kind", counter++);
+		members.add(new NodeTypeProtoMap());
 
-        names.put("id", counter++);
-        members.add(new BoaInt());
+		names.put("id", counter++);
+		members.add(new BoaInt());
 
-        names.put("stmt", counter++);
-        members.add(new StatementProtoTuple());
+		names.put("stmt", counter++);
+		members.add(new StatementProtoTuple());
 
-        names.put("expr", counter++);
-        members.add(new ExpressionProtoTuple());
+		names.put("expr", counter++);
+		members.add(new ExpressionProtoTuple());
 
-        names.put("children", counter++);
-        members.add(new BoaProtoList(new TreeNodeProtoTuple()));
-    }
+		names.put("children", counter++);
+		members.add(new BoaProtoList(new TreeNodeProtoTuple()));
+	}
 
-    /**
-     * Construct a {@link TreeNodeProtoTuple}.
-     */
-    public TreeNodeProtoTuple() {
-        super(members, names);
-    }
+	/**
+	 * Construct a {@link TreeNodeProtoTuple}.
+	 */
+	public TreeNodeProtoTuple() {
+		super(members, names);
+	}
 
-    /** @{inheritDoc} */
-    @Override
-    public String toJavaType() {
-        return "boa.graphs.trees.TreeNode";
-    }
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.graphs.trees.TreeNode";
+	}
 }

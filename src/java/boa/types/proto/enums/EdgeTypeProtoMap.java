@@ -24,12 +24,10 @@ import com.google.protobuf.ProtocolMessageEnum;
  *
  * @author marafat
  */
-
 public class EdgeTypeProtoMap extends BoaProtoMap {
-    /** {@inheritDoc} */
-    @Override
-    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-        return boa.types.Control.Edge.EdgeType.class;
-    }
-
+	/** {@inheritDoc} */
+	@Override
+	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+		return boa.types.Control.Edge.EdgeType.class;
+	}
 }

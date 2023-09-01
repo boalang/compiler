@@ -119,7 +119,8 @@ public class FileIO {
 	    	URL url = new URL(prefix);
 	        is = url.openStream();
 	        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		    String line, last = null;
+		    String line;
+		    String last = null;
 	        while ((line = br.readLine()) != null) {
 	        	line = line.trim();
 	        	if (line.startsWith("<a ")) {
@@ -163,7 +164,8 @@ public class FileIO {
 	}
 
 	public static String getFile(String outPath, String name, String link) throws IOException {
-		File dir = new File(outPath), file = new File(dir, name);
+		File dir = new File(outPath);
+		File file = new File(dir, name);
 		if (!file.exists()) {
 			URL url = new URL(link);
 			ReadableByteChannel rbc = Channels.newChannel(url.openStream());
@@ -197,15 +199,18 @@ public class FileIO {
 	}
 
 	public static class DirectoryRemover implements Runnable {
-		private String path;
+		private File file;
 
-		public DirectoryRemover(String path) {
-			this.path = path;
+		public DirectoryRemover(final String path) {
+			this.file = new File(path);
+		}
+
+		public DirectoryRemover(final File f) {
+			this.file = f;
 		}
 
 		@Override
 		public void run() {
-			File file = new File(path);
 			if (file.exists()) {
 //				System.out.println("Deleting cloned repo " + path);
 				org.apache.commons.io.FileUtils.deleteQuietly(file);

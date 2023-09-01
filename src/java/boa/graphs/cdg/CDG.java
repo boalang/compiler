@@ -18,9 +18,8 @@ package boa.graphs.cdg;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +42,7 @@ import boa.types.Control;
 public class CDG {
     private Method md;
     private CDGNode entryNode;
+    private CFG cfg;
     private final Set<CDGNode> nodes = new LinkedHashSet<CDGNode>();
 
     /**
@@ -53,6 +53,7 @@ public class CDG {
      */
     public CDG(final CFG cfg) throws Exception {
         if (cfg != null && cfg.getNodes().size() > 0) {
+            this.cfg = cfg;
             this.md = cfg.getMd();
             final PDTree pdTree = new PDTree(cfg);
             pdTree.addEntryNode();
@@ -89,6 +90,10 @@ public class CDG {
      */
     public Method getMethod() {
         return md;
+    }
+
+    public CFG getCfg() {
+        return cfg;
     }
 
     /**

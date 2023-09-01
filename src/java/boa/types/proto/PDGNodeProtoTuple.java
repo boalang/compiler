@@ -33,41 +33,41 @@ import java.util.Map;
  * @author marafat
  */
 public class PDGNodeProtoTuple extends BoaProtoTuple {
-    private final static List<BoaType> members = new ArrayList<BoaType>();
-    private final static Map<String, Integer> names = new HashMap<String, Integer>();
+	private final static List<BoaType> members = new ArrayList<BoaType>();
+	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-        int counter = 0;
+	static {
+		int counter = 0;
 
-        names.put("kind", counter++);
-        members.add(new NodeTypeProtoMap());
+		names.put("kind", counter++);
+		members.add(new NodeTypeProtoMap());
 
-        names.put("id", counter++);
-        members.add(new BoaInt());
+		names.put("id", counter++);
+		members.add(new BoaInt());
 
-        names.put("stmt", counter++);
-        members.add(new StatementProtoTuple());
+		names.put("stmt", counter++);
+		members.add(new StatementProtoTuple());
 
-        names.put("expr", counter++);
-        members.add(new ExpressionProtoTuple());
+		names.put("expr", counter++);
+		members.add(new ExpressionProtoTuple());
 
-        names.put("successors", counter++);
-        members.add(new BoaProtoList(new PDGNodeProtoTuple()));
+		names.put("successors", counter++);
+		members.add(new BoaProtoList(new PDGNodeProtoTuple()));
 
-        names.put("predecessors", counter++);
-        members.add(new BoaProtoList(new PDGNodeProtoTuple()));
-    }
+		names.put("predecessors", counter++);
+		members.add(new BoaProtoList(new PDGNodeProtoTuple()));
+	}
 
-    /**
-     * Construct a {@link PDGNodeProtoTuple}.
-     */
-    public PDGNodeProtoTuple() {
-        super(members, names);
-    }
+	/**
+	 * Construct a {@link PDGNodeProtoTuple}.
+	 */
+	public PDGNodeProtoTuple() {
+		super(members, names);
+	}
 
-    /** @{inheritDoc} */
-    @Override
-    public String toJavaType() {
-        return "boa.graphs.pdg.PDGNode";
-    }
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "boa.graphs.pdg.PDGNode";
+	}
 }

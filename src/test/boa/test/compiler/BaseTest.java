@@ -19,6 +19,7 @@ package boa.test.compiler;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -33,12 +34,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -48,23 +49,21 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import org.stringtemplate.v4.ST;
-
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
-import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.InheritedAttributeTransformer;
+import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.RecursiveFunctionTransformer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
-import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
-
 import boa.parser.BoaLexer;
 import boa.parser.BoaParser;
 import boa.parser.BoaParser.StartContext;
@@ -108,7 +107,7 @@ public abstract class BaseTest {
 		final List<String> foundErr = new ArrayList<String>();
 		final BoaLexer lexer = new BoaLexer(new ANTLRInputStream(new StringReader(input)));
 		lexer.removeErrorListeners();
-		lexer.addErrorListener(new BaseErrorListener () {
+		lexer.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
 				foundErr.add(line + "," + charPositionInLine + ": " + msg);
@@ -189,7 +188,7 @@ public abstract class BaseTest {
 			parser.reset();
 
 			parser.removeErrorListeners();
-			parser.addErrorListener(new BaseErrorListener () {
+			parser.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
 					foundErr.add(line + "," + charPositionInLine + ": " + msg);
@@ -225,7 +224,8 @@ public abstract class BaseTest {
 		final StartContext ctx = parse(input);
 
 		try {
-			new TypeCheckingVisitor().start(ctx.ast, new SymbolTable());
+			TypeCheckingVisitor.warn = false;
+			TypeCheckingVisitor.instance.start(ctx.ast, new SymbolTable());
 			if (error != null)
 				fail("expected error: " + error);
 		} catch (final Exception e) {
@@ -263,9 +263,10 @@ public abstract class BaseTest {
 			new VariableDeclRenameTransformer().start(p);
 			new InheritedAttributeTransformer().start(p);
 			new LocalAggregationTransformer().start(p);
+			new RecursiveFunctionTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
 
-			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", 64 * 1024 * 1024, seed, false);
+			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("Test", true, seed, false);
 			cg.start(p);
 
 			try (final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile))) {
@@ -291,7 +292,7 @@ public abstract class BaseTest {
 				} else
 					fail("found unexpected exception: " + e.getMessage());
 			} else
-				assertEquals(error, e.getMessage());
+				assertThat(e.getMessage(), RegexMatcher.matches(error));
 		}
 
 		delete(outputSrcDir);
@@ -338,5 +339,25 @@ public abstract class BaseTest {
 
 		if (!f.delete())
 			throw new IOException("unable to delete file " + f);
+	}
+
+	public static class RegexMatcher extends BaseMatcher {
+		private final String regex;
+
+		public RegexMatcher(final String regex) {
+			this.regex = regex;
+		}
+
+		public boolean matches(final Object o) {
+			return ((String)o).matches(regex);
+		}
+
+		public void describeTo(final Description description) {
+			description.appendText("matches regex=" + regex);
+		}
+
+		public static RegexMatcher matches(final String regex) {
+			return new RegexMatcher(regex);
+		}
 	}
 }

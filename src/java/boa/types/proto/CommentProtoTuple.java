@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,12 +25,11 @@ import boa.types.BoaInt;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.CommentKindProtoMap;
 
 /**
  * A {@link CommentProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class CommentProtoTuple extends BoaProtoTuple {
@@ -48,7 +47,7 @@ public class CommentProtoTuple extends BoaProtoTuple {
 
 		names.put("position", count++);
 		members.add(new PositionInfoProtoTuple());
-		
+
 		names.put("key", count++);
 		members.add(new BoaInt());
 	}

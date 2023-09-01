@@ -44,7 +44,7 @@ cfg_reach_def := traversal(n: CFGNode): T {
 		tmp_out:=values(cur_val.out);
 		foreach(i:int;def(tmp_out[i])) {
 			tmp1:=clone(tmp_out[i]);
-			str_array:=splitall(tmp1,"@");
+			str_array:=split(tmp1,"@");
 			if(str_array[0] == genkill.kill) {
 				remove(cur_val.out, tmp1);
 			}
@@ -62,7 +62,7 @@ copy_prop := traversal(n: CFGNode) : set of T1 {
 	foreach(i:int;def(uv[i])) {
 		tmp_in:=values(cur_val.in);
 		foreach(j:int;def(tmp_in[j])) {
-			str_array:=splitall(tmp_in[j],"@");
+			str_array:=split(tmp_in[j],"@");
 			if(str_array[0] == uv[i]) {
 				val : T1 = {uv[i], tmp_in[j]};
 				add(out1, val);

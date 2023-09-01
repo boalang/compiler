@@ -23,8 +23,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,45 +36,38 @@ import java.util.zip.ZipEntry;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
-import org.stringtemplate.v4.ST;
-
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
-
 import org.scannotation.ClasspathUrlFinder;
 
 import boa.BoaMain;
-import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
+import boa.compiler.listeners.BoaErrorListener;
+import boa.compiler.listeners.LexerErrorListener;
+import boa.compiler.listeners.ParserErrorListener;
 import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.RecursiveFunctionTransformer;
 import boa.compiler.transforms.VariableDeclRenameTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
-import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.ASTPrintingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
-import boa.compiler.listeners.BoaErrorListener;
-import boa.compiler.listeners.LexerErrorListener;
-import boa.compiler.listeners.ParserErrorListener;
-
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.RecognitionException;
-
 import boa.datagen.DefaultProperties;
-import boa.parser.BoaParser;
 import boa.parser.BoaLexer;
+import boa.parser.BoaParser;
 
 /**
  * The main entry point for the Boa compiler.
@@ -143,7 +136,13 @@ public class BoaCompiler extends BoaMain {
 
 			try {
 				if (!parserErrorListener.hasError) {
-					new TypeCheckingVisitor().start(p, new SymbolTable());
+					TypeCheckingVisitor.warn = true;
+					TypeCheckingVisitor.instance.start(p, new SymbolTable());
+					TypeCheckingVisitor.warn = false;
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER TypeCheckingVisitor");
+						new PrettyPrintVisitor().start(p);
+					}
 
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);
@@ -151,14 +150,35 @@ public class BoaCompiler extends BoaMain {
 					LOG.info(inputFile.getName() + ": task complexity: " + (isSimple ? "simple" : "complex"));
 
 					new VariableDeclRenameTransformer().start(p);
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER VariableDeclRenameTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 					new InheritedAttributeTransformer().start(p);
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER InheritedAttributeTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 					new LocalAggregationTransformer().start(p);
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER LocalAggregationTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
+					new RecursiveFunctionTransformer().start(p);
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER RecursiveFunctionTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 					new VisitorOptimizingTransformer().start(p);
+					if (cl.hasOption("ppall")) {
+						System.out.println("==> AFTER VisitorOptimizingTransformer");
+						new PrettyPrintVisitor().start(p);
+					}
 
 					if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 					if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 
-					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(className, isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024, seed, DefaultProperties.localDataPath != null);
+					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(className, isSimple, seed, DefaultProperties.localDataPath != null);
 					cg.start(p);
 
 					final File outputFile = new File(outputSrcDir, className + ".java");
@@ -167,9 +187,12 @@ public class BoaCompiler extends BoaMain {
 					}
 
 					compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
+				} else {
+					System.exit(-1);
 				}
 			} catch (final TypeCheckException e) {
 				parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+				System.exit(-1);
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -209,7 +232,7 @@ public class BoaCompiler extends BoaMain {
 
 			try {
 				if (!parserErrorListener.hasError) {
-					new TypeCheckingVisitor().start(p, new SymbolTable());
+					TypeCheckingVisitor.instance.start(p, new SymbolTable());
 
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);
@@ -292,6 +315,7 @@ public class BoaCompiler extends BoaMain {
 		options.addOption("ast", "ast-parsed", false, "print the AST immediately after parsing (debug)");
 		options.addOption("ast2", "ast-transformed", false, "print the AST after transformations, before code generation (debug)");
 		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
+		options.addOption("ppall", "pretty-print-all", false, "pretty print the AST after each transform (debug)");
 		options.addOption("cd", "compilation-dir", true, "directory to store all generated files");
 
 		final CommandLine cl;

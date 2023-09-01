@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import boa.types.proto.enums.RepositoryKindProtoMap;
 
 /**
  * A {@link BoaProtoTuple}.
- * 
+ *
  * @author rdyer
  */
 public class CodeRepositoryProtoTuple extends BoaProtoTuple {
@@ -63,10 +63,10 @@ public class CodeRepositoryProtoTuple extends BoaProtoTuple {
 
 		names.put("head", counter++);
 		members.add(new BoaInt());
-		
+
 		names.put("head_snapshot", counter++);
 		members.add(new BoaProtoList(new ChangedFileProtoTuple()));
-		
+
 		names.put("revision_keys", counter++);
 		members.add(new BoaProtoList(new BoaInt()));
 	}

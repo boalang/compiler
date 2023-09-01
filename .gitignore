@@ -6,3 +6,5 @@
 /bin/
 /.settings/
 /junitvmwatcher*.properties
+.vscode/
+/src/antlr/.antlr

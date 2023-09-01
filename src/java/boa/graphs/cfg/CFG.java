@@ -19,20 +19,19 @@ package boa.graphs.cfg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Expression;
+import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Method;
 import boa.types.Ast.Statement;
-import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Variable;
-import boa.types.Control.Graph.Builder;
 import boa.types.Control.Edge.EdgeLabel;
+import boa.types.Control.Graph.Builder;
 import boa.types.Control.Node.NodeType;
 
 /**
@@ -116,7 +115,7 @@ public class CFG {
 	/**
 	 * Returns the CFG node if id exists, null otherwise
 	 *
-	 * @param id
+	 * @param id the node id
 	 * @return CFG node
 	 */
 	public CFGNode getNode(int id) {
@@ -491,7 +490,7 @@ public class CFG {
 		return graph;
 	}
 
-	private CFG traverse_if (final CFGNode cfgNode, final Statement root) {
+	private CFG traverse_if(final CFGNode cfgNode, final Statement root) {
 		this.isBranchPresent = true;
 		final CFG graph = new CFG();
 
@@ -500,7 +499,8 @@ public class CFG {
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getNodeId() + ".");
 		graph.mergeSeq(branch);
 
-		boolean trueNotEmpty = false, falseNotEmpty = false;
+		boolean trueNotEmpty = false;
+		boolean falseNotEmpty = false;
 		if (root.getStatementsCount() > 0) { // Then
 			final CFG trueBranch = traverse(branch, root.getStatements(0));
 			if (trueBranch.getNodes().size() > 0) {
@@ -529,7 +529,8 @@ public class CFG {
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getNodeId() + ".");
 		graph.mergeSeq(branch);
 
-		boolean trueNotEmpty = false, falseNotEmpty = false;
+		boolean trueNotEmpty = false;
+		boolean falseNotEmpty = false;
 		if (root.getExpressionsCount() > 0) { // Then
 			final CFG trueBranch = traverse(branch, root.getExpressions(0));
 			if (trueBranch.getNodes().size() > 0) {
@@ -617,7 +618,8 @@ public class CFG {
 
 		// condition
 		final CFGNode control = new CFGNode("FOR", NodeType.CONTROL, "FOR", "FOR");
-		control.setAstNode(root.getConditions(0));
+        if (root.getConditionsList().size() > 0)
+            control.setAstNode(root.getConditions(0));
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid() + cfgNode.getNodeId() + ".");
 		graph.mergeSeq(control);
 

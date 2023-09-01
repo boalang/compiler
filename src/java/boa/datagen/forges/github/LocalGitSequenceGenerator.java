@@ -21,14 +21,11 @@ import boa.datagen.scm.AbstractConnector;
 import boa.datagen.scm.GitConnector;
 
 public class LocalGitSequenceGenerator {
-
-	private static SequenceFile.Writer projectWriter, astWriter, contentWriter;
+	private static SequenceFile.Writer projectWriter;
+	private static SequenceFile.Writer astWriter;
+	private static SequenceFile.Writer contentWriter;
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
-
-	public LocalGitSequenceGenerator() {
-		// TODO Auto-generated constructor stub
-	}
 
 	public static void localGitSequenceGenerate(String path, String outputPath) throws IOException {
 		conf = new Configuration();
@@ -36,8 +33,7 @@ public class LocalGitSequenceGenerator {
 		openWriters(outputPath);
 		try {
 			storeRepo(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		closeWriters();
@@ -68,20 +64,20 @@ public class LocalGitSequenceGenerator {
 				contentWriter.close();
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 				}
 				break;
-			} catch (Throwable t) {
+			} catch (final Throwable t) {
 				t.printStackTrace();
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 				}
 			}
 		}
 	}
 
-	private static void storeRepo(String path) throws IOException {
+	private static void storeRepo(final String path) throws IOException {
 		final Project.Builder projBuilder = Project.newBuilder();
 		final File gitDir = new File(path);
 		projBuilder.setName(gitDir.getName());
@@ -117,7 +113,7 @@ public class LocalGitSequenceGenerator {
 					e.printStackTrace();
 				}
 		}
-		Project project = projBuilder.build();
+		final Project project = projBuilder.build();
 		// System.out.println(project);
 		projectWriter.append(new Text(project.getId()), new BytesWritable(project.toByteArray()));
 	}

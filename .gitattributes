@@ -1,0 +1,3 @@
+*.proto linguist-detectable
+src/compiled-proto/** linguist-generated
+test/datagen/** -linguist-detectable

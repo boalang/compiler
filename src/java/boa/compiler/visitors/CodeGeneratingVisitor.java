@@ -18,8 +18,6 @@
 package boa.compiler.visitors;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -314,8 +312,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<Component> members = n.getMembers();
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
-			final List<String> types2 = new ArrayList<String>();
-			final List<Boolean> protos = new ArrayList<Boolean>();
+			final List<Boolean> aliases = new ArrayList<Boolean>();
 
 			int fieldCount = 0;
 			for (final Component c : members) {
@@ -326,16 +323,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 				fieldCount++;
 				BoaType type = c.getType().type;
-				protos.add(type instanceof BoaProtoTuple);
-				types.add(type.toInterfaceJavaType());
-				types2.add(type.toBoxedJavaType());
+				aliases.add((type instanceof BoaProtoTuple) || (type instanceof BoaEnum));
+				types.add(type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
-			st.add("types2", types2);
-			st.add("protos", protos);
+			st.add("aliases", aliases);
 
 			code.add(st.render());
 		}
@@ -494,13 +489,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected boolean abortGeneration = false;
 
 	protected String className;
-	protected int splitSize;
+	protected boolean simple;
 	protected int seed;
 	protected boolean isLocal;
 
-	public CodeGeneratingVisitor(final String className, final int splitSize, final int seed, final boolean isLocal) throws IOException {
+	public CodeGeneratingVisitor(final String className, final boolean simple, final int seed, final boolean isLocal) throws IOException {
 		this.className = className;
-		this.splitSize = splitSize;
+		this.simple = simple;
 		this.seed = seed;
 		this.isLocal = isLocal;
 
@@ -580,7 +575,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		Collections.sort(variableNames);
 
 		st.add("name", className);
-		st.add("splitsize", splitSize);
+		st.add("simple", simple);
 		st.add("seed", seed);
 		st.add("outputVariableNames", variableNames);
 		if (isLocal) st.add("isLocal", true);
@@ -1145,6 +1140,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (indexees.size() > 0) {
 			final List<Node> array = new ArrayList<Node>(indexees);
+			final Set<String> seen = new LinkedHashSet<String>();
 			String src = "";
 			for (int i = 0; i < array.size(); i++) {
 				final Factor indexee = (Factor)array.get(i);
@@ -1153,6 +1149,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				indexee.accept(this);
 				final String src2 = code.removeLast();
 				this.skipIndex = "";
+
+				if (seen.contains(src2)) continue;
+				seen.add(src2);
 
 				final BoaType indexeeType = this.indexeeFinder.getFactors().get(indexee).type;
 				final String func = (indexeeType instanceof BoaArray) ? ".length" : ".size()";
@@ -1335,9 +1334,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		lastVarDecl = "___" + n.getId().getToken();
 
 		if (!n.hasInitializer()) {
-			if (lhsType instanceof BoaProtoMap ||
-					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaQueue || lhsType instanceof BoaSet)) {
-				code.add("");
+			if (lhsType instanceof BoaProtoMap
+					|| !(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaQueue || lhsType instanceof BoaSet)) {
+				st.add("rhs", n.type.defaultValue());
+				code.add(st.render());
 				return;
 			}
 
@@ -1500,12 +1500,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
-		n.accept(cfgBuilder);
-		final CreateNodeId createNodeId = new CreateNodeId();
-		createNodeId.start(cfgBuilder);
+		cfgBuilder.start(n);
+		new CreateNodeId().start(cfgBuilder);
 
-		final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
-		final Set<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
+		final Set<Identifier> aliastSet = new LocalMayAliasAnalysis().start(cfgBuilder, traversalId);
 
 		final DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
 		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);
@@ -1750,31 +1748,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (lit.startsWith("T")) {
 			final String s = lit.substring(2, lit.length() - 1);
 
-			// first try a standard format
 			try {
-				final DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy");
-				code.add(formatDate(df.parse(s)));
+				code.add(boa.functions.BoaCasts.stringToTime(s) + "L");
 				return;
-			} catch (final Exception e) { }
-
-			// then try every possible combination of built in formats
-			final int [] formats = new int[] {DateFormat.DEFAULT, DateFormat.FULL, DateFormat.SHORT, DateFormat.LONG, DateFormat.MEDIUM};
-			for (final int f : formats)
-				for (final int f2 : formats)
-					try {
-						final DateFormat df = DateFormat.getDateTimeInstance(f, f2);
-						code.add(formatDate(df.parse(s)));
-						return;
-					} catch (final Exception e) { }
-
-			throw new TypeCheckException(n, "Invalid time literal '" + s + "'");
+			} catch (final Exception e) {
+				throw new TypeCheckException(n, "Invalid time literal '" + s + "'");
+			}
 		}
 
 		code.add(lit.substring(0, lit.length() - 1));
-	}
-
-	private String formatDate(final Date date) {
-		return (date.getTime() * 1000) + "L";
 	}
 
 	//
@@ -1783,6 +1765,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TypeDecl n) {
+		code.add("");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final VisitorType n) {
+		code.add("");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TraversalType n) {
 		code.add("");
 	}
 
@@ -1832,16 +1826,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FixPType n) {
-		final BoaFunction funcType = ((BoaFunction) n.type);
-
-		final BoaType[] paramTypes = funcType.getFormalParameters();
-		final List<String> args = new ArrayList<String>();
-		final List<String> types = new ArrayList<String>();
-
-		for (int i = 0; i < paramTypes.length; i++) {
-			args.add(((BoaName) paramTypes[i]).getId());
-			types.add(paramTypes[i].toJavaType());
-		}
+		code.add("");
 	}
 
 	/** {@inheritDoc} */
@@ -1890,7 +1875,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n) {
-		throw new RuntimeException("unexpected error");
+		code.add(((BoaTuple)n.type).toJavaType());
 	}
 
 	/** {@inheritDoc} */

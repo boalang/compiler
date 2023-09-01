@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Robert Dyer, Hridesh Rajan
- *                 and Iowa State University of Science and Technology
+ * Copyright 2015-2022, Robert Dyer, Hridesh Rajan
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,11 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 
+/**
+ * An ANTLR error listener that highlights Boa source containing an error.
+ *
+ * @author rdyer
+ */
 public abstract class BoaErrorListener extends BaseErrorListener {
 	public boolean hasError = false;
 
@@ -34,7 +40,12 @@ public abstract class BoaErrorListener extends BaseErrorListener {
 		System.err.print("Encountered " + kind + " error ");
 		if (offendingSymbol != null)
 			System.err.print("\"" + offendingSymbol + "\" ");
-		System.err.println("at line " + line + ", column " + charPositionInLine + ". " + msg);
+		System.err.print("at line " + line + ", ");
+		if (length > 0)
+			System.err.print("columns " + charPositionInLine + "-" + (charPositionInLine + length - 1));
+		else
+			System.err.print("column " + charPositionInLine);
+		System.err.println(". " + msg);
 
 		underlineError(tokens, (Token)offendingSymbol, line, charPositionInLine, length);
 
@@ -45,8 +56,12 @@ public abstract class BoaErrorListener extends BaseErrorListener {
 			System.err.println("\tat unknown stack");
 	}
 	private void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
+		if (line <= 0) return;
+
 		final String input = tokens.getInputStream().toString() + "\n ";
 		final String[] lines = input.split("\n");
+		if (line >= lines.length) return;
+
 		final String errorLine = lines[line - 1];
 		System.err.println(errorLine.replaceAll("\t", "    "));
 

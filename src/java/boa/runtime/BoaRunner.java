@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,16 +50,15 @@ import boa.io.EmitValue;
 public abstract class BoaRunner extends Configured implements Tool {
 	/**
 	 * Create a {@link Job} describing the work to be done by this Boa job.
-	 * 
+	 *
 	 * @param ins
 	 *            An array of {@link Path} containing the locations of the input
 	 *            files
-	 * 
+	 *
 	 * @param out
 	 *            A {@link Path} containing the location of the output file
-	 * 
+	 *
 	 * @return A {@link Job} describing the work to be done by this Boa job
-	 * @throws IOException
 	 */
 	public Job job(final Path[] ins, final Path out) throws IOException {
 		final Configuration configuration = getConf();
@@ -79,7 +79,6 @@ public abstract class BoaRunner extends Configured implements Tool {
 
 		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
 		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
-		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
 
 		final Job job = new Job(configuration);
 
@@ -95,6 +94,8 @@ public abstract class BoaRunner extends Configured implements Tool {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(NullWritable.class);
 
+		job.setPartitionerClass(BoaPartitioner.class);
+
 		return job;
 	}
 
@@ -103,6 +104,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 	static {
 		options.addOption("p", "profile", false, "if true, profiles the execution of 1 map task");
 		options.addOption("b", "block", false, "if true, wait for job to finish and show status");
+		options.addOption("t", "time", false, "if true, dump debug timings for each project");
 		options.addOption(OptionBuilder.withLongOpt("job")
 										.withDescription("sets the MySql ID to update with this job's status")
 										.hasArg()
@@ -118,6 +120,20 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.hasArg()
 										.withArgName("INPUT")
 										.create("c"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("splitsize")
+										.withDescription("split size in BYTES")
+										.hasArg()
+										.withArgName("BYTES")
+										.create("s"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("samplesize")
+										.withDescription("sample size")
+										.hasArg()
+										.create("ss"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("excludelist")
+										.withDescription("A comma-separated list of project IDs to exclude when running.")
+										.hasArg()
+										.withArgName("PROJECT_IDS")
+										.create("x"));
 	}
 
 	protected static Options getOptions() { return options; }
@@ -142,7 +158,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 
 	public abstract String getUsage();
 
-	public abstract Mapper<?,?,?,?> getMapper();
+	public abstract Mapper<?, ?, ?, ?> getMapper();
 
 	public abstract BoaCombiner getCombiner();
 

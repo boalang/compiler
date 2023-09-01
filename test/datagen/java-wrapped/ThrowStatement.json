@@ -1,0 +1,12 @@
+{
+   "kind": "THROW",
+   "expressions": [
+      {
+         "kind": "NEW",
+         "new_type": {
+            "name": "RuntimeException",
+            "kind": "CLASS"
+         }
+      }
+   ]
+}

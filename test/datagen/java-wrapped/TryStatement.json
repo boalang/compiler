@@ -1,0 +1,26 @@
+{
+   "kind": "TRY",
+   "statements": [
+      {
+         "kind": "BLOCK"
+      },
+      {
+         "kind": "CATCH",
+         "statements": [
+            {
+               "kind": "RETURN"
+            }
+         ],
+         "variable_declaration": {
+            "name": "e",
+            "variable_type": {
+               "name": "ArithmeticException",
+               "kind": "CLASS"
+            }
+         }
+      }
+   ]
+},
+{
+   "kind": "EMPTY"
+}

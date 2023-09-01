@@ -2,19 +2,17 @@ package boa.datagen;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 
 import boa.datagen.forges.github.IssueMetaData;
 import boa.datagen.util.FileIO;
@@ -35,14 +33,12 @@ public class CacheGithubIssues {
 		try {
 			fileSystem = FileSystem.get(conf);
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		File output = new File(jsonCachePath);
 		if (!output.exists())
 			output.mkdirs();
 		CacheGithubIssues.openWriters();
-		HashMap<String, byte[]> repos = new HashMap<String, byte[]>();
 		File dir = new File(jsonPath + "/issues");
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".json")) {
@@ -110,5 +106,4 @@ public class CacheGithubIssues {
 			}
 		}
 	}
-
 }

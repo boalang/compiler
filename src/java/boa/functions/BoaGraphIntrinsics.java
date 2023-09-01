@@ -98,7 +98,7 @@ public class BoaGraphIntrinsics {
 		return new PDGSlicer(method, (int)(long) id, normalize);
 	}
 
-	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "Node" })
+	//@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "Node" })
 	public static Set<String> getNodesWithDefinition(final Node node) {
 		final Set<String> vardef = new LinkedHashSet<String>();
 		if (node.getExpression() != null) {
@@ -109,7 +109,7 @@ public class BoaGraphIntrinsics {
 		return vardef;
 	}
 
-	@FunctionSpec(name = "get_variable_killed", returnType = "set of string", formalParameters = {"CFG", "Node" })
+	//@FunctionSpec(name = "get_variable_killed", returnType = "set of string", formalParameters = {"CFG", "Node" })
 	public static Set<String> getVariableKilled(final boa.types.Control.Graph cfg, final Node node) {
 		final Set<String> varkilled = new LinkedHashSet<String>();
 		String vardef = "";
@@ -144,7 +144,7 @@ public class BoaGraphIntrinsics {
 		return varkilled;
 	}
 
-	@FunctionSpec(name = "get_variable_def", returnType = "set of string", formalParameters = { "Node" })
+	//@FunctionSpec(name = "get_variable_def", returnType = "set of string", formalParameters = { "Node" })
 	public static Set<String> getVariableDef(final Node node) {
 		final Set<String> vardef = new LinkedHashSet<String>();
 		if (node.getExpression() != null) {
@@ -158,11 +158,11 @@ public class BoaGraphIntrinsics {
 		return vardef;
 	}
 
-	@FunctionSpec(name = "get_variable_used", returnType = "set of string", formalParameters = { "Node" })
+	//@FunctionSpec(name = "get_variable_used", returnType = "set of string", formalParameters = { "Node" })
 	public static Set<String> getVariableUsed(final Node node) {
 		final Set<String> varused = new LinkedHashSet<String>();
 		if (node.getExpression() != null) {
-			traverseExpr(varused,node.getExpression());
+			traverseExpr(varused, node.getExpression());
 		}
 		return varused;
 	}
@@ -203,7 +203,7 @@ public class BoaGraphIntrinsics {
 	}
 
 	private static String dotEscapeHtml(final String s) {
-		return s.replace("<", "&lt;").replace(">", "&gt;").replace("\r", "<BR/>").replace("\n", "<BR/>");
+		return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\r", "<BR/>").replace("\n", "<BR/>");
 	}
 
 	// Graph Visualizers
@@ -221,7 +221,7 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "traversal" })
-	public static String cfgToDot(final CFG cfg, final BoaAbstractTraversal t) {
+	public static String cfgToDot(final CFG cfg, final BoaAbstractTraversal<?> t) {
 		return cfgToDot(cfg, "", t);
 	}
 
@@ -265,7 +265,7 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "string", "traversal" })
-	public static String cfgToDot(final CFG cfg, final String label, final BoaAbstractTraversal t) {
+	public static String cfgToDot(final CFG cfg, final String label, final BoaAbstractTraversal<?> t) {
 		if (cfg == null || cfg.getNodes().size() == 0) return "";
 		final StringBuilder str = new StringBuilder();
 		final StringBuilder str2 = new StringBuilder();
@@ -347,7 +347,7 @@ public class BoaGraphIntrinsics {
 
 			final java.util.List<boa.graphs.cfg.CFGEdge> edges = new ArrayList<boa.graphs.cfg.CFGEdge>(n.getOutEdges());
 			Collections.sort(edges);
-			for (final boa.graphs.Edge e : edges) {
+			for (final boa.graphs.Edge<?, ?> e : edges) {
 				str2.append("\t");
 				str2.append(n.getId());
 				str2.append(" -> ");

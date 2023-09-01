@@ -26,9 +26,7 @@ import java.util.Arrays;
 public class BoaSortIntrinsics {
 	/**
 	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
+	 * Values will be arranged in increasing order.
 	 * 
 	 * @param a
 	 *            An array of long
@@ -46,25 +44,7 @@ public class BoaSortIntrinsics {
 
 	/**
 	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
-	 * 
-	 * @param a
-	 *            An array of long
-	 * 
-	 * @return A sorted copy of <em>a</em>
-	 */
-	@FunctionSpec(name = "sort", returnType = "array of int", formalParameters = { "array of int", "string" })
-	public static long[] sortLongArray(final long[] a, final String ignored) {
-		return BoaSortIntrinsics.sortLongArray(a);
-	}
-
-	/**
-	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
+	 * Values will be arranged in increasing order.
 	 * 
 	 * @param a
 	 *            An array of double
@@ -82,25 +62,7 @@ public class BoaSortIntrinsics {
 
 	/**
 	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
-	 * 
-	 * @param a
-	 *            An array of double
-	 * 
-	 * @return A sorted copy of <em>a</em>
-	 */
-	@FunctionSpec(name = "sort", returnType = "array of float", formalParameters = { "array of float", "string" })
-	public static double[] sortDoubleArray(final double[] a, final String ignored) {
-		return BoaSortIntrinsics.sortDoubleArray(a);
-	}
-
-	/**
-	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
+	 * Values will be arranged in increasing order.
 	 * 
 	 * @param a
 	 *            An array of {@link String}
@@ -118,25 +80,7 @@ public class BoaSortIntrinsics {
 
 	/**
 	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
-	 * 
-	 * @param a
-	 *            An array of {@link String}
-	 * 
-	 * @return A sorted copy of <em>a</em>
-	 */
-	@FunctionSpec(name = "sort", returnType = "array of string", formalParameters = { "array of string", "string" })
-	public static String[] sortStringArray(final String[] a, final String ignored) {
-		return BoaSortIntrinsics.sortStringArray(a);
-	}
-
-	/**
-	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
+	 * Values will be arranged in increasing order.
 	 * 
 	 * @param a
 	 *            An array of long
@@ -147,22 +91,4 @@ public class BoaSortIntrinsics {
 	public static long[] sortTimeArray(final long[] a) {
 		return BoaSortIntrinsics.sortLongArray(a);
 	}
-
-	/**
-	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
-	 * 
-	 * @param a
-	 *            An array of long
-	 * 
-	 * @return A sorted copy of <em>a</em>
-	 */
-	@FunctionSpec(name = "sort", returnType = "array of time", formalParameters = { "array of time", "string" })
-	public static long[] sortTimeArray(final long[] a, final String ignored) {
-		return BoaSortIntrinsics.sortTimeArray(a);
-	}
-
-	// TODO: implement sortx
 }

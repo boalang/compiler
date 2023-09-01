@@ -5,8 +5,10 @@ package boa.datagen.treed;
  *
  */
 public class Pair {
-	private Object obj1, obj2;
-	private double weight = -1.0, weight1 = 0;
+	private Object obj1;
+	private Object obj2;
+	private double weight = -1.0;
+	private double weight1 = 0;
 
 	public Pair(Object obj1, Object obj2) {
 		this.obj1 = obj1;

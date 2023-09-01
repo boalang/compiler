@@ -28,7 +28,7 @@ import java.util.TimeZone;
  * inconveniences many such operations require more sophistication, which these
  * functions provide.
  * 
- * Most time functions accept an optional argument indicating the time zone; the
+ * <p>Most time functions accept an optional argument indicating the time zone; the
  * default time zone is PST8PDT.
  * 
  * @author anthonyu

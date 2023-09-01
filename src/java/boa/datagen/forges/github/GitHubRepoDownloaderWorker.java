@@ -12,7 +12,6 @@ public class GitHubRepoDownloaderWorker implements Runnable {
 	File repoFile;
 	private TokenList tokens;
 	private final String output;
-	private final String input;
 	JsonArray javarepos;
 	private final String repo_url_header = "https://api.github.com/repos/";
 	String stateFile = "";
@@ -28,7 +27,6 @@ public class GitHubRepoDownloaderWorker implements Runnable {
 	public GitHubRepoDownloaderWorker(String repoPath, String output, TokenList tokenList) {
 		this.output = output;
 		this.tokens = tokenList;
-		this.input = repoPath;
 		this.javarepos = new JsonArray();
 	}
 
