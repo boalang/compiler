@@ -547,22 +547,22 @@ public class BoaIntrinsics {
 		return arr;
 	}
 
-	public static <T> long[] basic_array(final Long[] arr) {
-		final long[] arr2 = new long[arr.length];
+	public static <T> Long[] basic_array(final Long[] arr) {
+		final Long[] arr2 = new Long[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
 	}
 
-	public static <T> double[] basic_array(final Double[] arr) {
-		final double[] arr2 = new double[arr.length];
+	public static <T> Double[] basic_array(final Double[] arr) {
+		final Double[] arr2 = new Double[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
 	}
 
-	public static <T> boolean[] basic_array(final Boolean[] arr) {
-		final boolean[] arr2 = new boolean[arr.length];
+	public static <T> Boolean[] basic_array(final Boolean[] arr) {
+		final Boolean[] arr2 = new Boolean[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
