@@ -19,7 +19,7 @@ package boa.aggregators;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -64,7 +64,7 @@ public class SetAggregator extends Aggregator {
 		super.start(key);
 
 		// the set of data to be collected
-		this.set = new LinkedHashSet<String>();
+		this.set = new HashSet<String>();
 	}
 
 	/** {@inheritDoc} */
