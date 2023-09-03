@@ -276,12 +276,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				final List<String> fields = new ArrayList<String>();
 				final List<String> types = new ArrayList<String>();
 				final List<String> types2 = new ArrayList<String>();
+				final List<Boolean> aliases = new ArrayList<Boolean>();
 
 				int counter = 0;
 				for (final Expression e : n.getExprs()) {
 					fields.add("f" + counter);
 					types.add(e.type.toInterfaceJavaType());
 					types2.add(e.type.toBoxedJavaType());
+					aliases.add((e.type instanceof BoaProtoTuple) || (e.type instanceof BoaEnum));
 					counter++;
 				}
 
@@ -289,6 +291,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				st.add("fields", fields);
 				st.add("types", types);
 				st.add("types2", types2);
+				st.add("aliases", aliases);
 
 				code.add(st.render());
 			}
@@ -309,27 +312,29 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final BoaTuple tupType = ((BoaTuple) n.type);
 
-			final List<Component> members = n.getMembers();
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
+			final List<String> types2 = new ArrayList<String>();
 			final List<Boolean> aliases = new ArrayList<Boolean>();
 
 			int fieldCount = 0;
-			for (final Component c : members) {
+			for (final Component c : n.getMembers()) {
 				if (c.hasIdentifier()) {
 					fields.add(c.getIdentifier().getToken());
 				} else {
 					fields.add("f" + fieldCount);
 				}
 				fieldCount++;
-				BoaType type = c.getType().type;
+				final BoaType type = c.getType().type;
 				aliases.add((type instanceof BoaProtoTuple) || (type instanceof BoaEnum));
-				types.add(type.toBoxedJavaType());
+				types.add(type.toInterfaceJavaType());
+				types2.add(type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
+			st.add("types2", types2);
 			st.add("aliases", aliases);
 
 			code.add(st.render());
