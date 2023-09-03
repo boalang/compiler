@@ -121,16 +121,16 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types, aliases) ::= <<
+TupleType(name, fields, types, types2, aliases) ::= <<
 private class <name>
 {
 	<fields,types:{field,type|<type> ___<field>;}; separator="\n">
 
 	<name>(<fields,types:{field,type|<type> ___<field>}; separator=", ">) {
-		<fields,types,aliases:{field,type,alias|<if(alias)>this.___<field> = ___<field>;<else>this.___<field> = new <type>(___<field>);<endif>}; separator="\n">
+		<fields,types2,aliases:{field,type,alias|<if(alias)>this.___<field> = ___<field>;<else>this.___<field> = new <type>(___<field>);<endif>}; separator="\n">
 	}
 	<name>(<name> tmp) {
-		<fields,types,aliases:{field,type,alias|<if(alias)> this.___<field> = tmp.___<field>;<else> this.___<field> = new <type>(tmp.___<field>);<endif>}; separator="\n">
+		<fields,types2,aliases:{field,type,alias|<if(alias)> this.___<field> = tmp.___<field>;<else> this.___<field> = new <type>(tmp.___<field>);<endif>}; separator="\n">
 	}
 
 	public <name> clone() {
