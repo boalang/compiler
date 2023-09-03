@@ -17,8 +17,11 @@
 package boa.aggregators;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import boa.io.EmitKey;
 
@@ -76,7 +79,9 @@ public class SetAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		for (final String s : this.set)
+		final List<String> list = new ArrayList<String>(this.set);
+		Collections.sort(list);
+		for (final String s : list)
 			this.collect(s);
 	}
 }
