@@ -273,7 +273,7 @@ public class PythonLangMode implements LangMode {
 		String s = "";
 
 		if (v.hasComputedName())
-			s += v.getComputedName();
+			s += prettyprint(v.getComputedName());
 		else
 			s += v.getName();
 
@@ -405,7 +405,7 @@ public class PythonLangMode implements LangMode {
 						s += ", ";
 					s += prettyprint(stmt.getVariableDeclarations(i));
 				}
-				s += " in" + prettyprint(stmt.getConditions(0)) + ":\n";
+				s += " in " + prettyprint(stmt.getConditions(0)) + ":\n";
 				indent++;
 				s += prettyprint(stmt.getStatements(0));
 				indent--;
@@ -581,7 +581,7 @@ public class PythonLangMode implements LangMode {
 					if (i > 0)
 						s += ", ";
 					final Expression node = e.getExpressions(i);
-					s += prettyprint(node.getExpressions(0)) + " : " + prettyprint(node.getExpressions(1));
+					s += prettyprint(node.getExpressions(0)) + ": " + prettyprint(node.getExpressions(1));
 				}
 				s += " }";
 				return s;
@@ -606,7 +606,13 @@ public class PythonLangMode implements LangMode {
 					s += prettyprint(e.getExpressions(2));
 				} else {
 					// FIXME current AST ambiguous for less than 3 exps
-					s += "...";
+					if (e.getExpressionsCount() == 2) {
+						s += prettyprint(e.getExpressions(0));
+						s += ":";
+						s += prettyprint(e.getExpressions(1));
+					} else {
+						s += prettyprint(e.getExpressions(0));
+					}
 				}
 				s += "]";
 				return s;
