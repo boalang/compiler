@@ -31,6 +31,7 @@ import java.util.*;
 public class DDG {
     private Method md;
     private DDGNode entryNode;
+    private CFG cfg;
     private final Set<DDGNode> nodes = new LinkedHashSet<DDGNode>();
     private final HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
     //private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
@@ -43,6 +44,7 @@ public class DDG {
      */
     public DDG(final CFG cfg) throws Exception {
         if (cfg != null && cfg.getNodes().size() > 0) {
+            this.cfg = cfg;
             this.md = cfg.getMd();
             final Map<Integer, InOut> liveVars = getLiveVariables(cfg);
             formDefUseChains(liveVars, cfg);
@@ -79,6 +81,10 @@ public class DDG {
      */
     public Method getMethod() {
         return md;
+    }
+
+    public CFG getCfg() {
+        return cfg;
     }
 
     /**

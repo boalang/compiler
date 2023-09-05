@@ -45,57 +45,101 @@ import boa.runtime.BoaAbstractTraversal;
 public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
 	public static CFG getcfg(final Method method) {
-		return new CFG(method).get();
+		try {
+			return new CFG(method).get();
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getpdtree", returnType = "PDTree", formalParameters = { "Method" })
 	public static PDTree getpdtree(final Method method) throws Exception {
-		return new PDTree(method);
+		try {
+			return new PDTree(method);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getcdg", returnType = "CDG", formalParameters = { "Method" })
 	public static CDG getcdg(final Method method) throws Exception {
-		return new CDG(method);
+		try {
+			return new CDG(method);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getcdg", returnType = "CDG", formalParameters = { "CFG" })
 	public static CDG getcdg(final CFG cfg) throws Exception {
-		return new CDG(cfg);
+		try {
+			return new CDG(cfg);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getddg", returnType = "DDG", formalParameters = { "Method" })
 	public static DDG getddg(final Method method) throws Exception {
-		return new DDG(method);
+		try {
+			return new DDG(method);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getddg", returnType = "DDG", formalParameters = { "CFG" })
 	public static DDG getddg(final CFG cfg) throws Exception {
-		return new DDG(cfg);
+		try {
+			return new DDG(cfg);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "Method" })
 	public static PDG getpdg(final Method method) throws Exception {
-		return new PDG(method);
+		try {
+			return new PDG(method);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getpdg", returnType = "PDG", formalParameters = { "Method", "bool" })
 	public static PDG getpdg(final Method method, boolean paramAsStatement) throws Exception {
-		return new PDG(method, paramAsStatement);
+		try {
+			return new PDG(method, paramAsStatement);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getcfgslice", returnType = "CFGSlicer", formalParameters = { "Method", "int" })
 	public static CFGSlicer getcfgslice(final Method method, Long id) throws Exception {
-		return new CFGSlicer(method, (int)(long) id);
+		try {
+			return new CFGSlicer(method, (int)(long) id);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "PDG",  "int", "bool" })
 	public static PDGSlicer getpdgslice(final PDG pdg, Long id, boolean normalize) throws Exception {
-		return new PDGSlicer(pdg, (int)(long) id, normalize);
+		try {
+			return new PDGSlicer(pdg, (int)(long) id, normalize);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	@FunctionSpec(name = "getpdgslice", returnType = "PDGSlicer", formalParameters = { "Method",  "int", "bool" })
 	public static PDGSlicer getpdgslice(final Method method, Long id, boolean normalize) throws Exception {
-		return new PDGSlicer(method, (int)(long) id, normalize);
+		try {
+			return new PDGSlicer(method, (int)(long) id, normalize);
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	//@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "Node" })
