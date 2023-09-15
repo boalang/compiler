@@ -556,7 +556,10 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case LABEL:
-				return prettyprint(stmt.getExpressions(0)) + "@ " + prettyprint(stmt.getStatements(0));
+				s += "@" + prettyprint(stmt.getExpressions(0));
+				if (stmt.getExpressionsCount() > 1)
+					s += " " + prettyprint(stmt.getExpressions(1));
+				return s;
 
 			case CASE:
 				return prettyprint(stmt.getExpressions(0)) + " -> ";
@@ -653,7 +656,10 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case SWITCH:
-				s += "when (" + prettyprint(stmt.getConditions(0)) + ") {\n";
+				s += "when";
+				if (stmt.getConditionsCount() > 0)
+					s += " (" + prettyprint(stmt.getConditions(0)) + ")";
+				s += " {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
@@ -662,6 +668,8 @@ public class KotlinLangMode implements LangMode {
 				return s;
 
 			case THROW:
+				if (stmt.getExpressionsCount() == 0)
+					return "throw";
 				return "throw " + prettyprint(stmt.getExpressions(0));
 
 			default: return s;
@@ -744,9 +752,14 @@ public class KotlinLangMode implements LangMode {
 					return ppPostfix("++", e);
 				return ppPrefix("++", e);
 
-			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
-			case LABEL:
+			case PAREN:
+				if (e.getExpressionsCount() == 0)
+					return "()";
+				return "(" + prettyprint(e.getExpressions(0)) + ")";
+
+			case LABEL:   return e.getLiteral();
 			case LITERAL: return e.getLiteral();
+
 			case VARACCESS:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
 					s += prettyprint(e.getExpressions(i)) + ".";
@@ -760,8 +773,14 @@ public class KotlinLangMode implements LangMode {
 					s += ">";
 				}
 				return s;
-			case CAST: return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
-			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
+
+			case CAST:
+				s += "(" + e.getNewType().getName() + ")";
+				if (e.getExpressionsCount() > 0)
+					s += prettyprint(e.getExpressions(0));
+				return s;
+
+			case CONDITIONAL:  return prettyprint(e.getExpressions(0)) + " ? "  + prettyprint(e.getExpressions(1)) + " : " + prettyprint(e.getExpressions(2));
 			case NULLCOALESCE: return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
 
 			case METHODCALL:

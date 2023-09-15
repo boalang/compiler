@@ -8,7 +8,7 @@
             },
             {
                "name": "",
-               "reciever_type": {
+               "receiver_type": {
                   "name": "T",
                   "kind": "OTHER"
                }
@@ -36,7 +36,7 @@
                      ]
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "T",
                   "kind": "OTHER"
                }
@@ -70,7 +70,7 @@
                      ]
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "T",
                   "kind": "OTHER"
                }
@@ -80,7 +80,7 @@
             },
             {
                "name": "",
-               "reciever_type": {
+               "receiver_type": {
                   "name": "T",
                   "kind": "OTHER"
                }
@@ -108,7 +108,7 @@
                      ]
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "T",
                   "kind": "OTHER"
                }
@@ -142,7 +142,7 @@
                      ]
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "T",
                   "kind": "OTHER"
                }
@@ -162,7 +162,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "@[a] T",
                   "kind": "OTHER"
                }
@@ -195,7 +195,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "@[a] T",
                   "kind": "OTHER"
                }
@@ -234,7 +234,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "@[a()] T",
                   "kind": "OTHER"
                }
@@ -273,7 +273,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "@[a()] T",
                   "kind": "OTHER"
                }
@@ -284,7 +284,7 @@
                   "name": "bar?",
                   "kind": "OTHER"
                },
-               "reciever_type": {
+               "receiver_type": {
                   "name": "A?",
                   "kind": "OTHER"
                }
@@ -295,7 +295,7 @@
                   "name": "bar?",
                   "kind": "OTHER"
                },
-               "reciever_type": {
+               "receiver_type": {
                   "name": "A?",
                   "kind": "OTHER"
                }

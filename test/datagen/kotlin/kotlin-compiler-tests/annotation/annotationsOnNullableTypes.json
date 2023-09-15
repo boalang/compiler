@@ -60,7 +60,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "@a Int?",
                   "kind": "OTHER"
                }
@@ -122,7 +122,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "@b(1) Int?",
                   "kind": "OTHER"
                }
@@ -184,7 +184,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "@[a b(1)] Int?",
                   "kind": "OTHER"
                }

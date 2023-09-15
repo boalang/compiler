@@ -16,7 +16,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "@a a",
                   "kind": "OTHER"
                }
@@ -28,7 +28,7 @@
                      "kind": "BLOCK"
                   }
                ],
-               "reciever_type": {
+               "receiver_type": {
                   "name": "(@a a.(a) -> a)",
                   "kind": "OTHER"
                }
