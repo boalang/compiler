@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2023, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +19,12 @@ package boa.functions;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Set;
 
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -33,6 +37,14 @@ import boa.types.Toplevel.Project;
  * @author rdyer
  */
 public class BoaIntrinsics {
+	@FunctionSpec(name = "isfork", returnType = "bool", formalParameters = { "Project" })
+	public static boolean isfork(final Project p) {
+		final String[] knownForks = { };
+		final Set<String> forks = new HashSet<>();
+		Collections.addAll(forks, knownForks);
+		return forks.contains(p.getId());
+	}
+
 	private final static String[] fixingRegex = {
 		"\\bfix(s|es|ing|ed)?\\b",
 		"\\b(error|bug|issue)(s)?\\b",
