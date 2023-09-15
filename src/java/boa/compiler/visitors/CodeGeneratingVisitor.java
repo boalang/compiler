@@ -309,7 +309,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<Component> members = n.getMembers();
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
-			final List<Boolean> protos = new ArrayList<Boolean>();
+			final List<Boolean> aliases = new ArrayList<Boolean>();
 
 			int fieldCount = 0;
 			for (final Component c : members) {
@@ -320,14 +320,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 				fieldCount++;
 				BoaType type = c.getType().type;
-				protos.add(type instanceof BoaProtoTuple);
+				aliases.add((type instanceof BoaProtoTuple) || (type instanceof BoaEnum));
 				types.add(type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
-			st.add("protos", protos);
+			st.add("aliases", aliases);
 
 			code.add(st.render());
 		}
@@ -486,13 +486,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected boolean abortGeneration = false;
 
 	protected String className;
-	protected int splitSize;
+	protected boolean simple;
 	protected int seed;
 	protected boolean isLocal;
 
-	public CodeGeneratingVisitor(final String className, final int splitSize, final int seed, final boolean isLocal) throws IOException {
+	public CodeGeneratingVisitor(final String className, final boolean simple, final int seed, final boolean isLocal) throws IOException {
 		this.className = className;
-		this.splitSize = splitSize;
+		this.simple = simple;
 		this.seed = seed;
 		this.isLocal = isLocal;
 
@@ -572,7 +572,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		Collections.sort(variableNames);
 
 		st.add("name", className);
-		st.add("splitsize", splitSize);
+		st.add("simple", simple);
 		st.add("seed", seed);
 		st.add("outputVariableNames", variableNames);
 		if (isLocal) st.add("isLocal", true);

@@ -10,12 +10,7 @@
             },
             {
                "kind": "LITERAL",
-               "literal": "String.class",
-               "return_type": {
-                  "name": "Class",
-                  "fully_qualified_name": "java.lang.Class",
-                  "kind": "CLASS"
-               }
+               "literal": "String.class"
             }
          ]
       }

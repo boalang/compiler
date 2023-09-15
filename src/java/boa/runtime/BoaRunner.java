@@ -79,7 +79,6 @@ public abstract class BoaRunner extends Configured implements Tool {
 
 		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
 		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
-		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
 
 		final Job job = new Job(configuration);
 
@@ -126,6 +125,10 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.hasArg()
 										.withArgName("BYTES")
 										.create("s"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("samplesize")
+										.withDescription("sample size")
+										.hasArg()
+										.create("ss"));
 		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("excludelist")
 										.withDescription("A comma-separated list of project IDs to exclude when running.")
 										.hasArg()

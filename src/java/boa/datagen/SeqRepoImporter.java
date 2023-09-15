@@ -50,6 +50,7 @@ public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	private final static boolean cache = Properties.getBoolean("cache", DefaultProperties.CACHE);
 	private final static long skips = Long.parseLong(Properties.getProperty("skip", DefaultProperties.SKIPS)) + 1;
+	private final static long offset = Long.parseLong(Properties.getProperty("offset", DefaultProperties.OFFSET));
 
 	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
@@ -137,7 +138,7 @@ public class SeqRepoImporter {
 			try {
 				final JsonObject rp = repoArray.get(i).getAsJsonObject();
 				final RepoMetadata repo = new RepoMetadata(rp);
-				if (counter % skips == 0) {
+				if (counter >= offset && (skips <= 0 || (counter - offset) % skips == 0)) {
 					if (repo.id != null && repo.name != null && !processedProjectIds.contains(repo.id)) {
 						final Project project = repo.toBoaMetaDataProtobuf(); // current project instance only contains metadata
 
@@ -210,6 +211,7 @@ public class SeqRepoImporter {
 	}
 
 	public static class ImportTask implements Runnable {
+		private long procid;
 		private int id;
 		private int counter = 0;
 		private int allCounter = 0;
@@ -227,11 +229,11 @@ public class SeqRepoImporter {
 
 		public ImportTask(int id) {
 			setId(id);
+			this.procid = ProcessHandle.current().pid();
 		}
 
 		public synchronized void openWriters() {
-			long time = System.currentTimeMillis();
-			suffix = getId() + "-" + time + ".seq";
+			suffix = procid + "-" + getId() + "-" + System.currentTimeMillis() + ".seq";
 
 			while (true) {
 				try {

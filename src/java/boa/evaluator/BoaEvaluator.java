@@ -146,8 +146,18 @@ public class BoaEvaluator extends BoaMain {
 	private boolean compile() {
 		try{
 			BoaCompiler.main(createCompilerArguments());
+
+			final File jarFile = new File(BoaMain.jarToClassname(this.PROG_PATH) + ".jar");
+			if (jarFile.exists()) {
+				try {
+					FileIO.delete(jarFile);
+				} catch (final IOException e) {
+					e.printStackTrace();
+				}
+			}
 		} catch (final Exception e) {
 			System.err.print(e);
+			e.printStackTrace();
 			return false;
 		}
 

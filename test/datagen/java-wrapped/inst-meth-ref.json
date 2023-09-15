@@ -10,24 +10,10 @@
                "expressions": [
                   {
                      "kind": "VARACCESS",
-                     "variable": "String",
-                     "return_type": {
-                        "name": "String",
-                        "fully_qualified_name": "java.lang.String",
-                        "kind": "CLASS"
-                     }
+                     "variable": "String"
                   }
                ],
-               "method": "compareToIgnoreCase",
-               "declaring_type": {
-                  "name": "String",
-                  "fully_qualified_name": "java.lang.String",
-                  "kind": "CLASS"
-               },
-               "return_type": {
-                  "name": "int",
-                  "kind": "PRIMITIVE"
-               }
+               "method": "compareToIgnoreCase"
             }
          ],
          "declaring_type": {

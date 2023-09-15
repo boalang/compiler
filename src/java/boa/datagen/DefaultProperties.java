@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Hridesh Rajan, Robert Dyer, Hoan Nguyen
- *                 and Iowa State University of Science and Technology
+ * Copyright 2015-2022, Hridesh Rajan, Robert Dyer, Hoan Nguyen
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,8 @@ public class DefaultProperties {
 	public static String TOTAL_MAX_PROJECTS = "" + Long.MAX_VALUE;
 	public static String MAX_COMMITS = "10000";
 	public static String MAX_SIZE_FOR_PROJECT_WITH_COMMITS = String.valueOf(1 << 26); // Integer.MAX_VALUE / 3
-	public static String SKIPS = "1";
+	public static String SKIPS = "-1";
+	public static String OFFSET = "0";
 
 	public static boolean DEBUG = false;
 	public static boolean DEBUGPARSE = false;
@@ -65,14 +67,15 @@ public class DefaultProperties {
 	public static final String SF_TICKETS_PATH = "tickets";
 
 	// GitHub paths
-	public static  String GH_JSON_PATH = "repos-metadata-Boa-upto1213";
+	public static String GH_JSON_PATH = "repos-metadata-Boa-upto1213";
 	public static String GH_GIT_PATH = "";
 	public static String GH_ISSUE_PATH = "";
 	public static final String GH_TICKETS_PATH = "tickets";
-	public static  String TOKEN = null;
+	public static String TOKEN = null;
 
 	public static String CLASSPATH_ROOT = getClasspathRoot();
-	public static  String OUTPUT = "output";
+	public static String OUTPUT = "output";
+	public static String COMBINER_OUTPUT = OUTPUT;
 
 	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true;
 	public static boolean STORE_COMMITS = true;

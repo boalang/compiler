@@ -1,6 +1,7 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2023, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
+ *                 University of Nebraska Board of Regents
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -273,8 +274,10 @@ public class SymbolTable {
 			globalFunctions.addFunction("current", new BoaFunction(t, new BoaType[] { t }, ""));
 
 		// proto to string
-		for (final BoaType t : dslTupleTypes)
+		for (final BoaType t : dslTupleTypes) {
 			globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { t }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+			globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { t, new BoaBool() }, "com.googlecode.protobuf.format.JsonFormatMin.printToString(${0})"));
+		}
 
 		// FIXME the json library doesnt support lists
 		//globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaProtoList(new BoaAny()) }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
@@ -330,32 +333,83 @@ public class SymbolTable {
 		globalFunctions.addFunction("time", new BoaFunction(new BoaTime(), new BoaType[] { new BoaTime() }, "${0}"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaString() }, "${0}"));
 
-		/* expose the java.lang.Math class to Sawzall */
+		/* expose the java.lang.Math class */
 
-		globalFunctions.addFunction("highbit", new BoaFunction("java.lang.Long.highestOneBit", new BoaInt(), new BoaType[] { new BoaInt() }));
+		// expose the unary functions
+		for (final String s : Arrays.asList("abs"))
+			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaInt(), new BoaType[] { new BoaInt() }));
 
-		// abs just needs to be overloaded
-		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaType[] { new BoaInt() }));
-		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaType[] { new BoaFloat() }));
-
-		// expose the rest of the unary functions
-		for (final String s : Arrays.asList("log", "log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "round", "cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
+		for (final String s : Arrays.asList("abs", "log", "log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
 			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaType[] { new BoaFloat() }));
 
 		// expose the binary functions
-		for (final String s : Arrays.asList("pow", "atan2", "hypot", "IEEEremainder", "toDegrees", "toRadians"))
+		for (final String s : Arrays.asList("max", "min", "pow", "atan2", "hypot", "IEEEremainder", "toDegrees", "toRadians"))
+			globalFunctions.addFunction(s.toLowerCase(), new BoaFunction("java.lang.Math." + s, new BoaInt(), new BoaType[] { new BoaInt(), new BoaInt() }));
+
+		for (final String s : Arrays.asList("max", "min", "pow", "atan2", "hypot", "IEEEremainder", "toDegrees", "toRadians"))
 			globalFunctions.addFunction(s.toLowerCase(), new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaType[] { new BoaFloat(), new BoaFloat() }));
 
-		// max and min
-		for (final String s : Arrays.asList("max", "min"))
-			for (final BoaType t : Arrays.asList(new BoaInt(), new BoaFloat()))
-				globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, t, new BoaType[] { t, t }));
+		// some that need special handling
+		globalFunctions.addFunction("highbit", new BoaFunction("java.lang.Long.highestOneBit", new BoaInt(), new BoaType[] { new BoaInt() }));
+		globalFunctions.addFunction("round", new BoaFunction("java.lang.Math.round", new BoaInt(), new BoaType[] { new BoaFloat() }));
 
+		// max/min on other types
 		globalFunctions.addFunction("max", new BoaFunction(new BoaTime(), new BoaType[] { new BoaTime(), new BoaTime() }, "(${0} > ${1} ? ${0} : ${1})"));
 		globalFunctions.addFunction("min", new BoaFunction(new BoaTime(), new BoaType[] { new BoaTime(), new BoaTime() }, "(${0} < ${1} ? ${0} : ${1})"));
 
 		globalFunctions.addFunction("max", new BoaFunction(new BoaString(), new BoaType[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
 		globalFunctions.addFunction("min", new BoaFunction(new BoaString(), new BoaType[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+
+		// load built-in functions
+		final Class<?>[] builtinFuncs = {
+			boa.functions.BoaAstIntrinsics.class,
+			boa.functions.BoaGraphIntrinsics.class,
+			boa.functions.BoaIntrinsics.class,
+			boa.functions.BoaMetricIntrinsics.class,
+			boa.functions.BoaNormalFormIntrinsics.class,
+			boa.functions.BoaModifierIntrinsics.class,
+			boa.functions.BoaCasts.class,
+			boa.functions.BoaMathIntrinsics.class,
+			boa.functions.BoaSortIntrinsics.class,
+			boa.functions.BoaSpecialIntrinsics.class,
+			boa.functions.BoaStringIntrinsics.class,
+			boa.functions.BoaTimeIntrinsics.class
+		};
+		for (final Class<?> c : builtinFuncs)
+			importFunctions(c);
+
+		// load built-in aggregators
+		final Class<?>[] builtinAggs = {
+			boa.aggregators.BottomAggregator.class,
+			boa.aggregators.CollectionAggregator.class,
+			boa.aggregators.ConfidenceIntervalAggregator.class,
+			boa.aggregators.DistinctAggregator.class,
+			boa.aggregators.FloatHistogramAggregator.class,
+			boa.aggregators.FloatMeanAggregator.class,
+			boa.aggregators.FloatQuantileAggregator.class,
+			boa.aggregators.FloatSumAggregator.class,
+			boa.aggregators.GraphAggregator.class,
+			boa.aggregators.GraphvizAggregator.class,
+			boa.aggregators.IntHistogramAggregator.class,
+			boa.aggregators.IntMeanAggregator.class,
+			boa.aggregators.IntQuantileAggregator.class,
+			boa.aggregators.IntSumAggregator.class,
+			boa.aggregators.KurtosisAggregator.class,
+			boa.aggregators.LogAggregator.class,
+			boa.aggregators.MaximumAggregator.class,
+			boa.aggregators.MedianAggregator.class,
+			boa.aggregators.MinimumAggregator.class,
+			boa.aggregators.SetAggregator.class,
+			boa.aggregators.SkewnessAggregator.class,
+			boa.aggregators.StatisticsAggregator.class,
+			boa.aggregators.StDevAggregator.class,
+			boa.aggregators.TopAggregator.class,
+			boa.aggregators.UniqueAggregator.class,
+			boa.aggregators.VarianceAggregator.class,
+			boa.aggregators.PreconditionAggregator.class,
+		};
+		for (final Class<?> c : builtinAggs)
+			importAggregator(c);
 	}
 
 	public SymbolTable() {
@@ -549,57 +603,6 @@ public class SymbolTable {
 	}
 
 	private static void importLibs(final List<URL> urls) throws IOException {
-		// load built-in functions
-		final Class<?>[] builtinFuncs = {
-			boa.functions.BoaAstIntrinsics.class,
-			boa.functions.BoaGraphIntrinsics.class,
-			boa.functions.BoaIntrinsics.class,
-			boa.functions.BoaMetricIntrinsics.class,
-			boa.functions.BoaNormalFormIntrinsics.class,
-			boa.functions.BoaModifierIntrinsics.class,
-			boa.functions.BoaCasts.class,
-			boa.functions.BoaMathIntrinsics.class,
-			boa.functions.BoaSortIntrinsics.class,
-			boa.functions.BoaSpecialIntrinsics.class,
-			boa.functions.BoaStringIntrinsics.class,
-			boa.functions.BoaTimeIntrinsics.class
-		};
-		for (final Class<?> c : builtinFuncs)
-			importFunctions(c);
-
-		// load built-in aggregators
-		final Class<?>[] builtinAggs = {
-			boa.aggregators.BottomAggregator.class,
-			boa.aggregators.CollectionAggregator.class,
-			boa.aggregators.ConfidenceIntervalAggregator.class,
-			boa.aggregators.DistinctAggregator.class,
-			boa.aggregators.FloatHistogramAggregator.class,
-			boa.aggregators.FloatMeanAggregator.class,
-			boa.aggregators.FloatQuantileAggregator.class,
-			boa.aggregators.FloatSumAggregator.class,
-			boa.aggregators.GraphAggregator.class,
-			boa.aggregators.GraphvizAggregator.class,
-			boa.aggregators.IntHistogramAggregator.class,
-			boa.aggregators.IntMeanAggregator.class,
-			boa.aggregators.IntQuantileAggregator.class,
-			boa.aggregators.IntSumAggregator.class,
-			boa.aggregators.KurtosisAggregator.class,
-			boa.aggregators.LogAggregator.class,
-			boa.aggregators.MaximumAggregator.class,
-			boa.aggregators.MedianAggregator.class,
-			boa.aggregators.MinimumAggregator.class,
-			boa.aggregators.SetAggregator.class,
-			boa.aggregators.SkewnessAggregator.class,
-			boa.aggregators.StatisticsAggregator.class,
-			boa.aggregators.StDevAggregator.class,
-			boa.aggregators.TopAggregator.class,
-			boa.aggregators.UniqueAggregator.class,
-			boa.aggregators.VarianceAggregator.class,
-			boa.aggregators.PreconditionAggregator.class,
-		};
-		for (final Class<?> c : builtinAggs)
-			importAggregator(c);
-
 		// also check any libs passed into the compiler
 		if (urls.size() > 0) {
 			final AnnotationDB db = new AnnotationDB();

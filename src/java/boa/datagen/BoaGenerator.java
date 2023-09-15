@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021, Hridesh Rajan, Robert Dyer,
+ * Copyright 2015-2022, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and University of Nebraska Board of Regents
  *
@@ -48,40 +48,45 @@ public class BoaGenerator {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
 			System.err.println(e.getMessage());
-			new HelpFormatter().printHelp("BoaCompiler", options);
+			printHelp(options);
 			return;
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
+		if (cl.hasOption("help"))
+			return;
 
 		if (cl.hasOption("recover")) {
 			SeqCombiner.main(new String[0]);
 		} else {
 			/*
-			 * 1. if user provides local json files
+			 * 1. if user provides local JSON files
 			 * 2. if user provides username and password
-			 * in both the cases json files are going to be available
+			 *
+			 * in both cases, JSON files are going to be available
 			 */
 
 			if (jsonAvailable) {
 				try {
 					SeqRepoImporter.main(new String[0]);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					e.printStackTrace();
 				}
-				SeqCombiner.main(new String[0]);
+				if (!cl.hasOption("nocombine"))
+					SeqCombiner.main(new String[0]);
 			} else if (tokenAvailable) { // when user provides local repo and doesn't have json files
-				MetaDataMaster mdm = new MetaDataMaster();
+				final MetaDataMaster mdm = new MetaDataMaster();
 				mdm.downloadRepoNames(DefaultProperties.TOKEN, DefaultProperties.OUTPUT);
 
-				SeqCombiner.main(new String[0]);
+				if (!cl.hasOption("nocombine"))
+					SeqCombiner.main(new String[0]);
 			} else { // when user provides local repo and does not have json files
-				File output = new File(DefaultProperties.OUTPUT);
+				final File output = new File(DefaultProperties.OUTPUT);
 				if (!output.exists())
 					output.mkdirs();
 				LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH, DefaultProperties.OUTPUT);
 				try {
 					MapFileGen.main(new String[0]);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -90,18 +95,13 @@ public class BoaGenerator {
 		}
 	}
 
-	private static final void printHelp(Options options, String message) {
-		String header = "Boa dataset generation options:";
-		String footer = "\nPlease report issues at https://github.com/boalang/compiler/";
-		if (message != null) System.err.println(message);
+	private static final void printHelp(final Options options) {
+		final String header = "Boa dataset generation options:";
+		final String footer = "\nPlease report issues at https://github.com/boalang/compiler/";
 		new HelpFormatter().printHelp("boa -g [options]", header, options, footer);
 	}
 
-	private static final void printHelp(Options options) {
-		printHelp(options, null);
-	}
-
-	private static void addOptions(Options options) {
+	private static void addOptions(final Options options) {
 		options.addOption("inputJson", true, ".json files for metadata");
 		options.addOption("inputToken", true, "token file");
 		options.addOption("inputRepo", true, "cloned repo path");
@@ -112,20 +112,23 @@ public class BoaGenerator {
 		options.addOption("nocommits", false, "do not store commits");
 		options.addOption("size", true, "maximum size of a project object to be stored");
 		options.addOption("libs", true, "directory to store libraries");
-		options.addOption("output", true, "directory where output is desired");
+		options.addOption("output", true, "directory where output is stored");
+		options.addOption("combineoutput", true, "directory where combiner output is stored");
 		options.addOption("user", true, "github username to authenticate");
 		options.addOption("password", true, "github password to authenticate");
 		options.addOption("targetUser", true, "username of target repository");
 		options.addOption("targetRepo", true, "name of the target repository");
 		options.addOption("cache", false, "enable if you want to use already cloned repositories");
-		options.addOption("skip", true, "skip every Nth project (useful for sampling)");
+		options.addOption("skip", true, "skip N projects after each processed project (useful for sampling)");
+		options.addOption("offset", true, "the offset for the first project to process");
 		options.addOption("recover", false, "enable to recover partially built dataset - this will only combine generated data");
+		options.addOption("nocombine", false, "do not combine generated seq files into final form");
 		options.addOption("debug", false, "enable for debug mode");
 		options.addOption("debugparse", false, "enable for debug mode when parsing source files");
 		options.addOption("help", false, "shows this help");
 	}
 
-	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
+	private static void handleCmdOptions(final CommandLine cl, final Options options, final String[] args) {
 		if (cl.hasOption("inputJson") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
 			DefaultProperties.OUTPUT = cl.getOptionValue("output");
@@ -151,7 +154,7 @@ public class BoaGenerator {
 			try {
 				// because there is no input directory in this case, we need to
 				// create one
-				String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
+				final String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
 				DefaultProperties.GH_JSON_PATH = GH_JSON_PATH + "/input";
 				getGithubMetadata(DefaultProperties.GH_JSON_PATH, cl.getOptionValue("user"),
 						cl.getOptionValue("password"), cl.getOptionValue("targetUser"),
@@ -164,15 +167,21 @@ public class BoaGenerator {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (cl.hasOption("help")) {
-			String message = cl.getOptionValue("help");
-			printHelp(options, message);
+		} else if (cl.hasOption("recover") && cl.hasOption("output")) {
+			DefaultProperties.OUTPUT = cl.getOptionValue("output");
 		} else {
-			System.err.println("Must specify the output, and the local input paths (JSON and repository) or remote login information.");
+			if (!cl.hasOption("help"))
+				System.err.println("Must specify the output, and the local input paths (JSON and repository) or remote login information.");
 			printHelp(options);
+			System.exit(1);
 		}
 		if (cl.hasOption("threads")) {
 			DefaultProperties.NUM_THREADS = cl.getOptionValue("threads");
+		}
+		if (cl.hasOption("combineoutput")) {
+			DefaultProperties.COMBINER_OUTPUT = cl.getOptionValue("combineoutput");
+		} else {
+			DefaultProperties.COMBINER_OUTPUT = DefaultProperties.OUTPUT;
 		}
 		if (cl.hasOption("projects")) {
 			DefaultProperties.MAX_PROJECTS = cl.getOptionValue("projects");
@@ -198,6 +207,9 @@ public class BoaGenerator {
 		if (cl.hasOption("skip")) {
 			DefaultProperties.SKIPS = cl.getOptionValue("skip");
 		}
+		if (cl.hasOption("offset")) {
+			DefaultProperties.OFFSET = cl.getOptionValue("offset");
+		}
 		if (cl.hasOption("libs")) {
 			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
 		}
@@ -207,14 +219,14 @@ public class BoaGenerator {
 
 	//
 	private static void clear() {
-		File inputDirectory = new File(DefaultProperties.OUTPUT + "/buf-map");
+		final File inputDirectory = new File(DefaultProperties.OUTPUT + "/buf-map");
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
 	}
 
-	private static void getGithubMetadata(String inputPath, String username, String password, String targetUser,
-			String targetRepo) {
-		String[] args = { inputPath, username, password, targetUser, targetRepo };
+	private static void getGithubMetadata(final String inputPath, final String username, final String password, final String targetUser,
+			final String targetRepo) {
+		final String[] args = { inputPath, username, password, targetUser, targetRepo };
 		GetGithubRepoByUser.main(args);
 	}
 }

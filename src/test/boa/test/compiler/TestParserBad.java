@@ -92,4 +92,10 @@ public class TestParserBad extends BaseTest {
 				"2,51: extraneous input '}' expecting {<EOF>, 'of', 'if', 'do', 'map', 'stack', 'queue', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'default', 'continue', 'function', 'fixp', 'visitor', 'traversal', 'before', 'after', 'stop', ';', '.', '{', '(', '[', 'or', '|', '||', 'and', '&', '&&', '+', '-', '^', '*', '/', '%', '>>', '~', '!', '$', '<<', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, MultilineStringLiteral, StringLiteral, TimeLiteral, Identifier}"
 			});
 	}
+
+	@Test
+	public void foreach() throws IOException {
+		parse(load(badDir + "foreach.boa"),
+			new String[] { "3,52: FOR statements require 3 parts, but only 2 given - did you mean foreach?" });
+	}
 }

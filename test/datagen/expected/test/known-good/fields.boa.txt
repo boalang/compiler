@@ -1,0 +1,7 @@
+MeanInstanceFields[] = 0.0
+MeanPrivateFields[] = 0.0
+MeanStaticFields[] = 0.0
+NoFieldClasses[] = 62
+TotalClasses[] = 77
+TotalInstanceFields[] = 21
+TotalStaticFields[] = 5

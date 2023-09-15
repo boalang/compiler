@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021, Hridesh Rajan, Robert Dyer,
+ * Copyright 2014-2023, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and University of Nebraska Board of Regents
  *
@@ -41,6 +41,14 @@ import boa.types.Toplevel.Project;
  * @author rdyer
  */
 public class BoaIntrinsics {
+	@FunctionSpec(name = "isfork", returnType = "bool", formalParameters = { "Project" })
+	public static boolean isfork(final Project p) {
+		final String[] knownForks = { };
+		final Set<String> forks = new HashSet<>();
+		Collections.addAll(forks, knownForks);
+		return p.getForked() || forks.contains(p.getId());
+	}
+
 	private final static String[] fixingRegex = {
 		"\\bfix(s|es|ing|ed)?\\b",
 		"\\b(error|bug|issue)(s)?\\b",
@@ -55,11 +63,59 @@ public class BoaIntrinsics {
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
 	}
 
-	private static int getRevisionIndex(final CodeRepository cr, final long timestamp) {
+	private final static Comparator<Integer> snapshotComparator = new Comparator<Integer>() {
+		@Override
+		public int compare(final Integer i1, final Integer i2) {
+			return i2 - i1;
+		}
+	};
+
+	@FunctionSpec(name = "getrevisionindex", returnType = "int", formalParameters = { "CodeRepository", "int" })
+	public static int getRevisionIndex(final CodeRepository cr, final long timestamp) {
+		return getRevisionIndex(cr, cr.getHead(), timestamp);
+	}
+
+	@FunctionSpec(name = "getrevisionindex", returnType = "int", formalParameters = { "CodeRepository", "int", "int" })
+	public static int getRevisionIndex(final CodeRepository cr, final long headId, final long timestamp) {
+		final int revCount = getRevisionsCount(cr);
+		if (headId < 0 || headId >= revCount) return -1;
+
+		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(1 + revCount / 4);
+		pq.offer((int)headId);
+
+		final Set<Integer> seenIds = new HashSet<Integer>();
+		int idx = -1;
+		long lasttime = Long.MIN_VALUE;
+
+		while (!pq.isEmpty()) {
+			final int id = pq.poll();
+			seenIds.add(id);
+			final Revision commit = getRevision(cr, id);
+
+			final long ts = commit.getCommitDate();
+			if (lasttime < ts && ts <= timestamp) {
+				idx = id;
+				lasttime = ts;
+			}
+
+			// git system only consider diffs from the first parent
+			if (ts > timestamp && commit.getParentsList() != null)
+				for (int i = 0; i < commit.getParentsList().size(); i++) {
+					final int p = commit.getParentsList().get(i);
+					if (!seenIds.contains(p) && p > idx)
+						pq.offer(p);
+				}
+		}
+
+		return idx;
+	}
+
+	@FunctionSpec(name = "getrevisionindex2", returnType = "int", formalParameters = { "CodeRepository", "int" })
+	public static int getRevisionIndex2(final CodeRepository cr, final long timestamp) {
 		int low = 0;
 		int high = getRevisionsCount(cr) - 1;
 
-		while (low < high) {
+		while (low <= high) {
 			final int mid = low + (high - low) / 2;
 			final Revision midRev = getRevision(cr, mid);
 			final long cmp = midRev.getCommitDate() - timestamp;
@@ -69,48 +125,40 @@ public class BoaIntrinsics {
 
 			if (cmp < 0)
 				low = mid + 1;
-			else if (cmp > 0)
+			else
 				high = mid - 1;
 		}
-		return low; // key not found: return low index
+		return high; // key not found
 	}
 
-	private static int getRevisionIndex(final CodeRepository cr, final String id) {
-		for (int i = 0; i < getRevisionsCount(cr); i++) {
-			if (getRevision(cr, i).getId().equals(id))
-				return i;
+	@FunctionSpec(name = "getrevisionindex", returnType = "int", formalParameters = { "CodeRepository", "string" })
+	public static int getRevisionIndex(final CodeRepository cr, final String id) {
+		if (cr.getRevisionKeysCount() > 0) {
+			for (int i = 0; i < cr.getRevisionKeysCount(); i++)
+				if (BoaAstIntrinsics.getRevision(cr.getRevisionKeys(i)).getId().equals(id))
+					return i;
+		} else {
+			for (int i = 0; i < cr.getRevisionsCount(); i++)
+				if (cr.getRevisions(i).getId().equals(id))
+					return i;
 		}
 		return -1;
 	}
 
 	@FunctionSpec(name = "getrevisionscount", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int getRevisionsCount(CodeRepository cr) {
+	public static int getRevisionsCount(final CodeRepository cr) {
 		return Math.max(cr.getRevisionKeysCount(), cr.getRevisionsCount());
 	}
 
 	@FunctionSpec(name = "getrevision", returnType = "Revision", formalParameters = { "CodeRepository", "int" })
 	public static Revision getRevision(final CodeRepository cr, final long index) {
-		if (cr.getRevisionKeysCount() > 0) {
-			long key = cr.getRevisionKeys((int) index);
-			return BoaAstIntrinsics.getRevision(key);
-		}
+		if (cr.getRevisionKeysCount() > 0)
+			return BoaAstIntrinsics.getRevision(cr.getRevisionKeys((int) index));
 		return cr.getRevisions((int) index);
-	}
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
-//		snapshot.initialize(timestamp, kinds).visit(cr);
-//		return snapshot.map.values().toArray(new ChangedFile[0]);
-		if (getRevisionsCount(cr) == 0)
-			return new ChangedFile[0];
-		int revisionOffset = getRevisionIndex(cr, timestamp);
-		return getSnapshotByIndex(cr, revisionOffset, kinds);
 	}
 
 	@FunctionSpec(name = "getsnapshotbyindex", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "int"})
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final long commitOffset) {
-		if (commitOffset == cr.getHead())
-			return getSnapshot(cr);
 		return getSnapshotByIndex(cr, commitOffset, new String[0]);
 	}
 
@@ -118,56 +166,27 @@ public class BoaIntrinsics {
 	public static ChangedFile[] getSnapshotByIndex(final CodeRepository cr, final long commitOffset, final String... kinds) {
 		if (commitOffset == cr.getHead())
 			return getSnapshot(cr, kinds);
-		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>();
-		Set<String> dels = new HashSet<String>();
-		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-			@Override
-			public int compare(Integer i1, Integer i2) {
-				return i2 - i1;
-			}
-		});
-		Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		if (commitOffset < 0)
+			return new ChangedFile[0];
+		final List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
+		final Set<String> adds = new HashSet<String>();
+		final Set<String> dels = new HashSet<String>();
+		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
+		final Set<Integer> queuedCommitIds = new HashSet<Integer>();
 		pq.offer((int) commitOffset);
 		queuedCommitIds.add((int) commitOffset);
 		while (!pq.isEmpty()) {
-			int offset = pq.poll();
-			Revision commit = getRevision(cr, offset);
+			final int offset = pq.poll();
+			final Revision commit = getRevision(cr, offset);
 			update(snapshot, commit, adds, dels, pq, queuedCommitIds, kinds);
 		}
 		return snapshot.toArray(new ChangedFile[0]);
 	}
 
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "Revision"})
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final Revision commit) {
-		return getSnapshot(cr, commit, new String[0]);
-	}
-
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "Revision", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final Revision commit, final String... kinds) {
-		List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		Set<String> adds = new HashSet<String>();
-		Set<String> dels = new HashSet<String>();
-		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-			@Override
-			public int compare(Integer i1, Integer i2) {
-				return i2 - i1;
-			}
-		});
-		Set<Integer> queuedCommitIds = new HashSet<Integer>();
-		update(snapshot, commit, adds, dels, pq, queuedCommitIds, kinds);
-		while (!pq.isEmpty()) {
-			int offset = pq.poll();
-			Revision c = getRevision(cr, offset);
-			update(snapshot, c, adds, dels, pq, queuedCommitIds, kinds);
-		}
-		return snapshot.toArray(new ChangedFile[0]);
-	}
-
-	private static void update(List<ChangedFile> snapshot, Revision commit, Set<String> adds, Set<String> dels,
-			PriorityQueue<Integer> pq, Set<Integer> queuedCommitIds, final String... kinds) {
+	private static void update(final List<ChangedFile> snapshot, final Revision commit, final Set<String> adds, final Set<String> dels,
+			final PriorityQueue<Integer> pq, final Set<Integer> queuedCommitIds, final String... kinds) {
 		for (final ChangedFile cf : commit.getFilesList()) {
-			ChangeKind ck = cf.getChange();
+			final ChangeKind ck = cf.getChange();
 			switch (ck) {
 			case ADDED:
 				if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
@@ -195,9 +214,7 @@ public class BoaIntrinsics {
 				}
 				for (int i = 0; i < cf.getChangesCount(); i++) {
 					if (cf.getChanges(i) != ChangeKind.ADDED) {
-						ChangeKind pck = cf.getChanges(i);
-//							ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
-//							String name = pcf.getName();
+						final ChangeKind pck = cf.getChanges(i);
 						String name = cf.getPreviousNames(i);
 						if (name.isEmpty())
 							name = cf.getName();
@@ -213,12 +230,9 @@ public class BoaIntrinsics {
 						snapshot.add(cf);
 				}
 				for (int i = 0; i < cf.getChangesCount(); i++) {
-//						ChangedFile pcf = revisions.get(cf.getPreviousVersions(i)).getFiles(cf.getPreviousIndices(i));
-//						String name = pcf.getName();
-					
 					// In git system, some renamed files might not have previous names
 					if (cf.getPreviousNamesCount() != 0) {
-						String name = cf.getPreviousNames(i);
+						final String name = cf.getPreviousNames(i);
 						if (!adds.contains(name) && !dels.contains(name))
 							dels.add(name);
 					}
@@ -235,7 +249,7 @@ public class BoaIntrinsics {
 		}
 		// git system only consider diffs from the first parent
 		if (commit.getParentsList() != null && commit.getParentsList().size() != 0) {
-			int p = commit.getParentsList().get(0);
+			final int p = commit.getParentsList().get(0);
 			if (!queuedCommitIds.contains(p)) {
 				pq.offer(p);
 				queuedCommitIds.add(p);
@@ -243,7 +257,7 @@ public class BoaIntrinsics {
 		}
 	}
 
-	private static boolean isIncluded(ChangedFile cf, String[] kinds) {
+	private static boolean isIncluded(final ChangedFile cf, final String[] kinds) {
 		if (kinds == null || kinds.length == 0)
 			return true;
 		final String kindName = cf.getKind().name();
@@ -260,23 +274,36 @@ public class BoaIntrinsics {
 
 	@FunctionSpec(name = "getsnapshotbyid", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string", "string..." })
 	public static ChangedFile[] getSnapshotById(final CodeRepository cr, final String id, final String... kinds) {
-		if (getRevisionsCount(cr) == 0)
-			return new ChangedFile[0];
-		int revisionOffset = getRevisionIndex(cr, id);
+		final int revisionOffset = getRevisionIndex(cr, id);
 		if (revisionOffset < 0)
 			return new ChangedFile[0];
 		return getSnapshotByIndex(cr, revisionOffset, kinds);
 	}
 
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
-	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) {
-//		return getSnapshot(cr, Long.MAX_VALUE, kinds);
-		List<ChangedFile> files = new ArrayList<ChangedFile>();
-		for (final ChangedFile file : cr.getHeadSnapshotList()) {
-			if (isIncluded(file, kinds))
-				files.add(file);
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "Revision"})
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final Revision commit) {
+		return getSnapshot(cr, commit, new String[0]);
+	}
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "Revision", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final Revision commit, final String... kinds) {
+		final List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
+		final Set<String> adds = new HashSet<String>();
+		final Set<String> dels = new HashSet<String>();
+		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
+		final Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		update(snapshot, commit, adds, dels, pq, queuedCommitIds, kinds);
+		while (!pq.isEmpty()) {
+			final int offset = pq.poll();
+			final Revision c = getRevision(cr, offset);
+			update(snapshot, c, adds, dels, pq, queuedCommitIds, kinds);
 		}
-		return files.toArray(new ChangedFile[0]);
+		return snapshot.toArray(new ChangedFile[0]);
+	}
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
+		return getSnapshotByIndex(cr, getRevisionIndex(cr, timestamp), kinds);
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
@@ -284,48 +311,51 @@ public class BoaIntrinsics {
 		return getSnapshot(cr, timestamp, new String[0]);
 	}
 
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) {
+		final List<ChangedFile> files = new ArrayList<ChangedFile>();
+		for (final ChangedFile file : cr.getHeadSnapshotList())
+			if (isIncluded(file, kinds))
+				files.add(file);
+		return files.toArray(new ChangedFile[0]);
+	}
+
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr) {
-//		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 		return cr.getHeadSnapshotList().toArray(new ChangedFile[0]);
 	}
 
 	@FunctionSpec(name = "getpreviousversion", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "ChangedFile" })
 	public static ChangedFile[] getPreviousVersion(final CodeRepository cr, final ChangedFile cf) throws Exception {
-		List<ChangedFile> l = new ArrayList<ChangedFile>();
+		final List<ChangedFile> l = new ArrayList<ChangedFile>();
 		for (int i = 0; i < cf.getChangesCount(); i++) {
-			ChangeKind kind = cf.getChanges(i);
+			final ChangeKind kind = cf.getChanges(i);
 			if (kind == ChangeKind.ADDED || kind == ChangeKind.COPIED)
 				continue;
-			ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
+			final ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
 			if (!cf.getPreviousNames(i).isEmpty())
 				fb.setName(cf.getPreviousNames(i));
-			ChangedFile key = fb.build();
+			final ChangedFile key = fb.build();
 			int revisionIndex = cf.getPreviousVersions(i);
-			Set<Integer> queuedRevisionIds = new HashSet<Integer>();
-			PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
-				@Override
-				public int compare(Integer i1, Integer i2) {
-					return i2 - i1;
-				}
-			});
+			final Set<Integer> queuedRevisionIds = new HashSet<Integer>();
+			final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
 			pq.offer(revisionIndex);
 			queuedRevisionIds.add(revisionIndex);
 			while (!pq.isEmpty()) {
 				revisionIndex = pq.poll();
-				Revision rev = getRevision(cr, revisionIndex);
-				int index = Collections.binarySearch(rev.getFilesList(), key, new Comparator<ChangedFile>() {
+				final Revision rev = getRevision(cr, revisionIndex);
+				final int index = Collections.binarySearch(rev.getFilesList(), key, new Comparator<ChangedFile>() {
 					@Override
-					public int compare(ChangedFile f1, ChangedFile f2) {
+					public int compare(final ChangedFile f1, final ChangedFile f2) {
 						return f1.getName().compareTo(f2.getName());
 					}
 				});
 				if (index >= 0) {
-					ChangedFile ocf = rev.getFiles(index);
+					final ChangedFile ocf = rev.getFiles(index);
 					if (ocf.getChange() != ChangeKind.DELETED)
 						l.add(ocf);
 				} else {
-					for (int parentId : rev.getParentsList()) {
+					for (final int parentId : rev.getParentsList()) {
 						if (!queuedRevisionIds.contains(parentId)) {
 							pq.offer(parentId);
 							queuedRevisionIds.add(parentId);
@@ -526,21 +556,21 @@ public class BoaIntrinsics {
 	}
 
 	public static <T> long[] basic_array(final Long[] arr) {
-		long[] arr2 = new long[arr.length];
+		final long[] arr2 = new long[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
 	}
 
 	public static <T> double[] basic_array(final Double[] arr) {
-		double[] arr2 = new double[arr.length];
+		final double[] arr2 = new double[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
 	}
 
 	public static <T> boolean[] basic_array(final Boolean[] arr) {
-		boolean[] arr2 = new boolean[arr.length];
+		final boolean[] arr2 = new boolean[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;

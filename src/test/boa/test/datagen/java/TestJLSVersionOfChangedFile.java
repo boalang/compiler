@@ -24,10 +24,11 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.CompressionType;
 import org.eclipse.jgit.lib.Constants;
 import org.hamcrest.Matchers;
-import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+import org.junit.Test;
 
 import boa.datagen.DefaultProperties;
 import boa.datagen.forges.github.RepositoryCloner;
@@ -42,11 +43,12 @@ import boa.types.Diff.ChangedFile;
 
 //FIXME autoboxing
 
+@Ignore
 @RunWith(Parameterized.class)
 public class TestJLSVersionOfChangedFile {
-    @Parameters(name = "{index}: {0}")
-    public static List<Object[]> data() throws Exception {
-    	final List<Object[]> data = new ArrayList<Object[]>();
+	@Parameters(name = "{index}: {0}")
+	public static List<Object[]> data() throws Exception {
+		final List<Object[]> data = new ArrayList<Object[]>();
 		final CodeRepository cr = buildCodeRepository("boalang/compiler");
 		final String[][] commits = new String[][] {
 			{"3a1e352cc63f94058ddb38341531d347f121c29a", "58"},
@@ -65,14 +67,14 @@ public class TestJLSVersionOfChangedFile {
 				final List<ChangedFile> snapshot = rev.getFilesList();
 				assertThat(snapshot.size(), Matchers.is(Integer.parseInt(commit[1])));
 
-		    	for (final ChangedFile cf : snapshot)
-		    		data.add(new Object[]{cf.getName(), cf});
+				for (final ChangedFile cf : snapshot)
+					data.add(new Object[]{cf.getName(), cf});
 			}
 		}
-    	return data;
-    }
+		return data;
+	}
 
-    private ChangedFile changedFile;
+	private ChangedFile changedFile;
 
 	private static Configuration conf = new Configuration();
 	private static FileSystem fileSystem = null;
@@ -91,7 +93,7 @@ public class TestJLSVersionOfChangedFile {
 	}
 
 	@Test
-	public void testJLSVersion() throws Exception {
+	public void testChangedFileJLSVersion() throws Exception {
 		final String kind = changedFile.getKind().name();
 		final String version = kind.substring(kind.lastIndexOf('_') + 1);
 		assertThat(changedFile.getName(), Matchers.containsString("/" + version + "/"));

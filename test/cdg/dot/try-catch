@@ -1,0 +1,14 @@
+digraph {
+	{ rank = source; 0; }
+	0[shape=ellipse,label="[0] ENTRY"]
+	1[shape=ellipse,label="[1] try {\l	if (o != null)\l		{\l			o.close();\l		}\l\l}\lcatch (InterruptedException e) {\l	Thread.currentThread().interrupt();\l}\l"]
+	2[shape=ellipse,label="[2] o != null"]
+	3[shape=ellipse,label="[3] o.close()"]
+	4[shape=ellipse,label="[4] catch (InterruptedException e) {\l	Thread.currentThread().interrupt();\l}\l"]
+	5[shape=ellipse,label="[5] Thread.currentThread().interrupt()"]
+	0 -> 1 [label="T"]
+	1 -> 2 [label="T"]
+	1 -> 4 [label="F"]
+	1 -> 5 [label="F"]
+	2 -> 3 [label="T"]
+}
