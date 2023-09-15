@@ -14007,31 +14007,31 @@ public final class Ast {
      */
     boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
 
-    // optional .boa.types.Type reciever_type = 16;
+    // optional .boa.types.Type receiver_type = 16;
     /**
-     * <code>optional .boa.types.Type reciever_type = 16;</code>
+     * <code>optional .boa.types.Type receiver_type = 16;</code>
      *
      * <pre>
      ** Reciever types 
      * </pre>
      */
-    boolean hasRecieverType();
+    boolean hasReceiverType();
     /**
-     * <code>optional .boa.types.Type reciever_type = 16;</code>
+     * <code>optional .boa.types.Type receiver_type = 16;</code>
      *
      * <pre>
      ** Reciever types 
      * </pre>
      */
-    boa.types.Ast.Type getRecieverType();
+    boa.types.Ast.Type getReceiverType();
     /**
-     * <code>optional .boa.types.Type reciever_type = 16;</code>
+     * <code>optional .boa.types.Type receiver_type = 16;</code>
      *
      * <pre>
      ** Reciever types 
      * </pre>
      */
-    boa.types.Ast.TypeOrBuilder getRecieverTypeOrBuilder();
+    boa.types.Ast.TypeOrBuilder getReceiverTypeOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Method}
@@ -14193,12 +14193,12 @@ public final class Ast {
             case 130: {
               boa.types.Ast.Type.Builder subBuilder = null;
               if (((bitField0_ & 0x00000040) == 0x00000040)) {
-                subBuilder = recieverType_.toBuilder();
+                subBuilder = receiverType_.toBuilder();
               }
-              recieverType_ = input.readMessage(boa.types.Ast.Type.PARSER, extensionRegistry);
+              receiverType_ = input.readMessage(boa.types.Ast.Type.PARSER, extensionRegistry);
               if (subBuilder != null) {
-                subBuilder.mergeFrom(recieverType_);
-                recieverType_ = subBuilder.buildPartial();
+                subBuilder.mergeFrom(receiverType_);
+                receiverType_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000040;
               break;
@@ -14817,38 +14817,38 @@ public final class Ast {
       return expression_;
     }
 
-    // optional .boa.types.Type reciever_type = 16;
-    public static final int RECIEVER_TYPE_FIELD_NUMBER = 16;
-    private boa.types.Ast.Type recieverType_;
+    // optional .boa.types.Type receiver_type = 16;
+    public static final int RECEIVER_TYPE_FIELD_NUMBER = 16;
+    private boa.types.Ast.Type receiverType_;
     /**
-     * <code>optional .boa.types.Type reciever_type = 16;</code>
+     * <code>optional .boa.types.Type receiver_type = 16;</code>
      *
      * <pre>
      ** Reciever types 
      * </pre>
      */
-    public boolean hasRecieverType() {
+    public boolean hasReceiverType() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>optional .boa.types.Type reciever_type = 16;</code>
+     * <code>optional .boa.types.Type receiver_type = 16;</code>
      *
      * <pre>
      ** Reciever types 
      * </pre>
      */
-    public boa.types.Ast.Type getRecieverType() {
-      return recieverType_;
+    public boa.types.Ast.Type getReceiverType() {
+      return receiverType_;
     }
     /**
-     * <code>optional .boa.types.Type reciever_type = 16;</code>
+     * <code>optional .boa.types.Type receiver_type = 16;</code>
      *
      * <pre>
      ** Reciever types 
      * </pre>
      */
-    public boa.types.Ast.TypeOrBuilder getRecieverTypeOrBuilder() {
-      return recieverType_;
+    public boa.types.Ast.TypeOrBuilder getReceiverTypeOrBuilder() {
+      return receiverType_;
     }
 
     private void initFields() {
@@ -14864,7 +14864,7 @@ public final class Ast {
       declaringType_ = 0;
       computedName_ = boa.types.Ast.Expression.getDefaultInstance();
       expression_ = boa.types.Ast.Expression.getDefaultInstance();
-      recieverType_ = boa.types.Ast.Type.getDefaultInstance();
+      receiverType_ = boa.types.Ast.Type.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -14925,8 +14925,8 @@ public final class Ast {
           return false;
         }
       }
-      if (hasRecieverType()) {
-        if (!getRecieverType().isInitialized()) {
+      if (hasReceiverType()) {
+        if (!getReceiverType().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -14975,7 +14975,7 @@ public final class Ast {
         output.writeMessage(15, expression_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeMessage(16, recieverType_);
+        output.writeMessage(16, receiverType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -15036,7 +15036,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(16, recieverType_);
+          .computeMessageSize(16, receiverType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -15159,7 +15159,7 @@ public final class Ast {
           getCommentsFieldBuilder();
           getComputedNameFieldBuilder();
           getExpressionFieldBuilder();
-          getRecieverTypeFieldBuilder();
+          getReceiverTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -15228,10 +15228,10 @@ public final class Ast {
           expressionBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000800);
-        if (recieverTypeBuilder_ == null) {
-          recieverType_ = boa.types.Ast.Type.getDefaultInstance();
+        if (receiverTypeBuilder_ == null) {
+          receiverType_ = boa.types.Ast.Type.getDefaultInstance();
         } else {
-          recieverTypeBuilder_.clear();
+          receiverTypeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00001000);
         return this;
@@ -15355,10 +15355,10 @@ public final class Ast {
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000040;
         }
-        if (recieverTypeBuilder_ == null) {
-          result.recieverType_ = recieverType_;
+        if (receiverTypeBuilder_ == null) {
+          result.receiverType_ = receiverType_;
         } else {
-          result.recieverType_ = recieverTypeBuilder_.build();
+          result.receiverType_ = receiverTypeBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -15552,8 +15552,8 @@ public final class Ast {
         if (other.hasExpression()) {
           mergeExpression(other.getExpression());
         }
-        if (other.hasRecieverType()) {
-          mergeRecieverType(other.getRecieverType());
+        if (other.hasReceiverType()) {
+          mergeReceiverType(other.getReceiverType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -15614,8 +15614,8 @@ public final class Ast {
             return false;
           }
         }
-        if (hasRecieverType()) {
-          if (!getRecieverType().isInitialized()) {
+        if (hasReceiverType()) {
+          if (!getReceiverType().isInitialized()) {
             
             return false;
           }
@@ -18223,140 +18223,140 @@ public final class Ast {
         return expressionBuilder_;
       }
 
-      // optional .boa.types.Type reciever_type = 16;
-      private boa.types.Ast.Type recieverType_ = boa.types.Ast.Type.getDefaultInstance();
+      // optional .boa.types.Type receiver_type = 16;
+      private boa.types.Ast.Type receiverType_ = boa.types.Ast.Type.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> recieverTypeBuilder_;
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> receiverTypeBuilder_;
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
        * </pre>
        */
-      public boolean hasRecieverType() {
+      public boolean hasReceiverType() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
        * </pre>
        */
-      public boa.types.Ast.Type getRecieverType() {
-        if (recieverTypeBuilder_ == null) {
-          return recieverType_;
+      public boa.types.Ast.Type getReceiverType() {
+        if (receiverTypeBuilder_ == null) {
+          return receiverType_;
         } else {
-          return recieverTypeBuilder_.getMessage();
+          return receiverTypeBuilder_.getMessage();
         }
       }
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
        * </pre>
        */
-      public Builder setRecieverType(boa.types.Ast.Type value) {
-        if (recieverTypeBuilder_ == null) {
+      public Builder setReceiverType(boa.types.Ast.Type value) {
+        if (receiverTypeBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          recieverType_ = value;
+          receiverType_ = value;
           onChanged();
         } else {
-          recieverTypeBuilder_.setMessage(value);
+          receiverTypeBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00001000;
         return this;
       }
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
        * </pre>
        */
-      public Builder setRecieverType(
+      public Builder setReceiverType(
           boa.types.Ast.Type.Builder builderForValue) {
-        if (recieverTypeBuilder_ == null) {
-          recieverType_ = builderForValue.build();
+        if (receiverTypeBuilder_ == null) {
+          receiverType_ = builderForValue.build();
           onChanged();
         } else {
-          recieverTypeBuilder_.setMessage(builderForValue.build());
+          receiverTypeBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00001000;
         return this;
       }
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
        * </pre>
        */
-      public Builder mergeRecieverType(boa.types.Ast.Type value) {
-        if (recieverTypeBuilder_ == null) {
+      public Builder mergeReceiverType(boa.types.Ast.Type value) {
+        if (receiverTypeBuilder_ == null) {
           if (((bitField0_ & 0x00001000) == 0x00001000) &&
-              recieverType_ != boa.types.Ast.Type.getDefaultInstance()) {
-            recieverType_ =
-              boa.types.Ast.Type.newBuilder(recieverType_).mergeFrom(value).buildPartial();
+              receiverType_ != boa.types.Ast.Type.getDefaultInstance()) {
+            receiverType_ =
+              boa.types.Ast.Type.newBuilder(receiverType_).mergeFrom(value).buildPartial();
           } else {
-            recieverType_ = value;
+            receiverType_ = value;
           }
           onChanged();
         } else {
-          recieverTypeBuilder_.mergeFrom(value);
+          receiverTypeBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00001000;
         return this;
       }
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
        * </pre>
        */
-      public Builder clearRecieverType() {
-        if (recieverTypeBuilder_ == null) {
-          recieverType_ = boa.types.Ast.Type.getDefaultInstance();
+      public Builder clearReceiverType() {
+        if (receiverTypeBuilder_ == null) {
+          receiverType_ = boa.types.Ast.Type.getDefaultInstance();
           onChanged();
         } else {
-          recieverTypeBuilder_.clear();
+          receiverTypeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
        * </pre>
        */
-      public boa.types.Ast.Type.Builder getRecieverTypeBuilder() {
+      public boa.types.Ast.Type.Builder getReceiverTypeBuilder() {
         bitField0_ |= 0x00001000;
         onChanged();
-        return getRecieverTypeFieldBuilder().getBuilder();
+        return getReceiverTypeFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
        * </pre>
        */
-      public boa.types.Ast.TypeOrBuilder getRecieverTypeOrBuilder() {
-        if (recieverTypeBuilder_ != null) {
-          return recieverTypeBuilder_.getMessageOrBuilder();
+      public boa.types.Ast.TypeOrBuilder getReceiverTypeOrBuilder() {
+        if (receiverTypeBuilder_ != null) {
+          return receiverTypeBuilder_.getMessageOrBuilder();
         } else {
-          return recieverType_;
+          return receiverType_;
         }
       }
       /**
-       * <code>optional .boa.types.Type reciever_type = 16;</code>
+       * <code>optional .boa.types.Type receiver_type = 16;</code>
        *
        * <pre>
        ** Reciever types 
@@ -18364,16 +18364,16 @@ public final class Ast {
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
-          getRecieverTypeFieldBuilder() {
-        if (recieverTypeBuilder_ == null) {
-          recieverTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getReceiverTypeFieldBuilder() {
+        if (receiverTypeBuilder_ == null) {
+          receiverTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder>(
-                  recieverType_,
+                  receiverType_,
                   getParentForChildren(),
                   isClean());
-          recieverType_ = null;
+          receiverType_ = null;
         }
-        return recieverTypeBuilder_;
+        return receiverTypeBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Method)
@@ -44096,7 +44096,7 @@ public final class Ast {
       "\n\003key\030\014 \001(\005\022\026\n\016declaring_type\030\r \001(\005\022,\n\rc",
       "omputed_name\030\016 \001(\0132\025.boa.types.Expressio" +
       "n\022)\n\nexpression\030\017 \001(\0132\025.boa.types.Expres" +
-      "sion\022&\n\rreciever_type\030\020 \001(\0132\017.boa.types." +
+      "sion\022&\n\rreceiver_type\030\020 \001(\0132\017.boa.types." +
       "Type\"\316\002\n\010Variable\022\014\n\004name\030\001 \001(\t\022&\n\rvaria" +
       "ble_type\030\002 \001(\0132\017.boa.types.Type\022&\n\tmodif" +
       "iers\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013initi" +
@@ -44290,7 +44290,7 @@ public final class Ast {
           internal_static_boa_types_Method_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Method_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "Key", "DeclaringType", "ComputedName", "Expression", "RecieverType", });
+              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "Key", "DeclaringType", "ComputedName", "Expression", "ReceiverType", });
           internal_static_boa_types_Variable_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_boa_types_Variable_fieldAccessorTable = new
