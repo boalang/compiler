@@ -1,0 +1,81 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "dowhile",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "DO",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "print",
+                                             "method_args": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "\"hi\""
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "x"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "DO",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "EMPTY"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "mutableList"
+                                    }
+                                 ],
+                                 "method": "remove",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

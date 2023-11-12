@@ -1,0 +1,168 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "x",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 }
+                              ],
+                              "variable": "z",
+                              "safe": true
+                           }
+                        ],
+                        "variable": "q",
+                        "safe": true
+                     }
+                  ],
+                  "method": "m",
+                  "safe": true
+               }
+            },
+            {
+               "name": "y",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 }
+                              ],
+                              "variable": "z"
+                           }
+                        ],
+                        "variable": "q"
+                     }
+                  ],
+                  "method": "m",
+                  "safe": true
+               }
+            },
+            {
+               "name": "z",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 }
+                              ],
+                              "variable": "z",
+                              "safe": true
+                           }
+                        ],
+                        "variable": "q"
+                     }
+                  ],
+                  "method": "m"
+               }
+            },
+            {
+               "name": "m",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 }
+                              ],
+                              "variable": "z",
+                              "safe": true
+                           }
+                        ],
+                        "method": "q"
+                     }
+                  ],
+                  "method": "m",
+                  "safe": true
+               }
+            },
+            {
+               "name": "n",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "expressions": [
+                                 {
+                                    "kind": "METHODCALL",
+                                    "method": "y"
+                                 }
+                              ],
+                              "variable": "z",
+                              "safe": true
+                           }
+                        ],
+                        "method": "q"
+                     }
+                  ],
+                  "method": "m",
+                  "safe": true
+               }
+            }
+         ]
+      }
+   ]
+}

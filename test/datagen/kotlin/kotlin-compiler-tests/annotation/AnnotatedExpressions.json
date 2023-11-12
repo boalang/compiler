@@ -1,0 +1,59 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "foo",
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "a"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "this",
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "a"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

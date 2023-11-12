@@ -1,0 +1,139 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "return_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               },
+               "arguments": [
+                  {
+                     "name": "p1",
+                     "variable_type": {
+                        "name": "dynamic",
+                        "kind": "DYNAMIC"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "p2",
+                     "variable_type": {
+                        "name": "@a dynamic",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "p3",
+                     "variable_type": {
+                        "name": "foo.dynamic",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "p4",
+                     "variable_type": {
+                        "name": "dynamic.foo",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "p5",
+                     "variable_type": {
+                        "name": "dynamic<T>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "p6",
+                     "variable_type": {
+                        "name": "Foo<dynamic>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "p7",
+                     "variable_type": {
+                        "name": "dynamic?",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "p8",
+                     "variable_type": {
+                        "name": "(dynamic) -> dynamic",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

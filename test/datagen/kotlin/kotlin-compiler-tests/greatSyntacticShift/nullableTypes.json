@@ -1,0 +1,268 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "test",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ELVIS",
+                                 "expressions": [
+                                    {
+                                       "kind": "CAST",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ],
+                                       "new_type": {
+                                          "name": "X",
+                                          "kind": "OTHER"
+                                       },
+                                       "safe": true
+                                    },
+                                    {
+                                       "kind": "STATEMENT",
+                                       "statements": [
+                                          {
+                                             "kind": "RETURN"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ELVIS",
+                                 "expressions": [
+                                    {
+                                       "kind": "CAST",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ],
+                                       "new_type": {
+                                          "name": "X?",
+                                          "kind": "OTHER"
+                                       }
+                                    },
+                                    {
+                                       "kind": "STATEMENT",
+                                       "statements": [
+                                          {
+                                             "kind": "RETURN"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "X?"
+                                    }
+                                 ],
+                                 "method": "x"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "X?"
+                                    }
+                                 ],
+                                 "method": "x"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "X??"
+                                    }
+                                 ],
+                                 "method": "x"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "X??"
+                                    }
+                                 ],
+                                 "method": "x"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "X??"
+                                    }
+                                 ],
+                                 "method": "x"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "variable_type": {
+                                          "name": "X?.() -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "variable_type": {
+                                          "name": "X??.() -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "variable_type": {
+                                          "name": "X?? .() -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "variable_type": {
+                                          "name": "X ? .() -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "variable_type": {
+                                          "name": "X ?.() -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

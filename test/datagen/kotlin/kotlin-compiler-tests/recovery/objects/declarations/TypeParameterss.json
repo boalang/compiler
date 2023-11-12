@@ -1,0 +1,57 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Foo",
+               "kind": "SINGLETON",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "R",
+                     "kind": "GENERIC"
+                  }
+               ]
+            },
+            {
+               "name": "Foo",
+               "kind": "SINGLETON",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "R",
+                     "kind": "GENERIC"
+                  }
+               ]
+            },
+            {
+               "name": "Foo",
+               "kind": "SINGLETON",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "R",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "Bar",
+                     "kind": "CLASS"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

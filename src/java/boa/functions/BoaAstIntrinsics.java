@@ -36,6 +36,7 @@ import org.apache.hadoop.mapreduce.Mapper.Context;
 
 import boa.datagen.DefaultProperties;
 import boa.functions.langmode.JavaLangMode;
+import boa.functions.langmode.KotlinLangMode;
 import boa.functions.langmode.LangMode;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.CommentsRoot;
@@ -652,6 +653,7 @@ public class BoaAstIntrinsics {
 	}
 
 	private static final LangMode javaLang = new JavaLangMode();
+	private static final LangMode kotlinLang = new KotlinLangMode();
 
 	private static ChangedFile.FileKind curLang = ChangedFile.FileKind.SOURCE_JAVA_JLS8;
 	private static LangMode lang = javaLang;
@@ -668,6 +670,15 @@ public class BoaAstIntrinsics {
 		curLang = l;
 
 		switch (curLang) {
+		case SOURCE_KOTLIN_1_5:
+		case SOURCE_KOTLIN_1_4:
+		case SOURCE_KOTLIN_1_3:
+		case SOURCE_KOTLIN_1_2:
+		case SOURCE_KOTLIN_1_1:
+		case SOURCE_KOTLIN_1_0:
+			lang = kotlinLang;
+			break;
+
 		default:
 			lang = javaLang;
 			break;

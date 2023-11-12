@@ -1,0 +1,51 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "B",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "foo",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "p",
+                                             "variable_type": {
+                                                "name": "Int",
+                                                "kind": "DELEGATED",
+                                                "delegate": {
+                                                   "kind": "METHODCALL",
+                                                   "method": "A"
+                                                }
+                                             },
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

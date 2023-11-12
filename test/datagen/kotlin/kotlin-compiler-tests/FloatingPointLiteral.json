@@ -1,0 +1,137 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "array",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "generic_parameters": [
+                     {
+                        "name": "Any",
+                        "kind": "GENERIC"
+                     }
+                  ],
+                  "method": "array",
+                  "method_args": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1e1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0e1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1e-1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0e-1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1F"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0F"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1e1F"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0e1F"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1e-1F"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0e-1F"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1e1f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0e1f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1e-1f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1.0e-1f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": ".1_1"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "3.141_592"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1e1__3_7"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1_0f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1e1_2f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "2_2.0f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": ".3_3f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "3.14_16f"
+                     },
+                     {
+                        "kind": "LITERAL",
+                        "literal": "6.022___137e+2_3f"
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}

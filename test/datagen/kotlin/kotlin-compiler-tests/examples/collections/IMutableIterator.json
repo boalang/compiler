@@ -1,0 +1,40 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "IMutableIterator",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "out T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IIterator<T>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "remove",
+                     "return_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

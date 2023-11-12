@@ -1,0 +1,43 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "An",
+                           "other": "get"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "An",
+                           "other": "set"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "An",
+                           "other": "setparam"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "\"A\""
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

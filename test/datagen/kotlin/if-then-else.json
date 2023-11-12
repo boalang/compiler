@@ -1,0 +1,126 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "foo",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "IF",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "println",
+                                                   "method_args": [
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "2"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "IF",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "println",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "3"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "println",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "\"Other!\""
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "conditions": [
+                                          {
+                                             "kind": "EQ",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "3"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "conditions": [
+                                    {
+                                       "kind": "EQ",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "2"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -1,0 +1,199 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<clinit>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<init>",
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "this"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<clinit>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "abc1",
+                     "variable_type": {
+                        "name": "A",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "new_type": {
+                              "name": "A",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "abc2",
+                     "variable_type": {
+                        "name": "A",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "NEW",
+                        "anon_declaration": {
+                           "name": "A",
+                           "kind": "ENUM"
+                        }
+                     },
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "new_type": {
+                              "name": "A",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "abc3",
+                     "variable_type": {
+                        "name": "A",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

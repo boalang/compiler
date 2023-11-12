@@ -1,0 +1,285 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "methods": [
+            {
+               "name": "numberToDay",
+               "arguments": [
+                  {
+                     "name": "day",
+                     "variable_type": {
+                        "name": "int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "SWITCH",
+                           "statements": [
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Monday\""
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Tuesday\""
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Wednesday\""
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "4"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Thursday\""
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "5"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Friday\""
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "6"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Saturday\""
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "7"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Sunday\""
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Sunday\""
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "DEFAULT"
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"Invalid day.\""
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "day"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "isValidDayNumber",
+               "arguments": [
+                  {
+                     "name": "day",
+                     "variable_type": {
+                        "name": "int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "SWITCH",
+                           "statements": [
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "IN",
+                                       "expressions": [
+                                          {
+                                             "kind": "ARRAY_COMPREHENSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "7"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "true"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "DEFAULT"
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "false"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "day"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,79 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<clinit>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<clinit>",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<clinit>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "method": "f"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

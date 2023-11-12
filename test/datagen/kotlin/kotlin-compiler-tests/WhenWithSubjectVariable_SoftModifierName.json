@@ -1,0 +1,263 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "test",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "abstract"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "enum"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "open"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "inner"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "override"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "private"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "public"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "internal"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "protected"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "out"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "final"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "vararg"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "reified"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "companion"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "sealed"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "lateinit"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "data"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "inline"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "noinline"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "tailrec"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "external"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "annotation"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "crossinline"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "const"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "operator"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "infix"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "suspend"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

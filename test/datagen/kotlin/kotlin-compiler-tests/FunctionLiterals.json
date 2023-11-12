@@ -1,0 +1,347 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "foo"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "y",
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "variable_type": {
+                                          "name": "b",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "f"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "variable_type": {
+                                          "name": "b",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "c",
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "f"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "variable_type": {
+                                          "name": "b",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "c",
+                                       "variable_type": {
+                                          "name": "d",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "f"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "variable_decls": [
+                                    {
+                                       "name": "a",
+                                       "variable_type": {
+                                          "name": "(Int) -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "c",
+                                       "variable_type": {
+                                          "name": "(Int) -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "f"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

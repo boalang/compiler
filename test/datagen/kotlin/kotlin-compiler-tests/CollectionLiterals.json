@@ -1,0 +1,192 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "test",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "ARRAYINIT"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "ARRAYINIT",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "ARRAYINIT"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "ARRAYINIT"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "ARRAYINIT"
+                                    },
+                                    {
+                                       "kind": "ARRAYINIT",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          },
+                                          {
+                                             "kind": "ARRAYINIT"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ARRAYINIT",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "ARRAYINIT",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "2"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

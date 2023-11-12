@@ -1,0 +1,379 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "ComparisonResult",
+               "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "LS",
+                     "variable_type": {
+                        "name": "ComparisonResult",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "EQ",
+                     "variable_type": {
+                        "name": "ComparisonResult",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "GR",
+                     "variable_type": {
+                        "name": "ComparisonResult",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "naturalOrder",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "in T : Comparable<T>",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "b",
+                     "variable_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "a"
+                     }
+                  ],
+                  "method": "compareTo",
+                  "method_args": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "b"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "castingNaturalOrder",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "Object",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "b",
+                     "variable_type": {
+                        "name": "Object",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "CAST",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "a"
+                                 }
+                              ],
+                              "new_type": {
+                                 "name": "Comparable<Object>",
+                                 "kind": "OTHER"
+                              }
+                           }
+                        ]
+                     }
+                  ],
+                  "method": "compareTo",
+                  "method_args": [
+                     {
+                        "kind": "CAST",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "b"
+                           }
+                        ],
+                        "new_type": {
+                           "name": "Comparable<Object>",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "asMatchableComparison",
+               "return_type": {
+                  "name": "MatchableComparison<T>",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "cmp",
+                     "variable_type": {
+                        "name": "Comparison<T>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "LAMBDA",
+                  "variable_decls": [
+                     {
+                        "name": "a",
+                        "modifiers": [
+                           {
+                              "kind": "IMPLICIT"
+                           },
+                           {
+                              "kind": "FINAL"
+                           }
+                        ]
+                     },
+                     {
+                        "name": "b",
+                        "modifiers": [
+                           {
+                              "kind": "IMPLICIT"
+                           },
+                           {
+                              "kind": "FINAL"
+                           }
+                        ]
+                     }
+                  ],
+                  "statements": [
+                     {
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "VARDECL",
+                                    "variable_decls": [
+                                       {
+                                          "name": "res",
+                                          "modifiers": [
+                                             {
+                                                "kind": "FINAL"
+                                             }
+                                          ],
+                                          "initializer": {
+                                             "kind": "METHODCALL",
+                                             "method": "cmp",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "b"
+                                                }
+                                             ]
+                                          }
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "IF",
+                              "statements": [
+                                 {
+                                    "kind": "RETURN",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "ComparisonResult"
+                                             }
+                                          ],
+                                          "variable": "EQ"
+                                       }
+                                    ]
+                                 }
+                              ],
+                              "conditions": [
+                                 {
+                                    "kind": "EQ",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "res"
+                                       },
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "0"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "IF",
+                              "statements": [
+                                 {
+                                    "kind": "RETURN",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "ComparisonResult"
+                                             }
+                                          ],
+                                          "variable": "LS"
+                                       }
+                                    ]
+                                 }
+                              ],
+                              "conditions": [
+                                 {
+                                    "kind": "LT",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "res"
+                                       },
+                                       {
+                                          "kind": "LITERAL",
+                                          "literal": "0"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "RETURN",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "ComparisonResult"
+                                       }
+                                    ],
+                                    "variable": "GR"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}

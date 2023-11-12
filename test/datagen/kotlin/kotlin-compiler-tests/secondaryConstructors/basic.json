@@ -1,0 +1,212 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "annot"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "constructor",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "constructor"
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "annot"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PROTECTED"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "y",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ],
+                                 "method": "this"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "constructor"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PUBLIC"
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "super"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "B",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "constructor"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

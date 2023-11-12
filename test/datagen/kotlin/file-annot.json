@@ -1,0 +1,135 @@
+{
+   "namespaces": [
+      {
+         "name": "kotlinx.ast.common",
+         "modifiers": [
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_values": [
+                  {
+                     "kind": "ASSIGN",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "f"
+                        },
+                        {
+                           "kind": "LITERAL",
+                           "literal": "\"Foo\""
+                        }
+                     ]
+                  },
+                  {
+                     "kind": "ASSIGN",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "g"
+                        },
+                        {
+                           "kind": "LITERAL",
+                           "literal": "3"
+                        }
+                     ]
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  },
+                  {
+                     "kind": "ASSIGN",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "g"
+                        },
+                        {
+                           "kind": "LITERAL",
+                           "literal": "3"
+                        }
+                     ]
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_values": [
+                  {
+                     "kind": "ASSIGN",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "f"
+                        },
+                        {
+                           "kind": "LITERAL",
+                           "literal": "\"Foo\""
+                        }
+                     ]
+                  },
+                  {
+                     "kind": "LITERAL",
+                     "literal": "3"
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  },
+                  {
+                     "kind": "LITERAL",
+                     "literal": "3"
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "annotation_values": [
+                  {
+                     "kind": "LITERAL",
+                     "literal": "\"Foo\""
+                  }
+               ],
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "other": "file"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "JvmName",
+               "other": "file"
+            }
+         ],
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS"
+            }
+         ],
+         "imports": [
+            "java.util.List"
+         ]
+      }
+   ]
+}

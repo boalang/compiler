@@ -1,0 +1,92 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "STATEMENT",
+                                          "statements": [
+                                             {
+                                                "kind": "IF",
+                                                "statements": [
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "LITERAL",
+                                                            "literal": "\"bar\""
+                                                         }
+                                                      ]
+                                                   },
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "STATEMENT",
+                                                            "modifiers": [
+                                                               {
+                                                                  "kind": "ANNOTATION",
+                                                                  "annotation_name": "Ann"
+                                                               }
+                                                            ],
+                                                            "statements": [
+                                                               {
+                                                                  "kind": "BLOCK",
+                                                                  "statements": [
+                                                                     {
+                                                                        "kind": "EXPRESSION",
+                                                                        "expressions": [
+                                                                           {
+                                                                              "kind": "LITERAL",
+                                                                              "literal": "\"foo\""
+                                                                           }
+                                                                        ]
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ]
+                                                         }
+                                                      ]
+                                                   }
+                                                ],
+                                                "conditions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "y"
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

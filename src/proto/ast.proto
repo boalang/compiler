@@ -104,6 +104,16 @@ enum TypeKind {
 	PRIMITIVE = 10;
 	/** Array type */
 	ARRAY = 11;
+	/** Immutable data type */
+	IMMUTABLE = 12;
+	/** A typedef/alias */
+	ALIAS = 13;
+	/** Types declared as a singletons */
+	SINGLETON = 14;
+	/** Types declared as explicitly dynamic */
+	DYNAMIC = 15;
+	/** A delegated type */
+	DELEGATED = 16;
 }
 
 /** A type in an AST */
@@ -123,6 +133,8 @@ message Type {
 	/** */
 	optional int32 key = 10;
 	optional Expression computed_name = 14;
+	/** For delegated types, this is the expression to delegate to. */
+	optional Expression delegate = 15;
 }
 
 /** A method declaration */
@@ -139,11 +151,11 @@ message Method {
 	repeated Variable arguments = 5;
 	/** The list of exceptions thrown by this method */
 	repeated Type exception_types = 6;
-    /**
+	/**
 	  * The statements in the method body. Note that most methods (in C-like
 	  * languages, such as Java) contain a single statement of type BLOCK, which
 	  * contains the list of statements within it!
-      */
+	  */
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;
@@ -153,6 +165,10 @@ message Method {
 	optional int32 declaring_type = 13;
 	/** */
 	optional Expression computed_name = 14;
+	/** The method body expression, if the body is not composed of statements. */
+	optional Expression expression = 15;
+	/** Reciever types */
+	optional Type receiver_type = 16;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -360,6 +376,12 @@ message Expression {
 		TRAIT_ALIAS = 98;
 		TRAIT_PRECEDENCE = 99;
 		NAMESPACENAME = 100;
+		STATEMENT = 101;
+		TEMPLATE = 102;
+		LABEL = 103;
+		OP_ELVIS = 104;
+		NOT_IN = 105;
+		OP_NOTNULL = 106;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -373,7 +395,7 @@ message Expression {
 	optional string method = 9;
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
-	optional Modifier annotation = 12;
+	repeated Modifier modifiers = 12;
 	/** 13 used to be lambda */
 	/** @exclude */
 	optional bool no_parens = 14;
@@ -394,6 +416,7 @@ message Expression {
 	optional bool is_static = 27;
 	optional bool has_from = 28;
 	optional Method trait = 29;
+	optional bool safe = 30;
 }
 
 /** A single modifier */
@@ -432,6 +455,8 @@ message Modifier {
 		TRANSIENT = 12;
 		/** A volatile modifier */
 		VOLATILE = 13;
+		/** Modifier is implicit */
+		IMPLICIT = 14;
 	}
 	/** A visibility modifier */
 	enum Visibility {
@@ -448,6 +473,8 @@ message Modifier {
 		PACKAGE = 4;
 		/** A default visibility modifier */
 		DEFAULT = 5;
+		/** An internal visibility modifier */
+		INTERNAL = 6;
 	}
 	/** A scope modifier */
 	enum Scope {

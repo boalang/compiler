@@ -1,0 +1,148 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "ReadOnlyArray",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "out T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "ISized",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "get",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "operator"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "WriteOnlyArray",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "in T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "ISized",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "set",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "operator"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "value",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "MutableArray",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "ReadOnlyArray<T>",
+                     "kind": "CLASS"
+                  },
+                  {
+                     "name": "WriteOnlyArray<T>",
+                     "kind": "CLASS"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

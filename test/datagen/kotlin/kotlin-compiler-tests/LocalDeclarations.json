@@ -1,0 +1,124 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "out"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "foo",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          },
+                                          {
+                                             "kind": "OTHER",
+                                             "other": "out"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "5"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "foo",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "a"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "4"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ],
+                     "type_declarations": [
+                        {
+                           "name": "foof",
+                           "kind": "CLASS",
+                           "modifiers": [
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "a"
+                              },
+                              {
+                                 "kind": "ABSTRACT"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "foof",
+                           "kind": "CLASS",
+                           "modifiers": [
+                              {
+                                 "kind": "ABSTRACT"
+                              },
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "a"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "f",
+                           "kind": "ALIAS",
+                           "parents": [
+                              {
+                                 "name": "T.() -> Unit",
+                                 "kind": "OTHER"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

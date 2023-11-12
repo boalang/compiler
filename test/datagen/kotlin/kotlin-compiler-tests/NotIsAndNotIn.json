@@ -1,0 +1,100 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "test",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LOGICAL_NOT",
+                                 "expressions": [
+                                    {
+                                       "kind": "TYPECOMPARE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "new_type": {
+                                          "name": "B",
+                                          "kind": "OTHER"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "NOT_IN",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "B"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LOGICAL_NOT",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "isBoolean",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LOGICAL_NOT",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "inRange",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

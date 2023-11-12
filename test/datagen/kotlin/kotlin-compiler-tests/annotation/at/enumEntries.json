@@ -1,0 +1,187 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "foo",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann"
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "X",
+                     "variable_type": {
+                        "name": "A",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann",
+                           "annotation_values": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              }
+                           ]
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": ""
+                              }
+                           ],
+                           "new_type": {
+                              "name": "A",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Y",
+                     "variable_type": {
+                        "name": "A",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "NEW",
+                        "anon_declaration": {
+                           "name": "A",
+                           "kind": "ENUM"
+                        }
+                     },
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": ""
+                              }
+                           ],
+                           "new_type": {
+                              "name": "A",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Z",
+                     "variable_type": {
+                        "name": "A",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann"
+                        }
+                     ],
+                     "expressions": [
+                        {
+                           "kind": "NEW",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": ""
+                              }
+                           ],
+                           "new_type": {
+                              "name": "A",
+                              "kind": "ENUM"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Q",
+                     "variable_type": {
+                        "name": "A",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "private"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "W",
+                     "variable_type": {
+                        "name": "A",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

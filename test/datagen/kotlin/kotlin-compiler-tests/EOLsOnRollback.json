@@ -1,0 +1,111 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "r"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "foo",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "a"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "4"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "f",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "a"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "foo"
+                        }
+                     ],
+                     "type_declarations": [
+                        {
+                           "name": "foo",
+                           "kind": "CLASS"
+                        },
+                        {
+                           "name": "foo",
+                           "kind": "CLASS"
+                        },
+                        {
+                           "name": "x",
+                           "kind": "ALIAS",
+                           "parents": [
+                              {
+                                 "name": "t",
+                                 "kind": "OTHER"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

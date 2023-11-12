@@ -1,0 +1,149 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OTHER",
+                                 "expressions": [
+                                    {
+                                       "kind": "OTHER",
+                                       "expressions": [
+                                          {
+                                             "kind": "OTHER",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "l"
+                                                },
+                                                {
+                                                   "kind": "LAMBDA",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "BLOCK",
+                                                         "statements": [
+                                                            {
+                                                               "kind": "EXPRESSION",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "it"
+                                                                        }
+                                                                     ],
+                                                                     "variable": "x"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "literal": "filter"
+                                          },
+                                          {
+                                             "kind": "LAMBDA",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "it"
+                                                                  }
+                                                               ],
+                                                               "variable": "foo"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "literal": "map"
+                                    },
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "a",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "name": "b",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "OP_ADD",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "a"
+                                                            },
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "b"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "literal": "aggregate"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

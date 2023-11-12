@@ -325,6 +325,9 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasComputedName())
 				visit(node.getComputedName());
 
+			if (node.hasDelegate())
+				visit(node.getDelegate());
+
 			postVisit(node);
 		}
 	}
@@ -360,6 +363,12 @@ public abstract class BoaAbstractVisitor {
 
 			if (node.hasComputedName())
 				visit(node.getComputedName());
+
+			if (node.hasExpression())
+				visit(node.getExpression());
+
+			if (node.hasReceiverType())
+				visit(node.getReceiverType());
 
 			postVisit(node);
 		}
@@ -467,8 +476,10 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasAnonDeclaration())
 				visit(node.getAnonDeclaration());
 
-			if (node.hasAnnotation())
-				visit(node.getAnnotation());
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0 ; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
 
 			if (node.hasDeclaringType())
 				visit(node.getDeclaringType());

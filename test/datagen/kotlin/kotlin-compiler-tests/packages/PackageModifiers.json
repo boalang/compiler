@@ -1,0 +1,17 @@
+{
+   "namespaces": [
+      {
+         "name": "name",
+         "modifiers": [
+            {
+               "kind": "VISIBILITY",
+               "visibility": "PUBLIC"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "a"
+            }
+         ]
+      }
+   ]
+}

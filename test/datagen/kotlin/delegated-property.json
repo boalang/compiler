@@ -1,0 +1,27 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "Example",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "p",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "DELEGATED",
+                        "delegate": {
+                           "kind": "METHODCALL",
+                           "method": "Delegate"
+                        }
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -88,6 +88,8 @@ public class FileIO {
 	}
 
 	public static final void delete(final File f) throws IOException {
+		if (!f.exists()) return;
+
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
 				delete(g);

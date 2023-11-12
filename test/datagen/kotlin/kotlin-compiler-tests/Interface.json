@@ -1,0 +1,29 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Foo",
+               "kind": "INTERFACE",
+               "methods": [
+                  {
+                     "name": "f"
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "a",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

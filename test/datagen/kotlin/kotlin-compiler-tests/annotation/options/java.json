@@ -1,0 +1,90 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "my",
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "java.lang.annotation.Retention",
+                     "annotation_values": [
+                        {
+                           "kind": "VARACCESS",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "RetentionPolicy"
+                              }
+                           ],
+                           "variable": "CLASS"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "my1",
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Retention",
+                     "annotation_values": [
+                        {
+                           "kind": "VARACCESS",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "RetentionPolicy"
+                              }
+                           ],
+                           "variable": "RUNTIME"
+                        }
+                     ]
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Target",
+                     "annotation_values": [
+                        {
+                           "kind": "VARACCESS",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "ElementType"
+                              }
+                           ],
+                           "variable": "ANNOTATION_TYPE"
+                        },
+                        {
+                           "kind": "VARACCESS",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "ElementType"
+                              }
+                           ],
+                           "variable": "CONSTRUCTOR"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "imports": [
+            "java.lang.annotation.*"
+         ]
+      }
+   ]
+}

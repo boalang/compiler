@@ -1,0 +1,59 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "f",
+                     "variable_type": {
+                        "name": "(Mutable)",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "f",
+                     "variable_type": {
+                        "name": "Array<(out)>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

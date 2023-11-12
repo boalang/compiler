@@ -1,0 +1,14 @@
+{
+   "namespaces": [
+      {
+         "name": "bar",
+         "modifiers": [
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "foo",
+               "other": "file"
+            }
+         ]
+      }
+   ]
+}

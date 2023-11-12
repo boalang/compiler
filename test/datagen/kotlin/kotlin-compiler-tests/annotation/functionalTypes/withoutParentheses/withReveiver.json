@@ -1,0 +1,658 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ABSTRACT"
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "@Foo suspend (@Foo () -> Unit).(suspend (Int) -> ((Int) -> Unit)) -> Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "ABSTRACT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "x.<get>",
+               "return_type": {
+                  "name": "(@Foo suspend Int.() -> Unit)",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "x.<get>",
+               "return_type": {
+                  "name": "@Foo Int.() -> Unit",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "x.<get>",
+               "return_type": {
+                  "name": "@Foo Int.(x: kotlin.Int) -> Unit",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "x.<get>",
+               "return_type": {
+                  "name": "@Foo ((x: @Foo (@Foo () -> Int) -> Int.(@Foo () -> Int) -> Int) -> Unit)",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "x.<get>",
+               "return_type": {
+                  "name": "suspend @Foo (x: @Foo (@Foo ((x: kotlin.Any) -> Int).(x: kotlin.Any) -> Int) -> Int) -> Unit",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "x.<get>",
+               "return_type": {
+                  "name": "Comparable<@Foo @Bar(10) @Foo Unit.(x: kotlin.Any) -> Unit>",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "(@Foo ((@Foo kotlin.Any)->(Int)).(@Foo kotlin.Any)->()->Unit)",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "VARACCESS",
+                  "variable": "x"
+               }
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "suspend @Foo(10) @Bar Comparable<T>.(kotlin.Any) -> Unit",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LAMBDA",
+                        "variable_decls": [
+                           {
+                              "name": "x",
+                              "variable_type": {
+                                 "name": "Int",
+                                 "kind": "OTHER"
+                              },
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "statements": [
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "x"
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "variable_type": {
+                                          "name": "@Foo suspend @Bar (Coomparable<kotlin.Any>) -> Unit.(Coomparable<kotlin.Any>) -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LAMBDA",
+                                          "statements": [
+                                             {
+                                                "kind": "BLOCK"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LAMBDA",
+                                          "variable_decls": [
+                                             {
+                                                "name": "x",
+                                                "variable_type": {
+                                                   "name": "suspend @Foo @Foo () -> Unit.(Coomparable<@Foo @Bar(10) @Foo () -> Unit>) -> () -> Unit",
+                                                   "kind": "OTHER"
+                                                },
+                                                "modifiers": [
+                                                   {
+                                                      "kind": "IMPLICIT"
+                                                   },
+                                                   {
+                                                      "kind": "FINAL"
+                                                   }
+                                                ]
+                                             }
+                                          ],
+                                          "statements": [
+                                             {
+                                                "kind": "BLOCK",
+                                                "statements": [
+                                                   {
+                                                      "kind": "EXPRESSION",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "VARACCESS",
+                                                            "variable": "x"
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "@Foo @Bar(10) @Foo Any.(Any) -> Unit",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "vararg"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "10"
+               }
+            },
+            {
+               "name": "foo",
+               "return_type": {
+                  "name": "@Foo.Bar suspend Nothing.(Nothing) -> Unit",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "foo",
+               "return_type": {
+                  "name": "() -> @Foo.Bar suspend Iterable<@Foo.Bar Int.(Bar) -> Unit>.(Bar) -> Unit",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "x.<get>",
+               "return_type": {
+                  "name": "Any",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "return_type": {
+                           "name": "@Foo (@Foo (Coomparable<Nothing>) -> Unit).(Coomparable<Nothing>) -> Unit",
+                           "kind": "OTHER"
+                        },
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "variable_type": {
+                                          "name": "(@Foo (()->Unit)-> @Foo Int.()->Unit) -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "initializer": {
+                                          "kind": "LAMBDA",
+                                          "statements": [
+                                             {
+                                                "kind": "BLOCK"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Any",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "TYPECOMPARE",
+                                 "expressions": [
+                                    {
+                                       "kind": "CAST",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ],
+                                       "new_type": {
+                                          "name": "@Foo @Bar(10) @Foo ()->Unit.(()->Unit) -> Unit",
+                                          "kind": "OTHER"
+                                       }
+                                    }
+                                 ],
+                                 "new_type": {
+                                    "name": "suspend @Foo @Bar(10) @Foo ((()->Unit).()->Unit) -> Unit",
+                                    "kind": "OTHER"
+                                 }
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "y",
+                     "variable_type": {
+                        "name": "Any",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "initializer": {
+                                          "kind": "CAST",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "y"
+                                             }
+                                          ],
+                                          "new_type": {
+                                             "name": "(@Foo suspend (suspend (()->Unit)->Int).(()->Unit) -> (Float.()->Unit) -> Unit) -> Unit",
+                                             "kind": "OTHER"
+                                          }
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "(@Foo suspend Int.() -> Unit)",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "@Foo Int.() -> Unit",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "@Foo Int.(x: kotlin.Int) -> Unit",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "@Foo ((x: @Foo (@Foo () -> Int) -> Int.(@Foo () -> Int) -> Int) -> Unit)",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "suspend @Foo (x: @Foo (@Foo ((x: kotlin.Any) -> Int).(x: kotlin.Any) -> Int) -> Int) -> Unit",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "Comparable<@Foo @Bar(10) @Foo Unit.(x: kotlin.Any) -> Unit>",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "Any",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "CAST",
+                  "expressions": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ],
+                  "new_type": {
+                     "name": "@Foo suspend Int.(x: @Foo Foo) -> (y: @Foo Bar) -> Unit",
+                     "kind": "OTHER"
+                  }
+               }
+            },
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "Any",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

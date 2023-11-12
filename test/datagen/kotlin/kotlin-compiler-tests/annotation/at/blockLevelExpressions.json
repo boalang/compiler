@@ -1,0 +1,611 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x0",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann0"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "METHODCALL",
+                                          "method": "foo0"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ASSIGN",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x1"
+                                    },
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "foo1"
+                                    }
+                                 ],
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann1"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ASSIGN_ADD",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x2"
+                                    },
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "foo2"
+                                    }
+                                 ],
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann2"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ASSIGN_ADD",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x22"
+                                    },
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "foo22"
+                                    }
+                                 ],
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann21"
+                                    },
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann22"
+                                    },
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann23"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "FOREACH",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "ASSIGN_ADD",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x3"
+                                                },
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "foo3"
+                                                }
+                                             ],
+                                             "modifiers": [
+                                                {
+                                                   "kind": "ANNOTATION",
+                                                   "annotation_name": "ann3"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "initializations": [
+                              {
+                                 "kind": "ARRAY_COMPREHENSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "100"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "variable_declarations": [
+                              {
+                                 "name": "i",
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "FOREACH",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x4"
+                                          },
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "foo4"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann4"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "initializations": [
+                              {
+                                 "kind": "ARRAY_COMPREHENSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "100"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "variable_declarations": [
+                              {
+                                 "name": "i",
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x41"
+                                          },
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "foo41"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann41"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "GT",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "2"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x42"
+                                          },
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "foo42"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann42"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x43"
+                                          },
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "foo43"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann43"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "GT",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "4"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "WHILE",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x44"
+                                          },
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "foo44"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann44"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "true"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "DO",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x45"
+                                          },
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "foo45"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "true"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "statements": [
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x46"
+                                          },
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "foo46"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann46"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "ASSIGN_ADD",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "x5"
+                                                            },
+                                                            {
+                                                               "kind": "METHODCALL",
+                                                               "method": "foo5"
+                                                            }
+                                                         ],
+                                                         "modifiers": [
+                                                            {
+                                                               "kind": "ANNOTATION",
+                                                               "annotation_name": "ann5"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ELVIS",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x6"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x7"
+                                          },
+                                          {
+                                             "kind": "OP_ADD",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x9"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "10"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "literal": "infix"
+                                    }
+                                 ],
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann6"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "STATEMENT",
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann7"
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "RETURN",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "CAST",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    }
+                                 ],
+                                 "new_type": {
+                                    "name": "Type",
+                                    "kind": "OTHER"
+                                 },
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann8"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

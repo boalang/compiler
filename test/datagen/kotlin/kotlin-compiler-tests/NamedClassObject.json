@@ -1,0 +1,75 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "nested_declarations": [
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "B",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "C",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "C",
+                     "kind": "SINGLETON"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

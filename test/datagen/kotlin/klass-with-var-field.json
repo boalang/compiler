@@ -1,0 +1,33 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "3"
+                     }
+                  },
+                  {
+                     "name": "y",
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "5"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

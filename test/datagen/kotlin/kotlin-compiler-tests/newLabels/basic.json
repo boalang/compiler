@@ -1,0 +1,385 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x1"
+                                    }
+                                 ],
+                                 "method": "filter",
+                                 "method_args": [
+                                    {
+                                       "kind": "STATEMENT",
+                                       "statements": [
+                                          {
+                                             "kind": "LABEL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LABEL",
+                                                   "literal": "b"
+                                                },
+                                                {
+                                                   "kind": "LAMBDA",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "BLOCK",
+                                                         "statements": [
+                                                            {
+                                                               "kind": "RETURN",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "1"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "STATEMENT",
+                                       "statements": [
+                                          {
+                                             "kind": "LABEL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LABEL",
+                                                   "literal": "c"
+                                                },
+                                                {
+                                                   "kind": "LAMBDA",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "BLOCK",
+                                                         "statements": [
+                                                            {
+                                                               "kind": "RETURN",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "2"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "LABEL",
+                           "expressions": [
+                              {
+                                 "kind": "LABEL",
+                                 "literal": "loop1"
+                              },
+                              {
+                                 "kind": "STATEMENT",
+                                 "statements": [
+                                    {
+                                       "kind": "FOREACH",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "RETURN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "4"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "initializations": [
+                                          {
+                                             "kind": "ARRAY_COMPREHENSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "100"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "variable_declarations": [
+                                          {
+                                             "name": "i",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "LABEL",
+                           "expressions": [
+                              {
+                                 "kind": "LABEL",
+                                 "literal": "loop2"
+                              },
+                              {
+                                 "kind": "STATEMENT",
+                                 "statements": [
+                                    {
+                                       "kind": "FOREACH",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "RETURN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "loop2"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "4"
+                                                      },
+                                                      {
+                                                         "kind": "LABEL",
+                                                         "literal": "loop2"
+                                                      }
+                                                   ]
+                                                },
+                                                {
+                                                   "kind": "RETURN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "loop2"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "5"
+                                                      },
+                                                      {
+                                                         "kind": "LABEL",
+                                                         "literal": "loop2"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "initializations": [
+                                          {
+                                             "kind": "ARRAY_COMPREHENSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "100"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "variable_declarations": [
+                                          {
+                                             "name": "i",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "LABEL",
+                           "expressions": [
+                              {
+                                 "kind": "LABEL",
+                                 "literal": "label1"
+                              },
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "1"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ADD",
+                                 "expressions": [
+                                    {
+                                       "kind": "OP_ADD",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          },
+                                          {
+                                             "kind": "STATEMENT",
+                                             "statements": [
+                                                {
+                                                   "kind": "LABEL",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LABEL",
+                                                         "literal": "label3"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "3"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "4"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OTHER",
+                                 "expressions": [
+                                    {
+                                       "kind": "STATEMENT",
+                                       "statements": [
+                                          {
+                                             "kind": "LABEL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LABEL",
+                                                   "literal": "l1"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "foo"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "STATEMENT",
+                                       "statements": [
+                                          {
+                                             "kind": "LABEL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LABEL",
+                                                   "literal": "l2"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "baz"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "literal": "bar"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "LABEL",
+                           "expressions": [
+                              {
+                                 "kind": "LABEL",
+                                 "literal": "a"
+                              },
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "PAREN"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

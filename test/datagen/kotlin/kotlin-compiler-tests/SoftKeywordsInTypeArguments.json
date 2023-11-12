@@ -1,0 +1,51 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Foo",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "out abstract",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "out out",
+                     "kind": "GENERIC"
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "f",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "generic_parameters": [
+                                    {
+                                       "name": "Int",
+                                       "kind": "GENERIC"
+                                    }
+                                 ],
+                                 "method": "Foo"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -1,0 +1,65 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "receiver_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            },
+            {
+               "name": "foo",
+               "receiver_type": {
+                  "name": "dynamic?",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo",
+               "receiver_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            },
+            {
+               "name": "foo",
+               "receiver_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            },
+            {
+               "name": "foo",
+               "receiver_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            },
+            {
+               "name": "foo",
+               "receiver_type": {
+                  "name": "dynamic",
+                  "kind": "DYNAMIC"
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "foo",
+               "variable_type": {
+                  "name": "dynamic.() -> Unit",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,58 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "1"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "f2",
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "1"
+               }
+            },
+            {
+               "name": "f3",
+               "expression": {
+                  "kind": "LAMBDA",
+                  "statements": [
+                     {
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "RETURN",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "1"
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
+

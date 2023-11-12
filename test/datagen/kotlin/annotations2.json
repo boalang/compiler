@@ -1,0 +1,406 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "ann",
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Retention",
+                     "annotation_values": [
+                        {
+                           "kind": "VARACCESS",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "AnnotationRetention"
+                              }
+                           ],
+                           "variable": "SOURCE"
+                        }
+                     ]
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Repeatable"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "bar",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "() -> Unit",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "() -> Unit",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "print",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "1"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "print",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "2"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "print",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "1"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "print",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "2"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "print",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "2"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "print",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "3"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "STATEMENT",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "STATEMENT",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "ann"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "true"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,177 @@
+{
+   "namespaces": [
+      {
+         "name": "foo.bar.goo",
+         "declarations": [
+            {
+               "name": "Bar",
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "ABSTRACT"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "override"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  },
+                  {
+                     "kind": "ABSTRACT"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PROTECTED"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  },
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "INTERNAL"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "in"
+                  },
+                  {
+                     "kind": "OTHER",
+                     "other": "out"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "abstract open enum open annotation override open abstract private protected public internal in out T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "abstract",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "open",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "enum",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "open",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "annotation",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "override",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "open",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "abstract",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "private",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "protected",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "public",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "internal",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "lazy",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

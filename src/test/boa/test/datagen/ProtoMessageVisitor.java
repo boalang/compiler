@@ -18,7 +18,6 @@ public class ProtoMessageVisitor {
 	}
 
 	public boolean preVisit(Message message) {
-		// TODO Auto-generated method stub
 		return true;
 	}
 

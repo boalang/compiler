@@ -1,0 +1,33 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "My",
+               "kind": "ENUM",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "enum"
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "inline",
+                     "variable_type": {
+                        "name": "My",
+                        "kind": "ENUM"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,211 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "with",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "inline"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "receiver",
+                     "variable_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "body",
+                     "variable_type": {
+                        "name": "T.() -> Unit",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "expression": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "receiver"
+                     }
+                  ],
+                  "method": "body"
+               }
+            },
+            {
+               "name": "example",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "with",
+                                 "method_args": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "java"
+                                                      }
+                                                   ],
+                                                   "variable": "lang"
+                                                }
+                                             ],
+                                             "variable": "System"
+                                          }
+                                       ],
+                                       "variable": "out"
+                                    },
+                                    {
+                                       "kind": "LAMBDA",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "println",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "\"foo\""
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                },
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "print",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "\"bar\""
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "println",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "\"foo\""
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                },
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "print",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "\"bar\""
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "System"
+                                          }
+                                       ],
+                                       "variable": "out"
+                                    }
+                                 ],
+                                 "method": ""
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

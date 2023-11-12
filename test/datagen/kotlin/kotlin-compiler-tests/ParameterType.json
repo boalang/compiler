@@ -1,0 +1,345 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "a",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "test1",
+               "arguments": [
+                  {
+                     "name": "a",
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "test2",
+               "arguments": [
+                  {
+                     "name": "a",
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "4"
+                     }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "test3",
+               "arguments": [
+                  {
+                     "name": "c",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "test4",
+               "arguments": [
+                  {
+                     "name": "a",
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "ann",
+                           "annotation_values": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "parameter"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "test5",
+               "arguments": [
+                  {
+                     "name": "a",
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "ann"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "test",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "TRY",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              },
+                              {
+                                 "kind": "CATCH",
+                                 "variable_declarations": [
+                                    {
+                                       "name": "a",
+                                       "variable_type": {
+                                          "name": "Int",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "arguments": [
+                           {
+                              "name": "b",
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "arguments": [
+                           {
+                              "name": "b",
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ],
+                              "initializer": {
+                                 "kind": "LITERAL",
+                                 "literal": "4"
+                              }
+                           }
+                        ],
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "arguments": [
+                           {
+                              "name": "b",
+                              "variable_type": {
+                                 "name": "Int",
+                                 "kind": "OTHER"
+                              },
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "variable_type": {
+                  "name": "(A) -> Unit",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            },
+            {
+               "name": "a",
+               "variable_type": {
+                  "name": "(a: A) -> Unit",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

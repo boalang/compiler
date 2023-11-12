@@ -1,0 +1,175 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Annotation",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "x",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "baz",
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "bar",
+                     "expression": {
+                        "kind": "VARACCESS",
+                        "variable": "x"
+                     }
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "foo",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "annotation",
+                     "variable_type": {
+                        "name": "Annotation",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "annotation"
+                                                }
+                                             ],
+                                             "method": "baz"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "RETURN",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "0"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "RETURN",
+                                       "expressions": [
+                                          {
+                                             "kind": "OP_SUB",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "EQ",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "annotation"
+                                          }
+                                       ],
+                                       "method": "bar"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "0"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

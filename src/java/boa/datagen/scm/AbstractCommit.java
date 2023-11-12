@@ -1,7 +1,8 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen
+ * Copyright 2016-2021, Hridesh Rajan, Robert Dyer, Hoan Nguyen, Samuel W. Flint,
  *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,8 @@ package boa.datagen.scm;
 import java.io.*;
 import java.util.*;
 
+import com.steadystate.css.dom.CSSStyleSheetImpl;
+
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -30,14 +33,13 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.php.internal.core.PHPVersion;
 import org.eclipse.php.internal.core.ast.nodes.Program;
+import org.jetbrains.kotlin.psi.KtFile;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
 import org.w3c.css.sac.InputSource;
-
-import com.steadystate.css.dom.CSSStyleSheetImpl;
 
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -51,14 +53,17 @@ import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.CssVisitor;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.HtmlVisitor;
+import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.JavaVisitor;
+import boa.datagen.util.KotlinVisitor;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.JavaErrorCheckVisitor;
+import boa.functions.langmode.KotlinLangMode;
+
 
 /**
  * @author rdyer
@@ -211,10 +216,19 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 			if (parseJavaFile(path, fb, getFileContents(path), false)) {
 				if (debugparse)
-					System.err.println("Accepted " + fb.getKind() + ": revision " + id + ": file " + path);
+					System.err.println("Accepted " + fb.getKind().toString().substring(7) + ": revision " + id + ": file " + path);
 			} else {
 				if (debugparse)
 					System.err.println("Found Java parse error in: revision " + id + ": file " + path);
+			}
+		} else if (lowerPath.endsWith(".kt") || lowerPath.endsWith(".kts")) {
+			fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
+			if (parseKotlinFile(path, fb, getFileContents(path), false)) {
+				if (debugparse)
+					System.err.println("Accepted " + fb.getKind().toString().substring(7) + ": revision " + id + ": file " + path);
+			} else {
+				if (debugparse)
+					System.err.println("Found Kotlin parse error in: revision " + id + ": file " + path);
 			}
 		} else if (lowerPath.endsWith(".js")) {
 			final String content = getFileContents(path);
@@ -352,7 +366,7 @@ public abstract class AbstractCommit {
 					BytesWritable bw = new BytesWritable(content.getBytes());
 					connector.contentWriter.append(new LongWritable(connector.contentWriterLen), bw);
 					connector.contentWriterLen += bw.getLength();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -544,9 +558,9 @@ public abstract class AbstractCommit {
 			final AstRoot cu;
 			try {
 				cu = parser.parse(content, null, 0);
-			} catch (java.lang.IllegalArgumentException ex) {
+			} catch (final java.lang.IllegalArgumentException ex) {
 				return false;
-			} catch (org.mozilla.javascript.EvaluatorException ex) {
+			} catch (final org.mozilla.javascript.EvaluatorException ex) {
 				return false;
 			}
 
@@ -580,7 +594,7 @@ public abstract class AbstractCommit {
 					final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
 					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
 					connector.astWriterLen += bw.getLength();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					e.printStackTrace();
 				}
 				// fb.setComments(comments);
@@ -593,14 +607,67 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	public Map<String, String> getLOC() {
-		final Map<String, String> l = new HashMap<String, String>();
+	private final KotlinVisitor visitor = new KotlinVisitor();
 
-		for (final ChangedFile.Builder cf : changedFiles)
-			if (cf.getChange() != ChangeKind.DELETED)
-				l.put(cf.getName(), processLOC(cf.getName()));
+	private boolean parseKotlinFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
+		final KtFile theKt;
 
-		return l;
+		try {
+			theKt = KotlinLangMode.tryparse(path, content, debugparse);
+		} catch (final Exception e) {
+			if (debugparse)
+				System.err.println("Error parsing Kotlin file: " + path  + " from: " + projectName);
+			e.printStackTrace();
+			return false;
+		}
+
+		if (theKt == null)
+			return false;
+
+		try {
+			final ASTRoot.Builder ast = ASTRoot.newBuilder();
+
+			ast.addNamespaces(visitor.getNamespace(theKt));
+
+			switch (visitor.getAstLevel()) {
+				case KotlinVisitor.KLS10:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_0);
+					break;
+				case KotlinVisitor.KLS11:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_1);
+					break;
+				case KotlinVisitor.KLS12:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_2);
+					break;
+				case KotlinVisitor.KLS13:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_3);
+					break;
+				case KotlinVisitor.KLS14:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_4);
+					break;
+				case KotlinVisitor.KLS15:
+					fb.setKind(FileKind.SOURCE_KOTLIN_1_5);
+					break;
+				default:
+					fb.setKind(FileKind.SOURCE_KOTLIN_ERROR);
+					break;
+			}
+
+			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
+
+			return true;
+		} catch (final IOException e) {
+			if (debug)
+				e.printStackTrace();
+		} catch (final Exception e) {
+			if (debugparse)
+				System.err.println("Error visiting Kotlin file: " + path  + " from: " + projectName);
+			e.printStackTrace();
+		}
+
+		return false;
 	}
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
@@ -677,6 +744,16 @@ public abstract class AbstractCommit {
 				e.printStackTrace();
 			return false;
 		}
+	}
+
+	public Map<String, String> getLOC() {
+		final Map<String, String> l = new HashMap<String, String>();
+
+		for (final ChangedFile.Builder cf : changedFiles)
+			if (cf.getChange() != ChangeKind.DELETED)
+				l.put(cf.getName(), processLOC(cf.getName()));
+
+		return l;
 	}
 
 	protected String processLOC(final String path) {

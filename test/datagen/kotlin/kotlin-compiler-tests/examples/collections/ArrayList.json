@@ -1,0 +1,1123 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "ArrayList",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IMutableList<T>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "iterator",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "IIterator<T>",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "method": "mutableIterator"
+                     }
+                  },
+                  {
+                     "name": "mutableIterator",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "IMutableIterator<T>",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "NEW",
+                        "new_type": {
+                           "name": "IMutableIterator",
+                           "kind": "CLASS"
+                        },
+                        "anon_declaration": {
+                           "name": "",
+                           "kind": "SINGLETON",
+                           "parents": [
+                              {
+                                 "name": "IMutableIterator",
+                                 "kind": "CLASS"
+                              }
+                           ],
+                           "methods": [
+                              {
+                                 "name": "checkVersion",
+                                 "modifiers": [
+                                    {
+                                       "kind": "VISIBILITY",
+                                       "visibility": "PRIVATE"
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "IF",
+                                             "statements": [
+                                                {
+                                                   "kind": "THROW",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "ConcurrentModificationException"
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "conditions": [
+                                                {
+                                                   "kind": "NEQ",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "version"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "myVersion"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "next",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "override"
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "checkVersion"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "IF",
+                                             "statements": [
+                                                {
+                                                   "kind": "THROW",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "NoMoreElementsException"
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "conditions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "hasNext"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ARRAYACCESS",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "data"
+                                                      },
+                                                      {
+                                                         "kind": "OP_INC",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "index"
+                                                            }
+                                                         ],
+                                                         "is_postfix": true
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "hasNext.<get>",
+                                 "expression": {
+                                    "kind": "LT",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "index"
+                                       },
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "used"
+                                       }
+                                    ]
+                                 }
+                              },
+                              {
+                                 "name": "remove",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "override"
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "checkVersion"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARDECL",
+                                                   "variable_decls": [
+                                                      {
+                                                         "name": "result",
+                                                         "modifiers": [
+                                                            {
+                                                               "kind": "FINAL"
+                                                            }
+                                                         ],
+                                                         "initializer": {
+                                                            "kind": "METHODCALL",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "variable": "ArrayList"
+                                                                     }
+                                                                  ],
+                                                                  "variable": "this"
+                                                               }
+                                                            ],
+                                                            "method": "remove",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "OP_SUB",
+                                                                  "expressions": [
+                                                                     {
+                                                                        "kind": "VARACCESS",
+                                                                        "variable": "index"
+                                                                     },
+                                                                     {
+                                                                        "kind": "LITERAL",
+                                                                        "literal": "1"
+                                                                     }
+                                                                  ]
+                                                               }
+                                                            ]
+                                                         }
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "myVersion"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "version"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "result"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "fields": [
+                              {
+                                 "name": "index",
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    },
+                                    {
+                                       "kind": "VISIBILITY",
+                                       "visibility": "PRIVATE"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "LITERAL",
+                                    "literal": "0"
+                                 }
+                              },
+                              {
+                                 "name": "myVersion",
+                                 "modifiers": [
+                                    {
+                                       "kind": "VISIBILITY",
+                                       "visibility": "PRIVATE"
+                                    }
+                                 ],
+                                 "initializer": {
+                                    "kind": "VARACCESS",
+                                    "variable": "version"
+                                 }
+                              },
+                              {
+                                 "name": "hasNext",
+                                 "modifiers": [
+                                    {
+                                       "kind": "FINAL"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "override"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     }
+                  },
+                  {
+                     "name": "get",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "checkIndex",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ARRAYACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "data"
+                                          },
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "checkIndex",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "IF",
+                                 "statements": [
+                                    {
+                                       "kind": "THROW",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "IndexOutOfBoundsException",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "index"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "conditions": [
+                                    {
+                                       "kind": "GT",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          },
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "used"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "isEmpty.<get>",
+                     "expression": {
+                        "kind": "EQ",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "used"
+                           },
+                           {
+                              "kind": "LITERAL",
+                              "literal": "0"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "size.<get>",
+                     "expression": {
+                        "kind": "VARACCESS",
+                        "variable": "used"
+                     }
+                  },
+                  {
+                     "name": "set",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "value",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "checkIndex",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "result",
+                                             "initializer": {
+                                                "kind": "ARRAYACCESS",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "data"
+                                                   },
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "index"
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "ARRAYACCESS",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "data"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "index"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "value"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "result"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "add",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "value",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "ensureSize",
+                                       "method_args": [
+                                          {
+                                             "kind": "OP_ADD",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "used"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "IF",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "ARRAYACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "data"
+                                                            },
+                                                            {
+                                                               "kind": "OP_INC",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "used"
+                                                                  }
+                                                               ],
+                                                               "is_postfix": true
+                                                            }
+                                                         ]
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "value"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "IF",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "FOREACH",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "ASSIGN",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "ARRAYACCESS",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "data"
+                                                                        },
+                                                                        {
+                                                                           "kind": "OP_ADD",
+                                                                           "expressions": [
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "i"
+                                                                              },
+                                                                              {
+                                                                                 "kind": "LITERAL",
+                                                                                 "literal": "1"
+                                                                              }
+                                                                           ]
+                                                                        }
+                                                                     ]
+                                                                  },
+                                                                  {
+                                                                     "kind": "ARRAYACCESS",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "data"
+                                                                        },
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "i"
+                                                                        }
+                                                                     ]
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "initializations": [
+                                                      {
+                                                         "kind": "ARRAY_COMPREHENSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "OP_SUB",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "used"
+                                                                  },
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "1"
+                                                                  }
+                                                               ]
+                                                            },
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "index"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "variable_declarations": [
+                                                      {
+                                                         "name": "i",
+                                                         "modifiers": [
+                                                            {
+                                                               "kind": "IMPLICIT"
+                                                            },
+                                                            {
+                                                               "kind": "FINAL"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                },
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "ASSIGN",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "ARRAYACCESS",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "data"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "index"
+                                                                  }
+                                                               ]
+                                                            },
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "value"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                },
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "OP_INC",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "used"
+                                                            }
+                                                         ],
+                                                         "is_postfix": true
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "THROW",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "IndexOutOfBoundsException",
+                                                   "method_args": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "index"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "conditions": [
+                                          {
+                                             "kind": "LT",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "index"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "used"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "conditions": [
+                                    {
+                                       "kind": "EQ",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          },
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "used"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "remove",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "FOREACH",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "ASSIGN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ARRAYACCESS",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "data"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "i"
+                                                      }
+                                                   ]
+                                                },
+                                                {
+                                                   "kind": "ARRAYACCESS",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "data"
+                                                      },
+                                                      {
+                                                         "kind": "OP_ADD",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "i"
+                                                            },
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "1"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "initializations": [
+                                    {
+                                       "kind": "ARRAY_COMPREHENSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          },
+                                          {
+                                             "kind": "OP_SUB",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "used"
+                                                },
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "variable_declarations": [
+                                    {
+                                       "name": "i",
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "data",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "method": "MutableArray",
+                        "method_args": [
+                           {
+                              "kind": "LITERAL",
+                              "literal": "10"
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "used",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "0"
+                     }
+                  },
+                  {
+                     "name": "version",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "0"
+                     }
+                  },
+                  {
+                     "name": "isEmpty",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "size",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -1,0 +1,103 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Annotation",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "setProblemGroup",
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "getQuickFixes",
+                     "expression": {
+                        "kind": "LITERAL",
+                        "literal": "0"
+                     }
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "registerQuickFix",
+               "arguments": [
+                  {
+                     "name": "annotation",
+                     "variable_type": {
+                        "name": "Annotation",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "annotation"
+                                    }
+                                 ],
+                                 "method": "setProblemGroup"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "fixes",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "METHODCALL",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "variable": "annotation"
+                                             }
+                                          ],
+                                          "method": "getQuickFixes"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

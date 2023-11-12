@@ -1,0 +1,1200 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "LinkedList",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "IMutableList<T>",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "size.<get>"
+                  },
+                  {
+                     "name": "size.<set>",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     }
+                  },
+                  {
+                     "name": "add",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "value",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "OP_INC",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "size"
+                                          }
+                                       ],
+                                       "is_postfix": true
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "checkIndex",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "newItem",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "initializer": {
+                                                "kind": "METHODCALL",
+                                                "method": "Item",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "value"
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "IF",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "newItem"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "head"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "head"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "newItem"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "IF",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "ASSIGN",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "tail"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "head"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "conditions": [
+                                                {
+                                                   "kind": "SHEQ",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "tail"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "null"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARDECL",
+                                                   "variable_decls": [
+                                                      {
+                                                         "name": "insertAfter",
+                                                         "initializer": {
+                                                            "kind": "METHODCALL",
+                                                            "method": "itemAt",
+                                                            "method_args": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "index"
+                                                               }
+                                                            ]
+                                                         }
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "newItem"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "insertAfter"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "insertAfter"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "newItem"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "IF",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "ASSIGN",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "tail"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "newItem"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "conditions": [
+                                                {
+                                                   "kind": "SHEQ",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "tail"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "insertAfter"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "conditions": [
+                                    {
+                                       "kind": "EQ",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          },
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "0"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "checkIndex",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "IF",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "THROW",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "IndexOutOfBoundsException",
+                                                   "method_args": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "index"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "conditions": [
+                                    {
+                                       "kind": "NOT_IN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          },
+                                          {
+                                             "kind": "ARRAY_COMPREHENSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "0"
+                                                },
+                                                {
+                                                   "kind": "OP_SUB",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "size"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "1"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "remove",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "checkIndex",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "item",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "initializer": {
+                                                "kind": "METHODCALL",
+                                                "method": "itemAt",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "index"
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "IF",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "head"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "item"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "IF",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "ASSIGN",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "tail"
+                                                            },
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "null"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "conditions": [
+                                                {
+                                                   "kind": "SHEQ",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "head"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "null"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "item"
+                                                                  }
+                                                               ],
+                                                               "variable": "previous"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "item"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "IF",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "ASSIGN",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "expressions": [
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "item"
+                                                                              }
+                                                                           ],
+                                                                           "variable": "next"
+                                                                        }
+                                                                     ],
+                                                                     "variable": "previous"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "item"
+                                                                        }
+                                                                     ],
+                                                                     "variable": "previous"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                },
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "ASSIGN",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "tail"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "tail"
+                                                                        }
+                                                                     ],
+                                                                     "variable": "previous"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "conditions": [
+                                                {
+                                                   "kind": "SHEQ",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "item"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "null"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "conditions": [
+                                    {
+                                       "kind": "SHEQ",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "item"
+                                          },
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "head"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "OP_DEC",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "size"
+                                          }
+                                       ],
+                                       "is_postfix": true
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "RETURN",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "item"
+                                          }
+                                       ],
+                                       "variable": "value"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "set",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "T",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "value",
+                           "variable_type": {
+                              "name": "T",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "checkIndex",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "item",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "initializer": {
+                                                "kind": "METHODCALL",
+                                                "method": "itemAt",
+                                                "method_args": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "index"
+                                                   }
+                                                ]
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "result",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "initializer": {
+                                                "kind": "VARACCESS",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "item"
+                                                   }
+                                                ],
+                                                "variable": "value"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "ASSIGN",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "item"
+                                                }
+                                             ],
+                                             "variable": "value"
+                                          },
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "value"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "RETURN",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "result"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "itemAt",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "index",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "result",
+                                             "initializer": {
+                                                "kind": "VARACCESS",
+                                                "variable": "head"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "FOREACH",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "result"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "result"
+                                                            }
+                                                         ],
+                                                         "variable": "next"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "initializations": [
+                                    {
+                                       "kind": "ARRAY_COMPREHENSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "LITERAL",
+                                             "literal": "1"
+                                          },
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "index"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "variable_declarations": [
+                                    {
+                                       "name": "i",
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "RETURN",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "result"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "mutableIterator",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "IMutableIterator<T>",
+                        "kind": "OTHER"
+                     }
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "head",
+                     "variable_type": {
+                        "name": "Item",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "null"
+                     }
+                  },
+                  {
+                     "name": "tail",
+                     "variable_type": {
+                        "name": "Item",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "null"
+                     }
+                  },
+                  {
+                     "name": "size",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "override"
+                        }
+                     ]
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "Item",
+                     "kind": "CLASS",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "methods": [
+                        {
+                           "name": "<init>",
+                           "modifiers": [
+                              {
+                                 "kind": "OTHER",
+                                 "other": "primary"
+                              }
+                           ],
+                           "arguments": [
+                              {
+                                 "name": "value",
+                                 "variable_type": {
+                                    "name": "Item",
+                                    "kind": "OTHER"
+                                 }
+                              }
+                           ]
+                        }
+                     ],
+                     "fields": [
+                        {
+                           "name": "value",
+                           "variable_type": {
+                              "name": "Item",
+                              "kind": "OTHER"
+                           }
+                        },
+                        {
+                           "name": "next",
+                           "variable_type": {
+                              "name": "Item",
+                              "kind": "OTHER"
+                           }
+                        },
+                        {
+                           "name": "previous",
+                           "variable_type": {
+                              "name": "Item",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

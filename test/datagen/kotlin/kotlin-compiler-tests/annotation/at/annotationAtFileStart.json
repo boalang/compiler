@@ -1,0 +1,19 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "ann"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

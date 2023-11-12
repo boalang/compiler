@@ -1,0 +1,314 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "test",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x1",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "VARACCESS",
+                                          "variable": "foo"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x2t",
+                                       "variable_type": {
+                                          "name": "T",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "y2t",
+                                       "variable_type": {
+                                          "name": "T",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "VARACCESS",
+                                          "variable": "foo"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "foo"
+                                    }
+                                 ],
+                                 "variable_decls": [
+                                    {
+                                       "name": "x3",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "x4",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "foo"
+                                    }
+                                 ],
+                                 "variable_decls": [
+                                    {
+                                       "name": "y3t",
+                                       "variable_type": {
+                                          "name": "T",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "y4",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "foo"
+                                    }
+                                 ],
+                                 "variable_decls": [
+                                    {
+                                       "name": "z3",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "z4t",
+                                       "variable_type": {
+                                          "name": "T",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "foo"
+                                    }
+                                 ],
+                                 "variable_decls": [
+                                    {
+                                       "name": "w3t",
+                                       "variable_type": {
+                                          "name": "T",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "w4t",
+                                       "variable_type": {
+                                          "name": "T",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x6a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Ann"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "VARACCESS",
+                                          "variable": "foo"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x7a",
+                                       "variable_type": {
+                                          "name": "@Ann T",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "VARACCESS",
+                                          "variable": "foo"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "SWITCH",
+                           "conditions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x8a",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "VARACCESS",
+                                          "variable": "foo",
+                                          "modifiers": [
+                                             {
+                                                "kind": "ANNOTATION",
+                                                "annotation_name": "Ann"
+                                             }
+                                          ]
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

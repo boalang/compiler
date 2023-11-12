@@ -1,0 +1,95 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>"
+                  },
+                  {
+                     "name": "foo",
+                     "expression": {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     }
+                  },
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PUBLIC"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<init>",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "this"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "<init>",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ],
+                                 "method": "super"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "2"
+                     }
+                  },
+                  {
+                     "name": "x",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "4"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

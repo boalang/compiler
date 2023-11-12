@@ -1,0 +1,129 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "y",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "LITERAL",
+                  "literal": "\"foo\""
+               }
+            },
+            {
+               "name": "x",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "IF",
+                        "statements": [
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "3"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "5"
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "TYPECOMPARE",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "y"
+                                 }
+                              ],
+                              "new_type": {
+                                 "name": "String",
+                                 "kind": "OTHER"
+                              }
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "z",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "IF",
+                        "statements": [
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "3"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "EXPRESSION",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "5"
+                                 }
+                              ]
+                           }
+                        ],
+                        "conditions": [
+                           {
+                              "kind": "LOGICAL_NOT",
+                              "expressions": [
+                                 {
+                                    "kind": "TYPECOMPARE",
+                                    "expressions": [
+                                       {
+                                          "kind": "VARACCESS",
+                                          "variable": "y"
+                                       }
+                                    ],
+                                    "new_type": {
+                                       "name": "String",
+                                       "kind": "OTHER"
+                                    }
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
+

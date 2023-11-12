@@ -1,0 +1,141 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "foo",
+               "kind": "CLASS"
+            },
+            {
+               "name": "foo",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "Bar",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PROTECTED"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "Bar",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "Bar",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "INTERNAL"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "Bar",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
