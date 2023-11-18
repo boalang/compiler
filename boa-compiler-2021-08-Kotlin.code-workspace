@@ -21,8 +21,10 @@
 			"statusBar.foreground": "#e7e7e7",
 			"activityBar.activeBackground": "#bb0000",
 			"activityBar.activeBorder": "#002000",
-			"statusBar.border": "#880000",
-			"titleBar.border": "#880000"
+			"commandCenter.border": "#e7e7e799",
+			"sash.hoverBorder": "#bb0000",
+			"statusBarItem.remoteBackground": "#880000",
+			"statusBarItem.remoteForeground": "#e7e7e7"
 		}
 	},
 	"extensions": {
