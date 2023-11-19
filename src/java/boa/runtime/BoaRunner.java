@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021, Anthony Urso, Hridesh Rajan, Robert Dyer,
+ * Copyright 2014-2023, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and University of Nebraska Board of Regents
  *
@@ -121,6 +121,11 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.hasArg()
 										.withArgName("INPUT")
 										.create("c"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("forks")
+										.withDescription("which INPUT to use for forks data")
+										.hasArg()
+										.withArgName("INPUT")
+										.create("f"));
 		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("splitsize")
 										.withDescription("split size in BYTES")
 										.hasArg()
