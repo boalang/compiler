@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-20222, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2023, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 Bowling Green State University
  *                 and University of Nebraska Board of Regents
@@ -64,7 +64,7 @@ import boa.types.Toplevel.Project;
  */
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
-	static Context context;
+	public static Context context;
 	private static MapFile.Reader map;
 	private static MapFile.Reader commentsMap;
 	private static MapFile.Reader issuesMap;

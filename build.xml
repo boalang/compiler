@@ -85,7 +85,7 @@
 
 	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
 		<echo level="error" message="Translating Protocol Buffer files to Java" />
-		 <apply executable="protoc" parallel="true">
+		<apply executable="protoc" parallel="true">
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
 			<srcfile />
@@ -95,6 +95,7 @@
 
 	<target name="compile-protobuf" depends="-init,-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
 		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-proc:none" />
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -136,6 +137,7 @@
 
 	<target name="compile-parser" depends="-parser,-check-deps" description="Compile the parser.">
 		<javac includeantruntime="true" srcdir="${src.parser.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-proc:none" />
 			<compilerarg value="-Xlint:unchecked"/>
 			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
@@ -151,6 +153,7 @@
 	<!-- main compilation targets -->
 	<target name="compile" depends="compile-protobuf,compile-parser,-check-deps" description="Compile the compiler.">
 		<javac includeantruntime="true" srcdir="${src.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-proc:none" />
 			<compilerarg value="-Xlint:unchecked"/>
 			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
@@ -450,6 +453,7 @@
 
 	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-proc:none" />
 			<compilerarg value="-Xlint:unchecked"/>
 			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
