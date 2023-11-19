@@ -64,6 +64,8 @@ public class <name> extends boa.runtime.BoaRunner {
 			configuration.set("boa.ast.dir", line.getOptionValue("ast"));
 		if (line.hasOption("comments"))
 			configuration.set("boa.comments.dir", line.getOptionValue("comments"));
+		if (line.hasOption("forks"))
+			configuration.set("boa.forks.file", line.getOptionValue("forks"));
 		if (line.hasOption("starsDir"))
 			configuration.set("boa.stars.dir", line.getOptionValue("starsDir"));
 

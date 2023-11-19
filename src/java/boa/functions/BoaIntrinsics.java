@@ -17,14 +17,20 @@
  */
 package boa.functions;
 
+import java.io.BufferedInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -37,12 +43,34 @@ import boa.types.Toplevel.Project;
  * @author rdyer
  */
 public class BoaIntrinsics {
+	private static Set<Integer> forksData;
+
+	private static void loadForksData() {
+		try {
+			final Configuration conf = BoaAstIntrinsics.context.getConfiguration();
+			final Path p = new Path(
+				BoaAstIntrinsics.context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+				new Path(conf.get("boa.forks.file", conf.get("boa.ast.dir", conf.get("boa.input.dir", "")) + "/forks.bin"))
+			);
+			final FileSystem fs = FileSystem.get(conf);
+
+			try (final FSDataInputStream data = fs.open(p);
+				final BufferedInputStream bis = new BufferedInputStream(data);
+				final ObjectInputStream ois = new ObjectInputStream(bis)) {
+				forksData = (Set<Integer>)ois.readObject();
+			}
+		} catch (final Exception e) {
+			System.err.println("Error reading forks.bin: " + e.getMessage());
+			e.printStackTrace();
+			forksData = new HashSet<Integer>();
+		}
+	}
+
 	@FunctionSpec(name = "isfork", returnType = "bool", formalParameters = { "Project" })
 	public static boolean isfork(final Project p) {
-		final String[] knownForks = { };
-		final Set<String> forks = new HashSet<>();
-		Collections.addAll(forks, knownForks);
-		return forks.contains(p.getId());
+		if (forksData == null)
+			loadForksData();
+		return forksData.contains(Integer.parseInt(p.getId()));
 	}
 
 	private final static String[] fixingRegex = {
