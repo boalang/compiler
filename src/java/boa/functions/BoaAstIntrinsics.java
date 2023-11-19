@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2023, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology,
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.VIntWritable;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
 import com.google.protobuf.CodedInputStream;
@@ -48,7 +50,7 @@ import boa.types.Toplevel.Project;
  */
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
-	private static Context context;
+	public static Context context;
 	private static MapFile.Reader map, commentsMap, issuesMap;
 
 	public static enum AST_COUNTER {
@@ -68,6 +70,44 @@ public class BoaAstIntrinsics {
 	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
 	private static final CommentsRoot emptyComments = CommentsRoot.newBuilder().build();
 	private static final IssuesRoot emptyIssues = IssuesRoot.newBuilder().build();
+	private static MapFile.Reader starMap;
+
+	private static void openStarMap() {
+		final Configuration conf = new Configuration();
+		try {
+			final FileSystem fs = FileSystem.get(conf);
+			final Path p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+								new Path(context.getConfiguration().get("boa.stars.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
+								new Path("stars")));
+			starMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@FunctionSpec(name = "stars", returnType = "int", formalParameters = { "Project" })
+	public static long getStars(final Project p) {
+		final String pid = p.getId();
+
+		if (starMap == null)
+			openStarMap();
+
+		try {
+			final VIntWritable value = new VIntWritable();
+			if (starMap.get(new Text(pid), value) == null) {
+				return -1;
+			} else {
+				return value.get();
+			}
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+
+		return -1;
+	}
 
 	/**
 	 * Given a ChangedFile, return the AST for that file at that revision.
@@ -245,8 +285,19 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
 		closeMap();
+		closeStarMap();
 		closeCommentMap();
 		closeIssuesMap();
+	}
+
+	private static void closeStarMap() {
+		if (starMap != null)
+			try {
+				starMap.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		starMap = null;
 	}
 
 	private static void closeMap() {

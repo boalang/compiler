@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2023, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology,
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,6 +129,11 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.hasArg()
 										.withArgName("INPUT")
 										.create("c"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("forks")
+										.withDescription("which INPUT to use for forks data")
+										.hasArg()
+										.withArgName("INPUT")
+										.create("f"));
 	}
 
 	protected static Options getOptions() { return options; }
