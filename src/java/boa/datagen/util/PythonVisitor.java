@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.eclipse.dltk.ast.ASTNode;
 import org.eclipse.dltk.ast.ASTVisitor;
 import org.eclipse.dltk.ast.declarations.Decorator;
@@ -1945,7 +1944,7 @@ public class PythonVisitor extends ASTVisitor {
 				b.setChange(status);
 		}
 
-		b.setLiteral(StringEscapeUtils.escapeJava(md.getValue()));
+		b.setLiteral(md.getValue());
 		expressions.push(b.build());
 
 		return true;

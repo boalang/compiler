@@ -348,7 +348,8 @@ public class PythonLangMode implements LangMode {
 
 			case ASSERT:
 				s += indent() + "assert ";
-				s += prettyprint(stmt.getConditions(0));
+				if (stmt.getConditionsCount() > 0)
+					s += prettyprint(stmt.getConditions(0));
 				if (stmt.getExpressionsCount() > 0)
 					s += ", " + prettyprint(stmt.getExpressions(0));
 				s += "\n";
@@ -405,7 +406,10 @@ public class PythonLangMode implements LangMode {
 						s += ", ";
 					s += prettyprint(stmt.getVariableDeclarations(i));
 				}
-				s += " in " + prettyprint(stmt.getConditions(0)) + ":\n";
+				if (stmt.getConditionsCount() == 1)
+					s += " in " + prettyprint(stmt.getConditions(0)) + ":\n";
+				else
+					s += ":\n";
 				indent++;
 				s += prettyprint(stmt.getStatements(0));
 				indent--;
@@ -418,7 +422,10 @@ public class PythonLangMode implements LangMode {
 				return s;
 
 			case WHILE:
-				s += indent() + "while " + prettyprint(stmt.getConditions(0)) + ":\n";
+				if (stmt.getConditionsCount() > 0)
+					s += indent() + "while " + prettyprint(stmt.getConditions(0)) + ":\n";
+				else
+					s += indent() + "while:\n";
 				indent++;
 				s += prettyprint(stmt.getStatements(0));
 				indent--;
@@ -431,7 +438,10 @@ public class PythonLangMode implements LangMode {
 				return s;
 
 			case IF:
-				s += indent() + "if " + prettyprint(stmt.getConditions(0)) + ":\n";
+				if (stmt.getConditionsCount() == 1)
+					s += indent() + "if " + prettyprint(stmt.getConditions(0)) + ":\n";
+				else
+					s += indent() + "if:\n";
 				indent++;
 				s += prettyprint(stmt.getStatements(0));
 				indent--;
@@ -519,7 +529,10 @@ public class PythonLangMode implements LangMode {
 			case LOGICAL_NOT: return ppPrefix("not ", e);
 			case BIT_NOT:     return ppPrefix("~", e);
 
-			case UNARY: return prettyprint(e.getExpressions(0)) + " " + prettyprint(e.getExpressions(1));
+			case UNARY:
+				if (e.getExpressionsCount() == 2)
+					return prettyprint(e.getExpressions(0)) + " " + prettyprint(e.getExpressions(1));
+				return prettyprint(e.getExpressions(0));
 			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
 
 			case LITERAL: return e.getLiteral();
@@ -529,13 +542,17 @@ public class PythonLangMode implements LangMode {
 				s += e.getVariable();
 				return s;
 			case CONDITIONAL:
-				s += prettyprint(e.getExpressions(0)) + " if " + prettyprint(e.getExpressions(1));
+				s += prettyprint(e.getExpressions(0)) + " if";
+				if (e.getExpressionsCount() > 1)
+					s += " " + prettyprint(e.getExpressions(1));
 				if (e.getExpressionsCount() > 2)
 					s += " else " + prettyprint(e.getExpressions(2));
 				return s;
 
 			case YIELD:
-				return indent() + "yield " + prettyprint(e.getExpressions(0)) + "\n";
+				if (e.getExpressionsCount() == 0)
+					return indent() + "yield";
+				return indent() + "yield " + prettyprint(e.getExpressions(0));
 
 			case METHODCALL:
 				for (int i = 0; i < e.getExpressionsCount(); i++)
@@ -581,7 +598,10 @@ public class PythonLangMode implements LangMode {
 					if (i > 0)
 						s += ", ";
 					final Expression node = e.getExpressions(i);
-					s += prettyprint(node.getExpressions(0)) + ": " + prettyprint(node.getExpressions(1));
+					if (node.getExpressionsCount() == 2)
+						s += prettyprint(node.getExpressions(0)) + ": " + prettyprint(node.getExpressions(1));
+					else
+						s += prettyprint(node);
 				}
 				s += " }";
 				return s;
@@ -610,7 +630,7 @@ public class PythonLangMode implements LangMode {
 						s += prettyprint(e.getExpressions(0));
 						s += ":";
 						s += prettyprint(e.getExpressions(1));
-					} else {
+					} else if (e.getExpressionsCount() == 1) {
 						s += prettyprint(e.getExpressions(0));
 					}
 				}
@@ -659,6 +679,8 @@ public class PythonLangMode implements LangMode {
 	}
 
 	private String ppInfix(final String op, final List<Expression> exps) {
+		if (exps.size() == 0) return "";
+
 		StringBuilder s = new StringBuilder();
 
 		s.append(prettyprint(exps.get(0)));
