@@ -16,8 +16,9 @@
  */
 package boa.compiler.visitors.analysis;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import boa.compiler.ast.Call;
 import boa.compiler.ast.Factor;
@@ -36,15 +37,15 @@ import boa.compiler.visitors.IdentifierFindingVisitor;
 public class LoopSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 	public CFGBuildingVisitor cfgBuilder;
 	public boolean getValueFound = false;
-	public HashSet<Identifier> getValueNodes = new HashSet<Identifier>();
-	public HashSet<Identifier> totalGetValueNodes = new HashSet<Identifier>();
-	public HashSet<Identifier> getValueNodesAlias = new HashSet<Identifier>();
+	public Set<Identifier> getValueNodes = new LinkedHashSet<Identifier>();
+	public Set<Identifier> totalGetValueNodes = new LinkedHashSet<Identifier>();
+	public Set<Identifier> getValueNodesAlias = new LinkedHashSet<Identifier>();
 	boolean loopSensitive = false;
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 	protected boolean abortGeneration = false;
 	public boolean argFlag = false;
-	public HashSet<Identifier> aliastSet;
+	public Set<Identifier> aliastSet;
 	public Identifier lastDeclVariable;
 	boolean isRhs = false;
 
@@ -52,16 +53,16 @@ public class LoopSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 		return loopSensitive;
 	}
 
-	public void start(CFGBuildingVisitor cfgBuilder, HashSet<Identifier> aliastSet) {
+	public void start(CFGBuildingVisitor cfgBuilder, Set<Identifier> aliastSet) {
 		this.aliastSet = aliastSet;
 		this.cfgBuilder = cfgBuilder;
-		final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+		final Set<Integer> visitedNodes = new LinkedHashSet<Integer>();
 		visitedNodes.add(cfgBuilder.currentStartNodes.get(0).nodeId);
 		dfs(cfgBuilder.currentStartNodes.get(0), visitedNodes);
 
 		for (final Identifier getValueNode : getValueNodes) {
 			final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
-			final HashSet<Identifier> tmpAliastSet = localMayAliasAnalysis.start(this.cfgBuilder, getValueNode);
+			final Set<Identifier> tmpAliastSet = localMayAliasAnalysis.start(this.cfgBuilder, getValueNode);
 			getValueNodesAlias.addAll(tmpAliastSet);
 		}
 		final InformationAnalysis informationAnalysis = new InformationAnalysis();

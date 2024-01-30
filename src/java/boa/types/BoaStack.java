@@ -139,7 +139,7 @@ public class BoaStack extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "java.util.Stack<" + this.type.toBoxedJavaType() + ">";
+		return "java.util.Stack<" + this.type.toInterfaceJavaType() + ">";
 	}
 
 	/** {@inheritDoc} */

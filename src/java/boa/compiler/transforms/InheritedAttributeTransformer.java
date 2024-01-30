@@ -20,7 +20,7 @@ package boa.compiler.transforms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -104,7 +104,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArgNoRet {
 	 * mapping from each type T found to a list of all uses in current(T).
 	 */
 	private class FindCurrentInVisitors extends AbstractVisitorNoArgNoRet{
-		protected final Set<BoaTuple> currents = new HashSet<BoaTuple>();
+		protected final Set<BoaTuple> currents = new LinkedHashSet<BoaTuple>();
 		protected final Map<BoaTuple, List<Factor>> factorMap = new HashMap<BoaTuple, List<Factor>>();
 
 		/** @{inheritDoc} */

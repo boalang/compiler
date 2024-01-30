@@ -54,8 +54,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	 * @author rdyer
 	 */
 	protected class VisitorCheckingVisitor extends AbstractVisitorNoArgNoRet {
-		protected Set<String> befores = new HashSet<String>();
-		protected Set<String> afters = new HashSet<String>();
+		protected Set<String> befores = new LinkedHashSet<String>();
+		protected Set<String> afters = new LinkedHashSet<String>();
 		protected boolean nested = false;
 
 		/** {@inheritDoc} */
@@ -99,7 +99,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	}
 
 	protected class TraversalCheckingVisitor extends AbstractVisitorNoArgNoRet {
-		protected Set<String> befores = new HashSet<String>();
+		protected Set<String> befores = new LinkedHashSet<String>();
 		protected boolean nested = false;
 
 		/** {@inheritDoc} */
@@ -141,7 +141,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	}
 
 	protected class FixPCheckingVisitor extends AbstractVisitorNoArgNoRet {
-		protected Set<String> befores = new HashSet<String>();
+		protected Set<String> befores = new LinkedHashSet<String>();
 		protected boolean nested = false;
 
 		/** {@inheritDoc} */

@@ -19,8 +19,9 @@ package boa.graphs.cfg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import boa.functions.BoaAstIntrinsics;
 import boa.types.Ast.Expression;
@@ -44,14 +45,14 @@ public class CFG {
 	protected Method md;
 	protected String class_name;
 
-	protected final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+	protected final Set<CFGNode> nodes = new LinkedHashSet<CFGNode>();
 	protected CFGNode entryNode;
 	protected CFGNode exitNode;
 
-	protected final HashSet<CFGNode> outs = new HashSet<CFGNode>();
-	protected final HashSet<CFGNode> ins = new HashSet<CFGNode>();
-	protected final HashSet<CFGNode> breaks = new HashSet<CFGNode>();
-	protected final HashSet<CFGNode> returns = new HashSet<CFGNode>();
+	protected final Set<CFGNode> outs = new LinkedHashSet<CFGNode>();
+	protected final Set<CFGNode> ins = new LinkedHashSet<CFGNode>();
+	protected final Set<CFGNode> breaks = new LinkedHashSet<CFGNode>();
+	protected final Set<CFGNode> returns = new LinkedHashSet<CFGNode>();
 
 	protected boolean isLoopPresent = false;
 	protected boolean isBranchPresent = false;
@@ -91,15 +92,15 @@ public class CFG {
 		return class_name;
 	}
 
-	public HashSet<CFGNode> getNodes() {
+	public Set<CFGNode> getNodes() {
 		return nodes;
 	}
 
-	public HashSet<CFGNode> getOuts() {
+	public Set<CFGNode> getOuts() {
 		return outs;
 	}
 
-	public HashSet<CFGNode> getIns() {
+	public Set<CFGNode> getIns() {
 		return ins;
 	}
 
@@ -208,7 +209,7 @@ public class CFG {
 		outs.add(branch);
 	}
 
-	protected void mergeBranches(final CFG target, final HashSet<CFGNode> saveOuts) {
+	protected void mergeBranches(final CFG target, final Set<CFGNode> saveOuts) {
 		if (target.getNodes().size() == 0)
 			return;
 

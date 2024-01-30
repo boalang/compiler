@@ -17,7 +17,7 @@
 package boa.graphs.trees;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,7 +33,7 @@ public class TreeNode extends Node<TreeNode, TreeEdge> {
     private TreeNode parent;
 
     private String defVariable;
-    private HashSet<String> useVariables;
+    private Set<String> useVariables;
 
     private final ArrayList<TreeNode> children = new ArrayList<TreeNode>();
     private final CFGNode cfgnode;
@@ -61,7 +61,7 @@ public class TreeNode extends Node<TreeNode, TreeEdge> {
     public TreeNode(final int id) {
         this.cfgnode = null;
         this.id = id;
-        this.useVariables = new HashSet<String>();
+        this.useVariables = new LinkedHashSet<String>();
     }
 
     public TreeNode getParent() {
@@ -88,7 +88,7 @@ public class TreeNode extends Node<TreeNode, TreeEdge> {
         this.defVariable = defVariables;
     }
 
-    public void setUseVariables(final HashSet<String> useVariables) {
+    public void setUseVariables(final Set<String> useVariables) {
         this.useVariables = useVariables;
     }
 

@@ -77,6 +77,12 @@ public class BoaProtoMap extends BoaMap {
 
 	/** {@inheritDoc} */
 	@Override
+	public String toInterfaceJavaType() {
+		return toJavaType();
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public String toString() {
 		if (getEnumClass() == null)
 			return "BoaProtoMap";

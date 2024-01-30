@@ -185,7 +185,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final ST st = stg.getInstanceOf("VarDecl");
 
 			st.add("id", n.getId().getToken());
-			st.add("type", n.type.toJavaType());
+			st.add("type", n.type.toInterfaceJavaType());
 
 			if (n.isStatic())
 				st.add("isstatic", true);
@@ -200,7 +200,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * @author rdyer
 	 */
 	protected class FunctionDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-		protected final Set<String> funcs = new HashSet<String>();
+		protected final Set<String> funcs = new LinkedHashSet<String>();
 
 		/** {@inheritDoc} */
 		@Override
@@ -230,7 +230,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			for (final Component c : params) {
 				args.add(c.getIdentifier().getToken());
-				types.add(c.getType().type.toJavaType());
+				types.add(c.getType().type.toInterfaceJavaType());
 			}
 
 			st.add("name", funcType.toJavaType());
@@ -251,7 +251,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * @author ankuraga
 	 */
 	protected class TupleDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-		protected final Set<String> tuples = new HashSet<String>();
+		protected final Set<String> tuples = new LinkedHashSet<String>();
 
 		/** {@inheritDoc} */
 		@Override
@@ -275,17 +275,23 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 				final List<String> fields = new ArrayList<String>();
 				final List<String> types = new ArrayList<String>();
+				final List<String> types2 = new ArrayList<String>();
+				final List<Boolean> aliases = new ArrayList<Boolean>();
 
 				int counter = 0;
 				for (final Expression e : n.getExprs()) {
 					fields.add("f" + counter);
-					types.add(e.type.toBoxedJavaType());
+					types.add(e.type.toInterfaceJavaType());
+					types2.add(e.type.toBoxedJavaType());
+					aliases.add((e.type instanceof BoaProtoTuple) || (e.type instanceof BoaEnum));
 					counter++;
 				}
 
 				st.add("name", name);
 				st.add("fields", fields);
 				st.add("types", types);
+				st.add("types2", types2);
+				st.add("aliases", aliases);
 
 				code.add(st.render());
 			}
@@ -306,27 +312,29 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final BoaTuple tupType = ((BoaTuple) n.type);
 
-			final List<Component> members = n.getMembers();
 			final List<String> fields = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
+			final List<String> types2 = new ArrayList<String>();
 			final List<Boolean> aliases = new ArrayList<Boolean>();
 
 			int fieldCount = 0;
-			for (final Component c : members) {
+			for (final Component c : n.getMembers()) {
 				if (c.hasIdentifier()) {
 					fields.add(c.getIdentifier().getToken());
 				} else {
 					fields.add("f" + fieldCount);
 				}
 				fieldCount++;
-				BoaType type = c.getType().type;
+				final BoaType type = c.getType().type;
 				aliases.add((type instanceof BoaProtoTuple) || (type instanceof BoaEnum));
-				types.add(type.toBoxedJavaType());
+				types.add(type.toInterfaceJavaType());
+				types2.add(type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
+			st.add("types2", types2);
 			st.add("aliases", aliases);
 
 			code.add(st.render());
@@ -427,7 +435,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		protected Node lastFactor;
 
 		protected Map<Node, Node> lastFactors = new HashMap<Node, Node>();
-		protected final Set<Node> indexees = new HashSet<Node>();
+		protected final Set<Node> indexees = new LinkedHashSet<Node>();
 
 		/** {@inheritDoc} */
 		@Override
@@ -728,15 +736,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
+			n.env.setNeedsCast(true);
 			visit(n.getExprs());
+			n.env.setNeedsCast(false);
+			st.add("exprlist", code.removeLast());
 
-			if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaEnum) {
+			if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaScalar) {
+				st.add("type", t.toBoxedJavaType());
+			} else if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaEnum) {
 				st.add("type", "Object[] ");
 			} else {
 				st.add("type", t.toJavaType().replaceAll("<(.*)>", ""));
 			}
-
-			st.add("exprlist", code.removeLast());
 		}
 
 		code.add(st.render());
@@ -784,32 +795,35 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Factor n) {
+		String s = "";
+
 		if (n.getOpsSize() > 0) {
 			n.env.setOperand(n.getOperand());
 
-			String accept = "";
 			abortGeneration = false;
 
 			if (!(n.getOp(0) instanceof Call)) {
 				n.getOperand().accept(this);
 				n.env.setOperandType(n.getOperand().type);
-				accept = code.removeLast();
+				s = code.removeLast();
 			}
 
 			for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
 				final Node o = n.getOp(i);
 
 				o.accept(this);
-				accept += code.removeLast();
+				s += code.removeLast();
 			}
 
 			n.env.getOperandType();
-
-			code.add(accept);
 		} else {
 			n.getOperand().accept(this);
-			code.add(code.removeLast());
+			s = code.removeLast();
 		}
+
+		if (n.env != null && n.env.getNeedsCast())
+			s = "((" + n.type.toJavaType() + ")" + s + ")";
+		code.add(s);
 	}
 
 	/** {@inheritDoc} */
@@ -860,7 +874,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final BoaType indexType = n.getStart().type;
 		n.getStart().accept(this);
 		if (indexType instanceof BoaInt && !(t instanceof BoaMap))
-			st.add("index", "(int)(" + code.removeLast() + ")");
+			st.add("index", "(int)((long)" + code.removeLast() + ")");
 		else
 			st.add("index", code.removeLast());
 
@@ -1494,7 +1508,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		cfgBuilder.start(n);
 		new CreateNodeId().start(cfgBuilder);
 
-		final HashSet<Identifier> aliastSet = new LocalMayAliasAnalysis().start(cfgBuilder, traversalId);
+		final Set<Identifier> aliastSet = new LocalMayAliasAnalysis().start(cfgBuilder, traversalId);
 
 		final DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
 		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);
@@ -1573,7 +1587,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (!(c instanceof BoaName))
 				continue;
 			args.add(((BoaName)c).getId());
-			types.add(((BoaName)c).getType().toJavaType());
+			types.add(((BoaName)c).getType().toInterfaceJavaType());
 		}
 
 		this.varDecl.start(n);
@@ -1800,7 +1814,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		for (int i = 0; i < paramTypes.length; i++) {
 			args.add(((BoaName) paramTypes[i]).getId());
-			types.add(paramTypes[i].toJavaType());
+			types.add(paramTypes[i].toInterfaceJavaType());
 		}
 
 		st.add("name", funcType.toJavaType());
@@ -1823,19 +1837,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final MapType n) {
-		final ST st = stg.getInstanceOf("MapType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getIndex().accept(this);
-		st.add("key", code.removeLast());
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render());
+		code.add(n.type.toJavaType());
 	}
 
 	/** {@inheritDoc} */
@@ -1860,46 +1862,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n) {
-		final ST st = stg.getInstanceOf("StackType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render());
+		code.add(n.type.toJavaType());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final QueueType n) {
-		final ST st = stg.getInstanceOf("QueueType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render());
+		code.add(n.type.toJavaType());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SetType n) {
-		final ST st = stg.getInstanceOf("SetType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render());
+		code.add(n.type.toJavaType());
 	}
 
 	/** {@inheritDoc} */

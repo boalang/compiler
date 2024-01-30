@@ -16,7 +16,7 @@
  */
 package boa.graphs.cdg;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import boa.graphs.cfg.CFGNode;
@@ -57,7 +57,7 @@ public class CDGNode extends Node<CDGNode, CDGEdge> {
     public CDGNode(int id) {
         this.cfgnode = null;
         this.id = id;
-        this.useVariables = new HashSet<String>();
+        this.useVariables = new LinkedHashSet<String>();
     }
 
     public CFGNode getCfgNode() {
@@ -76,7 +76,7 @@ public class CDGNode extends Node<CDGNode, CDGEdge> {
         return useVariables;
     }
 
-    public void setUseVariables(final HashSet<String> useVariables) {
+    public void setUseVariables(final Set<String> useVariables) {
         this.useVariables = useVariables;
     }
 

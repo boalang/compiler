@@ -16,7 +16,7 @@
  */
 package boa.types;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import boa.compiler.ast.types.AbstractType;
@@ -195,6 +195,6 @@ public class BoaProtoList extends BoaType {
 			set.add((Class<? extends BoaProtoTuple>) this.type.getClass());
 			return set;
 		}
-		return new HashSet<Class<? extends BoaProtoTuple>>();
+		return new LinkedHashSet<Class<? extends BoaProtoTuple>>();
 	}
 }

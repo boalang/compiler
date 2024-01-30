@@ -17,7 +17,7 @@
  */
 package boa.compiler.transforms;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
 
@@ -41,8 +41,8 @@ import boa.types.proto.*;
  * @author rdyer
  */
 public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
-	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
-	protected final static Set<Class<? extends BoaType>> revTypes = new HashSet<Class<? extends BoaType>>();
+	protected final static Set<Class<? extends BoaType>> astTypes = new LinkedHashSet<Class<? extends BoaType>>();
+	protected final static Set<Class<? extends BoaType>> revTypes = new LinkedHashSet<Class<? extends BoaType>>();
 
 	static {
 		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
@@ -70,7 +70,7 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	protected void initialize() {
-		types = new HashSet<Class<? extends BoaType>>();
+		types = new LinkedHashSet<Class<? extends BoaType>>();
 		beforeChangedFile = afterChangedFile = null;
 		beforeCodeRepository = afterCodeRepository = null;
 
@@ -90,15 +90,15 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 		beforeCodeRepositoryStack.push(beforeCodeRepository);
 		afterCodeRepositoryStack.push(afterCodeRepository);
 
-		types = new HashSet<Class<? extends BoaType>>();
+		types = new LinkedHashSet<Class<? extends BoaType>>();
 		beforeChangedFile = afterChangedFile = null;
 
 		n.getBody().accept(this);
 
 		// if the visitor doesnt use an AST type, we can enforce
 		// a stop at the lowest level visited
-		final Set<Class<? extends BoaType>> hasAst = new HashSet<Class<? extends BoaType>>(types);
-		final Set<Class<? extends BoaType>> hasRevision = new HashSet<Class<? extends BoaType>>(types);
+		final Set<Class<? extends BoaType>> hasAst = new LinkedHashSet<Class<? extends BoaType>>(types);
+		final Set<Class<? extends BoaType>> hasRevision = new LinkedHashSet<Class<? extends BoaType>>(types);
 		hasAst.retainAll(astTypes);
 		hasRevision.retainAll(revTypes);
 		if (hasRevision.isEmpty()) {
