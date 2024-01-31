@@ -71,31 +71,6 @@ message ChangedFile {
 		/** @exclude */
 		JLS15 = 115;
 
-		/** @exclude TODO */
-		SOURCE_CS_ERROR = 200;
-		/** @exclude TODO */
-		SOURCE_CS_CS1 = 201;
-		/** @exclude TODO */
-		SOURCE_CS_CS2 = 202;
-		/** @exclude TODO */
-		SOURCE_CS_CS3 = 203;
-		/** @exclude TODO */
-		SOURCE_CS_CS4 = 204;
-		/** @exclude TODO */
-		SOURCE_CS_CS5 = 205;
-		/** @exclude */
-		CS_ERROR = 200;
-		/** @exclude */
-		CS1 = 201;
-		/** @exclude */
-		CS2 = 202;
-		/** @exclude */
-		CS3 = 203;
-		/** @exclude */
-		CS4 = 204;
-		/** @exclude */
-		CS5 = 205;
-
 		/** The file represents a JavaScript source file that had a parse error */
 		SOURCE_JS_ERROR = 300;
 		/** The file represents a JavaScript source file that parsed without error as ES1 */
