@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021, Hridesh Rajan, Robert Dyer,
+ * Copyright 2014-2023, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and University of Nebraska Board of Regents
  *
@@ -41,6 +41,14 @@ import boa.types.Toplevel.Project;
  * @author rdyer
  */
 public class BoaIntrinsics {
+	@FunctionSpec(name = "isfork", returnType = "bool", formalParameters = { "Project" })
+	public static boolean isfork(final Project p) {
+		final String[] knownForks = { };
+		final Set<String> forks = new HashSet<>();
+		Collections.addAll(forks, knownForks);
+		return p.getForked() || forks.contains(p.getId());
+	}
+
 	private final static String[] fixingRegex = {
 		"\\bfix(s|es|ing|ed)?\\b",
 		"\\b(error|bug|issue)(s)?\\b",

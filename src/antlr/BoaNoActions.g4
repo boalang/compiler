@@ -171,7 +171,8 @@ emitStatement
 	;
 
 forStatement
-	: FOR LPAREN (forExpression)? SEMICOLON (expression)? SEMICOLON (forExpression)? RPAREN programStatement
+	: FOR LPAREN (forExpression)? SEMICOLON (expression)? { notifyErrorListeners("FOR statements require 3 parts, but only 2 given - did you mean foreach?"); } RPAREN programStatement
+	| FOR LPAREN (forExpression)? SEMICOLON (expression)? SEMICOLON (forExpression)? RPAREN programStatement
 	;
 
 forExpression
@@ -204,12 +205,12 @@ switchStatement
 	: SWITCH LPAREN expression RPAREN LBRACE
 		(switchCase)*
 		DEFAULT COLON
-		(statement)+
+		(programStatement)+
 		RBRACE
 	;
 
 switchCase
-	: CASE expressionList COLON (statement)+
+	: CASE expressionList COLON (programStatement)+
 	;
 
 foreachStatement
@@ -256,7 +257,7 @@ expression
 
 expressionList
 	: expression (COMMA expression)*
-	| expression ({ notifyErrorListeners("error: ',' expected"); } expression | COMMA expression)*
+    | expression ({ this.notifyErrorListeners("error: ',' expected"); } expression | COMMA (expression | { this.notifyErrorListeners("error: expression expected"); }))*
 	;
 
 conjunction

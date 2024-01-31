@@ -116,9 +116,9 @@
 	<target name="-check-parser" depends="-init">
 		<condition property="parser.uptodate">
 			<and>
-				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaParser.java" />
-				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaLexer.java" />
-				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaListener.java" />
+				<uptodate srcfile="src/antlr/Boa.g4" targetfile="build/java/boa/parser/BoaParser.java" />
+				<uptodate srcfile="src/antlr/Boa.g4" targetfile="build/java/boa/parser/BoaLexer.java" />
+				<uptodate srcfile="src/antlr/Boa.g4" targetfile="build/java/boa/parser/BoaListener.java" />
 			</and>
 		</condition>
 	</target>
@@ -130,7 +130,7 @@
 			<arg value="../../build/java/boa/parser/" />
 			<arg value="-package" />
 			<arg value="boa.parser" />
-			<arg value="Boa.g" />
+			<arg value="Boa.g4" />
 		</java>
 	</target>
 
@@ -473,10 +473,47 @@
 
 
 	<!-- packaging -->
+	<target name="git.revision" description="Store git revision in ${repository.version}">
+		<exec executable="git" outputproperty="git.revision" failifexecutionfails="false" errorproperty="">
+			<arg value="log" />
+			<arg value="-1" />
+			<arg value="--pretty=format:%H" />
+		</exec>
+		<condition property="repository.version" value="${git.revision}" else="unknown">
+			<and>
+				<isset property="git.revision"/>
+				<length string="${git.revision}" trim="yes" length="0" when="greater" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="git.branch" description="Store git branch in ${repository.branch}">
+		<exec executable="git" outputproperty="git.branch" failifexecutionfails="false" errorproperty="">
+			<arg value="branch" />
+			<arg value="--show-current" />
+		</exec>
+		<condition property="repository.branch" value="${git.branch}" else="unknown">
+			<and>
+				<isset property="git.branch"/>
+				<length string="${git.branch}" trim="yes" length="0" when="greater" />
+			</and>
+		</condition>
+	</target>
+
 	<target name="package" depends="package-runtime,package-compiler" description="Package both the compiler and runtime JARs."/>
 
-	<target name="package-runtime" depends="compile" description="Package the runtime JAR.">
+	<target name="package-runtime" depends="compile,git.branch,git.revision" description="Package the runtime JAR.">
+		<tstamp>
+			<format property="time.stamp" pattern="yyyy-MM-dd_HH:mm:ss"/>
+		</tstamp>
 		<jar destfile="dist/boa-runtime.jar">
+			<manifest>
+				<section name="boa">
+					<attribute name="Boa-Compiler-Branch" value="${repository.branch}" />
+					<attribute name="Boa-Compiler-Commit" value="${repository.version}" />
+					<attribute name="Boa-Compiler-CompiledDate" value="${time.stamp}" />
+				</section>
+			</manifest>
 			<fileset dir="build/classes">
 				<patternset>
 					<include name="boa/" />
@@ -490,10 +527,18 @@
 		</jar>
 	</target>
 
-	<target name="package-compiler" depends="compile" description="Package the compiler JAR.">
+	<target name="package-compiler" depends="compile,git.branch,git.revision" description="Package the compiler JAR.">
+		<tstamp>
+			<format property="time.stamp" pattern="yyyy-MM-dd_HH:mm:ss"/>
+		</tstamp>
 		<jar destfile="dist/boa-compiler.jar">
 			<manifest>
 				<attribute name="Main-Class" value="boa.BoaMain" />
+				<section name="boa">
+					<attribute name="Boa-Compiler-Branch" value="${repository.branch}" />
+					<attribute name="Boa-Compiler-Commit" value="${repository.version}" />
+					<attribute name="Boa-Compiler-CompiledDate" value="${time.stamp}" />
+				</section>
 			</manifest>
 			<fileset dir="build/classes" />
 			<fileset dir="conf" />

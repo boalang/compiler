@@ -1,0 +1,4 @@
+o: output sum of int;
+
+for (i: int; input.programming_langagues[i] == "foo")
+    o << 1;

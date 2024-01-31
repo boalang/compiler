@@ -315,7 +315,8 @@ forStatement returns [ForStatement ast]
 		$ast = new ForStatement();
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: FOR LPAREN (f=forExpression { $ast.setInit($f.ast); })? SEMICOLON (e=expression { $ast.setCondition($e.ast); })? SEMICOLON (f=forExpression { $ast.setUpdate($f.ast); })? RPAREN s=programStatement { $ast.setBody($s.ast); }
+	: FOR LPAREN (f=forExpression { $ast.setInit($f.ast); })? SEMICOLON (e=expression { $ast.setCondition($e.ast); })? { notifyErrorListeners("FOR statements require 3 parts, but only 2 given - did you mean foreach?"); } RPAREN { $ast.setUpdate(new Block()); } s=programStatement { $ast.setBody($s.ast); }
+	| FOR LPAREN (f=forExpression { $ast.setInit($f.ast); })? SEMICOLON (e=expression { $ast.setCondition($e.ast); })? SEMICOLON (f=forExpression { $ast.setUpdate($f.ast); })? RPAREN s=programStatement { $ast.setBody($s.ast); }
 	;
 
 forExpression returns [Statement ast]
@@ -448,7 +449,7 @@ expression returns [Expression ast]
 expressionList returns [ArrayList<Expression> list]
 	@init { $list = new ArrayList<Expression>(); }
 	: e=expression { $list.add($e.ast); } (COMMA e=expression   { $list.add($e.ast); })*
-	| e=expression { $list.add($e.ast); } ({ notifyErrorListeners("error: ',' expected"); } e=expression { $list.add($e.ast); } | COMMA e=expression { $list.add($e.ast); })*
+    | e=expression { $list.add($e.ast); } ({ notifyErrorListeners("error: ',' expected"); } e=expression { $list.add($e.ast); } | COMMA (e=expression { $list.add($e.ast); } | { notifyErrorListeners("error: expression expected"); }))*
 	;
 
 conjunction returns [Conjunction ast]

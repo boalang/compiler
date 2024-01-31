@@ -1,0 +1,12 @@
+expr: Expression;
+
+switch (expr.kind) {
+    case ExpressionKind.METHODCALL:
+        m := 3;
+        break;
+    default:
+        break;
+}
+
+o: output sum of int;
+o << 1;

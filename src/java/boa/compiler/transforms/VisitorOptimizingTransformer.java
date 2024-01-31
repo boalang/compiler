@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2021, Hridesh Rajan, Robert Dyer,
+ * Copyright 2014-2023, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 and University of Nebraska Board of Regents
  *
@@ -34,17 +34,19 @@ import boa.types.BoaType;
 import boa.types.proto.*;
 
 /**
- * Optimizes a visitor by adding stop statements if the visitor doesn't look
- * at AST nodes.  This avoids calling getast() on each ChangedFile, saving a
+ * Optimizes a visitor by adding stop statements if the visitor doesn't look at
+ * Revision or AST nodes.  This avoids calling getrevision()/getast(), saving a
  * significant amount of time.
  *
  * @author rdyer
  */
 public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
+	protected final static Set<Class<? extends BoaType>> revTypes = new HashSet<Class<? extends BoaType>>();
 
 	static {
 		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
+		revTypes.addAll(new RevisionProtoTuple().reachableTypes());
 	}
 
 	protected final static VariableRenameTransformer argumentRenamer = new VariableRenameTransformer();
@@ -54,28 +56,39 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 	protected final Stack<Set<Class<? extends BoaType>>> typeStack = new Stack<Set<Class<? extends BoaType>>>();
 
 	protected VisitStatement beforeChangedFile;
-	protected final Stack<VisitStatement> beforeStack = new Stack<VisitStatement>();
+	protected final Stack<VisitStatement> beforeChangedFileStack = new Stack<VisitStatement>();
 
 	protected VisitStatement afterChangedFile;
-	protected final Stack<VisitStatement> afterStack = new Stack<VisitStatement>();
+	protected final Stack<VisitStatement> afterChangedFileStack = new Stack<VisitStatement>();
+
+	protected VisitStatement beforeCodeRepository;
+	protected final Stack<VisitStatement> beforeCodeRepositoryStack = new Stack<VisitStatement>();
+
+	protected VisitStatement afterCodeRepository;
+	protected final Stack<VisitStatement> afterCodeRepositoryStack = new Stack<VisitStatement>();
 
 	/** {@inheritDoc} */
 	@Override
 	protected void initialize() {
 		types = new HashSet<Class<? extends BoaType>>();
 		beforeChangedFile = afterChangedFile = null;
+		beforeCodeRepository = afterCodeRepository = null;
 
 		typeStack.clear();
-		beforeStack.clear();
-		afterStack.clear();
+		beforeChangedFileStack.clear();
+		afterChangedFileStack.clear();
+		beforeCodeRepositoryStack.clear();
+		afterCodeRepositoryStack.clear();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitorExpression n) {
 		typeStack.push(types);
-		beforeStack.push(beforeChangedFile);
-		afterStack.push(afterChangedFile);
+		beforeChangedFileStack.push(beforeChangedFile);
+		afterChangedFileStack.push(afterChangedFile);
+		beforeCodeRepositoryStack.push(beforeCodeRepository);
+		afterCodeRepositoryStack.push(afterCodeRepository);
 
 		types = new HashSet<Class<? extends BoaType>>();
 		beforeChangedFile = afterChangedFile = null;
@@ -84,44 +97,57 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 
 		// if the visitor doesnt use an AST type, we can enforce
 		// a stop at the lowest level visited
-		types.retainAll(astTypes);
-		if (types.isEmpty()) {
-			// if the before's last statement isnt a stop, merge in the after and add a stop
-			if (beforeChangedFile == null
-					|| beforeChangedFile.getBody().getStatementsSize() == 0
-					|| !(beforeChangedFile.getBody().getStatement(beforeChangedFile.getBody().getStatementsSize() - 1) instanceof StopStatement)) {
-				if (beforeChangedFile == null) {
-					final String id;
-					if (afterChangedFile != null && afterChangedFile.hasComponent())
-						id = afterChangedFile.getComponent().getIdentifier().getToken();
-					else
-						id = "_n";
-
-					beforeChangedFile = new VisitStatement(true, new Component(new Identifier(id), new Identifier("ChangedFile")), new Block());
-					TypeCheckingVisitor.instance.start(beforeChangedFile, n.env);
-
-					n.getBody().addStatement(beforeChangedFile);
-				}
-
-				if (afterChangedFile != null) {
-					argumentRenamer.start(beforeChangedFile);
-					argumentRenamer.start(afterChangedFile);
-
-					for (final Statement s : afterChangedFile.getBody().getStatements()) {
-						final Statement s2 = s.clone();
-						beforeChangedFile.getBody().addStatement(s2);
-						TypeCheckingVisitor.instance.start(s2, beforeChangedFile.getBody().env);
-					}
-					declRenamer.start(beforeChangedFile);
-				}
-
-				beforeChangedFile.getBody().addStatement(new StopStatement());
-			}
+		final Set<Class<? extends BoaType>> hasAst = new HashSet<Class<? extends BoaType>>(types);
+		final Set<Class<? extends BoaType>> hasRevision = new HashSet<Class<? extends BoaType>>(types);
+		hasAst.retainAll(astTypes);
+		hasRevision.retainAll(revTypes);
+		if (hasRevision.isEmpty()) {
+			beforeCodeRepository = insertStop(n, beforeCodeRepository, afterCodeRepository, "CodeRepository");
+		} else if (hasAst.isEmpty()) {
+			beforeChangedFile = insertStop(n, beforeChangedFile, afterChangedFile, "ChangedFile");
 		}
 
 		types = typeStack.pop();
-		beforeChangedFile = beforeStack.pop();
-		afterChangedFile = afterStack.pop();
+		beforeChangedFile = beforeChangedFileStack.pop();
+		afterChangedFile = afterChangedFileStack.pop();
+		beforeCodeRepository = beforeCodeRepositoryStack.pop();
+		afterCodeRepository = afterCodeRepositoryStack.pop();
+	}
+
+	private VisitStatement insertStop(final VisitorExpression n, VisitStatement beforeStatement, final VisitStatement afterStatement, final String statementKind) {
+		// if the before's last statement isnt a stop, merge in the after and add a stop
+		if (beforeStatement == null
+				|| beforeStatement.getBody().getStatementsSize() == 0
+				|| !(beforeStatement.getBody().getStatement(beforeStatement.getBody().getStatementsSize() - 1) instanceof StopStatement)) {
+			if (beforeStatement == null) {
+				final String id;
+				if (afterStatement != null && afterStatement.hasComponent())
+					id = afterStatement.getComponent().getIdentifier().getToken();
+				else
+					id = "_n";
+
+				beforeStatement = new VisitStatement(true, new Component(new Identifier(id), new Identifier(statementKind)), new Block());
+				TypeCheckingVisitor.instance.start(beforeStatement, n.env);
+
+				n.getBody().addStatement(beforeStatement);
+			}
+
+			if (afterStatement != null) {
+				argumentRenamer.start(beforeStatement);
+				argumentRenamer.start(afterStatement);
+
+				for (final Statement s : afterStatement.getBody().getStatements()) {
+					final Statement s2 = s.clone();
+					beforeStatement.getBody().addStatement(s2);
+					TypeCheckingVisitor.instance.start(s2, beforeStatement.getBody().env);
+				}
+				declRenamer.start(beforeStatement);
+			}
+
+			beforeStatement.getBody().addStatement(new StopStatement());
+		}
+
+		return beforeStatement;
 	}
 
 	/** {@inheritDoc} */
@@ -146,6 +172,11 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 				beforeChangedFile = n;
 			else
 				afterChangedFile = n;
+		} else if (t instanceof CodeRepositoryProtoTuple) {
+			if (n.isBefore())
+				beforeCodeRepository = n;
+			else
+				afterCodeRepository = n;
 		}
 	}
 }
