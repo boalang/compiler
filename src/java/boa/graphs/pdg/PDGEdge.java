@@ -17,6 +17,7 @@
 package boa.graphs.pdg;
 
 import boa.graphs.Edge;
+import boa.types.Control;
 import boa.types.Control.Edge.EdgeLabel;
 import boa.types.Control.Edge.EdgeType;
 
@@ -45,6 +46,32 @@ public class PDGEdge extends Edge<PDGNode, PDGEdge> {
 
 		this.src.addOutEdge(this);
 		this.dest.addInEdge(this);
+    }
+
+    public int compareTo(final PDGEdge edge) {
+        //use the compareString method to compare the edges
+        return this.compareString().compareTo(edge.compareString());
+    }
+
+    public String compareString() {
+        String edgeName;
+
+        if (this.getKind() == Control.Edge.EdgeType.DATA) {
+            //classify into RAW, WAR, WAW
+            if (this.getSrc().getDefVariable() != null && this.getDest().getUseVariables().contains(this.getSrc().getDefVariable())) {
+                edgeName = "DATA:RAW";
+            } else if (this.getDest().getDefVariable() != null && this.getSrc().getUseVariables().contains(this.getDest().getDefVariable())) {
+                edgeName = "DATA:WAR";
+            } else {
+                edgeName = "DATA:WAW";
+            }
+        } else {
+            edgeName = this.getKind() + ":" + this.getLabel();
+        }
+
+        edgeName += this.getDest().getKind() + String.valueOf(this.getDest().getId());
+
+        return edgeName;
     }
 
     public void setKind(final EdgeType kind) {

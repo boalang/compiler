@@ -392,76 +392,177 @@ public class PDG {
     
     //FSG Mining:
     
-    public HashMap<String, Integer> genSG(final long upperLimit) throws Exception {
+    public HashMap<String, Long> genSG(final long upperLimit) throws Exception {
 		//upperLimit inclusive
 		return this.genSG(1, upperLimit, null);
 	}
 	
-	public HashMap<String, Integer> genSG(final long lowerLimit, final long upperLimit) throws Exception {
+	public HashMap<String, Long> genSG(final long lowerLimit, final long upperLimit) throws Exception {
 		//upperLimit inclusive
 		return this.genSG(lowerLimit, upperLimit, null);
 	}
 	
-	public HashMap<String, Integer> genSG(final long upperLimit, BoaAbstractTraversal tra) throws Exception {
+	public HashMap<String, Long> genSG(final long upperLimit, BoaAbstractTraversal tra) throws Exception {
 		//upperLimit inclusive
 		return this.genSG(1, upperLimit, tra);
 	}
+    public HashMap<String, Long> genSG(final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra) throws Exception {
+        //lowerLimit + upperLimit inclusive
+        final HashMap<String, Long> result = new HashMap<String, Long>();
 
-	public HashMap<String, Integer> genSG(final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra) throws Exception {
-		//lowerLimit + upperLimit inclusive
-		final HashMap<String, Integer> result = new HashMap<String, Integer>();
+        //create graphs starting at each node, combining as we go.
+        for (final PDGNode start: this.getNodes()) {
 
-		//create graphs starting at each node, combining as we go.
-		for (final PDGNode start: this.getNodes()) {
-			
-			String firstExt = ";;" + start.getTraName(tra) + "\n";
-			
-			dfs(result, lowerLimit, upperLimit, tra, 1, "", firstExt, start);
-		}
+            HashMap<String, String> id_to_subnode = new HashMap<String, String>();
+            id_to_subnode.put(String.valueOf(start.getId()), "1" );
 
-		return result;
-	}
-	
-	public void dfs(final HashMap<String, Integer> result, final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra, final int currSize, final String currString, final String nextExt, final PDGNode currNode) throws Exception {
-		
-		if (currSize > upperLimit)
-			return;
-		
-		String myString = currString + nextExt;
-		
-		if (currSize >= lowerLimit)
-			result.put(myString, 1);
-		
-		//1-neighbor extension
-		for (final PDGEdge next: currNode.getOutEdges()) {
-			String src = currNode.getTraName(tra);
-			String dst = next.getDest().getTraName(tra);
-			String edgeName = next.convertLabel(next.getLabel()).name().replace("\n", "");
-			
-			String ext = src + ";" + edgeName + ";" + dst + "\n";
-			dfs(result, lowerLimit, upperLimit, tra, currSize + 1, myString, ext, next.getDest());
-		}
-		
-		//2-neighbor extension
-		if (currNode.hasFalseBranch() && currNode.hasTrueBranch()) {
-			String src = currNode.getTraName(tra);
-			
-			PDGEdge t = currNode.getTrueBranch();
-			PDGEdge f = currNode.getFalseBranch();
-			
-			String tedge = t.convertLabel(t.getLabel()).name().replace("\n", "");
-			String fedge = f.convertLabel(f.getLabel()).name().replace("\n", "");
-			
-			String tdst = t.getDest().getTraName(tra);
-			String fdst = f.getDest().getTraName(tra);
-			
-			String ext = src + ";" + tedge + ";" + tdst + "\n";
-			ext = ext + src + ";" + fedge + ";" + fdst + "\n";
-			
-			dfs(result, lowerLimit, upperLimit, tra, currSize + 2, myString, ext, t.getDest());
-			dfs(result, lowerLimit, upperLimit, tra, currSize + 2, myString, ext, f.getDest());
-			
-		}
-		
-	}
+            String firstExt = ";;" + id_to_subnode.get(String.valueOf(start.getId())) + ":" + start.getTraName(tra) + "\n";
+            ArrayList<PDGEdge> startQueue = new ArrayList<PDGEdge>(start.getOutEdges());
+            Collections.sort(startQueue);
+
+            dfs(result, lowerLimit, upperLimit, tra, id_to_subnode, "", firstExt, startQueue, new HashSet<PDGEdge>());
+        }
+
+        return result;
+    }
+
+    public void dfs(final HashMap<String, Long> result, final long lowerLimit, final long upperLimit, final BoaAbstractTraversal tra, HashMap<String, String> id_to_subnode, final String currString, final String nextExt, final ArrayList<PDGEdge> myQueue, final HashSet<PDGEdge> usedEdges) throws Exception {
+
+        //size check
+        if (id_to_subnode.size() > upperLimit)
+            return;
+
+        String myString = currString + nextExt;
+
+        if (id_to_subnode.size() >= lowerLimit) {
+            result.put(myString, (long) 1);
+        }
+
+        //performance issue
+        if (myQueue.size() > 8) {
+            return;
+        }
+
+        //remove edges whose src and dst are the same
+        myQueue.removeIf(s -> s.getSrc().getId() == s.getDest().getId());
+
+        //if myQueue is empty, return
+        if (myQueue.isEmpty()) {
+            return;
+        }
+
+        //general neighbor expansion - of all recently expanded nodes, generate all combinations
+        //of their outward edges to form the next expansions.
+        ArrayList<ArrayList<PDGEdge>> outCombos = this.getCombination(myQueue);
+
+        //remove any combos which contain an edge that has already been used
+        outCombos.removeIf(s -> s.stream().anyMatch(usedEdges::contains));
+
+        for (final ArrayList<PDGEdge> currCombo: outCombos) {
+
+            //get a set of the dst nodes of the edges in currCombo
+            HashSet<PDGNode> dstNodes = new HashSet<PDGNode>();
+            for (final PDGEdge next: currCombo) {
+                dstNodes.add(next.getDest());
+            }
+
+            //get the number of new nodes that would be added
+            int newNodes = 0;
+            for (final PDGNode next: dstNodes) {
+                if (!id_to_subnode.containsKey(String.valueOf(next.getId()))) {
+                    newNodes++;
+                }
+            }
+
+            if ((upperLimit - id_to_subnode.size()) < newNodes) {
+                continue;
+            }
+
+            HashMap<String, String> my_id_to_subnode = new HashMap<String, String>(id_to_subnode);
+            HashSet<PDGEdge> myUsedEdges = new HashSet<PDGEdge>(usedEdges);
+            myUsedEdges.addAll(currCombo);
+
+            String ext = "";
+            HashSet<PDGEdge> tempQueue = new HashSet<PDGEdge>();
+
+            for (final PDGEdge next: currCombo) {
+
+                String src;
+                String dst;
+
+                //if next.getDest().getId() is not in id_to_subnode, add it
+                if (!my_id_to_subnode.containsKey(String.valueOf(next.getDest().getId()))) {
+                    my_id_to_subnode.put(String.valueOf(next.getDest().getId()), String.valueOf(my_id_to_subnode.size() + 1));
+                }
+
+                if (tra != null) {
+                    src = my_id_to_subnode.get(String.valueOf(next.getSrc().getId())) + ":" + next.getSrc().getTraName(tra);
+                    dst = my_id_to_subnode.get(String.valueOf(next.getDest().getId())) + ":" + next.getDest().getTraName(tra);
+                } else {
+                    src = my_id_to_subnode.get(String.valueOf(next.getSrc().getId())) + ":" + next.getSrc().getName().replace("\n", "");
+                    dst = my_id_to_subnode.get(String.valueOf(next.getDest().getId())) + ":" + next.getDest().getName().replace("\n", "");
+                }
+
+                String edgeName;
+
+                if (next.getKind() == Control.Edge.EdgeType.DATA) {
+                    //classify into RAW, WAR, WAW
+                    if (next.getSrc().getDefVariable() != null && next.getDest().getUseVariables().contains(next.getSrc().getDefVariable())) {
+                        edgeName = "DATA:RAW";
+                    } else if (next.getDest().getDefVariable() != null && next.getSrc().getUseVariables().contains(next.getDest().getDefVariable())) {
+                        edgeName = "DATA:WAR";
+                    } else {
+                        edgeName = "DATA:WAW";
+                    }
+                } else {
+                    edgeName = next.getKind() + ":" + next.getLabel();
+                }
+
+                ext = ext + src + ";" + edgeName + ";" + dst + "\n";
+
+                tempQueue.addAll(next.getDest().getOutEdges());
+            }
+
+            ArrayList<PDGEdge> nextQueue = new ArrayList<PDGEdge>(tempQueue);
+
+            Collections.sort(nextQueue);
+
+            //print out the compareStrings of the edges in nextQueue
+            for (PDGEdge e: nextQueue) {
+            	System.out.println(e.compareString());
+            }
+
+            System.out.println("");
+
+            dfs(result, lowerLimit, upperLimit, tra, my_id_to_subnode, myString, ext, nextQueue, myUsedEdges);
+        }
+
+    }
+
+    public ArrayList<ArrayList<PDGEdge>> getCombination(ArrayList<PDGEdge> allItems) {
+
+        //sort allItems
+        Collections.sort(allItems);
+
+        ArrayList<ArrayList<PDGEdge>> res = new ArrayList<ArrayList<PDGEdge>>();
+
+        for (int i = 0; i<allItems.size(); i++) {
+            findAllHelper(res, allItems, i, new ArrayList<PDGEdge>());
+        }
+
+        return res;
+
+    }
+
+    public void findAllHelper(ArrayList<ArrayList<PDGEdge>> res, ArrayList<PDGEdge> allItems, int currIndex, ArrayList<PDGEdge> currIter) {
+
+        currIter.add(allItems.get(currIndex));
+
+        res.add(currIter);
+
+        for (int i = currIndex + 1; i<allItems.size(); i++) {
+            findAllHelper(res, allItems, i, currIter);
+        }
+    }
+
 }

@@ -112,36 +112,4 @@ public class PDGNode extends Node<PDGNode, PDGEdge> {
 		return nodeName;
 	}
     
-    public boolean hasFalseBranch() {
-		for (final PDGEdge e : this.outEdges) {
-			if (e.getLabel().equals("F"))
-				return true;
-		}
-		return false;
-	}
-	
-	public PDGEdge getFalseBranch() {
-		for (final PDGEdge e : this.outEdges) {
-			if (e.getLabel().equals("F"))
-				return e;
-		}
-		return null;
-	}
-	
-	public boolean hasTrueBranch() {
-		for (final PDGEdge e : this.outEdges) {
-			if (e.getLabel().equals("T"))
-				return true;
-		}
-		return false;
-	}
-	
-	public PDGEdge getTrueBranch() {
-		for (final PDGEdge e : this.outEdges) {
-			if (e.getLabel().equals("T"))
-				return e;
-		}
-		return null;
-	}
-    
 }
