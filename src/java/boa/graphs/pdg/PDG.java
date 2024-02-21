@@ -525,14 +525,13 @@ public class PDG {
 
             ArrayList<PDGEdge> nextQueue = new ArrayList<PDGEdge>(tempQueue);
 
-            Collections.sort(nextQueue);
+            //sort nextQueue by edge type, and the destination's tra name
+            nextQueue.sort((e1, e2) -> {
+                String formalName1 = e1.getKind() + e1.getDest().getTraName(tra);
+                String formalName2 = e2.getKind() + e2.getDest().getTraName(tra);
+                return formalName1.compareTo(formalName2);
+            });
 
-            //print out the compareStrings of the edges in nextQueue
-            for (PDGEdge e: nextQueue) {
-            	System.out.println(e.compareString());
-            }
-
-            System.out.println("");
 
             dfs(result, lowerLimit, upperLimit, tra, my_id_to_subnode, myString, ext, nextQueue, myUsedEdges);
         }
