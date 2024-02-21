@@ -375,6 +375,9 @@ message Expression {
 		PROVIDES = 106;
 		PACKAGE_NAME = 107;
 		MODULE_NAME = 108;
+		PATTERN = 109;
+		NULL_PATTERN = 110;
+		GUARDED_PATTERN = 111;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

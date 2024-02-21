@@ -60,6 +60,11 @@ public class JavaVisitor extends ASTVisitor {
 	public static final int JLS15 = 15;
 	public static final int JLS16 = 16;
 	public static final int JLS17 = 17;
+	public static final int JLS18 = 18;
+	public static final int JLS19 = 19;
+	public static final int JLS20 = 20;
+	public static final int JLS21 = 21;
+
 	public static final int SOURCE_JAVA_ERROR = 999;
 
 	protected CompilationUnit root = null;
@@ -2570,6 +2575,33 @@ public class JavaVisitor extends ASTVisitor {
 			}
 		}
 		declarations.peek().add(b.build());
+		return false;
+	}
+
+	//begin Java 21
+
+	@Override
+	public boolean visit(final NullPattern node) {
+		setAstLevel(JLS21);
+
+		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.NULL_PATTERN);
+		expressions.push(eb.build());
+
+		return false;
+	}
+
+	@Override
+	public boolean visit(final GuardedPattern node) {
+		setAstLevel(JLS21);
+
+		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.GUARDED_PATTERN);
+		eb.addExpressions(expressions.pop());
+		node.getPattern().accept(this);
+		eb.addExpressions(expressions.pop());
+		expressions.push(eb.build());
+
 		return false;
 	}
 
