@@ -2597,9 +2597,19 @@ public class JavaVisitor extends ASTVisitor {
 
 		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.GUARDED_PATTERN);
-		eb.addExpressions(expressions.pop());
-		node.getPattern().accept(this);
-		eb.addExpressions(expressions.pop());
+		Expression expression = node.getExpression();
+		Pattern pattern = node.getPattern();
+
+		if (expression != null) {
+			expression.accept(this);
+			eb.addExpressions(expressions.pop());
+		}
+
+		if (pattern != null) {
+			pattern.accept(this);
+			eb.addExpressions(expressions.pop());
+		}
+
 		expressions.push(eb.build());
 
 		return false;
