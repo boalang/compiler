@@ -1,0 +1,70 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "season",
+               "variable_type": {
+                  "name": "int",
+                  "kind": "PRIMITIVE"
+               },
+               "initializer": {
+                  "kind": "STATEMENT",
+                  "statements": [
+                     {
+                        "kind": "SWITCH",
+                        "statements": [
+                           {
+                              "kind": "CASE",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "JAN"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "YIELD_IMPLICIT",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "1"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "CASE",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "APRIL"
+                                 }
+                              ]
+                           },
+                           {
+                              "kind": "YIELD_IMPLICIT",
+                              "expressions": [
+                                 {
+                                    "kind": "LITERAL",
+                                    "literal": "2"
+                                 }
+                              ]
+                           }
+                        ],
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "month"
+                           }
+                        ],
+                        "is_arrow": true
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}

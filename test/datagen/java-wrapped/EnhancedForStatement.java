@@ -1,1 +1,2 @@
-for(int x : intList){}
+for (int x : intList) {
+}

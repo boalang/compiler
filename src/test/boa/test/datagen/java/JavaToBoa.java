@@ -20,7 +20,7 @@ package boa.test.datagen.java;
 /*
  * @author rdyer
  */
-public class JavaToBoa extends Java8BaseTest {
+public class JavaToBoa extends JavaBaseTest {
 	public static void main(final String[] args) {
 		for (final String s : args)
 			if (s.indexOf("class ") == -1)

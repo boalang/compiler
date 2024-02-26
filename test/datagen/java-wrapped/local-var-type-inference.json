@@ -1,0 +1,21 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "test",
+               "variable_type": {
+                  "name": "var",
+                  "kind": "INFERRED"
+               },
+               "initializer": {
+                  "kind": "LITERAL",
+                  "literal": "true"
+               }
+            }
+         ]
+      }
+   ]
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2021, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017-2022, Hridesh Rajan, Robert Dyer,
  *                 Iowa State University of Science and Technology
  *                 Bowling Green State University
  *                 and University of Nebraska Board of Regents
@@ -18,13 +18,20 @@
  */
 package boa.functions.langmode;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FileASTRequestor;
+import org.eclipse.jdt.core.JavaCore;
 
+import com.googlecode.protobuf.format.JsonFormat;
+
+import boa.datagen.DefaultProperties;
+import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.JavaVisitor;
 import boa.types.Ast.ASTRoot;
@@ -37,6 +44,8 @@ import boa.types.Ast.Statement;
 import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.FileKind;
 
 /**
  * Boa functions for working with Java ASTs.
@@ -44,6 +53,15 @@ import boa.types.Ast.Variable;
  * @author rdyer
  */
 public class JavaLangMode implements LangMode {
+	// default AST version
+	public static int DEFAULT_JAVA_ASTLEVEL = AST.JLS15;
+	public static String DEFAULT_JAVA_CORE = JavaCore.VERSION_15;
+
+	public static int astLevel = DEFAULT_JAVA_ASTLEVEL;
+	public static String javaVersion = DEFAULT_JAVA_CORE;
+
+	protected static Boolean hasArrow = null;
+
 	public String type_name(final String s) {
 		// first, normalize the string
 		final String t = s.replaceAll("<\\s+", "<")
@@ -423,7 +441,7 @@ public class JavaLangMode implements LangMode {
 		s += v.getName();
 
 		if (v.getExpressionsCount() != 0)
-			s += "("+ prettyprint(v.getExpressions(0)) +")";
+			s += "(" + prettyprint(v.getExpressions(0)) + ")";
 
 		if (v.hasInitializer())
 			s += " = " + prettyprint(v.getInitializer());
@@ -434,8 +452,11 @@ public class JavaLangMode implements LangMode {
 	private String prettyprint(final List<Modifier> mods) {
 		String s = "";
 
-		for (final Modifier m : mods)
+		for (final Modifier m : mods) {
+			if (m.getKind().equals(boa.types.Ast.Modifier.ModifierKind.MODULE))
+				return "module";
 			s += prettyprint(m) + " ";
+		}
 
 		return s;
 	}
@@ -481,7 +502,7 @@ public class JavaLangMode implements LangMode {
 				s += "assert ";
 				s += prettyprint(stmt.getConditions(0));
 				if (stmt.getExpressionsCount() > 0)
-					s += " " + prettyprint(stmt.getExpressions(0));
+					s += " : " + prettyprint(stmt.getExpressions(0));
 				s += ";";
 				return s;
 
@@ -489,6 +510,8 @@ public class JavaLangMode implements LangMode {
 				return prettyprint(stmt.getExpressions(0)) + ": " + prettyprint(stmt.getStatements(0));
 
 			case CASE:
+				if (hasArrow != null && hasArrow)
+					return "case " + prettyprint(stmt.getExpressions(0)) + " -> ";
 				return "case " + prettyprint(stmt.getExpressions(0)) + ":";
 
 			case DEFAULT:
@@ -501,12 +524,12 @@ public class JavaLangMode implements LangMode {
 				return prettyprint(stmt.getTypeDeclaration());
 
 			case SYNCHRONIZED:
-				s += "synchronized () {\n";
+				s += "synchronized (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
 				indent--;
-				s += "}";
+				s += indent() + "}";
 				return s;
 
 			case CATCH:
@@ -574,7 +597,9 @@ public class JavaLangMode implements LangMode {
 
 			case FOREACH:
 				s += "for (" + prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpressions(0)) + ")\n";
+				indent++;
 				s += indent() + prettyprint(stmt.getStatements(0));
+				indent--;
 				return s;
 
 			case DO:
@@ -587,12 +612,10 @@ public class JavaLangMode implements LangMode {
 				return s;
 
 			case WHILE:
-				s += "while (" + prettyprint(stmt.getConditions(0)) + ") {\n";
+				s += "while (" + prettyprint(stmt.getConditions(0)) + ")\n";
 				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				s += indent() + prettyprint(stmt.getStatements(0));
 				indent--;
-				s += indent() + "}";
 				return s;
 
 			case IF:
@@ -611,14 +634,27 @@ public class JavaLangMode implements LangMode {
 			case SWITCH:
 				s += "switch (" + prettyprint(stmt.getExpressions(0)) + ") {\n";
 				indent++;
-				for (int i = 0; i < stmt.getStatementsCount(); i++)
-					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				if (stmt.hasIsArrow())
+					hasArrow = stmt.getIsArrow();
+				for (int i = 0; i < stmt.getStatementsCount(); i++) {
+					if (!hasArrow || stmt.getStatements(i).getKind() == Statement.StatementKind.CASE)
+						s += indent();
+					s += prettyprint(stmt.getStatements(i));
+					if (!hasArrow || stmt.getStatements(i).getKind() != Statement.StatementKind.CASE)
+						s += "\n";
+				}
 				indent--;
 				s += indent() + "}";
 				return s;
 
 			case THROW:
 				return "throw " + prettyprint(stmt.getExpressions(0)) + ";";
+
+			case YIELD:
+				return "yield " +  prettyprint(stmt.getExpressions(0)) + ";";
+
+			case YIELD_IMPLICIT:
+				return prettyprint(stmt.getExpressions(0)) + ";";
 
 			default: return s;
 		}
@@ -799,6 +835,11 @@ public class JavaLangMode implements LangMode {
 			case METHOD_REFERENCE:
 				return s;
 
+			case STATEMENT:
+				for (int i = 0; i < e.getStatementsCount(); i++)
+					s += prettyprint(e.getStatements(i));
+				return s;
+
 			default: return s;
 		}
 	}
@@ -856,9 +897,17 @@ public class JavaLangMode implements LangMode {
 			case STATIC:       return "static";
 			case SYNCHRONIZED: return "synchronized";
 			case ABSTRACT:     return "abstract";
+			case MODULE:       return "module";
 
 			default: return s;
 		}
+	}
+
+	private static final Expression defaultExp;
+	static {
+		final Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.OTHER);
+		defaultExp = eb.build();
 	}
 
 	/**
@@ -868,28 +917,29 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public Expression parseexpression(final String s) {
-		final ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
 
-		@SuppressWarnings("rawtypes")
-		final Map options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 
 		try {
 			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
-			final JavaVisitor visitor = new JavaVisitor(s);
+
+			visitor.reset(s);
 			e.accept(visitor);
 			return visitor.getExpression();
 		} catch (final Exception e) {
 			// do nothing
 		}
 
-		final Expression.Builder eb = Expression.newBuilder();
-		eb.setKind(Expression.ExpressionKind.OTHER);
-		return eb.build();
+		return defaultExp;
 	}
+
+	public static final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+	public static final JavaVisitor visitor = new JavaVisitor("");
+	public static final ASTParser parser = ASTParser.newParser(astLevel);
 
 	/**
 	 * Converts a string into an AST.
@@ -898,23 +948,19 @@ public class JavaLangMode implements LangMode {
 	 * @return the AST representation of the string
 	 */
 	public ASTRoot parse(final String s) {
-		final ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(s.toCharArray());
 
-		@SuppressWarnings("rawtypes")
-		final Map options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		try {
-			final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
-			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-			cu.accept(errorCheck);
+			final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
-			if (!errorCheck.hasError) {
-				final JavaVisitor visitor = new JavaVisitor(s);
+			if (!errorCheck.check(cu)) {
+				visitor.reset(s);
 				ast.addNamespaces(visitor.getNamespaces(cu));
 			}
 		} catch (final Exception e) {
@@ -922,5 +968,138 @@ public class JavaLangMode implements LangMode {
 		}
 
 		return ast.build();
+	}
+
+	public static ASTRoot.Builder parseJavaFile(final String path, final String content, final ChangedFile.Builder fb, final String projectName, final boolean debug) {
+		try {
+			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+//			parser.setResolveBindings(true);
+			parser.setUnitName(FileIO.getFileName(path));
+//			parser.setEnvironment(null, null, null, true);
+			parser.setSource(content.toCharArray());
+
+			final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+			JavaCore.setComplianceOptions(javaVersion, options);
+			parser.setCompilerOptions(options);
+
+			final CompilationUnit cu;
+
+			try {
+				cu = (CompilationUnit) parser.createAST(null);
+			} catch (final Throwable e) {
+				return null;
+			}
+
+			if (!errorCheck.check(cu)) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+//				final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
+				visitor.reset(content);
+				try {
+					ast.addNamespaces(visitor.getNamespaces(cu));
+//					for (final Comment c : visitor.getComments())
+//						comments.addComments(c);
+				} catch (final Throwable e) {
+					if (debug) {
+						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
+						e.printStackTrace();
+					}
+					return null;
+				}
+
+				switch (visitor.getAstLevel()) {
+				case JavaVisitor.JLS1:
+				case JavaVisitor.JLS2:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
+					break;
+				case JavaVisitor.JLS3:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
+					break;
+				case JavaVisitor.JLS7:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS7);
+					break;
+				case JavaVisitor.JLS8:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+					break;
+				case JavaVisitor.JLS9:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS9);
+					break;
+				case JavaVisitor.JLS10:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS10);
+					break;
+				case JavaVisitor.JLS11:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS11);
+					break;
+				case JavaVisitor.JLS12:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS12);
+					break;
+				case JavaVisitor.JLS13:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS13);
+					break;
+				case JavaVisitor.JLS14:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS14);
+					break;
+				case JavaVisitor.JLS15:
+					fb.setKind(FileKind.SOURCE_JAVA_JLS15);
+					break;
+				default:
+					fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+				}
+//				fb.setComments(comments);
+
+				return ast;
+			}
+		} catch (final Throwable e) {
+			if (debug)
+				e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static void dumpJava(final String content) {
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setSource(content.toCharArray());
+
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+		JavaCore.setComplianceOptions(javaVersion, options);
+		parser.setCompilerOptions(options);
+
+		try {
+			final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+
+			try (final UglyMathCommentsExtractor cex = new UglyMathCommentsExtractor(cu, content)) {
+				new ASTDumper(cex).dump(cu);
+			}
+		} catch (final Exception e) {}
+	}
+
+	public static String parseJavaFile(final String path) {
+		final StringBuilder sb = new StringBuilder();
+		final FileASTRequestor r = new FileASTRequestor() {
+			@Override
+			public void acceptAST(final String sourceFilePath, final CompilationUnit cu) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				try {
+					visitor.reset("");
+					ast.addNamespaces(visitor.getNamespaces(cu));
+				} catch (final Exception e) {
+					System.err.println(e);
+					e.printStackTrace();
+				}
+
+				sb.append(JsonFormat.printToString(ast.build()));
+			}
+		};
+
+		final Map<String, String> options = (Map<String, String>) JavaCore.getOptions();
+		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
+		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
+		parser.setCompilerOptions(options);
+
+		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
+		parser.setResolveBindings(true);
+		parser.createASTs(new String[] { path }, null, new String[0], r, null);
+
+		return sb.toString();
 	}
 }

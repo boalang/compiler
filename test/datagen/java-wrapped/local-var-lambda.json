@@ -1,0 +1,63 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "n",
+               "variable_type": {
+                  "name": "int",
+                  "kind": "PRIMITIVE"
+               },
+               "initializer": {
+                  "kind": "LAMBDA",
+                  "expressions": [
+                     {
+                        "kind": "OP_ADD",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "s1"
+                           },
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "s2"
+                           }
+                        ]
+                     }
+                  ],
+                  "variable_decls": [
+                     {
+                        "name": "s1",
+                        "variable_type": {
+                           "name": "var",
+                           "kind": "INFERRED"
+                        },
+                        "modifiers": [
+                           {
+                              "kind": "ANNOTATION",
+                              "annotation_name": "Nonnull"
+                           }
+                        ]
+                     },
+                     {
+                        "name": "s2",
+                        "variable_type": {
+                           "name": "var",
+                           "kind": "INFERRED"
+                        },
+                        "modifiers": [
+                           {
+                              "kind": "ANNOTATION",
+                              "annotation_name": "Nullable"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}

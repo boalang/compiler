@@ -24,14 +24,28 @@ message ChangedFile {
 
 		/** The file represents a Java source file that had a parse error */
 		SOURCE_JAVA_ERROR = 100;
-		/** The file represents a Java source file that parsed without error as JLS2 */
+		/** The file represents a Java source file that parsed without error as JLS2 (before Java 5) */
 		SOURCE_JAVA_JLS2 = 102;
-		/** The file represents a Java source file that parsed without error as JLS3 */
+		/** The file represents a Java source file that parsed without error as JLS3 (Java 5, 6) */
 		SOURCE_JAVA_JLS3 = 103;
-		/** The file represents a Java source file that parsed without error as JLS4 */
-		SOURCE_JAVA_JLS4 = 104;
-		/** The file represents a Java source file that parsed without error as JLS8 */
+		/** The file represents a Java source file that parsed without error as JLS7 (Java 7) */
+		SOURCE_JAVA_JLS7 = 107;
+		/** The file represents a Java source file that parsed without error as JLS8 (Java 8) */
 		SOURCE_JAVA_JLS8 = 108;
+		/** The file represents a Java source file that parsed without error as JLS9 (Java 9) */
+		SOURCE_JAVA_JLS9 = 109;
+		/** The file represents a Java source file that parsed without error as JLS10 (Java 10) */
+		SOURCE_JAVA_JLS10 = 110;
+		/** The file represents a Java source file that parsed without error as JLS11 (Java 11) */
+		SOURCE_JAVA_JLS11 = 111;
+		/** The file represents a Java source file that parsed without error as JLS12 (Java 12) */
+		SOURCE_JAVA_JLS12 = 112;
+		/** The file represents a Java source file that parsed without error as JLS13 (Java 13) */
+		SOURCE_JAVA_JLS13 = 113;
+		/** The file represents a Java source file that parsed without error as JLS14 (Java 14) */
+		SOURCE_JAVA_JLS14 = 114;
+		/** The file represents a Java source file that parsed without error as JLS15 (Java 15) */
+		SOURCE_JAVA_JLS15 = 115;
 		/** @exclude */
 		JAVA_ERROR = 100;
 		/** @exclude */
@@ -39,9 +53,23 @@ message ChangedFile {
 		/** @exclude */
 		JLS3 = 103;
 		/** @exclude */
-		JLS4 = 104;
+		JLS7 = 107;
 		/** @exclude */
 		JLS8 = 108;
+		/** @exclude */
+		JLS9 = 109;
+		/** @exclude */
+		JLS10 = 110;
+		/** @exclude */
+		JLS11 = 111;
+		/** @exclude */
+		JLS12 = 112;
+		/** @exclude */
+		JLS13 = 113;
+		/** @exclude */
+		JLS14 = 114;
+		/** @exclude */
+		JLS15 = 115;
 
 		/** The file represents a JavaScript source file that had a parse error */
 		SOURCE_JS_ERROR = 300;
@@ -61,7 +89,7 @@ message ChangedFile {
 		SOURCE_JS_ES8 = 307;
 		/** @exclude */
 		JS_ERROR = 300;
-		
+
 		/** The file represents a PHP source file that had a parse error */
 		SOURCE_PHP_ERROR = 400;
 		/** The file represents a PHP source file that parsed without error as ES1 */
@@ -80,21 +108,21 @@ message ChangedFile {
 		SOURCE_PHP7_1 = 407;
 		/** @exclude */
 		PHP_ERROR = 400;
-		
+
 		/** The file represents an HTML source file that had a parse error */
 		SOURCE_HTML_ERROR = 500;
 		/** The file represents an HTML source file that parsed without error */
 		Source_HTML = 501;
 		/** @exclude */
 		HTML_ERROR = 500;
-		
+
 		/** The file represents an XML source file that had a parse error */
 		SOURCE_XML_ERROR = 600;
 		/** The file represents an HTML source file that parsed without error */
 		Source_XML = 601;
 		/** @exclude */
 		XML_ERROR = 600;
-		
+
 		/** The file represents an CSS source file that had a parse error */
 		SOURCE_CSS_ERROR = 700;
 		/** The file represents an CSS source file that parsed without error */

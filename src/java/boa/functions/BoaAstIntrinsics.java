@@ -210,8 +210,15 @@ public class BoaAstIntrinsics {
 		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS7
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS9
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS10
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS11
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS12
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS13
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS14
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS15)
 			return emptyComments;
 
 		final String rowName = f.getKey() + "!!" + f.getName();
@@ -645,15 +652,14 @@ public class BoaAstIntrinsics {
 		}
 	}
 
-	@FunctionSpec(name = "debug", returnType = "string", formalParameters = { "string" })
-	public static String debug(final String s) {
+	@FunctionSpec(name = "debug", formalParameters = { "string" })
+	public static void debug(final String s) {
 		System.err.println(s);
-		return null;
 	}
 
 	private static final LangMode javaLang = new JavaLangMode();
 
-	private static ChangedFile.FileKind curLang = ChangedFile.FileKind.SOURCE_JAVA_JLS8;
+	private static ChangedFile.FileKind curLang = ChangedFile.FileKind.SOURCE_JAVA_JLS15;
 	private static LangMode lang = javaLang;
 
 	@FunctionSpec(name = "getlang", returnType = "FileKind", formalParameters = {})
@@ -668,6 +674,17 @@ public class BoaAstIntrinsics {
 		curLang = l;
 
 		switch (curLang) {
+		case SOURCE_JAVA_JLS2:
+		case SOURCE_JAVA_JLS3:
+		case SOURCE_JAVA_JLS7:
+		case SOURCE_JAVA_JLS8:
+		case SOURCE_JAVA_JLS9:
+		case SOURCE_JAVA_JLS10:
+		case SOURCE_JAVA_JLS11:
+		case SOURCE_JAVA_JLS12:
+		case SOURCE_JAVA_JLS13:
+		case SOURCE_JAVA_JLS14:
+		case SOURCE_JAVA_JLS15:
 		default:
 			lang = javaLang;
 			break;

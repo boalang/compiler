@@ -1,0 +1,27 @@
+{
+   "namespaces": [
+      {
+         "name": "com.bytestree.calculator",
+         "modifiers": [
+            {
+               "kind": "OTHER",
+               "other": "open"
+            },
+            {
+               "kind": "MODULE"
+            }
+         ],
+         "expressions": [
+            {
+               "kind": "REQUIRES",
+               "expressions": [
+                  {
+                     "kind": "MODULE_NAME",
+                     "variable": "com.bytestree.maths"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
