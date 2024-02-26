@@ -1417,6 +1417,12 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(final SwitchStatement node) {
+		//print all the kinds of statements in the switch block
+
+		for (final Object s : node.statements()) {
+			System.out.println(s.getClass().getName());
+		}
+
 		final boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
@@ -2437,6 +2443,7 @@ public class JavaVisitor extends ASTVisitor {
 	// begin Java 14
 	@Override
 	public boolean visit(final SwitchExpression node) {
+		System.out.println("\n\n\nhere switchexp\n\n\n");
 		setAstLevel(JLS14);
 
 		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
@@ -2593,6 +2600,7 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(final GuardedPattern node) {
+		System.out.println("\n\n\nhere\n\n\n\n");
 		setAstLevel(JLS21);
 
 		final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
@@ -2614,6 +2622,44 @@ public class JavaVisitor extends ASTVisitor {
 
 		return false;
 	}
+
+	@Override
+	public boolean visit(TypePattern node) {
+		// Create a builder for the representation of the TypePattern
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+
+		// Set the kind of the expression to TypePattern
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.TYPE_PATTERN);
+
+		// Get the pattern variable of the TypePattern
+		SingleVariableDeclaration patternVariable = node.getPatternVariable();
+
+		// Process the pattern variable if it exists
+		if (patternVariable != null) {
+			// Visit the pattern variable
+			patternVariable.accept(this);
+			// Add the processed pattern variable to the expression
+			b.addExpressions(expressions.pop());
+		}
+
+		// Get the list of pattern variables of the TypePattern
+		List<SingleVariableDeclaration> patternVariables = node.patternVariables();
+
+		// Process each pattern variable in the list
+		for (SingleVariableDeclaration var : patternVariables) {
+			// Visit the pattern variable
+			var.accept(this);
+			// Add the processed pattern variable to the expression
+			b.addExpressions(expressions.pop());
+		}
+
+		// Add the built TypePattern representation to the stack of expressions
+		expressions.push(b.build());
+
+		// Return false to indicate that the visitation should not continue to child nodes
+		return false;
+	}
+
 
 	//////////////////////////////////////////////////////////////
 	// Utility methods

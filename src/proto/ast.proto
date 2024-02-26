@@ -378,6 +378,7 @@ message Expression {
 		PATTERN = 109;
 		NULL_PATTERN = 110;
 		GUARDED_PATTERN = 111;
+		TYPE_PATTERN = 112;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
