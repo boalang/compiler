@@ -17,7 +17,6 @@
 package boa.graphs.pdg;
 
 import boa.graphs.Edge;
-import boa.types.Control;
 import boa.types.Control.Edge.EdgeLabel;
 import boa.types.Control.Edge.EdgeType;
 

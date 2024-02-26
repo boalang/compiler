@@ -97,19 +97,4 @@ public class PDGNode extends Node<PDGNode, PDGEdge> {
         return "" + id;
     }
     
-    public String getTraName(final BoaAbstractTraversal tra) {
-		String nodeName = null;
-		
-		if (tra == null)
-			nodeName = getName().replace("\n", "");
-		else
-			try {
-				nodeName = tra.getValue(this).toString();
-			} catch (final Exception e) {
-				return nodeName;
-			}
-		
-		return nodeName;
-	}
-    
 }

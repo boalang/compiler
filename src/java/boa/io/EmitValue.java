@@ -376,11 +376,11 @@ public class EmitValue implements Writable {
 		this.metadata = metadata;
 	}
 
-	public HashMap<String,Long> getHM() {
+	public HashMap<String,Long> getMapData() {
 		return this.hmdata;
 	}
 
-	public void setHM(final HashMap<String,Long> hmdata) {
+	public void setMapData(final HashMap<String,Long> hmdata) {
 		this.hmdata = hmdata;
 	}
 

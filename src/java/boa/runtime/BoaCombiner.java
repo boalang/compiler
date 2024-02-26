@@ -93,8 +93,8 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 
 		for (final EmitValue value : values)
 			try {
-				if (value.getHM() != null) {
-					a.aggregate(value.getHM(), value.getMetadata());
+				if (value.getMapData() != null) {
+					a.aggregate(value.getMapData(), value.getMetadata());
 				} else {
 					for (final String s : value.getData())
 						a.aggregate(s, value.getMetadata());

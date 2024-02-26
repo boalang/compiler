@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
+import boa.graphs.Node;
 import boa.graphs.ddg.DDG;
 import boa.graphs.ddg.DDGNode;
 import boa.graphs.pdg.PDG;
@@ -49,6 +50,10 @@ public abstract class BoaAbstractTraversal<T1> {
 	public BoaAbstractTraversal(boolean isFlowSensitive, boolean isLoopSensitive) {
 		this.isFlowSensitive = isFlowSensitive;
 		this.isLoopSensitive = isLoopSensitive;
+	}
+
+	public T1 getValue(final Node node) throws Exception {
+		return (T1)outputMapObj.get(node.getId());
 	}
 
 	public T1 getValue(final CFGNode node) throws Exception {

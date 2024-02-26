@@ -416,7 +416,7 @@ public class PDG {
             HashMap<String, String> id_to_subnode = new HashMap<String, String>();
             id_to_subnode.put(String.valueOf(start.getId()), "1" );
 
-            String firstExt = ";;" + id_to_subnode.get(String.valueOf(start.getId())) + ":" + start.getTraName(tra) + "\n";
+            String firstExt = ";;" + id_to_subnode.get(String.valueOf(start.getId())) + ":" + start.getTraversalName(tra) + "\n";
             ArrayList<PDGEdge> startQueue = new ArrayList<PDGEdge>(start.getOutEdges());
             Collections.sort(startQueue);
 
@@ -453,7 +453,7 @@ public class PDG {
 
         //general neighbor expansion - of all recently expanded nodes, generate all combinations
         //of their outward edges to form the next expansions.
-        ArrayList<ArrayList<PDGEdge>> outCombos = this.getCombination(myQueue);
+        ArrayList<ArrayList<PDGEdge>> outCombos = this.getEdgeOrderedCombinations(myQueue);
 
         //remove any combos which contain an edge that has already been used
         outCombos.removeIf(s -> s.stream().anyMatch(usedEdges::contains));
@@ -496,8 +496,8 @@ public class PDG {
                 }
 
                 if (tra != null) {
-                    src = my_id_to_subnode.get(String.valueOf(next.getSrc().getId())) + ":" + next.getSrc().getTraName(tra);
-                    dst = my_id_to_subnode.get(String.valueOf(next.getDest().getId())) + ":" + next.getDest().getTraName(tra);
+                    src = my_id_to_subnode.get(String.valueOf(next.getSrc().getId())) + ":" + next.getSrc().getTraversalName(tra);
+                    dst = my_id_to_subnode.get(String.valueOf(next.getDest().getId())) + ":" + next.getDest().getTraversalName(tra);
                 } else {
                     src = my_id_to_subnode.get(String.valueOf(next.getSrc().getId())) + ":" + next.getSrc().getName().replace("\n", "");
                     dst = my_id_to_subnode.get(String.valueOf(next.getDest().getId())) + ":" + next.getDest().getName().replace("\n", "");
@@ -527,8 +527,8 @@ public class PDG {
 
             //sort nextQueue by edge type, and the destination's tra name
             nextQueue.sort((e1, e2) -> {
-                String formalName1 = e1.getKind() + e1.getDest().getTraName(tra);
-                String formalName2 = e2.getKind() + e2.getDest().getTraName(tra);
+                String formalName1 = e1.getKind() + e1.getDest().getTraversalName(tra);
+                String formalName2 = e2.getKind() + e2.getDest().getTraversalName(tra);
                 return formalName1.compareTo(formalName2);
             });
 
@@ -538,29 +538,30 @@ public class PDG {
 
     }
 
-    public ArrayList<ArrayList<PDGEdge>> getCombination(ArrayList<PDGEdge> allItems) {
+    public ArrayList<ArrayList<PDGEdge>> getEdgeOrderedCombinations(ArrayList<PDGEdge> sortedItems) {
+        Collections.sort(sortedItems); // Sort the input list
 
-        //sort allItems
-        Collections.sort(allItems);
+        ArrayList<ArrayList<PDGEdge>> combinations = new ArrayList<>();
 
-        ArrayList<ArrayList<PDGEdge>> res = new ArrayList<ArrayList<PDGEdge>>();
-
-        for (int i = 0; i<allItems.size(); i++) {
-            findAllHelper(res, allItems, i, new ArrayList<PDGEdge>());
+        // Generate combinations starting from each element
+        for (int i = 0; i < sortedItems.size(); i++) {
+            generateCombinations(combinations, sortedItems, i, new ArrayList<PDGEdge>());
         }
 
-        return res;
-
+        return combinations;
     }
 
-    public void findAllHelper(ArrayList<ArrayList<PDGEdge>> res, ArrayList<PDGEdge> allItems, int currIndex, ArrayList<PDGEdge> currIter) {
+    public void generateCombinations(ArrayList<ArrayList<PDGEdge>> combinations, ArrayList<PDGEdge> sortedItems, int currentIndex, ArrayList<PDGEdge> currentCombination) {
+        // Add current item to the current combination
+        currentCombination.add(sortedItems.get(currentIndex));
 
-        currIter.add(allItems.get(currIndex));
+        // Add the current combination to the result
+        combinations.add(new ArrayList<>(currentCombination));
 
-        res.add(currIter);
-
-        for (int i = currIndex + 1; i<allItems.size(); i++) {
-            findAllHelper(res, allItems, i, currIter);
+        // Generate combinations starting from the next index
+        for (int i = currentIndex + 1; i < sortedItems.size(); i++) {
+            generateCombinations(combinations, sortedItems, i, currentCombination);
+            currentCombination.remove(currentCombination.size() - 1); // Backtrack to generate different combinations
         }
     }
 

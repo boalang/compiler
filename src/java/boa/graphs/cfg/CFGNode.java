@@ -180,21 +180,6 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 			name = "";
 		return name;
 	}
-	
-	public String getTraName(final BoaAbstractTraversal tra) {
-		String nodeName = null;
-		
-		if (tra == null)
-			nodeName = getName().replace("\n", "");
-		else
-			try {
-				nodeName = tra.getValue(this).toString();
-			} catch (final Exception e) {
-				return nodeName;
-			}
-		
-		return nodeName;
-	}
 
 	private void processDef() {
 		this.defVariables = expr == null ? "" : processDef(this.expr);

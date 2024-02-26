@@ -1002,7 +1002,7 @@ public class CFG {
 		//create graphs starting at each node, combining as we go.
 		for (final CFGNode start: this.getNodes()) {
 			
-			String firstExt = ";;" + start.getTraName(tra) + "\n";
+			String firstExt = ";;" + start.getTraversalName(tra) + "\n";
 			ArrayList<CFGEdge> startQueue = new ArrayList<CFGEdge>(start.getOutEdges());
 			Collections.sort(startQueue);
 			
@@ -1049,8 +1049,8 @@ public class CFG {
 				String src;
 				String dst;
 				if (tra != null) {
-					src = next.getSrc().getTraName(tra);
-					dst = next.getDest().getTraName(tra);
+					src = next.getSrc().getTraversalName(tra);
+					dst = next.getDest().getTraversalName(tra);
 				} else {
 					src = next.getSrc().getName().replace("\n", "");
 					dst = next.getDest().getName().replace("\n", "");

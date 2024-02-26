@@ -21,10 +21,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import boa.runtime.BoaAbstractTraversal;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Statement;
 import boa.types.Control.Node.Builder;
 import boa.types.Control.Node.NodeType;
+
+import boa.runtime.BoaAbstractTraversal;
 
 /**
  * A graph node
@@ -229,19 +232,18 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 		return "node " + getNodeId();
 	}
 
-	public List<List<E>> getOutCombination() {
-		final List<List<E>> result = new ArrayList<List<E>>();
-		final List<E> edges = new ArrayList<E>(this.outEdges);
-		final int n = edges.size();
-		for (int i = 0; i < (1 << n); i++) {
-			final List<E> combination = new ArrayList<E>();
-			for (int j = 0; j < n; j++) {
-				if ((i & (1 << j)) > 0) {
-					combination.add(edges.get(j));
-				}
+	public String getTraversalName(final BoaAbstractTraversal tra) {
+		String nodeName = null;
+
+		if (tra == null)
+			nodeName = getName().replace("\n", "");
+		else
+			try {
+				nodeName = tra.getValue(this).toString();
+			} catch (final Exception e) {
+				return nodeName;
 			}
-			result.add(combination);
-		}
-		return result;
+
+		return nodeName;
 	}
 }
