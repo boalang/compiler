@@ -1,0 +1,49 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "listener",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "ActionListener",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK",
+                              "statements": [
+                                 {
+                                    "kind": "EXPRESSION",
+                                    "expressions": [
+                                       {
+                                          "kind": "METHODCALL",
+                                          "method": "println",
+                                          "method_args": [
+                                             {
+                                                "kind": "LITERAL",
+                                                "literal": "\"clicked\""
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
+

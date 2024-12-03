@@ -1,0 +1,32 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "a",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Deprecated",
+                           "other": "field"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "\"String\""
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

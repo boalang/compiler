@@ -1,0 +1,25 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "p",
+               "variable_type": {
+                  "name": "Int",
+                  "kind": "DELEGATED",
+                  "delegate": {
+                     "kind": "METHODCALL",
+                     "method": "A"
+                  }
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,324 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "SWITCH",
+                           "statements": [
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "variable": "foo"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "method": "foo"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "generic_parameters": [
+                                          {
+                                             "name": "T",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "method": "foo"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "generic_parameters": [
+                                          {
+                                             "name": "T",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "method": "foo",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "generic_parameters": [
+                                          {
+                                             "name": "T",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "method": "foo",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          },
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "d"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "bar"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LOGICAL_NOT",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "bar"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "CASE",
+                                 "expressions": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "LOGICAL_NOT",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "bar"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "DEFAULT"
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "a"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

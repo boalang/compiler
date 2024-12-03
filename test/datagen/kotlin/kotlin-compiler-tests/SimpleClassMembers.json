@@ -1,0 +1,378 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "foo",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "foo"
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "x",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "f"
+                  }
+               ],
+               "nested_declarations": [
+                  {
+                     "name": "foo",
+                     "kind": "CLASS",
+                     "methods": [
+                        {
+                           "name": "foo"
+                        }
+                     ],
+                     "fields": [
+                        {
+                           "name": "x",
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "f"
+                        }
+                     ],
+                     "nested_declarations": [
+                        {
+                           "name": "foo",
+                           "kind": "SINGLETON"
+                        },
+                        {
+                           "name": "Bar",
+                           "kind": "CLASS"
+                        },
+                        {
+                           "name": "foo",
+                           "kind": "ALIAS",
+                           "parents": [
+                              {
+                                 "name": "bar",
+                                 "kind": "OTHER"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Bar",
+                     "kind": "CLASS",
+                     "methods": [
+                        {
+                           "name": "foo"
+                        }
+                     ],
+                     "fields": [
+                        {
+                           "name": "x",
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "f"
+                        }
+                     ],
+                     "nested_declarations": [
+                        {
+                           "name": "foo",
+                           "kind": "SINGLETON",
+                           "nested_declarations": [
+                              {
+                                 "name": "Companion",
+                                 "kind": "SINGLETON",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "COMPANION"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "companion"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "Companion",
+                                 "kind": "SINGLETON",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "COMPANION"
+                                    },
+                                    {
+                                       "kind": "VISIBILITY",
+                                       "visibility": "PRIVATE"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "companion"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "Companion",
+                                 "kind": "SINGLETON",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "COMPANION"
+                                    },
+                                    {
+                                       "kind": "VISIBILITY",
+                                       "visibility": "PRIVATE"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "companion"
+                                    }
+                                 ],
+                                 "parents": [
+                                    {
+                                       "name": "Fooo",
+                                       "kind": "CLASS"
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "Companion",
+                                 "kind": "SINGLETON",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "COMPANION"
+                                    },
+                                    {
+                                       "kind": "VISIBILITY",
+                                       "visibility": "PRIVATE"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "companion"
+                                    }
+                                 ],
+                                 "parents": [
+                                    {
+                                       "name": "Fooo",
+                                       "kind": "CLASS"
+                                    },
+                                    {
+                                       "name": "Bar",
+                                       "kind": "DELEGATED",
+                                       "delegate": {
+                                          "kind": "VARACCESS",
+                                          "variable": "foo"
+                                       }
+                                    }
+                                 ]
+                              },
+                              {
+                                 "name": "Companion",
+                                 "kind": "SINGLETON",
+                                 "modifiers": [
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "COMPANION"
+                                    },
+                                    {
+                                       "kind": "VISIBILITY",
+                                       "visibility": "PRIVATE"
+                                    },
+                                    {
+                                       "kind": "OTHER",
+                                       "other": "companion"
+                                    }
+                                 ],
+                                 "parents": [
+                                    {
+                                       "name": "Fooo",
+                                       "kind": "CLASS"
+                                    },
+                                    {
+                                       "name": "Bar",
+                                       "kind": "DELEGATED",
+                                       "delegate": {
+                                          "kind": "VARACCESS",
+                                          "variable": "foo"
+                                       }
+                                    },
+                                    {
+                                       "name": "Goo",
+                                       "kind": "CLASS"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "name": "Bar",
+                           "kind": "CLASS"
+                        },
+                        {
+                           "name": "foo",
+                           "kind": "ALIAS",
+                           "parents": [
+                              {
+                                 "name": "bar",
+                                 "kind": "OTHER"
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "foo",
+                     "kind": "ALIAS",
+                     "parents": [
+                        {
+                           "name": "bar",
+                           "kind": "OTHER"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ],
+                     "parents": [
+                        {
+                           "name": "Fooo",
+                           "kind": "CLASS"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ],
+                     "parents": [
+                        {
+                           "name": "Fooo",
+                           "kind": "CLASS"
+                        },
+                        {
+                           "name": "Bar",
+                           "kind": "DELEGATED",
+                           "delegate": {
+                              "kind": "VARACCESS",
+                              "variable": "foo"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "name": "Companion",
+                     "kind": "SINGLETON",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "COMPANION"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "OTHER",
+                           "other": "companion"
+                        }
+                     ],
+                     "parents": [
+                        {
+                           "name": "Fooo",
+                           "kind": "CLASS"
+                        },
+                        {
+                           "name": "Bar",
+                           "kind": "DELEGATED",
+                           "delegate": {
+                              "kind": "VARACCESS",
+                              "variable": "foo"
+                           }
+                        },
+                        {
+                           "name": "Goo",
+                           "kind": "CLASS"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

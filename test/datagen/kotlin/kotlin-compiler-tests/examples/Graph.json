@@ -1,0 +1,1080 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Vertex",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "V",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "data",
+                           "variable_type": {
+                              "name": "V",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "data",
+                     "variable_type": {
+                        "name": "V",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "Edge",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "V",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "E",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "from",
+                           "variable_type": {
+                              "name": "V",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "data",
+                           "variable_type": {
+                              "name": "E",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "to",
+                           "variable_type": {
+                              "name": "V",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "from",
+                     "variable_type": {
+                        "name": "V",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "data",
+                     "variable_type": {
+                        "name": "E",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "to",
+                     "variable_type": {
+                        "name": "V",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "Graph",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "V",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "E",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "addEdge",
+                     "arguments": [
+                        {
+                           "name": "from",
+                           "variable_type": {
+                              "name": "V",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "data",
+                           "variable_type": {
+                              "name": "E",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "to",
+                           "variable_type": {
+                              "name": "V",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "mutableEdges"
+                                          }
+                                       ],
+                                       "method": "add",
+                                       "method_args": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "Edge",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "from"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "data"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "to"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "addVertex",
+                     "arguments": [
+                        {
+                           "name": "v",
+                           "variable_type": {
+                              "name": "V",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "mutableEdges"
+                                          }
+                                       ],
+                                       "method": "add",
+                                       "method_args": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "Edge",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "from"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "data"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "to"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "neighbours",
+                     "arguments": [
+                        {
+                           "name": "v",
+                           "variable_type": {
+                              "name": "Vertex<V>",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "expression": {
+                        "kind": "METHODCALL",
+                        "expressions": [
+                           {
+                              "kind": "METHODCALL",
+                              "expressions": [
+                                 {
+                                    "kind": "VARACCESS",
+                                    "variable": "edges"
+                                 }
+                              ],
+                              "method": "filter",
+                              "method_args": [
+                                 {
+                                    "kind": "LAMBDA",
+                                    "statements": [
+                                       {
+                                          "kind": "BLOCK",
+                                          "statements": [
+                                             {
+                                                "kind": "EXPRESSION",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "EQ",
+                                                      "expressions": [
+                                                         {
+                                                            "kind": "VARACCESS",
+                                                            "expressions": [
+                                                               {
+                                                                  "kind": "VARACCESS",
+                                                                  "variable": "it"
+                                                               }
+                                                            ],
+                                                            "variable": "from"
+                                                         },
+                                                         {
+                                                            "kind": "VARACCESS",
+                                                            "variable": "v"
+                                                         }
+                                                      ]
+                                                   }
+                                                ]
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ],
+                        "method": "map",
+                        "method_args": [
+                           {
+                              "kind": "LAMBDA",
+                              "statements": [
+                                 {
+                                    "kind": "BLOCK",
+                                    "statements": [
+                                       {
+                                          "kind": "EXPRESSION",
+                                          "expressions": [
+                                             {
+                                                "kind": "VARACCESS",
+                                                "expressions": [
+                                                   {
+                                                      "kind": "VARACCESS",
+                                                      "variable": "it"
+                                                   }
+                                                ],
+                                                "variable": "to"
+                                             }
+                                          ]
+                                       }
+                                    ]
+                                 }
+                              ]
+                           }
+                        ]
+                     }
+                  },
+                  {
+                     "name": "dfs",
+                     "arguments": [
+                        {
+                           "name": "handler",
+                           "variable_type": {
+                              "name": "(V) -> Unit",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "visited",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "initializer": {
+                                                "kind": "METHODCALL",
+                                                "generic_parameters": [
+                                                   {
+                                                      "name": "Vertex<V>",
+                                                      "kind": "GENERIC"
+                                                   }
+                                                ],
+                                                "method": "HashSet"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "vertices"
+                                          }
+                                       ],
+                                       "method": "foreach",
+                                       "method_args": [
+                                          {
+                                             "kind": "LAMBDA",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "METHODCALL",
+                                                               "method": "dfs",
+                                                               "method_args": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "it"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "visited"
+                                                                  },
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "handler"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "methods": [
+                              {
+                                 "name": "dfs",
+                                 "arguments": [
+                                    {
+                                       "name": "current",
+                                       "variable_type": {
+                                          "name": "Vertex<V>",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "visited",
+                                       "variable_type": {
+                                          "name": "ISet<Vertex<V>>",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "name": "handler",
+                                       "variable_type": {
+                                          "name": "(V) -> Unit",
+                                          "kind": "OTHER"
+                                       },
+                                       "modifiers": [
+                                          {
+                                             "kind": "IMPLICIT"
+                                          },
+                                          {
+                                             "kind": "FINAL"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "IF",
+                                             "statements": [
+                                                {
+                                                   "kind": "RETURN"
+                                                }
+                                             ],
+                                             "conditions": [
+                                                {
+                                                   "kind": "LOGICAL_NOT",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "visited"
+                                                            }
+                                                         ],
+                                                         "method": "add",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "current"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "handler",
+                                                   "method_args": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "current"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "METHODCALL",
+                                                         "method": "neighbours",
+                                                         "method_args": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "current"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "method": "foreach",
+                                                   "method_args": [
+                                                      {
+                                                         "kind": "LAMBDA",
+                                                         "statements": [
+                                                            {
+                                                               "kind": "BLOCK",
+                                                               "statements": [
+                                                                  {
+                                                                     "kind": "EXPRESSION",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "METHODCALL",
+                                                                           "method": "dfs",
+                                                                           "method_args": [
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "it"
+                                                                              },
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "visited"
+                                                                              },
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "handler"
+                                                                              }
+                                                                           ]
+                                                                        }
+                                                                     ]
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  {
+                     "name": "traverse",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PUBLIC"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "pending",
+                           "variable_type": {
+                              "name": "IPushPop<Vertex<V>>",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "visited",
+                           "variable_type": {
+                              "name": "ISet<Vertex<V>>",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "handler",
+                           "variable_type": {
+                              "name": "(V) -> Unit",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "vertices"
+                                          }
+                                       ],
+                                       "method": "foreach",
+                                       "method_args": [
+                                          {
+                                             "kind": "LAMBDA",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "IF",
+                                                         "statements": [
+                                                            {
+                                                               "kind": "CONTINUE"
+                                                            }
+                                                         ],
+                                                         "conditions": [
+                                                            {
+                                                               "kind": "LOGICAL_NOT",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "METHODCALL",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "visited"
+                                                                        }
+                                                                     ],
+                                                                     "method": "add",
+                                                                     "method_args": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "it"
+                                                                        }
+                                                                     ]
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      },
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "METHODCALL",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "pending"
+                                                                  }
+                                                               ],
+                                                               "method": "push",
+                                                               "method_args": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "it"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      },
+                                                      {
+                                                         "kind": "WHILE",
+                                                         "statements": [
+                                                            {
+                                                               "kind": "BLOCK",
+                                                               "statements": [
+                                                                  {
+                                                                     "kind": "EXPRESSION",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARDECL",
+                                                                           "variable_decls": [
+                                                                              {
+                                                                                 "name": "current",
+                                                                                 "modifiers": [
+                                                                                    {
+                                                                                       "kind": "FINAL"
+                                                                                    }
+                                                                                 ],
+                                                                                 "initializer": {
+                                                                                    "kind": "METHODCALL",
+                                                                                    "expressions": [
+                                                                                       {
+                                                                                          "kind": "VARACCESS",
+                                                                                          "variable": "pending"
+                                                                                       }
+                                                                                    ],
+                                                                                    "method": "pop"
+                                                                                 }
+                                                                              }
+                                                                           ]
+                                                                        }
+                                                                     ]
+                                                                  },
+                                                                  {
+                                                                     "kind": "EXPRESSION",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "METHODCALL",
+                                                                           "method": "handler",
+                                                                           "method_args": [
+                                                                              {
+                                                                                 "kind": "VARACCESS",
+                                                                                 "variable": "current"
+                                                                              }
+                                                                           ]
+                                                                        }
+                                                                     ]
+                                                                  },
+                                                                  {
+                                                                     "kind": "EXPRESSION",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "METHODCALL",
+                                                                           "expressions": [
+                                                                              {
+                                                                                 "kind": "METHODCALL",
+                                                                                 "method": "neighbours",
+                                                                                 "method_args": [
+                                                                                    {
+                                                                                       "kind": "VARACCESS",
+                                                                                       "variable": "current"
+                                                                                    }
+                                                                                 ]
+                                                                              }
+                                                                           ],
+                                                                           "method": "foreach",
+                                                                           "method_args": [
+                                                                              {
+                                                                                 "kind": "LAMBDA",
+                                                                                 "variable_decls": [
+                                                                                    {
+                                                                                       "name": "n",
+                                                                                       "modifiers": [
+                                                                                          {
+                                                                                             "kind": "IMPLICIT"
+                                                                                          },
+                                                                                          {
+                                                                                             "kind": "FINAL"
+                                                                                          }
+                                                                                       ]
+                                                                                    }
+                                                                                 ],
+                                                                                 "statements": [
+                                                                                    {
+                                                                                       "kind": "BLOCK",
+                                                                                       "statements": [
+                                                                                          {
+                                                                                             "kind": "IF",
+                                                                                             "statements": [
+                                                                                                {
+                                                                                                   "kind": "BLOCK",
+                                                                                                   "statements": [
+                                                                                                      {
+                                                                                                         "kind": "EXPRESSION",
+                                                                                                         "expressions": [
+                                                                                                            {
+                                                                                                               "kind": "METHODCALL",
+                                                                                                               "expressions": [
+                                                                                                                  {
+                                                                                                                     "kind": "VARACCESS",
+                                                                                                                     "variable": "pending"
+                                                                                                                  }
+                                                                                                               ],
+                                                                                                               "method": "push",
+                                                                                                               "method_args": [
+                                                                                                                  {
+                                                                                                                     "kind": "VARACCESS",
+                                                                                                                     "variable": "n"
+                                                                                                                  }
+                                                                                                               ]
+                                                                                                            }
+                                                                                                         ]
+                                                                                                      }
+                                                                                                   ]
+                                                                                                }
+                                                                                             ],
+                                                                                             "conditions": [
+                                                                                                {
+                                                                                                   "kind": "METHODCALL",
+                                                                                                   "expressions": [
+                                                                                                      {
+                                                                                                         "kind": "VARACCESS",
+                                                                                                         "variable": "visited"
+                                                                                                      }
+                                                                                                   ],
+                                                                                                   "method": "add",
+                                                                                                   "method_args": [
+                                                                                                      {
+                                                                                                         "kind": "VARACCESS",
+                                                                                                         "variable": "n"
+                                                                                                      }
+                                                                                                   ]
+                                                                                                }
+                                                                                             ]
+                                                                                          }
+                                                                                       ]
+                                                                                    }
+                                                                                 ]
+                                                                              }
+                                                                           ]
+                                                                        }
+                                                                     ]
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ],
+                                                         "conditions": [
+                                                            {
+                                                               "kind": "LOGICAL_NOT",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "expressions": [
+                                                                        {
+                                                                           "kind": "VARACCESS",
+                                                                           "variable": "pending"
+                                                                        }
+                                                                     ],
+                                                                     "variable": "isEmpty"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "mutableEdges",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "generic_parameters": [
+                           {
+                              "name": "Edge<V, E>",
+                              "kind": "GENERIC"
+                           }
+                        ],
+                        "method": "ArrayList"
+                     }
+                  },
+                  {
+                     "name": "mutableVertices",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "generic_parameters": [
+                           {
+                              "name": "Vertex<V>",
+                              "kind": "GENERIC"
+                           }
+                        ],
+                        "method": "HashSet"
+                     }
+                  },
+                  {
+                     "name": "edges",
+                     "variable_type": {
+                        "name": "IList<Edge<V, E>>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "variable": "mutableEdges"
+                     }
+                  },
+                  {
+                     "name": "vertices",
+                     "variable_type": {
+                        "name": "ISet<Edge<V, E>>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "VARACCESS",
+                        "variable": "mutableVertices"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

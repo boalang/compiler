@@ -1,0 +1,25 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Outer",
+               "kind": "CLASS",
+               "nested_declarations": [
+                  {
+                     "name": "Inner",
+                     "kind": "CLASS",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "inner"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,156 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "print",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ],
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann",
+                                       "annotation_values": [
+                                          {
+                                             "kind": "LAMBDA",
+                                             "variable_decls": [
+                                                {
+                                                   "name": "it",
+                                                   "modifiers": [
+                                                      {
+                                                         "kind": "IMPLICIT"
+                                                      },
+                                                      {
+                                                         "kind": "FINAL"
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "OP_ADD",
+                                                               "expressions": [
+                                                                  {
+                                                                     "kind": "VARACCESS",
+                                                                     "variable": "it"
+                                                                  },
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "1"
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "PAREN",
+                                 "expressions": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "variable_decls": [
+                                          {
+                                             "name": "it",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "IMPLICIT"
+                                                },
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "statements": [
+                                                {
+                                                   "kind": "EXPRESSION",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "OP_ADD",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "it"
+                                                            },
+                                                            {
+                                                               "kind": "LITERAL",
+                                                               "literal": "1"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "ann"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "print",
+                                 "method_args": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

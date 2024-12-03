@@ -1,0 +1,50 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "f",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "STATEMENT",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Suppress",
+                                             "annotation_values": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "\"UNCHECKED_CAST\""
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "RETURN"
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,71 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARDECL",
+                                 "variable_decls": [
+                                    {
+                                       "name": "x",
+                                       "modifiers": [
+                                          {
+                                             "kind": "FINAL"
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Ann"
+                                          }
+                                       ],
+                                       "initializer": {
+                                          "kind": "LITERAL",
+                                          "literal": "1"
+                                       }
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "x"
+                              }
+                           ]
+                        }
+                     ],
+                     "type_declarations": [
+                        {
+                           "name": "Ann",
+                           "kind": "CLASS",
+                           "modifiers": [
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "annotation"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

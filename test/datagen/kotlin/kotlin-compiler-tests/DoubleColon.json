@@ -1,0 +1,976 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "simple",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "A"
+                                    }
+                                 ],
+                                 "method": "a"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ADD",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "A"
+                                          }
+                                       ],
+                                       "method": "a"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "generic_parameters": [
+                                          {
+                                             "name": "String",
+                                             "kind": "GENERIC"
+                                          },
+                                          {
+                                             "name": "Int",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "variable": "Map"
+                                    }
+                                 ],
+                                 "method": "size"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "method": "a"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "variable": "b"
+                                    }
+                                 ],
+                                 "method": "c"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "method": "b"
+                                    }
+                                 ],
+                                 "variable": "c"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             ],
+                                             "variable": "b"
+                                          }
+                                       ],
+                                       "method": "c"
+                                    }
+                                 ],
+                                 "variable": "d"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "PAREN",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHOD_REFERENCE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             ],
+                                             "method": "b"
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "method": ""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "expressions": [
+                                    {
+                                       "kind": "PAREN",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHOD_REFERENCE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "b"
+                                                }
+                                             ],
+                                             "method": "c"
+                                          }
+                                       ]
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    }
+                                 ],
+                                 "method": ""
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "genericType",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "generic_parameters": [
+                                          {
+                                             "name": "b",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "variable": "a"
+                                    }
+                                 ],
+                                 "method": "c"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "generic_parameters": [
+                                                {
+                                                   "name": "b",
+                                                   "kind": "GENERIC"
+                                                }
+                                             ],
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "method": "c"
+                                    }
+                                 ],
+                                 "variable": "d"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "generic_parameters": [
+                                          {
+                                             "name": "c",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "method": "b"
+                                    }
+                                 ],
+                                 "method": "d"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             ],
+                                             "generic_parameters": [
+                                                {
+                                                   "name": "c",
+                                                   "kind": "GENERIC"
+                                                }
+                                             ],
+                                             "method": "b"
+                                          }
+                                       ],
+                                       "method": "d"
+                                    }
+                                 ],
+                                 "variable": "e"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "generic_parameters": [
+                                          {
+                                             "name": "c.d",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "method": "b"
+                                    }
+                                 ],
+                                 "method": "e"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             ],
+                                             "generic_parameters": [
+                                                {
+                                                   "name": "c.d",
+                                                   "kind": "GENERIC"
+                                                }
+                                             ],
+                                             "method": "b"
+                                          }
+                                       ],
+                                       "method": "e"
+                                    }
+                                 ],
+                                 "variable": "d"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             ],
+                                             "generic_parameters": [
+                                                {
+                                                   "name": "c.d<e.f>",
+                                                   "kind": "GENERIC"
+                                                }
+                                             ],
+                                             "method": "b"
+                                          }
+                                       ],
+                                       "method": "g"
+                                    }
+                                 ],
+                                 "variable": "h"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "VARACCESS",
+                                                               "variable": "a"
+                                                            }
+                                                         ],
+                                                         "variable": "b"
+                                                      }
+                                                   ],
+                                                   "generic_parameters": [
+                                                      {
+                                                         "name": "d",
+                                                         "kind": "GENERIC"
+                                                      }
+                                                   ],
+                                                   "method": "c"
+                                                }
+                                             ],
+                                             "generic_parameters": [
+                                                {
+                                                   "name": "f",
+                                                   "kind": "GENERIC"
+                                                }
+                                             ],
+                                             "method": "e"
+                                          }
+                                       ],
+                                       "variable": "g"
+                                    }
+                                 ],
+                                 "method": "h"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "nullableType",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a?"
+                                    }
+                                 ],
+                                 "method": "b"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a??"
+                                    }
+                                 ],
+                                 "method": "b"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "generic_parameters": [
+                                          {
+                                             "name": "b",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "variable": "a?"
+                                    }
+                                 ],
+                                 "method": "c"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "generic_parameters": [
+                                          {
+                                             "name": "b?",
+                                             "kind": "GENERIC"
+                                          },
+                                          {
+                                             "name": "c?",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "variable": "a?"
+                                    }
+                                 ],
+                                 "method": "d"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "classLiteral",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "A"
+                                    }
+                                 ],
+                                 "method": "A::class"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "generic_parameters": [
+                                          {
+                                             "name": "b",
+                                             "kind": "GENERIC"
+                                          },
+                                          {
+                                             "name": "c",
+                                             "kind": "GENERIC"
+                                          }
+                                       ],
+                                       "method": "a"
+                                    }
+                                 ],
+                                 "method": "a<b,c>::class"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "method": "::class"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OTHER",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    },
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "method": "::class"
+                                    }
+                                 ],
+                                 "literal": "b"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "this"
+                                    }
+                                 ],
+                                 "method": "this::class"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "super"
+                                    }
+                                 ],
+                                 "method": "super::class"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "X"
+                                    }
+                                 ],
+                                 "method": "X()::class"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "NEW",
+                                       "anon_declaration": {
+                                          "name": "",
+                                          "kind": "SINGLETON"
+                                       }
+                                    }
+                                 ],
+                                 "method": "object {}::class"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "expressions",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "this@x"
+                                    }
+                                 ],
+                                 "method": "foo"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "super<a>@b"
+                                    }
+                                 ],
+                                 "method": "foo"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_SUB",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "method": "b"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_INC",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "a"
+                                          }
+                                       ],
+                                       "method": "b"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "OP_ADD",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    },
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "b"
+                                          }
+                                       ],
+                                       "method": "c"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "PAREN",
+                                       "expressions": [
+                                          {
+                                             "kind": "OP_ADD",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "b"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "method": "c"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "x"
+                                    }
+                                 ],
+                                 "method": "e"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "expressions": [
+                                                {
+                                                   "kind": "METHODCALL",
+                                                   "method": "x"
+                                                }
+                                             ],
+                                             "method": "y"
+                                          }
+                                       ],
+                                       "method": "z"
+                                    }
+                                 ],
+                                 "method": "e"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHOD_REFERENCE",
+                                             "expressions": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "a"
+                                                }
+                                             ],
+                                             "method": "b"
+                                          }
+                                       ],
+                                       "variable": "c"
+                                    }
+                                 ],
+                                 "method": "d"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHOD_REFERENCE",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "A"
+                                          }
+                                       ],
+                                       "method": "a"
+                                    }
+                                 ],
+                                 "method": "b"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "emptyLHS",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHOD_REFERENCE",
+                                       "method": "x"
+                                    }
+                                 ],
+                                 "variable": "name"
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "foo",
+                                 "method_args": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHOD_REFERENCE",
+                                             "method": "x"
+                                          }
+                                       ],
+                                       "variable": "name"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -1,0 +1,34 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "a.<get>",
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "1"
+               }
+            }
+         ],
+         "variables": [
+            {
+               "name": "a",
+               "variable_type": {
+                  "kind": "DELEGATED",
+                  "delegate": {
+                     "kind": "METHODCALL",
+                     "method": "A"
+                  }
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

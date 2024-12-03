@@ -1,0 +1,37 @@
+{
+   "namespaces": [
+      {
+         "name": "Foo",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "generic_parameters": [
+                  {
+                     "name": "D",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "T : S",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "F",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "O",
+                     "kind": "CLASS"
+                  },
+                  {
+                     "name": "P",
+                     "kind": "CLASS"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

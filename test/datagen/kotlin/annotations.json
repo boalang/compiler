@@ -1,0 +1,228 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Example",
+               "kind": "IMMUTABLE",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "data"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "foo",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann",
+                                 "other": "field"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "bar",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann",
+                                 "other": "get"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "quux",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann",
+                                 "other": "param"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "foo",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann",
+                           "other": "field"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "bar",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann",
+                           "other": "get"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "quux",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann",
+                           "other": "param"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "f",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARDECL",
+                                       "variable_decls": [
+                                          {
+                                             "name": "x",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "FINAL"
+                                                }
+                                             ],
+                                             "initializer": {
+                                                "kind": "LITERAL",
+                                                "literal": "3"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              },
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "METHODCALL",
+                                       "method": "print",
+                                       "method_args": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "x"
+                                          }
+                                       ],
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Ann1",
+                                             "annotation_values": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "5"
+                                                },
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "x"
+                                                }
+                                             ]
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Ann2"
+                                          },
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Ann3",
+                                             "annotation_values": [
+                                                {
+                                                   "kind": "ASSIGN",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "str"
+                                                      },
+                                                      {
+                                                         "kind": "LITERAL",
+                                                         "literal": "\"hi\""
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

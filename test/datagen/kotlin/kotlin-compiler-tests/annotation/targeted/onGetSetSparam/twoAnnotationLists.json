@@ -1,0 +1,103 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "a.<get>",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "e"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "expression": {
+                        "kind": "LITERAL",
+                        "literal": "5"
+                     }
+                  },
+                  {
+                     "name": "a.<set>",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "f"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "g"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "Unit",
+                        "kind": "OTHER"
+                     },
+                     "arguments": [
+                        {
+                           "name": "v",
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "h"
+                              }
+                           ]
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "a",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "a",
+                           "other": "get"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "b",
+                           "other": "set"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "c",
+                           "other": "set"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "d",
+                           "other": "setparam"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

@@ -62,6 +62,13 @@
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.php.core.source_4.3.1.201703301037.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.text-3.5.101-sources.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/org.eclipse.text-3.5.101.jar"/>
+	<classpathentry kind="lib" path="lib/datagen-kotlin/annotations-21.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/datagen-kotlin/kotlin-compiler-1.5.20.jar"/>
+	<classpathentry kind="lib" path="lib/datagen-kotlin/kotlin-reflect-1.5.20.jar"/>
+	<classpathentry kind="lib" path="lib/datagen-kotlin/kotlin-script-runtime-1.5.20.jar"/>
+	<classpathentry kind="lib" path="lib/datagen-kotlin/kotlin-stdlib-1.5.20.jar"/>
+	<classpathentry kind="lib" path="lib/datagen-kotlin/openapi-7.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/datagen-kotlin/trove4j-1.0.20200330.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/protobuf-java-2.5.0.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/slf4j-api-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/datagen/slf4j-log4j12-1.4.3.jar"/>

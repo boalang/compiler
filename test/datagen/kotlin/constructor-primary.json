@@ -1,0 +1,82 @@
+{
+   "namespaces": [
+      {
+         "name": "boa.kotlin.test",
+         "declarations": [
+            {
+               "name": "Person",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "firstName",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "lastName",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              }
+                           ]
+                        },
+                        {
+                           "name": "phone",
+                           "variable_type": {
+                              "name": "String?",
+                              "kind": "OTHER"
+                           }
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "lastName",
+                     "variable_type": {
+                        "name": "String",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "phone",
+                     "variable_type": {
+                        "name": "String?",
+                        "kind": "OTHER"
+                     }
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

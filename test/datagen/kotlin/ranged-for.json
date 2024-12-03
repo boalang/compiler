@@ -1,0 +1,242 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "f",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "FOREACH",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "println",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "i"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "initializations": [
+                              {
+                                 "kind": "ARRAY_COMPREHENSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "5"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "variable_declarations": [
+                              {
+                                 "name": "i",
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "FOREACH",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "println",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "i"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "initializations": [
+                              {
+                                 "kind": "ARRAY_COMPREHENSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "1"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "5"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "5"
+                                    }
+                                 ]
+                              }
+                           ],
+                           "variable_declarations": [
+                              {
+                                 "name": "i",
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "FOREACH",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "println",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "j"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "initializations": [
+                              {
+                                 "kind": "ARRAY_COMPREHENSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "60"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ],
+                                 "literal": "downTo"
+                              }
+                           ],
+                           "variable_declarations": [
+                              {
+                                 "name": "j",
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "FOREACH",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK",
+                                 "statements": [
+                                    {
+                                       "kind": "EXPRESSION",
+                                       "expressions": [
+                                          {
+                                             "kind": "METHODCALL",
+                                             "method": "println",
+                                             "method_args": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "j"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ],
+                           "initializations": [
+                              {
+                                 "kind": "ARRAY_COMPREHENSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "60"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    },
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "3"
+                                    }
+                                 ],
+                                 "literal": "downTo"
+                              }
+                           ],
+                           "variable_declarations": [
+                              {
+                                 "name": "j",
+                                 "modifiers": [
+                                    {
+                                       "kind": "IMPLICIT"
+                                    },
+                                    {
+                                       "kind": "FINAL"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

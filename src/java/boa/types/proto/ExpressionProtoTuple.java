@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2014-2021, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,8 +75,8 @@ public class ExpressionProtoTuple extends BoaProtoTuple {
 		names.put("anon_declaration", counter++);
 		members.add(new DeclarationProtoTuple());
 
-		names.put("annotation", counter++);
-		members.add(new ModifierProtoTuple());
+		names.put("modifiers", counter++);
+		members.add(new BoaProtoList(new ModifierProtoTuple()));
 
 		names.put("no_parens", counter++);
 		members.add(new BoaBool());
@@ -115,6 +116,9 @@ public class ExpressionProtoTuple extends BoaProtoTuple {
 
 		names.put("trait", counter++);
 		members.add(new MethodProtoTuple());
+
+		names.put("safe", counter++);
+		members.add(new BoaBool());
 	}
 
 	/**

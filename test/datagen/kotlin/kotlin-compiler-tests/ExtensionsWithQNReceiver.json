@@ -1,0 +1,24 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "size",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "1"
+               },
+               "receiver_type": {
+                  "name": "java.util.Map<*,*>",
+                  "kind": "OTHER"
+               }
+            }
+         ]
+      }
+   ]
+}

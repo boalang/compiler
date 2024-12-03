@@ -746,6 +746,62 @@ public final class Diff {
        * </pre>
        */
       Source_CSS(39, 701),
+      /**
+       * <code>SOURCE_KOTLIN_ERROR = 800;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that had a parse error 
+       * </pre>
+       */
+      SOURCE_KOTLIN_ERROR(41, 800),
+      /**
+       * <code>SOURCE_KOTLIN_1_5 = 815;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.5.x+ 
+       * </pre>
+       */
+      SOURCE_KOTLIN_1_5(42, 815),
+      /**
+       * <code>SOURCE_KOTLIN_1_4 = 814;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.4.x+ 
+       * </pre>
+       */
+      SOURCE_KOTLIN_1_4(43, 814),
+      /**
+       * <code>SOURCE_KOTLIN_1_3 = 813;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.3.x+ 
+       * </pre>
+       */
+      SOURCE_KOTLIN_1_3(44, 813),
+      /**
+       * <code>SOURCE_KOTLIN_1_2 = 812;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.2.x+ 
+       * </pre>
+       */
+      SOURCE_KOTLIN_1_2(45, 812),
+      /**
+       * <code>SOURCE_KOTLIN_1_1 = 811;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.1.x+ 
+       * </pre>
+       */
+      SOURCE_KOTLIN_1_1(46, 811),
+      /**
+       * <code>SOURCE_KOTLIN_1_0 = 810;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.0.x+ 
+       * </pre>
+       */
+      SOURCE_KOTLIN_1_0(47, 810),
       ;
 
       /**
@@ -1156,6 +1212,62 @@ public final class Diff {
        * </pre>
        */
       public static final int CSS_ERROR_VALUE = 700;
+      /**
+       * <code>SOURCE_KOTLIN_ERROR = 800;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that had a parse error 
+       * </pre>
+       */
+      public static final int SOURCE_KOTLIN_ERROR_VALUE = 800;
+      /**
+       * <code>SOURCE_KOTLIN_1_5 = 815;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.5.x+ 
+       * </pre>
+       */
+      public static final int SOURCE_KOTLIN_1_5_VALUE = 815;
+      /**
+       * <code>SOURCE_KOTLIN_1_4 = 814;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.4.x+ 
+       * </pre>
+       */
+      public static final int SOURCE_KOTLIN_1_4_VALUE = 814;
+      /**
+       * <code>SOURCE_KOTLIN_1_3 = 813;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.3.x+ 
+       * </pre>
+       */
+      public static final int SOURCE_KOTLIN_1_3_VALUE = 813;
+      /**
+       * <code>SOURCE_KOTLIN_1_2 = 812;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.2.x+ 
+       * </pre>
+       */
+      public static final int SOURCE_KOTLIN_1_2_VALUE = 812;
+      /**
+       * <code>SOURCE_KOTLIN_1_1 = 811;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.1.x+ 
+       * </pre>
+       */
+      public static final int SOURCE_KOTLIN_1_1_VALUE = 811;
+      /**
+       * <code>SOURCE_KOTLIN_1_0 = 810;</code>
+       *
+       * <pre>
+       ** The file represents a Kotlin source file that parsed without error as 1.0.x+ 
+       * </pre>
+       */
+      public static final int SOURCE_KOTLIN_1_0_VALUE = 810;
 
 
       public final int getNumber() { return value; }
@@ -1193,6 +1305,13 @@ public final class Diff {
           case 601: return Source_XML;
           case 700: return SOURCE_CSS_ERROR;
           case 701: return Source_CSS;
+          case 800: return SOURCE_KOTLIN_ERROR;
+          case 815: return SOURCE_KOTLIN_1_5;
+          case 814: return SOURCE_KOTLIN_1_4;
+          case 813: return SOURCE_KOTLIN_1_3;
+          case 812: return SOURCE_KOTLIN_1_2;
+          case 811: return SOURCE_KOTLIN_1_1;
+          case 810: return SOURCE_KOTLIN_1_0;
           default: return null;
         }
       }
@@ -1223,7 +1342,7 @@ public final class Diff {
       }
 
       private static final FileKind[] VALUES = {
-        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_JS_ERROR, SOURCE_JS_ES1, SOURCE_JS_ES2, SOURCE_JS_ES3, SOURCE_JS_ES5, SOURCE_JS_ES6, SOURCE_JS_ES7, SOURCE_JS_ES8, JS_ERROR, SOURCE_PHP_ERROR, SOURCE_PHP5, SOURCE_PHP5_3, SOURCE_PHP5_4, SOURCE_PHP5_5, SOURCE_PHP5_6, SOURCE_PHP7_0, SOURCE_PHP7_1, PHP_ERROR, SOURCE_HTML_ERROR, Source_HTML, HTML_ERROR, SOURCE_XML_ERROR, Source_XML, XML_ERROR, SOURCE_CSS_ERROR, Source_CSS, CSS_ERROR, 
+        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_JS_ERROR, SOURCE_JS_ES1, SOURCE_JS_ES2, SOURCE_JS_ES3, SOURCE_JS_ES5, SOURCE_JS_ES6, SOURCE_JS_ES7, SOURCE_JS_ES8, JS_ERROR, SOURCE_PHP_ERROR, SOURCE_PHP5, SOURCE_PHP5_3, SOURCE_PHP5_4, SOURCE_PHP5_5, SOURCE_PHP5_6, SOURCE_PHP7_0, SOURCE_PHP7_1, PHP_ERROR, SOURCE_HTML_ERROR, Source_HTML, HTML_ERROR, SOURCE_XML_ERROR, Source_XML, XML_ERROR, SOURCE_CSS_ERROR, Source_CSS, CSS_ERROR, SOURCE_KOTLIN_ERROR, SOURCE_KOTLIN_1_5, SOURCE_KOTLIN_1_4, SOURCE_KOTLIN_1_3, SOURCE_KOTLIN_1_2, SOURCE_KOTLIN_1_1, SOURCE_KOTLIN_1_0, 
       };
 
       public static FileKind valueOf(
@@ -2978,14 +3097,14 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\232\010\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\304\t\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\004\022\013\n\003ast\030\005 \002(\010\022)\n\010commen" +
       "ts\030\006 \001(\0132\027.boa.types.CommentsRoot\022&\n\007cha" +
       "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\026\n\016pre" +
       "vious_names\030\010 \003(\t\022\031\n\021previous_versions\030\t" +
-      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\"\354\005\n\010FileK" +
+      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\"\226\007\n\010FileK" +
       "ind\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003",
       "XML\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_J" +
       "AVA_JLS2\020f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOUR" +
@@ -3004,7 +3123,11 @@ public final class Diff {
       "_HTML\020\365\003\022\017\n\nHTML_ERROR\020\364\003\022\025\n\020SOURCE_XML_" +
       "ERROR\020\330\004\022\017\n\nSource_XML\020\331\004\022\016\n\tXML_ERROR\020\330" +
       "\004\022\025\n\020SOURCE_CSS_ERROR\020\274\005\022\017\n\nSource_CSS\020\275" +
-      "\005\022\016\n\tCSS_ERROR\020\274\005\032\002\020\001B\002H\001"
+      "\005\022\016\n\tCSS_ERROR\020\274\005\022\030\n\023SOURCE_KOTLIN_ERROR" +
+      "\020\240\006\022\026\n\021SOURCE_KOTLIN_1_5\020\257\006\022\026\n\021SOURCE_KO" +
+      "TLIN_1_4\020\256\006\022\026\n\021SOURCE_KOTLIN_1_3\020\255\006\022\026\n\021S",
+      "OURCE_KOTLIN_1_2\020\254\006\022\026\n\021SOURCE_KOTLIN_1_1" +
+      "\020\253\006\022\026\n\021SOURCE_KOTLIN_1_0\020\252\006\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

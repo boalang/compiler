@@ -1,0 +1,121 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "value",
+                           "variable_type": {
+                              "name": "String",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "IMPLICIT"
+                              },
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann",
+                                 "other": "param"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "B",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ],
+                     "arguments": [
+                        {
+                           "name": "n",
+                           "variable_type": {
+                              "name": "Int",
+                              "kind": "OTHER"
+                           },
+                           "modifiers": [
+                              {
+                                 "kind": "FINAL"
+                              },
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann",
+                                 "other": "param"
+                              },
+                              {
+                                 "kind": "ANNOTATION",
+                                 "annotation_name": "Ann2",
+                                 "other": "param"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fields": [
+                  {
+                     "name": "n",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann",
+                           "other": "param"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Ann2",
+                           "other": "param"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

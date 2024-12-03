@@ -1,0 +1,209 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo1",
+               "return_type": {
+                  "name": "T!!",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "T!!",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "y",
+                     "variable_type": {
+                        "name": "List<T!!>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "z",
+                     "variable_type": {
+                        "name": "T!!.(T!!) -> T!!",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo2",
+               "return_type": {
+                  "name": "T!!",
+                  "kind": "OTHER"
+               },
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "T!!?",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "y",
+                     "variable_type": {
+                        "name": "List<T!!?>",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "z",
+                     "variable_type": {
+                        "name": "T!!?.(T!!?) -> T!!?",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  },
+                  {
+                     "name": "w",
+                     "variable_type": {
+                        "name": "String!!",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK"
+                  }
+               ]
+            },
+            {
+               "name": "foo3",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "IF",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              }
+                           ],
+                           "conditions": [
+                              {
+                                 "kind": "LOGICAL_NOT",
+                                 "expressions": [
+                                    {
+                                       "kind": "LOGICAL_NOT",
+                                       "expressions": [
+                                          {
+                                             "kind": "PAREN",
+                                             "expressions": [
+                                                {
+                                                   "kind": "EQ",
+                                                   "expressions": [
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "x"
+                                                      },
+                                                      {
+                                                         "kind": "VARACCESS",
+                                                         "variable": "y"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ],
+                                 "modifiers": [
+                                    {
+                                       "kind": "ANNOTATION",
+                                       "annotation_name": "RetentionSourceAndTargetExpression"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

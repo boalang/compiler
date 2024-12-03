@@ -1,0 +1,60 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Foo",
+               "kind": "SINGLETON",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "Foo",
+               "kind": "SINGLETON",
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "Foo",
+               "kind": "SINGLETON",
+               "parents": [
+                  {
+                     "name": "Bar",
+                     "kind": "CLASS"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "<init>",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "primary"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

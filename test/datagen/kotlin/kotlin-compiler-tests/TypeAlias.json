@@ -1,0 +1,173 @@
+{
+   "namespaces": [
+      {
+         "name": "foo.bar.goo",
+         "declarations": [
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "T : foo",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "A",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "B",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "A",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "B : A",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "T : foo",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "A",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "B",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "A",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "B : A",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "bar",
+                     "kind": "OTHER"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

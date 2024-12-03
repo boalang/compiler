@@ -1,0 +1,283 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "f",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "f",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "f",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "method": "f",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "f"
+                           }
+                        ]
+                     }
+                  ],
+                  "method": "",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "f"
+                           }
+                        ]
+                     }
+                  ],
+                  "method": "",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "PAREN",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "f"
+                           }
+                        ]
+                     }
+                  ],
+                  "generic_parameters": [
+                     {
+                        "name": "A",
+                        "kind": "GENERIC"
+                     }
+                  ],
+                  "method": "",
+                  "method_args": [
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     },
+                     {
+                        "kind": "LAMBDA",
+                        "statements": [
+                           {
+                              "kind": "BLOCK"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
+

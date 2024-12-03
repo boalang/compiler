@@ -1,0 +1,92 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "f",
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "EXPRESSION",
+                                 "expressions": [
+                                    {
+                                       "kind": "STATEMENT",
+                                       "modifiers": [
+                                          {
+                                             "kind": "ANNOTATION",
+                                             "annotation_name": "Suppress",
+                                             "annotation_values": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "\"UNUSED_VARIABLE\""
+                                                }
+                                             ]
+                                          }
+                                       ],
+                                       "statements": [
+                                          {
+                                             "kind": "FOREACH",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK",
+                                                   "statements": [
+                                                      {
+                                                         "kind": "EXPRESSION",
+                                                         "expressions": [
+                                                            {
+                                                               "kind": "METHODCALL",
+                                                               "method": "println",
+                                                               "method_args": [
+                                                                  {
+                                                                     "kind": "LITERAL",
+                                                                     "literal": "\"hi\""
+                                                                  }
+                                                               ]
+                                                            }
+                                                         ]
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "initializations": [
+                                                {
+                                                   "kind": "VARACCESS",
+                                                   "variable": "y"
+                                                }
+                                             ],
+                                             "variable_declarations": [
+                                                {
+                                                   "name": "x",
+                                                   "modifiers": [
+                                                      {
+                                                         "kind": "IMPLICIT"
+                                                      },
+                                                      {
+                                                         "kind": "FINAL"
+                                                      }
+                                                   ]
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

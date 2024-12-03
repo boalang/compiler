@@ -1,0 +1,70 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "Lifetime",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "attached",
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "METHODCALL",
+                        "generic_parameters": [
+                           {
+                              "name": "()->Unit",
+                              "kind": "GENERIC"
+                           }
+                        ],
+                        "method": "ArrayList"
+                     }
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "commands",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODCALL",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "java"
+                           }
+                        ],
+                        "variable": "util"
+                     }
+                  ],
+                  "generic_parameters": [
+                     {
+                        "name": "String",
+                        "kind": "GENERIC"
+                     },
+                     {
+                        "name": "() -> Unit",
+                        "kind": "GENERIC"
+                     }
+                  ],
+                  "method": "HashMap"
+               }
+            }
+         ]
+      }
+   ]
+}
+

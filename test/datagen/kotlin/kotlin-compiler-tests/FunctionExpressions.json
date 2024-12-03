@@ -1,0 +1,809 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "c",
+               "expression": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": ""
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "c",
+               "expression": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "name"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "c",
+               "expression": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "receiver_type": {
+                           "name": "@[a] T",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "c",
+               "expression": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "return_type": {
+                           "name": "bar",
+                           "kind": "OTHER"
+                        },
+                        "arguments": [
+                           {
+                              "name": "a",
+                              "variable_type": {
+                                 "name": "foo",
+                                 "kind": "OTHER"
+                              },
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "receiver_type": {
+                           "name": "@[a] T",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "c",
+               "expression": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "return_type": {
+                           "name": "bar",
+                           "kind": "OTHER"
+                        },
+                        "generic_parameters": [
+                           {
+                              "name": "T : (a) -> b",
+                              "kind": "GENERIC"
+                           }
+                        ],
+                        "arguments": [
+                           {
+                              "name": "a",
+                              "variable_type": {
+                                 "name": "foo",
+                                 "kind": "OTHER"
+                              },
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "receiver_type": {
+                           "name": "@[a()] T",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "outer",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "name",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK"
+                                                }
+                                             ],
+                                             "receiver_type": {
+                                                "name": "@[a] T",
+                                                "kind": "OTHER"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "name",
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK"
+                                                }
+                                             ],
+                                             "receiver_type": {
+                                                "name": "@[a] T",
+                                                "kind": "OTHER"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "",
+                                             "return_type": {
+                                                "name": "bar",
+                                                "kind": "OTHER"
+                                             },
+                                             "arguments": [
+                                                {
+                                                   "name": "a",
+                                                   "variable_type": {
+                                                      "name": "foo",
+                                                      "kind": "OTHER"
+                                                   },
+                                                   "modifiers": [
+                                                      {
+                                                         "kind": "IMPLICIT"
+                                                      },
+                                                      {
+                                                         "kind": "FINAL"
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK"
+                                                }
+                                             ],
+                                             "receiver_type": {
+                                                "name": "@[a] T",
+                                                "kind": "OTHER"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "",
+                                             "return_type": {
+                                                "name": "bar",
+                                                "kind": "OTHER"
+                                             },
+                                             "generic_parameters": [
+                                                {
+                                                   "name": "T : (a) -> b",
+                                                   "kind": "GENERIC"
+                                                }
+                                             ],
+                                             "arguments": [
+                                                {
+                                                   "name": "a",
+                                                   "variable_type": {
+                                                      "name": "foo",
+                                                      "kind": "OTHER"
+                                                   },
+                                                   "modifiers": [
+                                                      {
+                                                         "kind": "IMPLICIT"
+                                                      },
+                                                      {
+                                                         "kind": "FINAL"
+                                                      }
+                                                   ]
+                                                }
+                                             ],
+                                             "statements": [
+                                                {
+                                                   "kind": "BLOCK"
+                                                }
+                                             ],
+                                             "receiver_type": {
+                                                "name": "@[a()] T",
+                                                "kind": "OTHER"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "methods": [
+                                                {
+                                                   "name": "",
+                                                   "return_type": {
+                                                      "name": "bar",
+                                                      "kind": "OTHER"
+                                                   },
+                                                   "generic_parameters": [
+                                                      {
+                                                         "name": "T : @[a]  (a) -> b",
+                                                         "kind": "GENERIC"
+                                                      }
+                                                   ],
+                                                   "arguments": [
+                                                      {
+                                                         "name": "a",
+                                                         "variable_type": {
+                                                            "name": "foo",
+                                                            "kind": "OTHER"
+                                                         },
+                                                         "modifiers": [
+                                                            {
+                                                               "kind": "IMPLICIT"
+                                                            },
+                                                            {
+                                                               "kind": "FINAL"
+                                                            }
+                                                         ]
+                                                      }
+                                                   ],
+                                                   "statements": [
+                                                      {
+                                                         "kind": "BLOCK"
+                                                      }
+                                                   ],
+                                                   "receiver_type": {
+                                                      "name": "@[a()] T",
+                                                      "kind": "OTHER"
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "methods": [
+                                                {
+                                                   "name": "",
+                                                   "return_type": {
+                                                      "name": "bar?",
+                                                      "kind": "OTHER"
+                                                   },
+                                                   "receiver_type": {
+                                                      "name": "A?",
+                                                      "kind": "OTHER"
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "LAMBDA",
+                                       "statements": [
+                                          {
+                                             "kind": "BLOCK",
+                                             "methods": [
+                                                {
+                                                   "name": "",
+                                                   "return_type": {
+                                                      "name": "bar?",
+                                                      "kind": "OTHER"
+                                                   },
+                                                   "receiver_type": {
+                                                      "name": "A?",
+                                                      "kind": "OTHER"
+                                                   }
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "",
+                                             "expression": {
+                                                "kind": "VARACCESS",
+                                                "variable": "a"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "name",
+                                             "expression": {
+                                                "kind": "VARACCESS",
+                                                "variable": "a"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "METHODCALL",
+                                 "method": "bar",
+                                 "method_args": [
+                                    {
+                                       "kind": "METHODDECL",
+                                       "methods": [
+                                          {
+                                             "name": "name",
+                                             "modifiers": [
+                                                {
+                                                   "kind": "ANNOTATION",
+                                                   "annotation_name": "a"
+                                                }
+                                             ],
+                                             "expression": {
+                                                "kind": "VARACCESS",
+                                                "variable": "a"
+                                             }
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": ""
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "name"
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "name",
+                        "receiver_type": {
+                           "name": "T",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "return_type": {
+                           "name": "bar",
+                           "kind": "OTHER"
+                        },
+                        "arguments": [
+                           {
+                              "name": "a",
+                              "variable_type": {
+                                 "name": "foo",
+                                 "kind": "OTHER"
+                              },
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "receiver_type": {
+                           "name": "@[a] T",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "name",
+                        "return_type": {
+                           "name": "bar",
+                           "kind": "OTHER"
+                        },
+                        "arguments": [
+                           {
+                              "name": "a",
+                              "variable_type": {
+                                 "name": "foo",
+                                 "kind": "OTHER"
+                              },
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "receiver_type": {
+                           "name": "@[a] T",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "return_type": {
+                           "name": "bar",
+                           "kind": "OTHER"
+                        },
+                        "generic_parameters": [
+                           {
+                              "name": "T : (a) -> b",
+                              "kind": "GENERIC"
+                           }
+                        ],
+                        "arguments": [
+                           {
+                              "name": "a",
+                              "variable_type": {
+                                 "name": "foo",
+                                 "kind": "OTHER"
+                              },
+                              "modifiers": [
+                                 {
+                                    "kind": "IMPLICIT"
+                                 },
+                                 {
+                                    "kind": "FINAL"
+                                 }
+                              ]
+                           }
+                        ],
+                        "receiver_type": {
+                           "name": "@[a()] T",
+                           "kind": "OTHER"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "d",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "expression": {
+                           "kind": "VARACCESS",
+                           "variable": "a"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "d",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "name",
+                        "expression": {
+                           "kind": "VARACCESS",
+                           "variable": "a"
+                        }
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "modifiers": [
+                           {
+                              "kind": "ANNOTATION",
+                              "annotation_name": "a"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            },
+            {
+               "name": "b",
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "METHODDECL",
+                  "methods": [
+                     {
+                        "name": "",
+                        "generic_parameters": [
+                           {
+                              "name": "T : A",
+                              "kind": "GENERIC"
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+}
+

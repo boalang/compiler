@@ -1,0 +1,145 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo",
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\"\"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\"\"\"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\" \"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\"\" \"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\" \"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\" \"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\" \"\"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\" \"\"\"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\" \"\"\"\"\"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\" \"\"\"\""
+                              }
+                           ]
+                        },
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"\"\"\"\" \"\"\"\"\""
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

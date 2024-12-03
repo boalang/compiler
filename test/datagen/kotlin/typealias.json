@@ -1,0 +1,53 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "foo",
+               "kind": "ALIAS",
+               "parents": [
+                  {
+                     "name": "Int",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "bar",
+               "kind": "ALIAS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "Int",
+                     "kind": "OTHER"
+                  }
+               ]
+            }
+         ],
+         "variables": [
+            {
+               "name": "x",
+               "variable_type": {
+                  "name": "foo",
+                  "kind": "OTHER"
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ],
+               "initializer": {
+                  "kind": "LITERAL",
+                  "literal": "3"
+               }
+            }
+         ]
+      }
+   ]
+}

@@ -1,0 +1,38 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "ann",
+               "kind": "ANNOTATION",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "annotation"
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "foo",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "ann"
+                  }
+               ],
+               "return_type": {
+                  "name": "String?",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "null"
+               }
+            }
+         ]
+      }
+   ]
+}

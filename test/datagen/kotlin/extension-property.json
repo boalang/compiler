@@ -1,0 +1,147 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "methods": [
+            {
+               "name": "foo.baz.<get>",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "3"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo.bar.<get>",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  }
+               ],
+               "return_type": {
+                  "name": "String",
+                  "kind": "OTHER"
+               },
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "RETURN",
+                           "expressions": [
+                              {
+                                 "kind": "LITERAL",
+                                 "literal": "\"hi\""
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo.foo.<get>",
+               "return_type": {
+                  "name": "Int",
+                  "kind": "OTHER"
+               },
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "3"
+               }
+            },
+            {
+               "name": "foo.foo.<set>",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PRIVATE"
+                  }
+               ],
+               "return_type": {
+                  "name": "Unit",
+                  "kind": "OTHER"
+               },
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "IMPLICIT"
+                        },
+                        {
+                           "kind": "FINAL"
+                        }
+                     ]
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "BLOCK",
+                     "statements": [
+                        {
+                           "kind": "EXPRESSION",
+                           "expressions": [
+                              {
+                                 "kind": "ASSIGN",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "expressions": [
+                                          {
+                                             "kind": "VARACCESS",
+                                             "variable": "foo"
+                                          }
+                                       ],
+                                       "variable": "bar"
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "x"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "foo.bad.<get>",
+               "return_type": {
+                  "name": "String",
+                  "kind": "OTHER"
+               }
+            },
+            {
+               "name": "foo<S>.bar.<get>",
+               "expression": {
+                  "kind": "LITERAL",
+                  "literal": "3"
+               }
+            }
+         ]
+      }
+   ]
+}

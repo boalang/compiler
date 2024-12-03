@@ -1,0 +1,78 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "fields": [
+                  {
+                     "name": "plainField",
+                     "variable_type": {
+                        "name": "Int",
+                        "kind": "OTHER"
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Transient",
+                           "other": "delegate"
+                        }
+                     ],
+                     "initializer": {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     }
+                  },
+                  {
+                     "name": "lazy",
+                     "variable_type": {
+                        "kind": "DELEGATED",
+                        "delegate": {
+                           "kind": "METHODCALL",
+                           "method": "lazy",
+                           "method_args": [
+                              {
+                                 "kind": "LAMBDA",
+                                 "statements": [
+                                    {
+                                       "kind": "BLOCK",
+                                       "statements": [
+                                          {
+                                             "kind": "EXPRESSION",
+                                             "expressions": [
+                                                {
+                                                   "kind": "LITERAL",
+                                                   "literal": "1"
+                                                }
+                                             ]
+                                          }
+                                       ]
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     },
+                     "modifiers": [
+                        {
+                           "kind": "FINAL"
+                        },
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "Transient",
+                           "other": "delegate"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

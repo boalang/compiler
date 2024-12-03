@@ -1,0 +1,35 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "variables": [
+            {
+               "name": "a",
+               "variable_type": {
+                  "kind": "DELEGATED",
+                  "delegate": {
+                     "kind": "METHODCALL",
+                     "method": "A",
+                     "method_args": [
+                        {
+                           "kind": "LAMBDA",
+                           "statements": [
+                              {
+                                 "kind": "BLOCK"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               },
+               "modifiers": [
+                  {
+                     "kind": "FINAL"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+

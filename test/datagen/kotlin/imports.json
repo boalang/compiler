@@ -1,0 +1,18 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS"
+            }
+         ],
+         "imports": [
+            "java.util.List",
+            "java.io.*",
+            "jave.io.File as F"
+         ]
+      }
+   ]
+}

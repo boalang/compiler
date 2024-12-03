@@ -1,0 +1,41 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "FileTable",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "K",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "MutableMap<K, MutableList<File>>",
+                     "kind": "OTHER"
+                  }
+               ]
+            },
+            {
+               "name": "Predicate",
+               "kind": "ALIAS",
+               "generic_parameters": [
+                  {
+                     "name": "T",
+                     "kind": "GENERIC"
+                  }
+               ],
+               "parents": [
+                  {
+                     "name": "(T) -> Boolean",
+                     "kind": "OTHER"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

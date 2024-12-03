@@ -1,0 +1,55 @@
+{
+   "namespaces": [
+      {
+         "name": "boo",
+         "modifiers": [
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "Deprecated",
+               "other": "field"
+            },
+            {
+               "kind": "ANNOTATION",
+               "annotation_name": "Deprecated",
+               "other": "field"
+            }
+         ],
+         "declarations": [
+            {
+               "name": "A",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Deprecated",
+                     "other": "field"
+                  }
+               ]
+            },
+            {
+               "name": "I",
+               "kind": "INTERFACE",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Deprecated",
+                     "other": "field"
+                  }
+               ]
+            }
+         ],
+         "methods": [
+            {
+               "name": "a",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Deprecated",
+                     "other": "field"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

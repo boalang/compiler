@@ -1,0 +1,29 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "IMap",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "OTHER",
+                     "other": "open"
+                  }
+               ],
+               "generic_parameters": [
+                  {
+                     "name": "in K",
+                     "kind": "GENERIC"
+                  },
+                  {
+                     "name": "out V",
+                     "kind": "GENERIC"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
