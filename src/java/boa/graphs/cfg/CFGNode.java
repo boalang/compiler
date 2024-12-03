@@ -18,7 +18,8 @@
 package boa.graphs.cfg;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import boa.graphs.Node;
 import boa.types.Ast.Expression.ExpressionKind;
@@ -35,12 +36,12 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 	private int objectNameId;
 	private int classNameId;
 	private int numOfParameters = 0;
-	private HashSet<Integer> parameters;
+	private Set<Integer> parameters;
 
 	private static final HashMap<String, Integer> idOfLabel = new HashMap<String, Integer>();
 	private static final HashMap<Integer, String> labelOfID = new HashMap<Integer, String>();
 
-	private HashSet<String> useVariables;
+	private Set<String> useVariables;
 	private String defVariables;
 
 	public CFGNode() {
@@ -55,7 +56,7 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 	}
 
 	public CFGNode(final String methodName, final NodeType kind, final String className,
-			final String objectName, final int numOfParameters, final HashSet<Integer> datas) {
+			final String objectName, final int numOfParameters, final Set<Integer> datas) {
 		super(kind);
 		this.methodId = convertLabel(methodName);
 		if (className == null) {
@@ -64,7 +65,7 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 			this.classNameId = convertLabel(className);
 		}
 		this.objectNameId = convertLabel(objectName);
-		this.parameters = new HashSet<Integer>(datas);
+		this.parameters = new LinkedHashSet<Integer>(datas);
 		this.numOfParameters = numOfParameters;
 	}
 
@@ -91,11 +92,11 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		return this.numOfParameters;
 	}
 
-	public void setParameters(final HashSet<Integer> parameters) {
+	public void setParameters(final Set<Integer> parameters) {
 		this.parameters = parameters;
 	}
 
-	public HashSet<Integer> getParameters() {
+	public Set<Integer> getParameters() {
 		return this.parameters;
 	}
 
@@ -115,7 +116,7 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		return labelOfID.get(this.classNameId);
 	}
 
-	public HashSet<String> getUseVariables() {
+	public Set<String> getUseVariables() {
 		if (this.useVariables == null)
 			processUse();
 		return this.useVariables;
@@ -184,7 +185,7 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 	}
 
 	private void processUse() {
-		final HashSet<String> useVar = new HashSet<String>();
+		final Set<String> useVar = new LinkedHashSet<String>();
 		if (this.expr != null) {
 			if (this.expr.getKind() == ExpressionKind.ASSIGN) {
 				processUse(useVar, this.expr.getExpressions(1));
@@ -195,7 +196,7 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		this.useVariables = useVar;
 	}
 
-	private static void processUse(final HashSet<String> useVar, final boa.types.Ast.Expression expr) {
+	private static void processUse(final Set<String> useVar, final boa.types.Ast.Expression expr) {
 		if (expr.getKind() == ExpressionKind.ASSIGN) {
 			processUse(useVar, expr.getExpressions(1));
 			return;
@@ -219,7 +220,7 @@ public class CFGNode extends Node<CFGNode, CFGEdge> {
 		}
 	}
 
-	private static void processUse(final HashSet<String> useVar, final boa.types.Ast.Variable vardecls) {
+	private static void processUse(final Set<String> useVar, final boa.types.Ast.Variable vardecls) {
 		if (vardecls.hasInitializer()) {
 			processUse(useVar, vardecls.getInitializer());
 		}

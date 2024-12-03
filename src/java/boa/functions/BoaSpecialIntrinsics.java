@@ -87,29 +87,29 @@ public class BoaSpecialIntrinsics {
 	 * @return The array
 	 */
 	@FunctionSpec(name = "new", returnType = "array of int", formalParameters = { "array of int", "int", "int" })
-	public static long[] newInt(long[] a, long size, long val) {
-		long[] arr = new long[(int)size];
+	public static Long[] newInt(Long[] a, long size, long val) {
+		Long[] arr = new Long[(int)size];
 		for (int i = 0; i < size; i++)
 			arr[i] = val;
 		return arr;
 	}
 	@FunctionSpec(name = "new", returnType = "array of float", formalParameters = { "array of float", "int", "float" })
-	public static double[] newDouble(double[] a, long size, double val) {
-		double[] arr = new double[(int)size];
+	public static Double[] newDouble(Double[] a, long size, double val) {
+		Double[] arr = new Double[(int)size];
 		for (int i = 0; i < size; i++)
 			arr[i] = val;
 		return arr;
 	}
 	@FunctionSpec(name = "new", returnType = "array of bool", formalParameters = { "array of bool", "int", "bool" })
-	public static boolean[] newBoolean(boolean[] a, long size, boolean val) {
-		boolean[] arr = new boolean[(int)size];
+	public static Boolean[] newBoolean(Boolean[] a, long size, boolean val) {
+		Boolean[] arr = new Boolean[(int)size];
 		for (int i = 0; i < size; i++)
 			arr[i] = val;
 		return arr;
 	}
 	@FunctionSpec(name = "new", returnType = "array of time", formalParameters = { "array of time", "int", "time" })
-	public static long[] newTime(long[] a, long size, long val) {
-		long[] arr = new long[(int)size];
+	public static Long[] newTime(Long[] a, long size, long val) {
+		Long[] arr = new Long[(int)size];
 		for (int i = 0; i < size; i++)
 			arr[i] = val;
 		return arr;

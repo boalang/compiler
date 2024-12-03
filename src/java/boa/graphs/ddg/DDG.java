@@ -32,7 +32,7 @@ public class DDG {
     private Method md;
     private DDGNode entryNode;
     private CFG cfg;
-    private final HashSet<DDGNode> nodes = new HashSet<DDGNode>();
+    private final Set<DDGNode> nodes = new LinkedHashSet<DDGNode>();
     private final HashMap<DDGNode, Set<DDGNode>> defUseChain = new HashMap<DDGNode, Set<DDGNode>>();
     //private HashMap<DDGNode, Set<DDGNode>> useDefChain; //TODO: needs reaching-def analysis
 
@@ -99,7 +99,7 @@ public class DDG {
      *
      * @return the set of all the nodes in the graph
      */
-    public HashSet<DDGNode> getNodes() { return nodes; }
+    public Set<DDGNode> getNodes() { return nodes; }
 
     public DDGNode[] sortNodes() {
         try {
@@ -130,7 +130,7 @@ public class DDG {
      * @return definition nodes
      */
     public Set<DDGNode> getDefNodes(final String var) {
-        final Set<DDGNode> defNodes = new HashSet<DDGNode>();
+        final Set<DDGNode> defNodes = new LinkedHashSet<DDGNode>();
         for (final DDGNode n : defUseChain.keySet()) {
             if (n.getDefVariable() != null && n.getDefVariable().equals(var))
                 defNodes.add(n);
@@ -260,7 +260,7 @@ public class DDG {
                         if (n.getDefVariables().equals(p.var)) {
                             final DDGNode useNode = getNode(p.node);
                             if (!defUseChain.containsKey(defNode))
-                                defUseChain.put(defNode, new HashSet<DDGNode>());
+                                defUseChain.put(defNode, new LinkedHashSet<DDGNode>());
                             defUseChain.get(defNode).add(useNode);
                             // connect nodes for constructing the graph
                             new DDGEdge(defNode, useNode, p.var);

@@ -17,7 +17,7 @@
 package boa.graphs;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,8 +40,8 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 	protected Statement stmt;
 	protected Expression expr;
 
-	protected final Set<E> inEdges = new HashSet<E>();
-	protected final Set<E> outEdges = new HashSet<E>();
+	protected final Set<E> inEdges = new LinkedHashSet<E>();
+	protected final Set<E> outEdges = new LinkedHashSet<E>();
 
 	@Override
 	public int compareTo(final N node) {
@@ -110,14 +110,14 @@ public abstract class Node<N extends Node<N, E>, E extends Edge<N, E>> implement
 	}
 
 	public List<N> getPredecessors() {
-		final Set<N> nodes = new HashSet<N>();
+		final Set<N> nodes = new LinkedHashSet<N>();
 		for (final E e : this.inEdges)
 			nodes.add(e.getSrc());
 		return new ArrayList<N>(nodes);
 	}
 
 	public List<N> getSuccessors() {
-		final Set<N> nodes = new HashSet<N>();
+		final Set<N> nodes = new LinkedHashSet<N>();
 		for (final E e : this.outEdges)
 			nodes.add(e.getDest());
 		return new ArrayList<N>(nodes);

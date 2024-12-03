@@ -41,7 +41,7 @@ import static boa.functions.BoaNormalFormIntrinsics.normalizeStatement;
 public class PDG {
     private Method md;
     private PDGNode entryNode;
-    private final HashSet<PDGNode> nodes = new HashSet<PDGNode>();
+    private final Set<PDGNode> nodes = new LinkedHashSet<PDGNode>();
     private boolean normalize = false;
     private int hashcode;
 
@@ -117,7 +117,7 @@ public class PDG {
      *
      * @return the set of all the nodes in the graph
      */
-    public HashSet<PDGNode> getNodes() {
+    public Set<PDGNode> getNodes() {
         return nodes;
     }
 
@@ -192,7 +192,7 @@ public class PDG {
                 return;
             final Stack<PDGNode> nodes = new Stack<PDGNode>();
             nodes.add(entryNode);
-            final Set<PDGNode> visited = new HashSet<PDGNode>();
+            final Set<PDGNode> visited = new LinkedHashSet<PDGNode>();
             final Map<String, String> normalizedVars = new HashMap<String, String>();
             int varCount = 1;
             // if normalization is enabled then normalize node expression
@@ -212,7 +212,7 @@ public class PDG {
                             node.setDefVariable(normalizedVars.get(node.getDefVariable()));
                         }
                         // use variables
-                        final HashSet<String> useVars = new HashSet<String>();
+                        final Set<String> useVars = new LinkedHashSet<String>();
                         for (final String dVar : node.getUseVariables()) {
                             if (dVar != null) {
                                 if (!normalizedVars.containsKey(dVar)) {
@@ -297,8 +297,8 @@ public class PDG {
 
         final Stack<PDGNode> nodes1 = new Stack<PDGNode>();
         final Stack<PDGNode> nodes2 = new Stack<PDGNode>();
-        final Set<PDGNode> visited1 = new HashSet<PDGNode>();
-        final Set<PDGNode> visited2 = new HashSet<PDGNode>();
+        final Set<PDGNode> visited1 = new LinkedHashSet<PDGNode>();
+        final Set<PDGNode> visited2 = new LinkedHashSet<PDGNode>();
         nodes1.add(entryNode);
         nodes2.add(pdg.getEntryNode());
 
@@ -366,7 +366,7 @@ public class PDG {
         if (hashcode == 0 && entryNode != null) {
             final Stack<PDGNode> nodes = new Stack<PDGNode>();
             nodes.add(entryNode);
-            final Set<PDGNode> visited = new HashSet<PDGNode>();
+            final Set<PDGNode> visited = new LinkedHashSet<PDGNode>();
             final StringBuilder sb = new StringBuilder();
             while (nodes.size() != 0) {
                 final PDGNode node = nodes.pop();

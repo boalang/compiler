@@ -140,7 +140,13 @@ public class BoaSet extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "java.util.HashSet<" + this.type.toBoxedJavaType() + ">";
+		return "java.util.LinkedHashSet<" + this.type.toInterfaceJavaType() + ">";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toInterfaceJavaType() {
+		return "java.util.Set<" + this.type.toInterfaceJavaType() + ">";
 	}
 
 	/** {@inheritDoc} */

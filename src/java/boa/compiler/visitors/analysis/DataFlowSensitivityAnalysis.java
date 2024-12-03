@@ -16,8 +16,9 @@
  */
 package boa.compiler.visitors.analysis;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import boa.compiler.ast.Call;
 import boa.compiler.ast.Factor;
@@ -33,7 +34,7 @@ import boa.compiler.visitors.IdentifierFindingVisitor;
  */
 public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 	public boolean getValueFound = false;
-	public HashSet<Identifier> getValueNodes = new HashSet<Identifier>();
+	public Set<Identifier> getValueNodes = new LinkedHashSet<Identifier>();
 	boolean flowSensitive = false;
 	boolean argFlag = false;
 	protected boolean abortGeneration = false;
@@ -44,8 +45,8 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 		return flowSensitive;
 	}
 
-	public void start(final CFGBuildingVisitor cfgBuilder, final HashSet<Identifier> aliastSet) {
-		final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+	public void start(final CFGBuildingVisitor cfgBuilder, final Set<Identifier> aliastSet) {
+		final Set<Integer> visitedNodes = new LinkedHashSet<Integer>();
 		visitedNodes.add(cfgBuilder.currentStartNodes.get(0).nodeId);
 		dfs(cfgBuilder.currentStartNodes.get(0), visitedNodes);
 

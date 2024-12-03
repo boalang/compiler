@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +43,7 @@ public class PreconditionAggregator extends Aggregator {
 	private final double sigma;
 	private int args = 0;
 
-	private final Set<Expression> preconds = new HashSet<Expression>();
+	private final Set<Expression> preconds = new LinkedHashSet<Expression>();
 	private final Map<Expression, Set<String>> omega = new HashMap<Expression, Set<String>>();  // preconditions: set of methods
 
 	/**
@@ -79,7 +79,7 @@ public class PreconditionAggregator extends Aggregator {
 		final Expression precondition = parseexpression(precond);
 
 		if (!omega.containsKey(precondition)) {
-			omega.put(precondition, new HashSet<String>());
+			omega.put(precondition, new LinkedHashSet<String>());
 			preconds.add(precondition);
 		}
 
@@ -106,7 +106,7 @@ public class PreconditionAggregator extends Aggregator {
 	 * @return map of all preconditions which include inferred preconditions
 	 */
 	private void inferNonStrictInequalities() {
-		final Set<Expression> added = new HashSet<Expression>();
+		final Set<Expression> added = new LinkedHashSet<Expression>();
 
 		for (final Expression p : preconds) {
 			if (p.getKind() == ExpressionKind.EQ) {
@@ -123,7 +123,7 @@ public class PreconditionAggregator extends Aggregator {
 							final Expression t = builder.build();
 
 							if (!preconds.contains(t)) {
-								omega.put(t, new HashSet<String>());
+								omega.put(t, new LinkedHashSet<String>());
 								added.add(t);
 							}
 
@@ -186,7 +186,7 @@ public class PreconditionAggregator extends Aggregator {
 		// generate psi from omega
 		final Map<Expression, Set<String>> psi = new HashMap<Expression, Set<String>>();
 		for (final Expression e : preconds) {
-			psi.put(e, new HashSet<String>());
+			psi.put(e, new LinkedHashSet<String>());
 
 			for (final String s : omega.get(e)) {
 				psi.get(e).add(s.split(":", 2)[0]);
@@ -213,7 +213,7 @@ public class PreconditionAggregator extends Aggregator {
 	private Map<Expression, Double> calcConfidence(final Map<Expression, Set<String>> precondMP) {
 		final Map<Expression, Double> precondConf = new HashMap<Expression, Double>();
 
-		final Set<String> totalCalls = new HashSet<String>();
+		final Set<String> totalCalls = new LinkedHashSet<String>();
 		for (final Expression precond : preconds)
 			totalCalls.addAll(precondMP.get(precond));
 
@@ -267,7 +267,7 @@ public class PreconditionAggregator extends Aggregator {
 	 * @return set of all combinations of arguments
 	 */
 	private Set<SortedSet<String>> generateCombinations() {
-		final Set<SortedSet<String>> comb = new HashSet<SortedSet<String>>();
+		final Set<SortedSet<String>> comb = new LinkedHashSet<SortedSet<String>>();
 		final List<String> argList = new ArrayList<String>();
 		comb.add(new TreeSet<String>(Collections.singletonList("$RECEIVER$")));
 		argList.add("$RECEIVER$");
@@ -278,7 +278,7 @@ public class PreconditionAggregator extends Aggregator {
 		}
 
 		for (final String arg : argList) {
-			final Set<SortedSet<String>> tempComb = new HashSet<SortedSet<String>>(comb);
+			final Set<SortedSet<String>> tempComb = new LinkedHashSet<SortedSet<String>>(comb);
 			for (final SortedSet<String> s : tempComb) {
 				final SortedSet<String> t = new TreeSet<String>(s);
 				t.add(arg);

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
@@ -83,7 +83,7 @@ public class BoaIntrinsics {
 		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(1 + revCount / 4);
 		pq.offer((int)headId);
 
-		final Set<Integer> seenIds = new HashSet<Integer>();
+		final Set<Integer> seenIds = new LinkedHashSet<Integer>();
 		int idx = -1;
 		long lasttime = Long.MIN_VALUE;
 
@@ -169,10 +169,10 @@ public class BoaIntrinsics {
 		if (commitOffset < 0)
 			return new ChangedFile[0];
 		final List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		final Set<String> adds = new HashSet<String>();
-		final Set<String> dels = new HashSet<String>();
+		final Set<String> adds = new LinkedHashSet<String>();
+		final Set<String> dels = new LinkedHashSet<String>();
 		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
-		final Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		final Set<Integer> queuedCommitIds = new LinkedHashSet<Integer>();
 		pq.offer((int) commitOffset);
 		queuedCommitIds.add((int) commitOffset);
 		while (!pq.isEmpty()) {
@@ -288,10 +288,10 @@ public class BoaIntrinsics {
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "Revision", "string..." })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final Revision commit, final String... kinds) {
 		final List<ChangedFile> snapshot = new LinkedList<ChangedFile>();
-		final Set<String> adds = new HashSet<String>();
-		final Set<String> dels = new HashSet<String>();
+		final Set<String> adds = new LinkedHashSet<String>();
+		final Set<String> dels = new LinkedHashSet<String>();
 		final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
-		final Set<Integer> queuedCommitIds = new HashSet<Integer>();
+		final Set<Integer> queuedCommitIds = new LinkedHashSet<Integer>();
 		update(snapshot, commit, adds, dels, pq, queuedCommitIds, kinds);
 		while (!pq.isEmpty()) {
 			final int offset = pq.poll();
@@ -337,7 +337,7 @@ public class BoaIntrinsics {
 				fb.setName(cf.getPreviousNames(i));
 			final ChangedFile key = fb.build();
 			int revisionIndex = cf.getPreviousVersions(i);
-			final Set<Integer> queuedRevisionIds = new HashSet<Integer>();
+			final Set<Integer> queuedRevisionIds = new LinkedHashSet<Integer>();
 			final PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, snapshotComparator);
 			pq.offer(revisionIndex);
 			queuedRevisionIds.add(revisionIndex);
@@ -495,7 +495,7 @@ public class BoaIntrinsics {
 		return s;
 	}
 
-	public static String arrayToString(final long[] arr) {
+	public static String arrayToString(final Long[] arr) {
 		String s = "";
 		for (final long val : arr)
 			if (s.isEmpty())
@@ -505,7 +505,7 @@ public class BoaIntrinsics {
 		return s;
 	}
 
-	public static String arrayToString(final double[] arr) {
+	public static String arrayToString(final Double[] arr) {
 		String s = "";
 		for (final double val : arr)
 			if (s.isEmpty())
@@ -515,7 +515,7 @@ public class BoaIntrinsics {
 		return s;
 	}
 
-	public static String arrayToString(final boolean[] arr) {
+	public static String arrayToString(final Boolean[] arr) {
 		String s = "";
 		for (final boolean val : arr)
 			if (s.isEmpty())
@@ -529,21 +529,21 @@ public class BoaIntrinsics {
 		return java.util.Arrays.deepEquals(arr, arr2);
 	}
 
-	public static boolean deepEquals(final long[] arr, final long[] arr2) {
+	public static boolean deepEquals(final Long[] arr, final Long[] arr2) {
 		if (arr.length != arr2.length) return false;
 		for (int i = 0; i < arr.length; i++)
 			if (arr2[i] != arr[i]) return false;
 		return true;
 	}
 
-	public static boolean deepEquals(final double[] arr, final double[] arr2) {
+	public static boolean deepEquals(final Double[] arr, final Double[] arr2) {
 		if (arr.length != arr2.length) return false;
 		for (int i = 0; i < arr.length; i++)
 			if (arr2[i] != arr[i]) return false;
 		return true;
 	}
 
-	public static boolean deepEquals(final boolean[] arr, final boolean[] arr2) {
+	public static boolean deepEquals(final Boolean[] arr, final Boolean[] arr2) {
 		if (arr.length != arr2.length) return false;
 		for (int i = 0; i < arr.length; i++)
 			if (arr2[i] != arr[i]) return false;
@@ -555,22 +555,22 @@ public class BoaIntrinsics {
 		return arr;
 	}
 
-	public static <T> long[] basic_array(final Long[] arr) {
-		final long[] arr2 = new long[arr.length];
+	public static <T> Long[] basic_array(final Long[] arr) {
+		final Long[] arr2 = new Long[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
 	}
 
-	public static <T> double[] basic_array(final Double[] arr) {
-		final double[] arr2 = new double[arr.length];
+	public static <T> Double[] basic_array(final Double[] arr) {
+		final Double[] arr2 = new Double[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
 	}
 
-	public static <T> boolean[] basic_array(final Boolean[] arr) {
-		final boolean[] arr2 = new boolean[arr.length];
+	public static <T> Boolean[] basic_array(final Boolean[] arr) {
+		final Boolean[] arr2 = new Boolean[arr.length];
 		for (int i = 0; i < arr.length; i++)
 			arr2[i] = arr[i];
 		return arr2;
@@ -591,73 +591,73 @@ public class BoaIntrinsics {
 		return result;
 	}
 
-	public static long[] concat(final long[] first, final long[]... rest) {
+	public static Long[] concat(final Long[] first, final Long[]... rest) {
 		int totalLength = first.length;
-		for (final long[] array : rest)
+		for (final Long[] array : rest)
 			totalLength += array.length;
 
-		final long[] result = new long[totalLength];
+		final Long[] result = new Long[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (final long[] array : rest) {
+		for (final Long[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
 		return result;
 	}
 
-	public static double[] concat(final double[] first, final double[]... rest) {
+	public static Double[] concat(final Double[] first, final Double[]... rest) {
 		int totalLength = first.length;
-		for (final double[] array : rest)
+		for (final Double[] array : rest)
 			totalLength += array.length;
 
-		final double[] result = new double[totalLength];
+		final Double[] result = new Double[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (final double[] array : rest) {
+		for (final Double[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
 		return result;
 	}
 
-	public static boolean[] concat(final boolean[] first, final boolean[]... rest) {
+	public static Boolean[] concat(final Boolean[] first, final Boolean[]... rest) {
 		int totalLength = first.length;
-		for (final boolean[] array : rest)
+		for (final Boolean[] array : rest)
 			totalLength += array.length;
 
-		final boolean[] result = new boolean[totalLength];
+		final Boolean[] result = new Boolean[totalLength];
 		System.arraycopy(first, 0, result, 0, first.length);
 
 		int offset = first.length;
-		for (final boolean[] array : rest) {
+		for (final Boolean[] array : rest) {
 			System.arraycopy(array, 0, result, offset, array.length);
 			offset += array.length;
 		}
 		return result;
 	}
 
-	public static <T> java.util.HashSet<T> set_union(final java.util.Set<T> s1, final java.util.Set<T> s2) {
-		final java.util.HashSet<T> s = new java.util.HashSet<T>(s1);
+	public static <T> java.util.Set<T> set_union(final java.util.Set<T> s1, final java.util.Set<T> s2) {
+		final java.util.Set<T> s = new java.util.LinkedHashSet<T>(s1);
 		s.addAll(s2);
 		return s;
 	}
 
-	public static <T> java.util.HashSet<T> set_intersect(final java.util.Set<T> s1, final java.util.Set<T> s2) {
-		final java.util.HashSet<T> s = new java.util.HashSet<T>(s1);
+	public static <T> java.util.Set<T> set_intersect(final java.util.Set<T> s1, final java.util.Set<T> s2) {
+		final java.util.Set<T> s = new java.util.LinkedHashSet<T>(s1);
 		s.retainAll(s2);
 		return s;
 	}
 
-	public static <T> java.util.HashSet<T> set_difference(final java.util.Set<T> s1, final java.util.Set<T> s2) {
-		final java.util.HashSet<T> s = new java.util.HashSet<T>(s1);
+	public static <T> java.util.Set<T> set_difference(final java.util.Set<T> s1, final java.util.Set<T> s2) {
+		final java.util.Set<T> s = new java.util.LinkedHashSet<T>(s1);
 		s.removeAll(s2);
 		return s;
 	}
 
-	public static <T> java.util.HashSet<T> set_symdiff(final java.util.Set<T> s1, final java.util.Set<T> s2) {
+	public static <T> java.util.Set<T> set_symdiff(final java.util.Set<T> s1, final java.util.Set<T> s2) {
 		return set_union(set_difference(s1, s2), set_difference(s2, s1));
 	}
 }

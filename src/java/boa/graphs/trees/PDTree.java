@@ -32,7 +32,7 @@ import boa.graphs.cfg.CFGNode;
 public class PDTree {
     private Method md;
     private TreeNode rootNode;
-    private final HashSet<TreeNode> nodes = new HashSet<TreeNode>();
+    private final Set<TreeNode> nodes = new LinkedHashSet<TreeNode>();
     private boolean hasEntryNode = false; // as specified in ferrante-1987 paper on PDG
 
     /**
@@ -108,7 +108,7 @@ public class PDTree {
      *
      * @return the set of all the nodes in the tree
      */
-    public HashSet<TreeNode> getNodes() {
+    public Set<TreeNode> getNodes() {
         return nodes;
     }
 
