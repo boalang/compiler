@@ -1,7 +1,7 @@
 # Getting Started with Boa Development
 This document describes how you might set up your development environment to view, edit and test
 the Boa compiler's source code on your local computer. The Boa infrastructure hosted at 
-http://boa.cs.iastate.edu uses the same code, but that execution would use a Hadoop cluster.
+https://boalang.org/ uses the same code, but that execution would use a Hadoop cluster.
 
 ## Using Eclipse
 1. Setup your development environment by following the instruction from 
@@ -30,7 +30,7 @@ libraries. To enable this within the Eclipse IDE
       Note that depending on your Boa program, the data set, and the capabilities of your local computer the 
       execution may take some time.
     8. Problems with the Boa compiler, and questions regarding Boa programming can be asked at 
-      the [Boa user forum](http://boa.cs.iastate.edu/forum.php). 
+      the [Boa user forum](https://boalang.org/forum.php). 
 
 ### Using IntelliJ IDEA
 1. Setup your development environment by following the instruction from 
@@ -60,7 +60,7 @@ libraries. To enable this within the IntelliJ IDE
       Note that depending on your Boa program, the data set, and the capabilities of your local computer the 
       execution may take some time.
     8. Problems with the Boa compiler, and questions regarding Boa programming can be asked at 
-      the [Boa user forum](http://boa.cs.iastate.edu/forum.php). 
+      the [Boa user forum](https://boalang.org/forum.php). 
 
 ## Sample Data Set
 A small data set is provided within the Boa repository to test the compiler and your modifications. 
