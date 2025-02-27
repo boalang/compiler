@@ -5,7 +5,7 @@ option optimize_for = SPEED;
 
 message Traversal {
 	enum TraversalDirection {
-		BACKWARD = 1; 
+		BACKWARD = 1;
 		FORWARD = 2;
 	}
 	enum TraversalKind {

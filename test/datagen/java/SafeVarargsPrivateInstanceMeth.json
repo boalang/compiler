@@ -1,0 +1,38 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "SafeVarargsPrivateInstanceMeth",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "m",
+                     "modifiers": [
+                        {
+                           "kind": "ANNOTATION",
+                           "annotation_name": "SafeVarargs"
+                        },
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "void",
+                        "kind": "PRIMITIVE"
+                     },
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ],
+               "fully_qualified_name": "SafeVarargsPrivateInstanceMeth"
+            }
+         ]
+      }
+   ]
+}

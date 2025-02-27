@@ -1,0 +1,49 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "InterfaceWithPrivateMethods",
+               "kind": "INTERFACE",
+               "methods": [
+                  {
+                     "name": "staticPrivate",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PRIVATE"
+                        },
+                        {
+                           "kind": "STATIC"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "String",
+                        "fully_qualified_name": "java.lang.String",
+                        "kind": "CLASS"
+                     },
+                     "statements": [
+                        {
+                           "kind": "BLOCK",
+                           "statements": [
+                              {
+                                 "kind": "RETURN",
+                                 "expressions": [
+                                    {
+                                       "kind": "LITERAL",
+                                       "literal": "\"This is a string\""
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ],
+               "fully_qualified_name": "InterfaceWithPrivateMethods"
+            }
+         ]
+      }
+   ]
+}

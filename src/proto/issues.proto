@@ -25,9 +25,9 @@ message Issue {
 		PROPOSAL = 3;
 		TASK = 4;
 		FEATURE = 5;
-		SUPPORT = 6;		
- 		DISCUSSION = 7;		
- 		DOCUMENTATION = 8;		
+		SUPPORT = 6;
+ 		DISCUSSION = 7;
+ 		DOCUMENTATION = 8;
  		SUGGESTION = 9;
  		QUESTION = 10;
  		TEST = 11;

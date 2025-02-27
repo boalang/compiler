@@ -542,7 +542,7 @@ public final class Diff {
        * <code>SOURCE_JAVA_JLS2 = 102;</code>
        *
        * <pre>
-       ** The file represents a Java source file that parsed without error as JLS2 
+       ** The file represents a Java source file that parsed without error as JLS2 (before Java 5) 
        * </pre>
        */
       SOURCE_JAVA_JLS2(5, 102),
@@ -550,26 +550,82 @@ public final class Diff {
        * <code>SOURCE_JAVA_JLS3 = 103;</code>
        *
        * <pre>
-       ** The file represents a Java source file that parsed without error as JLS3 
+       ** The file represents a Java source file that parsed without error as JLS3 (Java 5, 6) 
        * </pre>
        */
       SOURCE_JAVA_JLS3(6, 103),
       /**
-       * <code>SOURCE_JAVA_JLS4 = 104;</code>
+       * <code>SOURCE_JAVA_JLS7 = 107;</code>
        *
        * <pre>
-       ** The file represents a Java source file that parsed without error as JLS4 
+       ** The file represents a Java source file that parsed without error as JLS7 (Java 7) 
        * </pre>
        */
-      SOURCE_JAVA_JLS4(7, 104),
+      SOURCE_JAVA_JLS7(7, 107),
       /**
        * <code>SOURCE_JAVA_JLS8 = 108;</code>
        *
        * <pre>
-       ** The file represents a Java source file that parsed without error as JLS8 
+       ** The file represents a Java source file that parsed without error as JLS8 (Java 8) 
        * </pre>
        */
       SOURCE_JAVA_JLS8(8, 108),
+      /**
+       * <code>SOURCE_JAVA_JLS9 = 109;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS9 (Java 9) 
+       * </pre>
+       */
+      SOURCE_JAVA_JLS9(9, 109),
+      /**
+       * <code>SOURCE_JAVA_JLS10 = 110;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS10 (Java 10) 
+       * </pre>
+       */
+      SOURCE_JAVA_JLS10(10, 110),
+      /**
+       * <code>SOURCE_JAVA_JLS11 = 111;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS11 (Java 11) 
+       * </pre>
+       */
+      SOURCE_JAVA_JLS11(11, 111),
+      /**
+       * <code>SOURCE_JAVA_JLS12 = 112;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS12 (Java 12) 
+       * </pre>
+       */
+      SOURCE_JAVA_JLS12(12, 112),
+      /**
+       * <code>SOURCE_JAVA_JLS13 = 113;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS13 (Java 13) 
+       * </pre>
+       */
+      SOURCE_JAVA_JLS13(13, 113),
+      /**
+       * <code>SOURCE_JAVA_JLS14 = 114;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS14 (Java 14) 
+       * </pre>
+       */
+      SOURCE_JAVA_JLS14(14, 114),
+      /**
+       * <code>SOURCE_JAVA_JLS15 = 115;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS15 (Java 15) 
+       * </pre>
+       */
+      SOURCE_JAVA_JLS15(15, 115),
       /**
        * <code>SOURCE_JS_ERROR = 300;</code>
        *
@@ -577,7 +633,7 @@ public final class Diff {
        ** The file represents a JavaScript source file that had a parse error 
        * </pre>
        */
-      SOURCE_JS_ERROR(14, 300),
+      SOURCE_JS_ERROR(28, 300),
       /**
        * <code>SOURCE_JS_ES1 = 301;</code>
        *
@@ -585,7 +641,7 @@ public final class Diff {
        ** The file represents a JavaScript source file that parsed without error as ES1 
        * </pre>
        */
-      SOURCE_JS_ES1(15, 301),
+      SOURCE_JS_ES1(29, 301),
       /**
        * <code>SOURCE_JS_ES2 = 302;</code>
        *
@@ -593,7 +649,7 @@ public final class Diff {
        ** The file represents a JavaScript source file that parsed without error as ES2 
        * </pre>
        */
-      SOURCE_JS_ES2(16, 302),
+      SOURCE_JS_ES2(30, 302),
       /**
        * <code>SOURCE_JS_ES3 = 303;</code>
        *
@@ -601,7 +657,7 @@ public final class Diff {
        ** The file represents a JavaScript source file that parsed without error as ES3 
        * </pre>
        */
-      SOURCE_JS_ES3(17, 303),
+      SOURCE_JS_ES3(31, 303),
       /**
        * <code>SOURCE_JS_ES5 = 304;</code>
        *
@@ -609,7 +665,7 @@ public final class Diff {
        ** The file represents a JavaScript source file that parsed without error as ES5 
        * </pre>
        */
-      SOURCE_JS_ES5(18, 304),
+      SOURCE_JS_ES5(32, 304),
       /**
        * <code>SOURCE_JS_ES6 = 305;</code>
        *
@@ -617,7 +673,7 @@ public final class Diff {
        ** The file represents a JavaScript source file that parsed without error as ES6 
        * </pre>
        */
-      SOURCE_JS_ES6(19, 305),
+      SOURCE_JS_ES6(33, 305),
       /**
        * <code>SOURCE_JS_ES7 = 306;</code>
        *
@@ -625,7 +681,7 @@ public final class Diff {
        ** The file represents a JavaScript source file that parsed without error as ES7 
        * </pre>
        */
-      SOURCE_JS_ES7(20, 306),
+      SOURCE_JS_ES7(34, 306),
       /**
        * <code>SOURCE_JS_ES8 = 307;</code>
        *
@@ -633,7 +689,7 @@ public final class Diff {
        ** The file represents a JavaScript source file that parsed without error as ES8 
        * </pre>
        */
-      SOURCE_JS_ES8(21, 307),
+      SOURCE_JS_ES8(35, 307),
       /**
        * <code>SOURCE_PHP_ERROR = 400;</code>
        *
@@ -641,7 +697,7 @@ public final class Diff {
        ** The file represents a PHP source file that had a parse error 
        * </pre>
        */
-      SOURCE_PHP_ERROR(23, 400),
+      SOURCE_PHP_ERROR(37, 400),
       /**
        * <code>SOURCE_PHP5 = 401;</code>
        *
@@ -649,7 +705,7 @@ public final class Diff {
        ** The file represents a PHP source file that parsed without error as ES1 
        * </pre>
        */
-      SOURCE_PHP5(24, 401),
+      SOURCE_PHP5(38, 401),
       /**
        * <code>SOURCE_PHP5_3 = 402;</code>
        *
@@ -657,7 +713,7 @@ public final class Diff {
        ** The file represents a PHP source file that parsed without error as ES2 
        * </pre>
        */
-      SOURCE_PHP5_3(25, 402),
+      SOURCE_PHP5_3(39, 402),
       /**
        * <code>SOURCE_PHP5_4 = 403;</code>
        *
@@ -665,7 +721,7 @@ public final class Diff {
        ** The file represents a PHP source file that parsed without error as ES3 
        * </pre>
        */
-      SOURCE_PHP5_4(26, 403),
+      SOURCE_PHP5_4(40, 403),
       /**
        * <code>SOURCE_PHP5_5 = 404;</code>
        *
@@ -673,7 +729,7 @@ public final class Diff {
        ** The file represents a PHP source file that parsed without error as ES5 
        * </pre>
        */
-      SOURCE_PHP5_5(27, 404),
+      SOURCE_PHP5_5(41, 404),
       /**
        * <code>SOURCE_PHP5_6 = 405;</code>
        *
@@ -681,7 +737,7 @@ public final class Diff {
        ** The file represents a PHP source file that parsed without error as ES6 
        * </pre>
        */
-      SOURCE_PHP5_6(28, 405),
+      SOURCE_PHP5_6(42, 405),
       /**
        * <code>SOURCE_PHP7_0 = 406;</code>
        *
@@ -689,7 +745,7 @@ public final class Diff {
        ** The file represents a PHP source file that parsed without error as ES7 
        * </pre>
        */
-      SOURCE_PHP7_0(29, 406),
+      SOURCE_PHP7_0(43, 406),
       /**
        * <code>SOURCE_PHP7_1 = 407;</code>
        *
@@ -697,7 +753,7 @@ public final class Diff {
        ** The file represents a PHP source file that parsed without error as ES8 
        * </pre>
        */
-      SOURCE_PHP7_1(30, 407),
+      SOURCE_PHP7_1(44, 407),
       /**
        * <code>SOURCE_HTML_ERROR = 500;</code>
        *
@@ -705,7 +761,7 @@ public final class Diff {
        ** The file represents an HTML source file that had a parse error 
        * </pre>
        */
-      SOURCE_HTML_ERROR(32, 500),
+      SOURCE_HTML_ERROR(46, 500),
       /**
        * <code>Source_HTML = 501;</code>
        *
@@ -713,7 +769,7 @@ public final class Diff {
        ** The file represents an HTML source file that parsed without error 
        * </pre>
        */
-      Source_HTML(33, 501),
+      Source_HTML(47, 501),
       /**
        * <code>SOURCE_XML_ERROR = 600;</code>
        *
@@ -721,7 +777,7 @@ public final class Diff {
        ** The file represents an XML source file that had a parse error 
        * </pre>
        */
-      SOURCE_XML_ERROR(35, 600),
+      SOURCE_XML_ERROR(49, 600),
       /**
        * <code>Source_XML = 601;</code>
        *
@@ -729,7 +785,7 @@ public final class Diff {
        ** The file represents an HTML source file that parsed without error 
        * </pre>
        */
-      Source_XML(36, 601),
+      Source_XML(50, 601),
       /**
        * <code>SOURCE_CSS_ERROR = 700;</code>
        *
@@ -737,7 +793,7 @@ public final class Diff {
        ** The file represents an CSS source file that had a parse error 
        * </pre>
        */
-      SOURCE_CSS_ERROR(38, 700),
+      SOURCE_CSS_ERROR(52, 700),
       /**
        * <code>Source_CSS = 701;</code>
        *
@@ -745,7 +801,7 @@ public final class Diff {
        ** The file represents an CSS source file that parsed without error 
        * </pre>
        */
-      Source_CSS(39, 701),
+      Source_CSS(53, 701),
       ;
 
       /**
@@ -773,13 +829,13 @@ public final class Diff {
        */
       public static final FileKind JLS3 = SOURCE_JAVA_JLS3;
       /**
-       * <code>JLS4 = 104;</code>
+       * <code>JLS7 = 107;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public static final FileKind JLS4 = SOURCE_JAVA_JLS4;
+      public static final FileKind JLS7 = SOURCE_JAVA_JLS7;
       /**
        * <code>JLS8 = 108;</code>
        *
@@ -788,6 +844,62 @@ public final class Diff {
        * </pre>
        */
       public static final FileKind JLS8 = SOURCE_JAVA_JLS8;
+      /**
+       * <code>JLS9 = 109;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JLS9 = SOURCE_JAVA_JLS9;
+      /**
+       * <code>JLS10 = 110;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JLS10 = SOURCE_JAVA_JLS10;
+      /**
+       * <code>JLS11 = 111;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JLS11 = SOURCE_JAVA_JLS11;
+      /**
+       * <code>JLS12 = 112;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JLS12 = SOURCE_JAVA_JLS12;
+      /**
+       * <code>JLS13 = 113;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JLS13 = SOURCE_JAVA_JLS13;
+      /**
+       * <code>JLS14 = 114;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JLS14 = SOURCE_JAVA_JLS14;
+      /**
+       * <code>JLS15 = 115;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JLS15 = SOURCE_JAVA_JLS15;
       /**
        * <code>JS_ERROR = 300;</code>
        *
@@ -872,7 +984,7 @@ public final class Diff {
        * <code>SOURCE_JAVA_JLS2 = 102;</code>
        *
        * <pre>
-       ** The file represents a Java source file that parsed without error as JLS2 
+       ** The file represents a Java source file that parsed without error as JLS2 (before Java 5) 
        * </pre>
        */
       public static final int SOURCE_JAVA_JLS2_VALUE = 102;
@@ -880,26 +992,82 @@ public final class Diff {
        * <code>SOURCE_JAVA_JLS3 = 103;</code>
        *
        * <pre>
-       ** The file represents a Java source file that parsed without error as JLS3 
+       ** The file represents a Java source file that parsed without error as JLS3 (Java 5, 6) 
        * </pre>
        */
       public static final int SOURCE_JAVA_JLS3_VALUE = 103;
       /**
-       * <code>SOURCE_JAVA_JLS4 = 104;</code>
+       * <code>SOURCE_JAVA_JLS7 = 107;</code>
        *
        * <pre>
-       ** The file represents a Java source file that parsed without error as JLS4 
+       ** The file represents a Java source file that parsed without error as JLS7 (Java 7) 
        * </pre>
        */
-      public static final int SOURCE_JAVA_JLS4_VALUE = 104;
+      public static final int SOURCE_JAVA_JLS7_VALUE = 107;
       /**
        * <code>SOURCE_JAVA_JLS8 = 108;</code>
        *
        * <pre>
-       ** The file represents a Java source file that parsed without error as JLS8 
+       ** The file represents a Java source file that parsed without error as JLS8 (Java 8) 
        * </pre>
        */
       public static final int SOURCE_JAVA_JLS8_VALUE = 108;
+      /**
+       * <code>SOURCE_JAVA_JLS9 = 109;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS9 (Java 9) 
+       * </pre>
+       */
+      public static final int SOURCE_JAVA_JLS9_VALUE = 109;
+      /**
+       * <code>SOURCE_JAVA_JLS10 = 110;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS10 (Java 10) 
+       * </pre>
+       */
+      public static final int SOURCE_JAVA_JLS10_VALUE = 110;
+      /**
+       * <code>SOURCE_JAVA_JLS11 = 111;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS11 (Java 11) 
+       * </pre>
+       */
+      public static final int SOURCE_JAVA_JLS11_VALUE = 111;
+      /**
+       * <code>SOURCE_JAVA_JLS12 = 112;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS12 (Java 12) 
+       * </pre>
+       */
+      public static final int SOURCE_JAVA_JLS12_VALUE = 112;
+      /**
+       * <code>SOURCE_JAVA_JLS13 = 113;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS13 (Java 13) 
+       * </pre>
+       */
+      public static final int SOURCE_JAVA_JLS13_VALUE = 113;
+      /**
+       * <code>SOURCE_JAVA_JLS14 = 114;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS14 (Java 14) 
+       * </pre>
+       */
+      public static final int SOURCE_JAVA_JLS14_VALUE = 114;
+      /**
+       * <code>SOURCE_JAVA_JLS15 = 115;</code>
+       *
+       * <pre>
+       ** The file represents a Java source file that parsed without error as JLS15 (Java 15) 
+       * </pre>
+       */
+      public static final int SOURCE_JAVA_JLS15_VALUE = 115;
       /**
        * <code>JAVA_ERROR = 100;</code>
        *
@@ -925,13 +1093,13 @@ public final class Diff {
        */
       public static final int JLS3_VALUE = 103;
       /**
-       * <code>JLS4 = 104;</code>
+       * <code>JLS7 = 107;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public static final int JLS4_VALUE = 104;
+      public static final int JLS7_VALUE = 107;
       /**
        * <code>JLS8 = 108;</code>
        *
@@ -940,6 +1108,62 @@ public final class Diff {
        * </pre>
        */
       public static final int JLS8_VALUE = 108;
+      /**
+       * <code>JLS9 = 109;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JLS9_VALUE = 109;
+      /**
+       * <code>JLS10 = 110;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JLS10_VALUE = 110;
+      /**
+       * <code>JLS11 = 111;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JLS11_VALUE = 111;
+      /**
+       * <code>JLS12 = 112;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JLS12_VALUE = 112;
+      /**
+       * <code>JLS13 = 113;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JLS13_VALUE = 113;
+      /**
+       * <code>JLS14 = 114;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JLS14_VALUE = 114;
+      /**
+       * <code>JLS15 = 115;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JLS15_VALUE = 115;
       /**
        * <code>SOURCE_JS_ERROR = 300;</code>
        *
@@ -1169,8 +1393,15 @@ public final class Diff {
           case 100: return SOURCE_JAVA_ERROR;
           case 102: return SOURCE_JAVA_JLS2;
           case 103: return SOURCE_JAVA_JLS3;
-          case 104: return SOURCE_JAVA_JLS4;
+          case 107: return SOURCE_JAVA_JLS7;
           case 108: return SOURCE_JAVA_JLS8;
+          case 109: return SOURCE_JAVA_JLS9;
+          case 110: return SOURCE_JAVA_JLS10;
+          case 111: return SOURCE_JAVA_JLS11;
+          case 112: return SOURCE_JAVA_JLS12;
+          case 113: return SOURCE_JAVA_JLS13;
+          case 114: return SOURCE_JAVA_JLS14;
+          case 115: return SOURCE_JAVA_JLS15;
           case 300: return SOURCE_JS_ERROR;
           case 301: return SOURCE_JS_ES1;
           case 302: return SOURCE_JS_ES2;
@@ -1223,7 +1454,7 @@ public final class Diff {
       }
 
       private static final FileKind[] VALUES = {
-        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_JS_ERROR, SOURCE_JS_ES1, SOURCE_JS_ES2, SOURCE_JS_ES3, SOURCE_JS_ES5, SOURCE_JS_ES6, SOURCE_JS_ES7, SOURCE_JS_ES8, JS_ERROR, SOURCE_PHP_ERROR, SOURCE_PHP5, SOURCE_PHP5_3, SOURCE_PHP5_4, SOURCE_PHP5_5, SOURCE_PHP5_6, SOURCE_PHP7_0, SOURCE_PHP7_1, PHP_ERROR, SOURCE_HTML_ERROR, Source_HTML, HTML_ERROR, SOURCE_XML_ERROR, Source_XML, XML_ERROR, SOURCE_CSS_ERROR, Source_CSS, CSS_ERROR, 
+        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS7, SOURCE_JAVA_JLS8, SOURCE_JAVA_JLS9, SOURCE_JAVA_JLS10, SOURCE_JAVA_JLS11, SOURCE_JAVA_JLS12, SOURCE_JAVA_JLS13, SOURCE_JAVA_JLS14, SOURCE_JAVA_JLS15, JAVA_ERROR, JLS2, JLS3, JLS7, JLS8, JLS9, JLS10, JLS11, JLS12, JLS13, JLS14, JLS15, SOURCE_JS_ERROR, SOURCE_JS_ES1, SOURCE_JS_ES2, SOURCE_JS_ES3, SOURCE_JS_ES5, SOURCE_JS_ES6, SOURCE_JS_ES7, SOURCE_JS_ES8, JS_ERROR, SOURCE_PHP_ERROR, SOURCE_PHP5, SOURCE_PHP5_3, SOURCE_PHP5_4, SOURCE_PHP5_5, SOURCE_PHP5_6, SOURCE_PHP7_0, SOURCE_PHP7_1, PHP_ERROR, SOURCE_HTML_ERROR, Source_HTML, HTML_ERROR, SOURCE_XML_ERROR, Source_XML, XML_ERROR, SOURCE_CSS_ERROR, Source_CSS, CSS_ERROR, 
       };
 
       public static FileKind valueOf(
@@ -2978,33 +3209,39 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\232\010\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\206\n\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\004\022\013\n\003ast\030\005 \002(\010\022)\n\010commen" +
       "ts\030\006 \001(\0132\027.boa.types.CommentsRoot\022&\n\007cha" +
       "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\026\n\016pre" +
       "vious_names\030\010 \003(\t\022\031\n\021previous_versions\030\t" +
-      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\"\354\005\n\010FileK" +
+      " \003(\005\022\030\n\020previous_indices\030\n \003(\005\"\330\007\n\010FileK" +
       "ind\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003",
       "XML\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_J" +
       "AVA_JLS2\020f\022\024\n\020SOURCE_JAVA_JLS3\020g\022\024\n\020SOUR" +
-      "CE_JAVA_JLS4\020h\022\024\n\020SOURCE_JAVA_JLS8\020l\022\016\n\n" +
-      "JAVA_ERROR\020d\022\010\n\004JLS2\020f\022\010\n\004JLS3\020g\022\010\n\004JLS4" +
-      "\020h\022\010\n\004JLS8\020l\022\024\n\017SOURCE_JS_ERROR\020\254\002\022\022\n\rSO" +
-      "URCE_JS_ES1\020\255\002\022\022\n\rSOURCE_JS_ES2\020\256\002\022\022\n\rSO" +
-      "URCE_JS_ES3\020\257\002\022\022\n\rSOURCE_JS_ES5\020\260\002\022\022\n\rSO" +
-      "URCE_JS_ES6\020\261\002\022\022\n\rSOURCE_JS_ES7\020\262\002\022\022\n\rSO" +
-      "URCE_JS_ES8\020\263\002\022\r\n\010JS_ERROR\020\254\002\022\025\n\020SOURCE_" +
-      "PHP_ERROR\020\220\003\022\020\n\013SOURCE_PHP5\020\221\003\022\022\n\rSOURCE",
-      "_PHP5_3\020\222\003\022\022\n\rSOURCE_PHP5_4\020\223\003\022\022\n\rSOURCE" +
-      "_PHP5_5\020\224\003\022\022\n\rSOURCE_PHP5_6\020\225\003\022\022\n\rSOURCE" +
-      "_PHP7_0\020\226\003\022\022\n\rSOURCE_PHP7_1\020\227\003\022\016\n\tPHP_ER" +
-      "ROR\020\220\003\022\026\n\021SOURCE_HTML_ERROR\020\364\003\022\020\n\013Source" +
-      "_HTML\020\365\003\022\017\n\nHTML_ERROR\020\364\003\022\025\n\020SOURCE_XML_" +
-      "ERROR\020\330\004\022\017\n\nSource_XML\020\331\004\022\016\n\tXML_ERROR\020\330" +
-      "\004\022\025\n\020SOURCE_CSS_ERROR\020\274\005\022\017\n\nSource_CSS\020\275" +
-      "\005\022\016\n\tCSS_ERROR\020\274\005\032\002\020\001B\002H\001"
+      "CE_JAVA_JLS7\020k\022\024\n\020SOURCE_JAVA_JLS8\020l\022\024\n\020" +
+      "SOURCE_JAVA_JLS9\020m\022\025\n\021SOURCE_JAVA_JLS10\020" +
+      "n\022\025\n\021SOURCE_JAVA_JLS11\020o\022\025\n\021SOURCE_JAVA_" +
+      "JLS12\020p\022\025\n\021SOURCE_JAVA_JLS13\020q\022\025\n\021SOURCE" +
+      "_JAVA_JLS14\020r\022\025\n\021SOURCE_JAVA_JLS15\020s\022\016\n\n" +
+      "JAVA_ERROR\020d\022\010\n\004JLS2\020f\022\010\n\004JLS3\020g\022\010\n\004JLS7" +
+      "\020k\022\010\n\004JLS8\020l\022\010\n\004JLS9\020m\022\t\n\005JLS10\020n\022\t\n\005JLS" +
+      "11\020o\022\t\n\005JLS12\020p\022\t\n\005JLS13\020q\022\t\n\005JLS14\020r\022\t\n",
+      "\005JLS15\020s\022\024\n\017SOURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE" +
+      "_JS_ES1\020\255\002\022\022\n\rSOURCE_JS_ES2\020\256\002\022\022\n\rSOURCE" +
+      "_JS_ES3\020\257\002\022\022\n\rSOURCE_JS_ES5\020\260\002\022\022\n\rSOURCE" +
+      "_JS_ES6\020\261\002\022\022\n\rSOURCE_JS_ES7\020\262\002\022\022\n\rSOURCE" +
+      "_JS_ES8\020\263\002\022\r\n\010JS_ERROR\020\254\002\022\025\n\020SOURCE_PHP_" +
+      "ERROR\020\220\003\022\020\n\013SOURCE_PHP5\020\221\003\022\022\n\rSOURCE_PHP" +
+      "5_3\020\222\003\022\022\n\rSOURCE_PHP5_4\020\223\003\022\022\n\rSOURCE_PHP" +
+      "5_5\020\224\003\022\022\n\rSOURCE_PHP5_6\020\225\003\022\022\n\rSOURCE_PHP" +
+      "7_0\020\226\003\022\022\n\rSOURCE_PHP7_1\020\227\003\022\016\n\tPHP_ERROR\020" +
+      "\220\003\022\026\n\021SOURCE_HTML_ERROR\020\364\003\022\020\n\013Source_HTM",
+      "L\020\365\003\022\017\n\nHTML_ERROR\020\364\003\022\025\n\020SOURCE_XML_ERRO" +
+      "R\020\330\004\022\017\n\nSource_XML\020\331\004\022\016\n\tXML_ERROR\020\330\004\022\025\n" +
+      "\020SOURCE_CSS_ERROR\020\274\005\022\017\n\nSource_CSS\020\275\005\022\016\n" +
+      "\tCSS_ERROR\020\274\005\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

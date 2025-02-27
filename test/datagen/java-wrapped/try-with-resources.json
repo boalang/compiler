@@ -1,0 +1,98 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "fileStream",
+               "variable_type": {
+                  "name": "FileOutputStream",
+                  "kind": "OTHER"
+               },
+               "initializer": {
+                  "kind": "NEW",
+                  "new_type": {
+                     "name": "FileOutputStream",
+                     "kind": "CLASS"
+                  },
+                  "method_args": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "\"javatpoint.txt\""
+                     }
+                  ]
+               }
+            }
+         ]
+      }
+   ]
+},
+{
+   "kind": "TRY",
+   "statements": [
+      {
+         "kind": "BLOCK",
+         "statements": [
+            {
+               "kind": "EXPRESSION",
+               "expressions": [
+                  {
+                     "kind": "METHODCALL",
+                     "expressions": [
+                        {
+                           "kind": "VARACCESS",
+                           "variable": "System.out",
+                           "declaring_type": {
+                              "name": "System",
+                              "fully_qualified_name": "java.lang.System",
+                              "kind": "CLASS"
+                           },
+                           "return_type": {
+                              "name": "PrintStream",
+                              "fully_qualified_name": "java.io.PrintStream",
+                              "kind": "CLASS"
+                           },
+                           "is_member_access": true
+                        }
+                     ],
+                     "method": "println",
+                     "method_args": [
+                        {
+                           "kind": "LITERAL",
+                           "literal": "\"File written\""
+                        }
+                     ],
+                     "declaring_type": {
+                        "name": "PrintStream",
+                        "fully_qualified_name": "java.io.PrintStream",
+                        "kind": "CLASS"
+                     },
+                     "return_type": {
+                        "name": "void",
+                        "kind": "PRIMITIVE"
+                     }
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "kind": "CATCH",
+         "variable_declaration": {
+            "name": "e",
+            "variable_type": {
+               "name": "Exception",
+               "fully_qualified_name": "java.lang.Exception",
+               "kind": "CLASS"
+            }
+         }
+      }
+   ],
+   "initializations": [
+      {
+         "kind": "VARACCESS",
+         "variable": "fileStream"
+      }
+   ]
+}

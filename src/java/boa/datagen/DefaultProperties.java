@@ -20,6 +20,8 @@ package boa.datagen;
 
 import java.io.File;
 
+import org.eclipse.jdt.core.dom.AST;
+
 /**
  * @author rdyer
  */

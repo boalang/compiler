@@ -1,5 +1,6 @@
 class t {
 	class inner {
-		void m(t inner.this) {}
+		void m(t inner.this) {
+		}
 	}
 }

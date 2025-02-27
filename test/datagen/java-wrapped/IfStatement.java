@@ -1,1 +1,2 @@
-if (true) {}
+if (true) {
+}

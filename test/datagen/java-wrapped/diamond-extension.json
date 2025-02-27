@@ -1,0 +1,34 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "fc1",
+               "variable_type": {
+                  "name": "FooClass<?>",
+                  "kind": "OTHER"
+               },
+               "initializer": {
+                  "kind": "NEW",
+                  "new_type": {
+                     "name": "FooClass<>",
+                     "kind": "CLASS"
+                  },
+                  "method_args": [
+                     {
+                        "kind": "LITERAL",
+                        "literal": "1"
+                     }
+                  ],
+                  "anon_declaration": {
+                     "name": "",
+                     "kind": "ANONYMOUS"
+                  }
+               }
+            }
+         ]
+      }
+   ]
+}

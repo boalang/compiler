@@ -1,7 +1,8 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen
- *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ * Copyright 2016-2022, Hridesh Rajan, Robert Dyer, Hoan Nguyen,
+ *                 Iowa State University of Science and Technology,
+ *                 Bowling Green State University,
+ *                 and University of Nebraska Board of Regents
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,13 +40,6 @@ import org.w3c.css.sac.InputSource;
 
 import com.steadystate.css.dom.CSSStyleSheetImpl;
 
-import boa.types.Ast.ASTRoot;
-import boa.types.Code.Revision;
-import boa.types.Diff.ChangedFile;
-import boa.types.Diff.ChangedFile.Builder;
-import boa.types.Diff.ChangedFile.FileKind;
-import boa.types.Shared.ChangeKind;
-import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
 import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.CssVisitor;
@@ -58,7 +52,14 @@ import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.XMLVisitor;
-import boa.datagen.util.JavaErrorCheckVisitor;
+import boa.functions.langmode.JavaLangMode;
+import boa.types.Ast.ASTRoot;
+import boa.types.Code.Revision;
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.Builder;
+import boa.types.Diff.ChangedFile.FileKind;
+import boa.types.Shared.ChangeKind;
+import boa.types.Shared.Person;
 
 /**
  * @author rdyer
@@ -209,7 +210,7 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java")) {
 			fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-			if (parseJavaFile(path, fb, getFileContents(path), false)) {
+			if (parseJavaFile(path, fb)) {
 				if (debugparse)
 					System.err.println("Accepted " + fb.getKind() + ": revision " + id + ": file " + path);
 			} else {
@@ -593,6 +594,23 @@ public abstract class AbstractCommit {
 		}
 	}
 
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb) {
+		final ASTRoot.Builder ast = JavaLangMode.parseJavaFile(path, getFileContents(path), fb, projectName, debug);
+		if (ast == null)
+			return false;
+
+		try {
+			final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
+			connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
+			connector.astWriterLen += bw.getLength();
+		} catch (final IOException e) {
+			if (debug)
+				e.printStackTrace();
+		}
+
+		return true;
+	}
+
 	public Map<String, String> getLOC() {
 		final Map<String, String> l = new HashMap<String, String>();
 
@@ -601,82 +619,6 @@ public abstract class AbstractCommit {
 				l.put(cf.getName(), processLOC(cf.getName()));
 
 		return l;
-	}
-
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final boolean storeOnError) {
-		try {
-			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(AST.JLS8);
-			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-//			parser.setResolveBindings(true);
-//			parser.setUnitName(FileIO.getFileName(path));
-//			parser.setEnvironment(null, null, null, true);
-			parser.setSource(content.toCharArray());
-
-			final Map<?, ?> options = JavaCore.getOptions();
-			JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-			parser.setCompilerOptions(options);
-
-			final CompilationUnit cu;
-
-			try {
-				cu = (CompilationUnit) parser.createAST(null);
-			} catch (final Throwable e) {
-				return false;
-			}
-
-			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-			cu.accept(errorCheck);
-
-			if (!errorCheck.hasError || storeOnError) {
-				final ASTRoot.Builder ast = ASTRoot.newBuilder();
-				// final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
-				final JavaVisitor visitor = new JavaVisitor(content);
-				try {
-					ast.addNamespaces(visitor.getNamespaces(cu));
-
-//					for (final Comment c : visitor.getComments()) comments.addComments(c);
-				} catch (final Throwable e) {
-					if (debug) {
-						System.err.println("Error visiting Java file: " + path + " from: " + projectName);
-						e.printStackTrace();
-					}
-					return false;
-				}
-
-				switch (visitor.getAstLevel()) {
-				case JavaVisitor.JLS2:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-					break;
-				case JavaVisitor.JLS3:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-					break;
-				case JavaVisitor.JLS4:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					break;
-				case JavaVisitor.JLS8:
-					fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-					break;
-				default:
-					fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-				}
-
-				try {
-					final BytesWritable bw = new BytesWritable(ast.build().toByteArray());
-					connector.astWriter.append(new LongWritable(connector.astWriterLen), bw);
-					connector.astWriterLen += bw.getLength();
-				} catch (final IOException e) {
-					if (debug)
-						e.printStackTrace();
-				}
-				// fb.setComments(comments);
-			}
-
-			return !errorCheck.hasError;
-		} catch (final Throwable e) {
-			if (debug)
-				e.printStackTrace();
-			return false;
-		}
 	}
 
 	protected String processLOC(final String path) {

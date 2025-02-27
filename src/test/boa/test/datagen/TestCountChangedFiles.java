@@ -13,9 +13,9 @@ import org.junit.Test;
 
 import boa.datagen.scm.GitConnector;
 import boa.datagen.util.FileIO;
-import boa.test.datagen.java.Java8BaseTest;
+import boa.test.datagen.java.JavaBaseTest;
 
-public class TestCountChangedFiles extends Java8BaseTest {
+public class TestCountChangedFiles extends JavaBaseTest {
 	
 	private GitConnector gc;
 		

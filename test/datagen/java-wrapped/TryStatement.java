@@ -1,4 +1,4 @@
 try {
-} catch (ArithmeticException e){
-	return;
+} catch (ArithmeticException e) {
+    return;
 }

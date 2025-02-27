@@ -11,3 +11,5 @@ USES[https://github.com/boalang/test-datagen][src/JLS4/UnsafeVarargsDemo/UnsafeV
 USES[https://github.com/boalang/test-datagen][src/JLS4/UnsafeVarargsDemo/UnsafeVarargsDemo2.java][1532032882000000] = 1
 USES[https://github.com/boalang/test-datagen][src/JLS4/UnsafeVarargsDemo/UnsafeVarargsDemo2.java][1534433645000000] = 1
 USES[https://github.com/boalang/test-datagen][src/JLS4/UnsafeVarargsDemo/UnsafeVarargsDemo2.java][1534433645000000] = 1
+USES[https://github.com/boalang/test-datagen][src/JLS7/UnsafeVarargsDemo/UnsafeVarargsDemo2.java][1651287276000000] = 1
+USES[https://github.com/boalang/test-datagen][src/JLS7/UnsafeVarargsDemo/UnsafeVarargsDemo2.java][1651287276000000] = 1

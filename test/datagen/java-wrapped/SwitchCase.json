@@ -16,8 +16,6 @@
          "kind": "VARACCESS",
          "variable": "x"
       }
-   ]
-},
-{
-   "kind": "EMPTY"
+   ],
+   "is_arrow": false
 }

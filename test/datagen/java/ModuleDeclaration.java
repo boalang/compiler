@@ -1,0 +1,3 @@
+module module-info {
+	requires ;
+}

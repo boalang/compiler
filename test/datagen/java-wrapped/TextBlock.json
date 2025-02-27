@@ -1,0 +1,22 @@
+{
+   "kind": "EXPRESSION",
+   "expressions": [
+      {
+         "kind": "VARDECL",
+         "variable_decls": [
+            {
+               "name": "json",
+               "variable_type": {
+                  "name": "String",
+                  "fully_qualified_name": "java.lang.String",
+                  "kind": "CLASS"
+               },
+               "initializer": {
+                  "kind": "LITERAL",
+                  "literal": "\"\"\"\n      {\n        \"name\": \"web\",\n        \"version\": \"1.0.0\",\n        \"dependencies\": \"AppA\"\n      }\n      \"\"\""
+               }
+            }
+         ]
+      }
+   ]
+}

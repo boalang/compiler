@@ -104,6 +104,10 @@ enum TypeKind {
 	PRIMITIVE = 10;
 	/** Array type */
 	ARRAY = 11;
+	/** Immutable data type */
+	IMMUTABLE = 12;
+	/** Local variable type inference*/
+	INFERRED = 13;
 }
 
 /** A type in an AST */
@@ -139,11 +143,11 @@ message Method {
 	repeated Variable arguments = 5;
 	/** The list of exceptions thrown by this method */
 	repeated Type exception_types = 6;
-    /**
+	/**
 	  * The statements in the method body. Note that most methods (in C-like
 	  * languages, such as Java) contain a single statement of type BLOCK, which
 	  * contains the list of statements within it!
-      */
+	  */
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;
@@ -226,6 +230,8 @@ message Statement {
 		TRAIT_ALIAS = 36;
 		TRAIT_PRECEDENCE = 37;
 		TRAIT_USE = 38;
+		YIELD = 39;
+		YIELD_IMPLICIT = 40;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -244,6 +250,7 @@ message Statement {
 	repeated Variable variable_declarations = 14;
 	repeated Declaration type_declarations = 15;
 	repeated string names = 16;
+	optional bool is_arrow = 17;
 }
 
 /** A single expression */
@@ -360,6 +367,18 @@ message Expression {
 		TRAIT_ALIAS = 98;
 		TRAIT_PRECEDENCE = 99;
 		NAMESPACENAME = 100;
+		STATEMENT = 101;
+		REQUIRES = 102;
+		EXPORTS = 103;
+		OPENS = 104;
+		USES = 105;
+		PROVIDES = 106;
+		PACKAGE_NAME = 107;
+		MODULE_NAME = 108;
+		PATTERN = 109;
+		NULL_PATTERN = 110;
+		GUARDED_PATTERN = 111;
+		TYPE_PATTERN = 112;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -432,6 +451,14 @@ message Modifier {
 		TRANSIENT = 12;
 		/** A volatile modifier */
 		VOLATILE = 13;
+		/** A module modifier */
+		MODULE = 14;
+		/** A transitive modifier */
+		TRANSITIVE = 15;
+		/** A sealed modifier */
+		SEALED = 16;
+		/** A non_sealed modifier */
+		NON_SEALED= 17;
 	}
 	/** A visibility modifier */
 	enum Visibility {
@@ -545,14 +572,14 @@ message Element {
 	/** The Element's attributes */
 	repeated Attribute attributes = 6;
 	optional Namespace script = 7;
-	optional Namespace php = 8;  
+	optional Namespace php = 8;
 	repeated Variable var_decl = 9;
 	/** The Element's title */
 	optional string title = 10;
 	repeated Attribute processing_instruction = 11;
 }
 
-/** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */  
+/** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */
 message Attribute {
 	required string key = 1;
 	required string value = 2;

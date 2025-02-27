@@ -1,3 +1,3 @@
-public class FieldDeclaration{
-int x;
+public class FieldDeclaration {
+   int x;
 }
